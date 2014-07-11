@@ -1,0 +1,768 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"INPUT_",
+				"INPUT_IGNORE_BANG"
+			],
+			[
+				"set_extra",
+				"set_extra_wizinfo_size"
+			],
+			[
+				"exit",
+				"exit_to_unit"
+			],
+			[
+				"INI",
+				"INITIAL_UNIT"
+			],
+			[
+				"qu",
+				"query_unit"
+			],
+			[
+				"ELE",
+				"ELEVATOR_MOVING"
+			],
+			[
+				"moving",
+				"moving_status"
+			],
+			[
+				"door",
+				"door_status"
+			],
+			[
+				"DIRECTION",
+				"DIRECTION_DOWN"
+			],
+			[
+				"DIR",
+				"DIRECTION_UP"
+			],
+			[
+				"curren",
+				"current_floor"
+			],
+			[
+				"cu",
+				"current_floor"
+			],
+			[
+				"DIRE",
+				"DIRECTION_UP"
+			],
+			[
+				"ELEV",
+				"ELEVATOR_STOPPED"
+			],
+			[
+				"ST",
+				"ELEVATOR_STOPPED"
+			],
+			[
+				"D",
+				"DIRECTION_UP"
+			],
+			[
+				"ELEVAT",
+				"ELEVATOR_STOPPED"
+			],
+			[
+				"curr",
+				"current_direction"
+			],
+			[
+				"current",
+				"current_direction"
+			],
+			[
+				"it",
+				"int"
+			],
+			[
+				"incre",
+				"increment_next_serial"
+			],
+			[
+				"increm",
+				"increment_next_unit"
+			],
+			[
+				"inc",
+				"increment_next_serial"
+			],
+			[
+				"query_next_",
+				"query_next_serial"
+			],
+			[
+				"query",
+				"query_serial"
+			],
+			[
+				"INITIAL",
+				"INITIAL_UNIT"
+			],
+			[
+				"black",
+				"blacklist_pattern"
+			],
+			[
+				"pk",
+				"potterybarnkids"
+			],
+			[
+				"verb",
+				"verb_peaks"
+			],
+			[
+				"peak",
+				"peak_samples"
+			],
+			[
+				"cur",
+				"current_time"
+			],
+			[
+				"previous",
+				"previous_sample_time"
+			],
+			[
+				"prev",
+				"previous_smoothed_rate"
+			],
+			[
+				"adj",
+				"adjusted_smoothing_factor"
+			],
+			[
+				"rate_limits",
+				"INITIAL_RATE_LIMITS"
+			],
+			[
+				"allo",
+				"allowed_caller_set"
+			],
+			[
+				"allowed",
+				"allowed_caller_set"
+			],
+			[
+				"allowe",
+				"allowed_caller_sets"
+			],
+			[
+				"smoo",
+				"smoothed_rates"
+			],
+			[
+				"smooth",
+				"smoothing_intervals"
+			],
+			[
+				"allowed_call",
+				"allowed_caller_list"
+			],
+			[
+				"rate",
+				"ratelimit"
+			],
+			[
+				"rate_lm",
+				"rate_limits"
+			],
+			[
+				"I",
+				"INITIAL_SMOOTHED_RATE"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "inc/auto.h",
+			"settings":
+			{
+				"buffer_size": 815,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "obj/auth/login.c",
+			"settings":
+			{
+				"buffer_size": 6299,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "secure/master.c",
+			"settings":
+			{
+				"buffer_size": 10917,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "obj/avatar.c",
+			"settings":
+			{
+				"buffer_size": 2618,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "bin/chdir.c",
+			"settings":
+			{
+				"buffer_size": 369,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 588.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"instlal",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"Package Control:inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 792.0
+	},
+	"console":
+	{
+		"height": 186.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/bobal_000/work/asdf",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/sys/include_list.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/obj/auth/login.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/bin/pwd.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/lib/command.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/bin/dest.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/bin/load.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/lib/user.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/auto.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/bin/mkdir.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/ldmud.exe.stackdump",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/sys/objectinfo.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/lib/property.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/property.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/lib/file.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/bin/chdir.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/prop.h",
+		"/C/users/bobal_~1/appdata/local/temp/sublime-sftp-browse-1404979871/eotl/usr/devo/bobafett/living/include/prop.h",
+		"/C/users/bobal_~1/appdata/local/temp/sublime-sftp-browse-1404979738/eotl/usr/devo/bobafett/living/modules/prop.c",
+		"/C/Program Files/Sublime Text 3/Packages/tmp/C.tmLanguage",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/User/Monokai (SL).tmTheme",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/sys/configuration.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/sys/comm.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/log/compile",
+		"/C/Users/bobal_000/work/ldmud/mudlib/log/runtime",
+		"/C/Users/bobal_000/work/ldmud/mudlib/secure/simul_efun.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/ansi.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/inc/user.h",
+		"/C/Users/bobal_000/work/ldmud/mudlib/obj/avatar/avatar.c",
+		"/C/Users/bobal_000/work/ldmud/INSTALL",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/C/Users/bobal_000/work/ldmud/mudlib/etc/issue",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/User/C++.sublime-settings",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/bobal_000/work/ldmud/mudlib/secure/master.c",
+		"/C/Users/bobal_000/work/ldmud/doc/concepts/tls",
+		"/C/Users/bobal_000/work/ldmud/doc/FAQ",
+		"/C/Users/bobal_000/work/ldmud/mudlib/master.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/test_master.c",
+		"/C/Users/bobal_000/work/ldmud/mudlib/master_skeleton.c",
+		"/C/Users/bobal_000/Desktop/osb/mudlib/README",
+		"/C/Users/bobal_000/Desktop/osb/mudlib/room/voting_room.c",
+		"/C/Users/bobal_000/Desktop/osb/mudlib/std/player/bin/who.c",
+		"/C/Users/bobal_000/Desktop/osb/mudlib/std/player.c",
+		"/C/Users/bobal_000/Desktop/osb/mudlib/secure/kernel/comm.ic",
+		"/C/Users/bobal_000/Desktop/C.tmLanguage",
+		"/C/Program Files/Sublime Text 3/Packages/C++.sublime-package",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/templates/macros/products/pipElements.ftl",
+		"/C/Projects/ecommerce.shopbuy/sites/we/content/templates/products/pip.ftl",
+		"/C/Users/bobal_000/work/bin/assortment.pl",
+		"/C/Projects/quasi-cellmanager.embarc/src/main/groovy/com/wsgc/ecommerce/searchops/PropertyConfigManager.groovy",
+		"/C/Projects/endeca/apps/testcell2/genconfig.properties",
+		"/C/Projects/endecaETL.trunk/src/main/java/com/wsgc/ecommerce/search/endecaetl/util/StrategyExtractHelper.java",
+		"/C/Projects/endecaETL.trunk/src/main/java/com/wsgc/ecommerce/search/endecaetl/extract/StrategyExtract.java",
+		"/C/Projects/endecaETL.embarc/README.txt",
+		"/C/Projects/cell-manager/pom.xml",
+		"/C/Projects/endeca/apps/testcell4/cellconfig.properties",
+		"/C/Projects/endeca/apps/testcell3/cellconfig.properties",
+		"/C/Projects/endeca/apps/testcell2/cellconfig.properties",
+		"/C/Projects/endeca/apps/testcell1/cellconfig.properties",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/models/AttributeValue.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/libs.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/AssortmentInfo.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/main.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/utils/Images.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/Events.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/views/step/Filtered.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/views/step/selector/Swatch.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/views/price/PriceContainer.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/views/tally/TallyItemImage.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/models/tally/TallyItem.js",
+		"/C/Projects/ecommerce.shopbuy/sites/common/content/static/js/app/guidedPip/templates/tally/tallyItemImage.html",
+		"/C/Projects/quasi-cellmanager.trunk/src/main/scripts/web-cell-status.pl",
+		"/C/Projects/endecaOps.trunk/scripts/web-cell-status.pl",
+		"/C/Projects/endecaOps.embarc/scripts/web-cell-status.pl",
+		"/C/Projects/quasi-cellmanager.embarc/src/main/scripts/web-cell-status.pl",
+		"/C/Projects/ecommerce.embarc/sites/mg/sites/mg/content/templates/xml-sitemap.ftl",
+		"/C/Projects/ecommerce.embarc/sites/ws/sites/ws/content/templates/xml-sitemap.ftl",
+		"/C/Projects/ecommerce.embarc/sites/pb/sites/pb/content/templates/xml-sitemap.ftl",
+		"/C/Projects/ecommerce.embarc/sites/pk/sites/pk/content/templates/xml-sitemap.ftl",
+		"/C/Projects/ecommerce.embarc/sites/pt/sites/pt/content/templates/xml-sitemap.ftl",
+		"/C/Projects/ecommerce.embarc/sites/we/sites/we/content/templates/xml-sitemap.ftl",
+		"/C/Projects/endeca/aster/keywords.txt",
+		"/C/Projects/endecaETL.embarc/pom.xml",
+		"/C/Projects/endecaETL.fillmore/pom.xml",
+		"/C/Projects/endecaETL.trunk/pom.xml",
+		"/C/Program Files (x86)/Steam/SteamApps/common/FTL Faster Than Light/settings.ini",
+		"/C/Projects/endecaOps.embarc/endeca/cellsetup3/config/cell/sample.cellconfig.properties",
+		"/C/Users/bobal_000/Desktop/groups.js",
+		"/C/Projects/endeca/extract/61-sku-extract-413121600.txt",
+		"/C/Projects/endeca/partial/strategy-extract.txt",
+		"/C/Projects/endeca/aster/default.txt",
+		"/C/Projects/endeca/aster/bestseller.txt",
+		"/C/Projects/endeca/aster/sale.txt",
+		"/C/Projects/endeca/aster/new.txt",
+		"/C/Projects/endeca/config/61-relrankkeywords.txt",
+		"/C/Projects/endecaETL.trunk/assembly.xml",
+		"/C/Projects/endecaETL.trunk/src/main/scripts/strategy.sh",
+		"/C/Projects/cell-manager/.gitignore",
+		"/C/Projects/endeca/strategy/metadata-extract.txt",
+		"/C/Projects/endecaOps.divis/scripts/web-cell-status.pl",
+		"/C/Projects/endeca/strategy/strategy-extract.txt",
+		"/C/Projects/appsetting-properties/schema-site/webqa2/qa_app_owner/ws/default/default.properties",
+		"/C/Projects/appsetting-properties/schema-site/webqa2/qa_app_owner/global/global.properties",
+		"/C/Users/bobal_000/.m2/settings.xml",
+		"/C/Projects/endeca/apps/testcell1/genconfig.properties",
+		"/C/Projects/ecommerce.trunk/sites/admin/war/src/main/resources/com/wsgc/ecommerce/config/admin/security-config.xml",
+		"/C/Projects/ecommerce.alemany/sites/ws/war/src/main/resources/com/wsgc/ecommerce/config/app-settings.properties",
+		"/C/Projects/appsetting-properties/schema-site/webqa2/qa_app_owner/ws/override/override.properties",
+		"/C/Projects/ecommerce.alemany/sites/ws/war/src/main/resources/com/wsgc/ecommerce/config/ws/admin-tests.xml",
+		"/C/Projects/assortment/pb/tmp/objects/subsets.js",
+		"/C/Projects/assortment/pb/tmp/attrs/shipping.js",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/User/Pretty JSON.sublime-settings",
+		"/C/Users/bobal_000/AppData/Roaming/Sublime Text 3/Packages/Pretty JSON/Pretty JSON.sublime-settings",
+		"/C/Projects/assortment/pb/tmp/skus.js",
+		"/C/Projects/assortment/tmp/skus.js",
+		"/C/Projects/assortment/pb/tmp/groups.js",
+		"/C/Projects/ecommerce.broadway/platform/components/catalogdata/catalogdata-core-impl/src/test/java/com/wsgc/ecommerce/catalogdata/assortment/test/TestAssortmentLoader.java",
+		"/C/Projects/assortment/tmp/groups.js",
+		"/C/Projects/assortment/tmp/objects/imagesizes.js",
+		"/C/Projects/assortment/tmp/objects/subsets.js",
+		"/C/Projects/endecaETL.alemany/src/main/scripts/keywords.pl",
+		"/C/Projects/assortment/tmp/library/subsets.js",
+		"/C/Users/bobal_000/Desktop/subsets.js",
+		"/C/Users/bobal_000/Desktop/subset.txt"
+	],
+	"find":
+	{
+		"height": 50.0
+	},
+	"find_in_files":
+	{
+		"height": 138.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"comment",
+			"int",
+			"{\n",
+			"new_user",
+			"enter_",
+			"name",
+			".a",
+			"TYPEAHEAD_SEARCH_AB_TEST_ENABLED",
+			"5629282",
+			"manhattan-leather-recliner",
+			"refs",
+			"bed",
+			"refs",
+			"bed",
+			"HIDE_SEARCH_S",
+			"HIDE_SE",
+			"DOORS_PER_FLOOR",
+			"entry",
+			"door_status",
+			"moving_status",
+			"KEYCARD",
+			"CLOCKDAEMON",
+			"CONDOSERVER",
+			"CondoServer",
+			"    ",
+			"10%",
+			"50%",
+			":1,",
+			", ",
+			"LABEL",
+			"spaces",
+			"last_sample_time"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"select_",
+			"username",
+			"UNITS_PER_FLOOR",
+			"landing",
+			"open",
+			"moving",
+			"ClockObject",
+			"CondoServer",
+			"CONDOSERVER",
+			"  ",
+			"",
+			"\n",
+			"DEBUG_LABEL",
+			"previous_sample_time"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "inc/auto.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 815,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								760,
+								760
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 138.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "obj/auth/login.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6299,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5605,
+								5605
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4140.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "secure/master.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10917,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6746,
+								6746
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5612.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "obj/avatar.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2618,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2476,
+								2476
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"incomplete_sync": null,
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 2622.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "bin/chdir.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 369,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								182,
+								182
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 43.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 148.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.hex_viewer_inspector":
+	{
+		"height": 148.0
+	},
+	"output.sftp":
+	{
+		"height": 293.0
+	},
+	"project": "mudlib.sublime-project",
+	"replace":
+	{
+		"height": 58.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"login.c",
+				"obj\\auth\\login.c"
+			],
+			[
+				"auto",
+				"inc\\auto.h"
+			],
+			[
+				"login",
+				"obj\\auth\\login.c"
+			],
+			[
+				"command",
+				"lib\\command.c"
+			],
+			[
+				"auth",
+				"inc\\auto.h"
+			],
+			[
+				"ava",
+				"obj\\avatar.c"
+			],
+			[
+				"mast",
+				"secure\\master.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 750.0,
+		"selected_items":
+		[
+		],
+		"width": 570.0
+	},
+	"select_symbol":
+	{
+		"height": 388.0,
+		"selected_items":
+		[
+		],
+		"width": 388.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 225.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
