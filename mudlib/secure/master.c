@@ -11,9 +11,9 @@
 ** (read: they must be specified with full path).
 */
 
-#include "/inc/auto.h"
-#include "/inc/sys/driver_hook.h"
-#include "/inc/sys/debug_info.h"
+#include "/include/auto.h"
+#include "/include/sys/driver_hook.h"
+#include "/include/sys/debug_info.h"
 
 //===========================================================================
 //  Initialisation
@@ -61,13 +61,13 @@ void inaugurate_master(int arg) {
 
   // return dirs with trailing backslash
   // FUTURE add support for local include dirs
-  set_driver_hook(H_INCLUDE_DIRS, ({ "/inc/" }));
+  set_driver_hook(H_INCLUDE_DIRS, ({ "/include/" }));
 
   // FUTURE add support for local auto includes
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),
     ({ #'?, 
-       ({ #'==, 'current_file, "/inc/auto.h" }),
+       ({ #'==, 'current_file, "/include/auto.h" }),
        "",
        "#include <auto.h>\n"
     })
