@@ -1,4 +1,4 @@
-/mudlib/include/sys/
+/mudlib/include/sys/**
 /mudlib/**/log/
 /mudlib/**/etc/
 /bin/
@@ -18,5 +18,5 @@
 /INSTALL
 /README
 /mudlib/Debug.log
-/mudlib/LP_SWAP.pblaptop
+/mudlib/LP_SWAP.*
 /mudlib/sys

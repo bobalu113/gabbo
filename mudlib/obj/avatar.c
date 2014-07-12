@@ -50,6 +50,7 @@ void initialize_actions() {
     BinDir "/call", 
     BinDir "/tail", 
     BinDir "/load", 
+    BinDir "/reload", 
     BinDir "/clone",
     BinDir "/dest", 
     BinDir "/man"

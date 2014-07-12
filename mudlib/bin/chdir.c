@@ -1,6 +1,6 @@
 inherit CommandCode;
 
-string *query_actions() {
+mixed *query_actions() {
   return ({ ({ "chdir", 0 }), ({ "cd", 0 }) });
 }
 

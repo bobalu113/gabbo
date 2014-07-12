@@ -16,6 +16,10 @@
 
 #define UserLib LibDir "/user"
 #define FileLib LibDir "/file"
+#define ArrayLib LibDir "/array"
+#define StringsLib LibDir "/strings"
+#define ArgsLib LibDir "/args"
+#define GetoptsLib LibDir "/getopts"
 
 #define CommandCode LibDir "/command"
 

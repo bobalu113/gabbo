@@ -1,7 +1,9 @@
 inherit FileLib;
 
-string *query_actions() {
-  return ({ ({ basename(load_name(THISO)), 0 }) });
+#include <sys/commands.h>
+
+mixed *query_actions() {
+  return ({ ({ basename(load_name(THISO)), AA_VERB }) });
 }
 
 int do_command(string arg) {
