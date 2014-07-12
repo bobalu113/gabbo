@@ -254,15 +254,17 @@ private string format_stacktrace(string curobj, int line, int caught,
     result += sprintf("Caught by: %s:%d\n", curobj, line);
   }
 
-  mixed *stack = debug_info[1..];
-  for (int i = sizeof(stack) - 1; i >= 0; i--) {
-    result += sprintf("%10s %s->%s(%s:%d)\n", "at", stack[i][TRACE_OBJECT], 
-      to_string(stack[i][TRACE_NAME]), stack[i][TRACE_PROGRAM], 
-      stack[i][TRACE_LOC]);
+  if (sizeof(debug_info) > 1) {
+    mixed *stack = debug_info[1..];
+    for (int i = sizeof(stack) - 1; i >= 0; i--) {
+      result += sprintf("%10s %s->%s(%s:%d)\n", "at", stack[i][TRACE_OBJECT], 
+        to_string(stack[i][TRACE_NAME]), stack[i][TRACE_PROGRAM], 
+        stack[i][TRACE_LOC]);
+    }
   }
 
-  if (debug_info[0]) {
-    result += sprintf("Caused by: %s->heart_beat()\n", debug_info[1]);
+  if (sizeof(debug_info) && debug_info[0]) {
+    result += sprintf("Caused by: %s\n", debug_info[0]);
   }
 
   return result;

@@ -7,7 +7,7 @@ mixed *getopts(string *args, string validopts) {
  
   if (validopts) {
     // pad it to make checking for ':' easier
-    validopts += " ";        
+    validopts += " ";
   } else {
     // any option will be gathered
     anyopt = 1;
@@ -33,8 +33,8 @@ mixed *getopts(string *args, string validopts) {
       int pos;
       if (anyopt 
         || ( ((pos = member(validopts, opt)) > -1)
-          && (validopts[pos + 1] != '-') 
-          && (validopts[pos + 1] != ':') )) {
+          && (validopts[pos+1] != '-') 
+          && (validopts[pos+1] != ':') )) {
         options[opt] = 0;
       } else {
         badopts += args[i][j..j];
@@ -52,7 +52,7 @@ mixed *getopts(string *args, string validopts) {
     int pos = member(validopts, opt);
     if (pos > -1) { 
       // Valid option
-      if (validopts[pos + 1] == ':') { 
+      if (validopts[pos+1] == ':') { 
         // This option takes an argument
         if (++i < size) {
           // If we're not at the end

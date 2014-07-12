@@ -2,7 +2,7 @@ inherit CommandCode;
 
 int do_command(string arg) {
   if (!arg || !strlen(arg)) {
-    notify_fail("Usage: %s dir\n", query_verb());
+    notify_fail(sprintf("Usage: %s dir\n", query_verb()));
     return 0;
   }
 
