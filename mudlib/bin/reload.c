@@ -22,6 +22,10 @@ int do_command(string arg) {
   string err = catch(load_object(arg); publish);
   if (err) {
     printf("%s: %s: Caught error %s\n", query_verb(), arg, err); 
+    mixed *last_err = get_error_file(MASTER_OBJECT->get_wiz_name(arg));
+    if (last_err) {
+      printf("%s line %d: %s\n", last_err[0], last_err[1], last_err[2]);
+    }
     return 1;
   }
 

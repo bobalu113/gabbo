@@ -117,7 +117,7 @@ string *epilog(int eflag) {
 }
 
 void preload(string file) {
-  catch(load_object(file));
+  catch (load_object(file));
 }
 
 string get_simul_efun() {

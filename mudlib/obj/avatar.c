@@ -58,7 +58,7 @@ void initialize_actions() {
 
   foreach (string command : command_files) {
     object cmd_ob;
-    string err = catch(cmd_ob = load_object(command));
+    string err = catch (cmd_ob = load_object(command));
     if (err) {
       // TODO log error
       printf("Caught error loading command %s: %s\n", command, err);
@@ -85,7 +85,7 @@ static int do_command(string arg) {
   object cmd_ob = FINDO(command);
   if (!cmd_ob || !member(commands, cmd_ob)) {
     // FUTURE prompt user whether or not to re-init
-    string err = catch(cmd_ob = load_object(command));
+    string err = catch (cmd_ob = load_object(command));
     // TODO consolidate command loading logic (see above)
     if (err) {
       // TODO log error
@@ -133,7 +133,7 @@ void enter_game() {
   set_prompt(lambda(0, 
     ({ #'+, 
       ({ #'call_other, THISO, "query_cwd" }), 
-      ">" 
+      "> " 
     })
   ), THISO);
 }

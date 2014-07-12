@@ -150,7 +150,7 @@ static void spawn_avatar(string user) {
 
   object avatar;
   string avatar_name;
-  err = catch(
+  err = catch (
     (avatar = clone_object(AVATAR)),
     (avatar_name = object_name(avatar)),
     (avatar->setup(user) && (
@@ -167,12 +167,12 @@ static void spawn_avatar(string user) {
   }
 
   object location;
-  err = catch(location = load_object(data["location"]); publish);
+  err = catch (location = load_object(data["location"]); publish);
   if (err) {
     printf("Caught error loading starting location for user %s: %s\n", user, 
       err); 
   } else {
-    err = catch(
+    err = catch (
       // TODO log warning
       move_object(avatar, location);
       publish

@@ -5,14 +5,15 @@ inherit GetoptsLib;
 
 #include <sys/commands.h>
 
-#define CCDIR "/usr/" + getuid() + "/"
-#define CCFILE CCDIR "cc"
+#define CcDir sprintf("%s/%s/tmp", HomeDir, PID)
 
-#define USAGE "cc<id> [-msdrf] [-i<path>] [-p[<code>]] code"
+#define USAGE "cc<id> [-msdrf] [-h path] [-i path] code"
 
 mixed *query_actions() {
   return ({ ({ "cc", AA_SHORT }) });
 }
+
+string format_cc(string str);
 
 int do_command(string arg) {
   // TODO design a formal usage API
@@ -21,81 +22,132 @@ int do_command(string arg) {
     return 0; 
   }
 
-  string label = query_verb(0)[strlen(query_verb(1))..];
-  mixed *args = getopts(explode_args(arg), "msdrfoi:");
+  string label = query_verb(0);
+  mixed *args = getopts(explode_args(arg), "msdrfoh:i:");
   
-  arg = implode(args[0], " ");
+  arg = trim(implode(args[0], " "));
   mapping opts = args[1];
 
-  printf ("%O\n%O\n", label, args);
-  return 1;
-  /*
-  out += "\ncc() {\n";
-  out += implode(stuff[i..], " ");
-  if(out[<1] != ';') out += ";";
-  out += "\n}\n";
-  if(format) out = format_cc(out);
-  if(FINDO(file)) destruct(FINDO(file));
-  if(exists(file)) rm(file);
-  if( file_size( CCDIR ".cctemplate" ) > -1 )
-      copy_file( CCDIR ".cctemplate", file );
-  write_file(file, out);
-  if( err = catch( call_other( file, "??" ) ) )
-  {
-    printf( "Compile-time error: %s", err );
-    if( errmsg = get_error_file( this_object()->query_real_name(), 0 ) )
-      printf( "%s line %d: %s\n", errmsg[0], errmsg[1], errmsg[2] );
+  string cc = sprintf("%s%s%s\n%s", 
+    (!member(opts, 'o') ? "mixed cc() {\n" : ""),
+    arg,
+    ((arg[<1] != ';') ? ";" : ""),
+    (!member(opts, 'o') ? "}\n" : "")
+  );
+  if (member(opts, 'f')) {
+    cc = format_cc(cc);
+  }
+  
+  string path = sprintf("%s/%s.c", CcDir, label);
+
+  object cc_ob = FINDO(path);
+  if (cc_ob) { 
+    destruct(cc_ob);
+    if (cc_ob) {
+      printf("%s: %O: Unable to destruct existing cc object.\n", 
+        query_verb(), cc_ob);
+      return 1;
+    }
+  }
+  
+  if (file_exists(path)) {
+    if (!rm(path)) {
+      printf("%s: %s: Unable to remove existing cc file.\n", 
+        query_verb(), path);
+      return 1;
+    }
+  }
+
+  if (member(opts, 'h')) {
+    if (file_exists(opts['h'])) {
+      if (copy_file(opts['h'], path)) {
+        printf("%s: %s: Unable to apply template %s", 
+          query_verb(), path, opts['h']);
+        return 1;
+      }
+    }
+  }
+  if (!write_file(path, cc)) {
+    printf("%s: %s: Unable to write new cc file.\n", query_verb(), path);
+    return 1;
+  }
+
+  string err = catch (cc_ob = load_object(path); publish);
+  if (err) {
+    printf( "%s: %s\n", query_verb(), err);
+    mixed *last_err = get_error_file(MASTER_OBJECT->get_wiz_name(path));
+    if (last_err) {
+      printf("%s line %d: %s\n", last_err[0], last_err[1], last_err[2]);
+    }
     printf( "Check your error log for details.\n" );
+    return 1;
   }
-  else if( err = catch( ret = call_other( file, "cc" ) ) )
-  {
-    printf( "Run-time error: %s\n", err );
+
+  mixed result;
+  err = catch (result = cc_ob->cc());
+  if (err) {
+    printf("%s: %s\n", query_verb(), err);
+    return 1;
   }
-  else
-  {
-    if(dest) destruct(FINDO(file));
-    if(remove) rm(file);
-    if(!silent && more)
-      this_player()->more_string( sprintf( "Returned: %O\n", ret ) );
-    else if
-      (!silent) printf( "Returned: %O\n", ret );
-   }
-   return 1;
-   */
+
+  if (member(opts, 'd')) {
+    destruct(cc_ob);
+    if (cc_ob) {
+      printf("%s: %O: Unable to destruct new cc object.\n",  
+        query_verb(), cc_ob);
+    }
+  } 
+
+  if (member(opts, 'r')) {
+    if (!rm(path)) {
+      printf("%s: %s: Unable to remove new cc file.\n", query_verb(), path);
+    }
+  }
+
+  if (!member(opts, 's')) {
+    if (member(opts, 'm')) {
+      // TODO add more_string support
+      printf("Returned: %O\n", result);
+    } else {
+      printf("Returned: %O\n", result);
+    }
+  }
+   
+  return 1;
 }
 
-/*
-string
-format_cc(string str)
-{
+string format_cc(string str) {
   int odd;
-  int i, len, where;
-  len=strlen(str);
-  odd=0;
-  for(i=0;i<len;i++)
-  {
-    switch(str[i])
-    {
+  for (int i = 0, int len = strlen(str); i < len; i++) {
+    switch (str[i]){
+
       case '\'':
-        if(!odd&&str[i-1]!='#') odd='\'';
-        else if(odd=='\'') odd=0;
+        if (!odd && str[i-1] != '#') {
+          odd = '\'';
+        } else if (odd == '\'') {
+          odd = 0;
+        }
         break;
-      case '\"': 
-        if(!odd) odd='\"';
-        else if(odd=='\"') odd=0; // "
+
+      case '\"':  // "
+        if (!odd) {
+          odd = '\"';  // "
+        } else if (odd == '\"') { // "
+          odd = 0; 
+        }
         break;
+
       case '\\':
         i++;
         break;
+
       case '\;':
-        if(!odd)
-        {
-          str=str[0..i]+"\n"+str[i+1..];
+        if (!odd) {
+          str[i..i] = sprintf("%c\n", str[i]);
           len++;
         }
         break;
     }
   }
-  return(str);
+  return str;
 }
-*/

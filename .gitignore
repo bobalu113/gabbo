@@ -1,6 +1,7 @@
 /mudlib/include/sys/**
 /mudlib/**/log/
 /mudlib/**/etc/
+/mudlib/home/
 /bin/
 /doc/
 /etc/
@@ -20,3 +21,4 @@
 /mudlib/Debug.log
 /mudlib/LP_SWAP.*
 /mudlib/sys
+*.stackdump

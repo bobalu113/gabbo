@@ -11,7 +11,8 @@ int do_command(string arg) {
 
   // TODO add path expansion
   if (!file_exists(arg)) {
-    printf("%s: no such directory or permission denied.\n", arg);
+    printf("%s: %s: no such directory or permission denied.\n", 
+      query_verb(), arg);
     return 1;
   }
   THISP->set_cwd(arg);
