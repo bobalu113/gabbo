@@ -23,9 +23,9 @@ int do_command(string arg) {
   }
 
   string label = query_verb(0);
-  mixed *args = getopts(explode_args(arg), "msdrfoh:i:");
-  
-  arg = trim(implode(args[0], " "));
+  mixed *args = getopts(explode_args(arg, 1), "msdrfoh:i:");
+
+  arg = implode(args[0], " ");
   mapping opts = args[1];
 
   string cc = sprintf("%s%s%s\n%s", 
