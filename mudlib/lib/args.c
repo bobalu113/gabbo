@@ -1,6 +1,6 @@
 inherit StringsLib;
 
-string *explode_args(string arg, int keepquotes) {
+varargs string *explode_args(string arg, int preserve_quotes) {
   string *args = ({ });  
   if (!arg) { return args; }
   
@@ -9,7 +9,7 @@ string *explode_args(string arg, int keepquotes) {
   while (pos < len) {
     pos = find_nonws(arg, pos);
     int newpos = match_quote(arg, pos);
-    if (keepquotes) {
+    if (preserve_quotes) {
       args += ({ arg[pos..newpos] });
     } else {
       args += ({ unescape(unquote(arg[pos..newpos])) });

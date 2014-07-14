@@ -243,7 +243,7 @@ void runtime_warning(string err, string curobj, string prg, int line,
   );
 
   write_file("/log/runtime.log", msg);
-  write(msg);
+  //write(msg);
 }
 
 private string format_stacktrace(string curobj, int line, int caught, 
