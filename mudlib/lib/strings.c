@@ -1,9 +1,21 @@
+/**
+ * Utility library for manipulating strings.
+ * 
+ * @author devo
+ */
+
 inherit ArrayLib;
 
-/*
-      Faster than using AcmeArray->anti_searcha( str, ' ', start ),
-      but yields the same results.
-*/
+/**
+ * Find the first non-space character in a string.
+ * Note: functionally equivilent to ArrayLib->anti_search(str, ' ', start), 
+ * but optimized for speed.
+ * 
+ * @param  str   the string to search
+ * @param  start optional start position for search, defaults to 0
+ * @return       the index of the first non-space character, or strlen(str)
+ *               if the string only contains spaces
+ */
 varargs int find_nonws(string str, int start) {
   for (int size = strlen(str); 
        (start < size) && (str[start] == ' '); 
@@ -11,15 +23,32 @@ varargs int find_nonws(string str, int start) {
   return start;
 }
 
-#define UNQUOTE_CHARS "\"'"    /* default quote chars to remove */
-#define QUOTE_CHARS "\"'"     /* default quote chars to match on */
+#define UNQUOTE_CHARS "\"'"    // default quote chars to remove
+#define QUOTE_CHARS "\"'"     // default quote chars to match on
 
+/**
+ * Test whether a character in string is escaped by a backslash.
+ * 
+ * @param  str   the string containing the potentially escaped char
+ * @param  index the index of the character to test
+ * @return       true if str[index] is escaped
+ */
 int is_escaped(string str, int index) {
-  /* It's complicated because backslashes can be escaped too. */
+  // It's complicated because backslashes can be escaped too.
   int last_non_bs = anti_searcha(str, '\\', index-1, -1);
   return (index - last_non_bs + 1) % 2;
 }
- 
+
+/**
+ * Search a string for a character, ignoring escaped characters.
+ * 
+ * @param  str  the string to search
+ * @param  el   the character (ascii value) for which to search
+ * @param  pos  optional starting position, defaults to 0
+ * @param  step optional step size, defaults to 1
+ * @return      the index of the first unescaped character, or -1 if 
+ *              character was not found
+ */
 varargs int search_str_unescaped(string str, int el, int pos, int step) {
   step ||= 1;
  
@@ -31,6 +60,17 @@ varargs int search_str_unescaped(string str, int el, int pos, int step) {
   return -1;
 }
 
+/**
+ * Find the index of the last character in a possibly quoted string.
+ * 
+ * @param  str         the string to search
+ * @param  start       optional start position, defaults to 0
+ * @param  quote_chars an optional string containing quote characters, 
+ *                     defaults to "\"'"
+ * @return             the index of the last character in the first quoted
+ *                     character sequence, or the index of the last character 
+ *                     of the first word
+ */
 varargs int match_quote(string str, int start, string quote_chars) {
   int end;
   
@@ -43,11 +83,18 @@ varargs int match_quote(string str, int start, string quote_chars) {
 
 
 /*
-      This deals with literal backslashes only.  In the examples, and in
-      the strings this function is meant to deal with "\a" is meant to 
-      represent a string containing the two characters '\' and 'a',
-      not a string containing a single '\a' character.)
+      
 */
+/**
+ * Unescape all characters in a string by one level.
+ * Note: This deals with literal backslashes only.  In the examples, and ind
+ * the strings this function is meant to deal with "\a" is meant to represent 
+ * a string containing the two characters '\' and 'a', not a string 
+ * containing a single '\a' character.
+ * 
+ * @param  str the string to unescape
+ * @return     the unescaped string
+ */
 string unescape(string str) {
   string copy = "";
 
@@ -65,7 +112,14 @@ string unescape(string str) {
   return copy;
 }
  
-/* Removes outer layer of quotes, if there is one */
+/**
+ * Removes the outer layer of quotes, if there is one.
+ * 
+ * @param  str         the potentially quoted string
+ * @param  quote_chars an optional string containing quote characters, 
+ *                     defaults to "\"'"
+ * @return             the unquoted string
+ */
 varargs string unquote(string str, string quote_chars) {
   int len = strlen(str);
   

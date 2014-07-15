@@ -10,9 +10,10 @@
 
 #define LibDir "/lib"
 #define ObjDir "/obj"
-#define ZoneDir "/zone"
-#define HomeDir "/home"
 #define BinDir "/bin"
+#define ModulesDir "/modules"
+#define HomeDir "/home"
+#define DomainDir "/domain"
 
 #define UserLib LibDir "/user"
 #define FileLib LibDir "/file"
@@ -21,13 +22,14 @@
 #define ArgsLib LibDir "/args"
 #define GetoptsLib LibDir "/getopts"
 
-#define CommandCode LibDir "/command"
+#define CommandCode ModulesDir "/command"
+#define RoomCode ModulesDir "/room"
 
 #define MASTER_OBJECT __MASTER_OBJECT__
 #define SIMUL_EFUN_OBJECT "/secure/simul_efun"
 #define LOGIN_OBJECT ObjDir "/auth/login"
 #define AVATAR ObjDir "/avatar"
-#define COMMON_ROOM ZoneDir "/common"
+#define COMMON_ROOM DomainDir "/common"
 
 #define THISO this_object()
 #define THISP this_player()
