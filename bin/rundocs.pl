@@ -13,13 +13,16 @@ use File::Path;
 use File::Basename;
 use Data::Dumper;
 
-$CPP = "/usr/bin/cpp";
-$SYSROOT = "/cygdrive/c/Users/bobal_000/work/gabbo/mudlib";
-$DOCS = "/tmp";
-@SOURCE = ( "$SYSROOT/lib", "$SYSROOT/modules", "$SYSROOT/obj" );
+$JCPP = "jcpp";
+$CYGROOT = "/cygdrive/c/Users/bobal_000/work/gabbo/mudlib";
+$ROOT= `cygpath -w $CYGROOT`;
+chomp $ROOT;
+$ROOT =~ s/\\/\\\\/g;
+$DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs";
+@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj" );
 $TMPFILE = "/tmp/lpcdoc";
 
-@SOURCE = ( "$SYSROOT/lib", "$SYSROOT/modules", "$SYSROOT/secure" );
+@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/secure" );
 $TYPES = "int|string|object|mapping|closure|symbol|float|mixed";
 
 chroot $SYSROOT;
@@ -30,11 +33,10 @@ exit 1;
 
 sub generate_doc {
     return if (/^\./);
-#    system("$CPP -C --sysroot=$SYSROOT -include $SYSROOT/include/auto.h -isystem $SYSROOT/include/ $File::Find::name $TMPFILE");
-    my $ret = system("$CPP -C -include /include/auto.h -isystem /include/ $File::Find::name $TMPFILE");
-    print "ret=$ret; ?=$?; !=$!\n";
-    my $src = "";
-    open(F, "$TMPFILE") or die("Couldn't open $TMPFILE for read: $!\n");
+    my $cygpath = `cygpath -w $File::Find::name`;
+    $cygpath =~ s/\\/\\\\/g;
+    my $src = ``;
+    open(F, "$JCPP -I$ROOT\\\\include --root=$ROOT --include=auto.h $cygpath |") or die("Couldn't open $TMPFILE for read: $!\n");
     while (<F>) {
         next if (/^\s*$/);
         next if (/^\#/);
@@ -168,11 +170,11 @@ sub generate_doc {
     }
 
     my $program = $File::Find::name;
-    $program =~ s/^$SYSROOT(.*)\.c$/$1/;
+    $program =~ s/^$CYGROOT(.*)\.c$/$1/;
 
     my $html = write_doc($program, $desc, \@inherits, \%functions, \%variables);
 
-    my $dir = dirname("$DOCS/$program.html");
+    my $dir = dirname("$DOCS$program.html");
     mkpath($dir);
     open(F, ">$DOCS/$program.html") or die("Couldn't open $program.html for write: $!\n");
     print F $html;
@@ -333,7 +335,7 @@ END
 <!--   -->
 </a>
 <h3>Function Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing methods, and an explanation">
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
 <caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -436,7 +438,7 @@ END
 <li class="blockList"><a name="method_detail">
 <!--   -->
 </a>
-<h3>Method Detail</h3>
+<h3>Function Detail</h3>
 END
 
         foreach my $f (keys(%$functions)) {
