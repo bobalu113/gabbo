@@ -3,12 +3,11 @@
 // TODO object spawning
 // TODO details (descs)
 
-string name;
-string description;
+private string name;
+private string description;
 
 // ([ dir : path; hidden ])
-mapping exits;
-
+private mapping exits;
 
 void set_name(string str) {
   name = str;

@@ -6,6 +6,9 @@
 
 inherit ArrayLib;
 
+/** some variable */
+private string *s, v;
+
 /**
  * Find the first non-space character in a string.
  * Note: functionally equivilent to ArrayLib->anti_search(str, ' ', start), 
@@ -89,7 +92,7 @@ varargs int match_quote(string str, int start, string quote_chars) {
  * Unescape all characters in a string by one level.
  * Note: This deals with literal backslashes only.  In the examples, and ind
  * the strings this function is meant to deal with "\a" is meant to represent 
- * a string containing the two characters '\' and 'a', not a string 
+ * a string containing the two characters '\\' and 'a', not a string 
  * containing a single '\a' character.
  * 
  * @param  str the string to unescape
