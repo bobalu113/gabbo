@@ -96,8 +96,12 @@ public class CppReader extends Reader {
 						token = null;
 						return false;
 					case CCOMMENT:
+						if (!cpp.getFeature(Feature.KEEPCCOMMENTS)) {
+							token = " ";
+							break;
+						}
 					case CPPCOMMENT:
-						if (!cpp.getFeature(Feature.KEEPCOMMENTS)) {
+						if (!cpp.getFeature(Feature.KEEPCPPCOMMENTS)) {
 							token = " ";
 							break;
 						}

@@ -65,6 +65,8 @@ public class Main {
 			"Adds the directory dir to the list of directories to be searched for header files."),
 		new Option("iquote", LongOpt.REQUIRED_ARGUMENT, 0, "dir",
 			"Adds the directory dir to the list of directories to be searched for header files included using \"\"."),
+        new Option("root", LongOpt.REQUIRED_ARGUMENT, 4, "dir",
+            "Adds the directory dir to the list of directories used to resolve absolute paths."),
 		new Option("warning", LongOpt.REQUIRED_ARGUMENT, 'W', "type",
 			"Enables the named warning class ("  + getWarnings() + ")."),
 		new Option("no-warnings", LongOpt.NO_ARGUMENT, 'w', null,
@@ -103,15 +105,11 @@ public class Main {
 		Preprocessor	pp = new Preprocessor();
 		pp.addFeature(Feature.DIGRAPHS);
 		pp.addFeature(Feature.TRIGRAPHS);
-		pp.addFeature(Feature.LINEMARKERS);
+		//pp.addFeature(Feature.LINEMARKERS);
+        pp.addFeature(Feature.KEEPCCOMMENTS);
 		pp.addWarning(Warning.IMPORT);
 		pp.setListener(new PreprocessorListener());
 		pp.addMacro("__JCPP__");
-		pp.getSystemIncludePath().add("/usr/local/include");
-		pp.getSystemIncludePath().add("/usr/include");
-		pp.getFrameworksPath().add("/System/Library/Frameworks");
-		pp.getFrameworksPath().add("/Library/Frameworks");
-		pp.getFrameworksPath().add("/Local/Library/Frameworks");
 
         GETOPT: while ((c = g.getopt()) != -1) {
             switch (c) {
@@ -133,6 +131,9 @@ public class Main {
 				case 0:	// --iquote=
 					pp.getQuoteIncludePath().add(g.getOptarg());
 					break;
+                case 4: 
+                    pp.getRootPath().add(g.getOptarg());
+                    break;
 				case 'W':
 					arg = g.getOptarg().toUpperCase();
 					arg = arg.replace('-', '_');
@@ -147,9 +148,12 @@ public class Main {
 				case 1:	// --include=
 					// pp.addInput(new File(g.getOptarg()));
 					// Comply exactly with spec.
-					pp.addInput(new StringLexerSource(
-						"#" + "include \"" + g.getOptarg() + "\"\n"
-					));
+					// pp.addInput(new StringLexerSource(
+					// 	 "#" + "include \"" + g.getOptarg() + "\"\n"
+					// ));
+                    // for some reason StringLexerSource gobbles the first
+                    // line of the file that's including it.
+                    pp.addInput(new FileLexerSource(g.getOptarg()));
 					break;
 				case 2:	// --version
 					version(System.out);

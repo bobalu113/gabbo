@@ -30,9 +30,11 @@ public enum Feature {
 	/** Reports tokens of type INVALID as errors. */
 	CSYNTAX,
 	/** Preserves comments in the lexed output. */
-	KEEPCOMMENTS,
+	KEEPCCOMMENTS,
+	KEEPCPPCOMMENTS,
 	/** Preserves comments in the lexed output, even when inactive. */
-	KEEPALLCOMMENTS,
+	KEEPALLCCOMMENTS,
+	KEEPALLCPPCOMMENTS,
 	VERBOSE,
 	DEBUG,
 

@@ -609,10 +609,16 @@ public class LexerSource extends Source {
 				break;
 
 			case '#':
-				if (bol)
-					tok = new Token(HASH);
-				else
-					tok = cond('#', PASTE, '#');
+				d = read();
+				if (d == '\'') {
+					tok = new Token(CLOSURE);
+				} else {
+					unread(d);
+					if (bol)
+						tok = new Token(HASH);
+					else
+						tok = cond('#', PASTE, '#');
+				}
 				break;
 
 			case '+':

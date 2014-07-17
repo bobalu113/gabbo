@@ -107,6 +107,7 @@ public class Preprocessor implements Closeable {
 	/* Support junk to make it work like cpp */
 	private List<String>			quoteincludepath;	/* -iquote */
 	private List<String>			sysincludepath;		/* -I */
+	private List<String>			rootpath;		
 	private List<String>			frameworkspath;
 	private Set<Feature>			features;
 	private Set<Warning>			warnings;
@@ -128,6 +129,7 @@ public class Preprocessor implements Closeable {
 
 		this.quoteincludepath = new ArrayList<String>();
 		this.sysincludepath = new ArrayList<String>();
+		this.rootpath = new ArrayList<String>();
 		this.frameworkspath = new ArrayList<String>();
 		this.features = EnumSet.noneOf(Feature.class);
 		this.warnings = EnumSet.noneOf(Warning.class);
@@ -408,6 +410,14 @@ public class Preprocessor implements Closeable {
 	 */
 	public List<String> getSystemIncludePath() {
 		return sysincludepath;
+	}
+
+	public void setRootPath(List<String> path) {
+		this.rootpath = path;
+	}
+
+	public List<String> getRootPath() {
+		return rootpath;
 	}
 
 	/**
@@ -1097,6 +1107,8 @@ public class Preprocessor implements Closeable {
 				return;
 			if (include(quoteincludepath, name))
 				return;
+			if (include(rootpath, name))
+				return;
 		}
 
 		if (include(sysincludepath, name))
@@ -1589,13 +1601,21 @@ public class Preprocessor implements Closeable {
 					case WHITESPACE:
 						return tok;
 					case CCOMMENT:
-					case CPPCOMMENT:
 						// Patch up to preserve whitespace.
-						if (getFeature(Feature.KEEPALLCOMMENTS))
+						if (getFeature(Feature.KEEPALLCCOMMENTS))
 							return tok;
 						if (!isActive())
 							return toWhitespace(tok);
-						if (getFeature(Feature.KEEPCOMMENTS))
+						if (getFeature(Feature.KEEPCCOMMENTS))
+							return tok;
+						return toWhitespace(tok);
+					case CPPCOMMENT:
+						// Patch up to preserve whitespace.
+						if (getFeature(Feature.KEEPALLCPPCOMMENTS))
+							return tok;
+						if (!isActive())
+							return toWhitespace(tok);
+						if (getFeature(Feature.KEEPCPPCOMMENTS))
 							return tok;
 						return toWhitespace(tok);
 					default:
@@ -1618,8 +1638,23 @@ public class Preprocessor implements Closeable {
 					return tok;
 
 				case CCOMMENT:
+					// Patch up to preserve whitespace.
+					if (getFeature(Feature.KEEPALLCCOMMENTS))
+						return tok;
+					if (!isActive())
+						return toWhitespace(tok);
+					if (getFeature(Feature.KEEPCCOMMENTS))
+						return tok;
+					return toWhitespace(tok);
 				case CPPCOMMENT:
-					return tok;
+					// Patch up to preserve whitespace.
+					if (getFeature(Feature.KEEPALLCPPCOMMENTS))
+						return tok;
+					if (!isActive())
+						return toWhitespace(tok);
+					if (getFeature(Feature.KEEPCPPCOMMENTS))
+						return tok;
+					return toWhitespace(tok);
 
 				case '!': case '%': case '&':
 				case '(': case ')': case '*':
@@ -1648,8 +1683,10 @@ public class Preprocessor implements Closeable {
 				case HEADER:	/* Should only arise from include() */
 				case INC:
 				case LAND:
+				case LAND_EQ:
 				case LE:
 				case LOR:
+				case LOR_EQ:
 				case LSH:
 				case LSH_EQ:
 				case SUB_EQ:
@@ -1691,6 +1728,14 @@ public class Preprocessor implements Closeable {
 				default:
 					throw new InternalException("Bad token " + tok);
 					// break;
+
+				case CLOSURE:
+					Token cl_tok = tok;
+					tok = source_token_nonwhite();
+					StringBuilder buf = new StringBuilder();
+					buf.append("#'");
+					buf.append(tok.getText());
+					return new Token(CLOSURE, cl_tok.getLine(), cl_tok.getColumn(), buf.toString(), null);
 
 				case HASH:
 					tok = source_token_nonwhite();

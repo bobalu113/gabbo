@@ -12,7 +12,7 @@
 		<fileset dir="${global.dir.lib}">
 			<include name="runtime/**/*.jar"/>
 		</fileset>
-		<fileset dir="/usr/share/ant/lib">
+		<fileset dir="C:\Users\bobal_000\work\apps\apache-ant-1.9.2\lib">
 			<include name="*.jar" />
 		</fileset>
 	</path>
