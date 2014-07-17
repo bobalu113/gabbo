@@ -6,9 +6,6 @@
 
 inherit ArrayLib;
 
-/** some variable */
-private string *s, v;
-
 /**
  * Find the first non-space character in a string.
  * Note: functionally equivilent to ArrayLib->anti_search(str, ' ', start), 
