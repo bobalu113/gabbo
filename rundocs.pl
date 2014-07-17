@@ -2,11 +2,10 @@
 
 # FUTURE
 # add support for: @see, @since, @link, @deprecated, @inheritDoc
-# add support for some kid of nickname (e.g. RoomCode)
-# fix the ugly
+# comment and fix the ugly
 
 # TODO
-# build frames, indexes and package docs
+# finish frames, indexes and package docs
 
 use File::Find;
 use File::Path;
@@ -40,8 +39,18 @@ $MODS = join "|", keys(%MODRANKS);
 $TYPES = "void|int|string|object|mapping|closure|symbol|float|mixed";
 
 %programs = ();
+%packages = ();
 
 find(\&process_file, @SOURCE);
+
+for (keys(%packages)) {
+    &generate_package_frame($_);
+    &generate_package_summary($_);
+}
+
+&generate_package_frame();
+&generate_overview();
+&generate_summary();
 
 exit 0;
 
@@ -49,14 +58,17 @@ sub process_file {
     return unless (/\.c$/);
     my $program = $File::Find::name;
     $program =~ s/^$CYGROOT(.*)\.c$/$1/;
-    &generate_doc($program);
+    &generate_program_doc($program);
 }
 
 # write out a new doc for the specified program
-sub generate_doc($) {
+sub generate_program_doc($) {
     my ( $program ) = @_;
 
     $programs{$program} = undef;
+    my $package = dirname($program);
+    $packges{$package} = { } unless (exists($packages{$package}));
+    $packages{$package}->{$program} = 1;
 
     my $cygpath = `cygpath -w $CYGROOT$program.c`;
     $cygpath =~ s/\\/\\\\/g;
@@ -233,7 +245,7 @@ sub generate_doc($) {
         $inherits{$a}->[3] <=> $inherits{$b}->[3]
     } keys(%inherits);
     foreach (@inh) {
-        &generate_doc($_) unless (exists($programs{$_}));
+        &generate_program_doc($_) unless (exists($programs{$_}));
     }
 
     # go back to unstripped source and look for doc comments
@@ -354,7 +366,7 @@ sub write_doc($$$) {
 <body>
 END
 
-    $out .= &navbar("top");
+    $out .= &navbar("top", $program);
     $out .= <<END;
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
@@ -641,7 +653,7 @@ END
 <!-- ======== END OF CLASS DATA ======== -->
 END
 
-    $out .= navbar("bottom");
+    $out .= navbar("bottom", $program);
 
     $out .= <<END;
 </body>
@@ -651,24 +663,41 @@ END
     return $out;
 }
 
-sub navbar($) {
-    my ($loc) = @_;
-    return <<END;
+sub navbar($$) {
+    my ($loc, $program, $package) = @_;
+    my $rel = substr("/.." x (scalar(split(/\/+/, $program)) - 1), 1);
+    $rel = "." unless ($rel);
+    my $out = "";
+    $out .= <<END;
 <div class="${loc}Nav"><a name="navbar_$loc">
 </a><a href="#skip-navbar_$loc" title="Skip navigation links"></a><a name="navbar_$loc_firstrow">
 </a>
 <ul class="navList" title="Navigation">
 <!--
-<div class="aboutLanguage"><em><strong>GABBO Foundation<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
 -->
+</ul>
 </div>
 <div class="subNav">
+END
+    if ($package) {
+        $out .= <<END;
 <ul class="navList">
-<li><a href="" title="class in java.lang"><span class="strong">Prev Program</span></a></li>
-<li><a href="" title="class in java.lang"><span class="strong">Next Program</span></a></li>
+<li><a href="#" title="class in java.lang"><span class="strong">Prev Program</span></a></li>
+<li><a href="#" title="class in java.lang"><span class="strong">Next Program</span></a></li>
 </ul>
+END
+    } else {
+        $out .= <<END;
 <ul class="navList">
-<li><a href="../../index.html?$program.html" target="_top">Frames</a></li>
+<li>Prev</li>
+<li>Next Program</li>
+</ul>
+END
+    }
+    $out .= <<END;
+<ul class="navList">
+<li><a href="$rel/index.html?$program.html" target="_top">Frames</a></li>
 <li><a href="$rel$program.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
@@ -686,6 +715,9 @@ sub navbar($) {
   //-->
 </script>
 </div>
+END
+    unless ($package) {
+        $out .= <<END;
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
@@ -698,10 +730,14 @@ sub navbar($) {
 <li><a href="#method_detail">Function</a></li>
 </ul>
 </div>
+END
+    }
+    $out .= <<END;
 <a name="skip-navbar_$loc">
 <!--   -->
 </a></div>
 END
+    return $out;
 }
 
 sub inherit_mods($) {
@@ -883,4 +919,285 @@ END
         $out .= &inherited_functions($programs{$program}->[1], $rel, $found);
     }
     return $out;
+}
+
+sub generate_overview() {
+    my $out = <<END;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Overview List (gabbo mudlib foundation)</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+</head>
+<body>
+<h1 title="gabbo mudlib foundation" class="bar"><strong>gabbo mudlib foundation</strong></h1>
+<div class="indexHeader"><a href="allclasses-frame.html" target="packageFrame">All Programs</a></div>
+<div class="indexContainer">
+<h2 title="Packages">Packages</h2>
+<ul title="Packages">
+END
+
+    my @packages = sort keys(%packages);
+    foreach (@packages) {
+        $out .= <<END;
+<li><a href=".$_/package-frame.html" target="packageFrame">$_</a></li>
+END
+    }
+
+    $out .= <<END;
+</ul>
+</div>
+<p>&nbsp;</p>
+</body>
+</html>
+END
+
+    open (F, ">$DOCS/overview-frame.html") or die("Couldn't open overview-frame.html for write: $!\n");
+    print F $out;
+    close(F);
+}
+
+sub generate_package_frame($) {
+    my ($package) = @_;
+    my $rel = substr("/.." x (scalar(split(/\/+/, $package)) - 1), 1);
+    $rel = "." unless ($rel);
+ 
+    my $out = "";
+    $out .= <<END;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>
+END
+    $out .= ($package ? $package : "All Programs");
+    $out .= <<END;
+(gabbo mudlib foundation)</title>
+<link rel="stylesheet" type="text/css" href="$rel/stylesheet.css" title="Style">
+</head>
+<body>
+END
+    if ($package) {
+        $out .= <<END;
+<h1 class="bar"><a href="$rel$package/package-summary.html" target="classFrame">$package</a></h1>
+<div class="indexContainer">
+<ul>
+END
+    } else {
+        $out .= <<END;
+<h1 class="bar">All Programs</h1>
+<div class="indexContainer">
+<ul>
+END
+    }
+    my @programs = undef;
+    if ($package) {
+        @programs = keys(%{$packages{$package}});
+    } else {
+        @programs = keys(%programs);
+    }
+    @programs = sort {
+        ( $programs{$a}->[0] ? $programs{$a}->[0] : basename($a) ) 
+        cmp
+        ( $programs{$b}->[0] ? $programs{$b}->[0] : basename($b) ) 
+    } @programs;
+    foreach my $program (@programs) {
+        my $alias = $programs{$program}->[0];
+        $alias = basename($program) unless($alias);
+        $out .= <<END;
+<li><a href="$rel/$program.html" title="program in $package" target="classFrame">$alias</a></li>
+END
+    }
+    $out .= <<END;
+</ul>
+</div>
+</body>
+</html>
+END
+
+    my $file = "$DOCS/allclasses-frame.html";
+    $file = "$DOCS$package/package-frame.html" if ($package);
+    open (F, ">$file") or die("Couldn't open $file for write: $!\n");
+    print F $out;
+    close(F);
+}
+
+sub generate_package_summary($) {
+    my ($package) = @_;
+    my $out = "";
+
+    my $rel = substr("/.." x (scalar(split(/\/+/, $package)) - 1), 1);
+    $rel = "." unless ($rel);
+
+    $out .= <<END;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>$package (gabbo mudlib foundation)</title>
+<link rel="stylesheet" type="text/css" href="$rel/stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="$package (gabbo mudlib foundation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+END
+    $out .= &navbar($top, $package, 1);
+    $out .= <<END;
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 title="Package" class="title">Package&nbsp;$package</h1>
+<div class="docSummary">
+<div class="block"><!-- package summary --></div>
+</div>
+<p>See:&nbsp;<a href="#package_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<ul class="blockList">
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Package Summary table, listing programs, and an explanation">
+<caption><span>Program Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Program</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+END
+    my @programs = undef;
+    if ($package) {
+        @programs = keys(%{$packages{$package}});
+    } else {
+        @programs = keys(%programs);
+    }
+    @programs = sort {
+        ( $programs{$a}->[0] ? $programs{$a}->[0] : basename($a) ) 
+        cmp
+        ( $programs{$b}->[0] ? $programs{$b}->[0] : basename($b) ) 
+    } @programs;
+    my $color = "";
+    foreach my $program (@programs) {
+        my $alias = $programs{$program}->[0];
+        $alias = basename($program) unless($alias);
+        if ($color eq "row") { $color = "alt"; }
+        else { $color = "row"; }
+        $out .= <<END;        
+<tr class="$colorColor">
+<td class="colFirst"><a href="$rel$program.html" title="program in $package">$alias</a></td>
+<td class="colLast">
+<div class="block"><!-- program summary --></div>
+</td>
+</tr>
+END
+    }
+    $out .= <<END;
+</tbody>
+</table>
+</li>
+</ul>
+<a name="package_description">
+<!--   -->
+</a>
+<h2 title="Package $package Description">Package $package Description</h2>
+<div class="block"><!-- package description --></div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+END
+    $out .= &navbar("bottom", $package, 1);
+    $out .= <<END;
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>
+END
+
+    my $file = "$DOCS$package/package-summary.html";
+    open (F, ">$file") or die("Couldn't open $file for write: $!\n");
+    print F $out;
+    close(F);
+}
+
+sub generate_summary() {
+    my $out = "";
+    $out .= <<END;
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Overview (gabbo mudlib foundation)</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Overview (gabbo mudlib foundation)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+END
+    $out .= &navbar("top", "", 1);
+    $out .= <<END;
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 class="title">gabbo mudlib foundation<br>API Specification</h1>
+</div>
+<div class="header">
+<div class="subTitle">
+<div class="block">This document is the API specification for the gabbo mudlib foundation.</div>
+</div>
+<p>See: <a href="#overview_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Packages table, listing packages, and an explanation">
+<caption><span>Packages</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Package</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+END
+    my $color = "";
+    for (keys(%packages)) {
+        if ($color eq "row") { $color = "alt"; }
+        else { $color = "row"; }
+        $out .= <<END;
+<tr class="$colorColor">
+<td class="colFirst"><a href=".$_/package-summary.html">$_</a></td>
+<td class="colLast">
+<div class="block"><!-- implement package docs --></div>
+</td>
+</tr>
+END
+    }
+    $out .= <<END;
+</tbody>
+</table>
+</div>
+<div class="footer"><a name="overview_description">
+<!--   -->
+</a>
+<div class="subTitle">
+<div class="block">This document is the API specification for the Java&#x2122;
+Platform, Standard Edition.</div>
+</div>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+END
+    $out .= &navbar($bottom, "", 1);
+    $out .= <<END;
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>
+END
+    my $file = "$DOCS/overview-summary.html";
+    open (F, ">$file") or die("Couldn't open $file for write: $!\n");
+    print F $out;
+    close(F);
 }

@@ -1195,7 +1195,8 @@ public class Preprocessor implements Closeable {
 	protected void pragma(Token name, List<Token> value)
 						throws IOException,
 								LexerException {
-		warning(name, "Unknown #" + "pragma: " + name.getText());
+		// too noisy
+		//warning(name, "Unknown #" + "pragma: " + name.getText());
 	}
 
 	private Token pragma()
