@@ -1,27 +1,28 @@
 #!/usr/bin/perl
 
-$| = 1;
-
 # FUTURE
 # add support for: @see, @since, @link, @deprecated, @inheritDoc
 # add support for some kid of nickname (e.g. RoomCode)
 # fix the ugly
 
 # TODO
-# add full inheritance tree
-# add inherited members
+# build frames, indexes and package docs
 
 use File::Find;
 use File::Path;
 use File::Basename;
+use Getopt::Std;
 use Data::Dumper;
+
+%opts = ();
+getopts('p', \%opts);
 
 $JCPP = "jcpp";
 $CYGROOT = "/cygdrive/c/Users/bobal_000/work/gabbo/mudlib";
 $ROOT= `cygpath -w $CYGROOT`;
 chomp $ROOT;
 $ROOT =~ s/\\/\\\\/g;
-$DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs";
+$DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/mudlib";
 $TMPFILE = "/tmp/lpcdoc";
 
 @SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/secure" );
@@ -38,17 +39,27 @@ $TMPFILE = "/tmp/lpcdoc";
 $MODS = join "|", keys(%MODRANKS);
 $TYPES = "void|int|string|object|mapping|closure|symbol|float|mixed";
 
-find(\&generate_doc, @SOURCE);
+%programs = ();
 
-exit 1;
+find(\&process_file, @SOURCE);
 
-sub generate_doc {
-    return if (/^\./);
-    my $cygpath = `cygpath -w $File::Find::name`;
-    $cygpath =~ s/\\/\\\\/g;
+exit 0;
 
+sub process_file {
+    return unless (/\.c$/);
     my $program = $File::Find::name;
     $program =~ s/^$CYGROOT(.*)\.c$/$1/;
+    &generate_doc($program);
+}
+
+# write out a new doc for the specified program
+sub generate_doc($) {
+    my ( $program ) = @_;
+
+    $programs{$program} = undef;
+
+    my $cygpath = `cygpath -w $CYGROOT$program.c`;
+    $cygpath =~ s/\\/\\\\/g;
 
     # run the file through the preprocessor
     my $src = "";
@@ -68,10 +79,18 @@ sub generate_doc {
         $desc = &parse_doc($1);
     }
 
+    if (@{$desc->[1]->{'alias'}}) {
+        # program has an alias, store it for later
+        $programs{$program} = 
+            [ $desc->[1]->{'alias'}->[0]->[1], undef, undef, undef ];
+    } else {
+        $programs{$program} = [ undef, undef, undef, undef ];
+    }
+
     # grab all the inherit statements before we strip out the strings
-    %inherits = ();
+    my %inherits = ( );
     my $i = 1;
-    while ($src =~ s/^(.*?inherit.*?);//gm) {
+    while ($src =~ /^(.*?inherit.*?);/gm) {
         my $inherit = $1;
         my $prog = "";
         # FIXME resolve relative paths to full program name
@@ -94,6 +113,7 @@ sub generate_doc {
             my $rank = 1;
             $mods = { map { $_ => $rank++ } split(/\s+/, $1) };
         }
+
         $inherits{$prog} = [ $vars, $funcs, $mods, $i++ ];
     }
 
@@ -203,6 +223,19 @@ sub generate_doc {
         }
     }
 
+    # now that we have all the inherits, recurse down the tree and
+    # fill out the program info for the ancestors to use later for
+    # cross referencing links and such
+    $programs{$program}->[1] = \%inherits;
+    $programs{$program}->[2] = \%variables;
+    $programs{$program}->[3] = \%functions;
+    my @inh = sort {
+        $inherits{$a}->[3] <=> $inherits{$b}->[3]
+    } keys(%inherits);
+    foreach (@inh) {
+        &generate_doc($_) unless (exists($programs{$_}));
+    }
+
     # go back to unstripped source and look for doc comments
     while ($src =~ m#\/\*\*\s+(.*?)\s+\*\/\s*(.+?)[;{]#sg) {
         my $doc = $1;
@@ -230,9 +263,12 @@ sub generate_doc {
     close(F);
 }
 
+# parse out documentation from comment
 sub parse_doc($) {
     my ( $doc ) = @_;
+    # remove the customary leading asterisk
     $doc =~ s#^\s*\*\s+##gm;
+    # parse out the description
     $doc =~ /(.*?)\s*(\@.*)/ms;
     my $desc = $1;
     $doc = $2;
@@ -240,8 +276,10 @@ sub parse_doc($) {
     my $tag = undef;
     my $arg = undef;
     my $buf = "";
+    # go line-by-line looking for @tags
     foreach (split /\n/, $doc) {
         if (/^\@(\w+)\s+(.*)/) {
+            # found a new tag, store what we've parsed so far and reset
             if (defined($tag)) {
                 if ($tag  eq 'param') {
                     $tags{$tag} = { } unless(exists($tags{$tag}));
@@ -255,6 +293,7 @@ sub parse_doc($) {
             $tag = $1;
             $arg = $2;
             if ($tag eq 'param') {
+                # @param tag takes an arg
                 $arg =~ /^(\w+)\s+(.*)/;
                 $arg = $1;
                 $buf .= "$2 ";
@@ -263,11 +302,13 @@ sub parse_doc($) {
                 $arg = undef;
             }
         } else {
+            # no tags, append line to buffer
             s/\s*$/ /;
-            $buf .= "$_ ";
+            $buf .= "$_";
         }
     }
 
+    # our loop broke before the last tag was stored, do it now
     if (defined($tag)) {
         if ($tag  eq 'param') {
             $tags{$tag} = { } unless(exists($tags{$tag}));
@@ -280,10 +321,29 @@ sub parse_doc($) {
     return [$desc, \%tags];
 }
 
+# actually compose all the html
 sub write_doc($$$) {
     my ($program, $desc, $inherits, $functions, $variables) = @_;
+    my $out = "";
+
+    # for building relative paths
     my $rel = substr("/.." x (scalar(split(/\/+/, $program)) - 2), 1);
-    $out = "";
+
+    # omit private members if no -p option
+    my @visible_variables = keys(%$variables);
+    if (!exists($opts{'p'})) {
+        @visible_variables = grep { 
+            !exists($variables->{$_}->[0]->{'private'})
+        } @visible_variables;
+    }
+    my @visible_functions = keys(%$functions);
+    if (!exists($opts{'p'})) {
+        @visible_functions = grep { 
+            !exists($functions->{$_}->[0]->{'private'})
+        } @visible_functions;
+    }
+
+    # start building the page
     $out .= <<END;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -295,12 +355,23 @@ sub write_doc($$$) {
 END
 
     $out .= &navbar("top");
-
     $out .= <<END;
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<!-- <div class="subTitle">$directory</div> -->
+END
+    my $alias = $programs{$program}->[0];
+    if ($alias) {
+        $out .= <<END;
+<div class="subTitle">$program</div>
+<h2 title="Program $alias" class="title">Program $alias</h2>
+END
+    } else {
+        $out .= <<END;
 <h2 title="Program $program" class="title">Program $program</h2>
+END
+    }
+
+    $out .= <<END;
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -312,20 +383,9 @@ END
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul>
 END
-        my @inh = sort {
-            $inherits->{$a}->[3] <=> $inherits->{$b}->[3]
-        } keys(%$inherits);
-        foreach my $prog (@inh) {
-            my $mods = &inherit_mods($inherits->{$prog});
-            $mods = "&nbsp;[$mods]" if ($mods);
-            $out .= <<END;
-<li><a href="$rel$prog.html" title="">$prog</a>$mods</li>
-END
-        }
+        $out .= &inherit_tree($inherits, $rel);
         $out .= <<END;
-</ul>
 </dd>
 </dl>
 END
@@ -347,7 +407,12 @@ END
 <ul class="blockList">
 <li class="blockList">
 END
-    if (%$variables) {
+    my $inherited_variables = "";
+    if (%$inherits) {
+        $inherited_variables .= &inherited_variables($inherits, $rel, {});
+    }
+
+    if (@visible_variables || $inherited_variables) {
         $out .= <<END;
 <!-- =========== FIELD SUMMARY =========== -->
 <ul class="blockList">
@@ -355,6 +420,9 @@ END
 <!--   -->
 </a>
 <h3>Variable Summary</h3>
+END
+        if (@visible_variables) {
+            $out .= <<END;
 <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Variable Summary table, listing fields, and an explanation">
 <caption><span>Variables</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -362,19 +430,19 @@ END
 <th class="colLast" scope="col">Variable and Description</th>
 </tr>
 END
-        my $color;
-        my @vars = sort keys(%$variables);
-        foreach my $v (@vars) {
-            my $var = $variables->{$v};
-            if ($color eq "row") { $color = "alt"; }
-            else { $color = "row"; }
-            my $mods = &variable_mods($var);
-            $mods .= "&nbsp;" if ($mods);
-            my $type = $var->[1];
-            $type =~ s/\s+/&nbsp;/g;
-            my $summary = $var->[2]->[0];
-            $summary =~ s/^(.*?\.)\s.*/$1/s;
-            $out .= <<END;
+            my $color;
+            my @vars = sort @visible_variables;
+            foreach my $v (@vars) {
+                my $var = $variables->{$v};
+                if ($color eq "row") { $color = "alt"; }
+                else { $color = "row"; }
+                my $mods = &variable_mods($var);
+                $mods .= "&nbsp;" if ($mods);
+                my $type = $var->[1];
+                $type =~ s/\s+/&nbsp;/g;
+                my $summary = $var->[2]->[0];
+                $summary =~ s/^(.*?\.)\s.*/$1/s;
+                $out .= <<END;
 <tr class="${color}Color">
 <td class="colFirst"><code>$mods$type</code></td>
 <td class="colLast"><code><strong><a href="$rel/$program.html#$v">$v</strong></code>
@@ -382,15 +450,23 @@ END
 </td>
 </tr>
 END
-        }
+            }
         $out .= <<END;
 </table>
+END
+        }
+        $out .= <<END;
+$inherited_variables
 </li>
 </ul>
 END
     }
 
-    if (%$functions) {
+    my $inherited_functions = "";
+    if (%$inherits) {
+        $inherited_functions .= &inherited_functions($inherits, $rel, {});
+    }
+    if (@visible_functions || $inherited_functions) {
         $out .= <<END;
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
@@ -398,6 +474,9 @@ END
 <!--   -->
 </a>
 <h3>Function Summary</h3>
+END
+        if (@visible_functions) {
+            $out .= <<END;
 <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
 <caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -405,20 +484,19 @@ END
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 END
-
-        my @funcs = sort keys(%$functions);
-        foreach my $f (@funcs) {
-            my $func = $functions->{$f};
-            if ($color eq "row") { $color = "alt"; }
-            else { $color = "row"; }
-            my $mods = &function_mods($func);
-            $mods .= "&nbsp;" if ($mods);
-            my $type = $func->[1];
-            $type =~ s/\s+/&nbsp;/g;
-            my $args = &function_args($func);
-            my $summary = $func->[3]->[0];
-            $summary =~ s/^(.*?\.)\s.*/$1/s;
-            $out .= <<END;
+            my @funcs = sort @visible_functions;
+            foreach my $f (@funcs) {
+                my $func = $functions->{$f};
+                if ($color eq "row") { $color = "alt"; }
+                else { $color = "row"; }
+                my $mods = &function_mods($func);
+                $mods .= "&nbsp;" if ($mods);
+                my $type = $func->[1];
+                $type =~ s/\s+/&nbsp;/g;
+                my $args = &function_args($func);
+                my $summary = $func->[3]->[0];
+                $summary =~ s/^(.*?\.)\s.*/$1/s;
+                $out .= <<END;
 <tr class="${color}Color">
 <td class="colFirst"><code>$mod$type</code></td>
 <td class="colLast"><code><strong><a href="$rel$program.html#$f()">$f</a></strong>($args)</code>
@@ -426,22 +504,18 @@ END
 </td>
 </tr>
 END
+            }
+            $out .= <<END;
+</table>
+END
         }
         $out .= <<END;
-</table>
-<!--
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_$prg">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="$rel$prg.html" title="class in java.lang">$prg</a></h3>
-<code><a href="$rel$prg.html#clone()">clone</a>, <a href="$rel$prg.html#wait(long,%20int)">wait</a></code></li>
+$inherited_functions
+</li>
 </ul>
--->
 END
     }
     $out .= <<END;
-</li>
-</ul>
 </li>
 </ul>
 </div>
@@ -450,7 +524,7 @@ END
 <li class="blockList">
 END
 
-    if (%$variables) {
+    if (@visible_variables) {
         $out .= <<END;
 <!-- ============ FIELD DETAIL =========== -->
 <ul class="blockList">
@@ -461,7 +535,7 @@ END
 END
         my @vars = sort { 
             $variables->{$a}->[3] <=> $variables->{$b}->[3] 
-        } keys(%{$variables});
+        } @visible_variables;
         foreach my $v (@vars) {
             my $var = $variables->{$v};
             if ($color eq "row") { $color = "alt"; }
@@ -491,7 +565,7 @@ END
 END
     }
 
-    if (%$functions) {
+    if (@visible_functions) {
         $out .= <<END;
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
@@ -503,7 +577,7 @@ END
 
         my @funcs = sort { 
             $functions->{$a}->[4] <=> $functions->{$b}->[4] 
-        } keys(%{$functions});
+        } @visible_functions;
         foreach my $f (@funcs) {
             my $func = $functions->{$f};
             if ($color eq "row") { $color = "alt"; }
@@ -692,3 +766,121 @@ sub function_args($) {
     return $args;
 }
 
+sub inherit_tree($) {
+    my ($inherits, $rel) = @_;
+    my $out = "<ul class=\"tree\">";
+
+    my @inh = sort {
+        $inherits->{$a}->[3] <=> $inherits->{$b}->[3]
+    } keys(%$inherits);
+    for (my $i = 0; $i <= $#inh; $i++) {
+        my $last = " class=\"last\"" if ($i == $#inh);
+        my $prog = $inh[$i];
+        my $mods = &inherit_mods($inherits->{$prog});
+        $mods = "&nbsp;[$mods]" if ($mods);
+        if ($programs{$prog}->[0]) {
+            $out .= <<END;
+<li$last><a href="$rel$prog.html" title="">$programs{$prog}->[0]</a>$mods
+END
+        } else {
+            $out .= <<END;
+<li$last><a href="$rel$prog.html" title="">$prog</a>$mods
+END
+        }
+
+        if (%{$programs{$prog}->[1]}) {
+            # recurse down the inheritance tree
+            $out .= &inherit_tree($programs{$prog}->[1], $rel);
+        }
+        $out .= "</li>";
+    }
+    $out .= "</ul>";
+    return $out;
+}
+
+sub inherited_variables($) {
+    my ($inherits, $rel, $found) = @_;
+    my @inh = sort {
+        $inherits->{$a}->[3] <=> $inherits->{$b}->[3]
+    } keys(%$inherits);
+    my $out = "";
+    for $program (@inh) {
+        next if (exists($found->{$program}));
+        next if (exists($inherits->{$program}->[0]->{'private'}));
+        my $buf = "";
+        my @vars = sort keys(%{$programs{$program}->[2]});
+        my $first = 1;
+        foreach (@vars) {
+            my $var = $programs{$program}->[2]->{$_};
+            next if (exists($var->[0]->{'private'}));
+            my $comma = ", " unless($first);
+            $buf .= "$comma<a href=\"$rel$program.html#$_\">$_</a>";
+            $first = 0;
+        }
+        if ($buf) {
+            my $alias = $programs{$program}->[0];
+            $alias = $program unless($alias);
+            $buf = <<END;
+
+<li class="blockList"><a name="fields_inherited_from_class_$program">
+</a>
+<h3>Variables inherited from program&nbsp;<a href="$rel$program.html" title="program $program">$alias</a></h3>
+<code>$buf</code></li>
+END
+        }
+        if ($buf) {
+            $buf = <<END;
+<ul class="blockList">
+$buf
+</ul>
+END
+        }
+        $out .= $buf;
+        $found->{$program} = 1;
+        $out .= &inherited_variables($programs{$program}->[1], $rel, $found);
+    }
+    return $out;
+}
+
+sub inherited_functions($) {
+    my ($inherits, $rel, $found) = @_;
+    my @inh = sort {
+        $inherits->{$a}->[3] <=> $inherits->{$b}->[3]
+    } keys(%$inherits);
+    my $out = "";
+    for $program (@inh) {
+        next if (exists($found->{$program}));
+        next if (exists($inherits->{$program}->[1]->{'private'}));
+        my $buf = "";
+        my @funcs = sort keys(%{$programs{$program}->[3]});
+        my $first = 1;
+        foreach (@funcs) {
+            my $func = $programs{$program}->[3]->{$_};
+            next if (exists($func->[0]->{'private'}));
+            my $comma = ", " unless($first);
+            $buf .= "$comma<a href=\"$rel$program.html#$_()\">$_</a>";
+            $first = 0;
+        }
+        if ($buf) {
+            my $alias = $programs{$program}->[0];
+            $alias = $program unless($alias);
+            $buf = <<END;
+<li class="blockList"><a name="methods_inherited_from_class_$program">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="$rel$program.html" title="program $program">$alias</a></h3>
+<code>$buf</code></li>
+END
+        }
+        if ($buf) {
+            $buf = <<END;
+<ul class="blockList">
+$buf
+</ul>
+END
+        }
+        $out .= $buf;
+        $found->{$program} = 1;
+        $out .= &inherited_functions($programs{$program}->[1], $rel, $found);
+    }
+    return $out;
+}
