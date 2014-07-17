@@ -3,13 +3,13 @@
 $| = 1;
 
 # FUTURE
-# add @see tag support
-# add specified by
+# add support for: @see, @since, @link, @deprecated, @inheritDoc
+# add support for some kid of nickname (e.g. RoomCode)
+# fix the ugly
 
 # TODO
-# add inherited methods 
-# add real summary support
-# add support for some kid of nickname (e.g. RoomCode)
+# add full inheritance tree
+# add inherited members
 
 use File::Find;
 use File::Path;
@@ -25,10 +25,18 @@ $DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs";
 $TMPFILE = "/tmp/lpcdoc";
 
 @SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/secure" );
-#@SOURCE = ( "$CYGROOT/lib/strings.c" );
+#@SOURCE = ( "$CYGROOT/lib/doctest.c" );
+
+%MODRANKS = ( "public" => 1,
+              "static" => 2,
+              "protected" => 3,
+              "private" => 4,
+              "nomask" => 5,
+              "nosave" => 6,
+              "varargs" => 7,
+              "virtual" => 8 );
+$MODS = join "|", keys(%MODRANKS);
 $TYPES = "void|int|string|object|mapping|closure|symbol|float|mixed";
-$MODS = "private|protected|static|public|nomask|nosave";
-%programs = ();
 
 find(\&generate_doc, @SOURCE);
 
@@ -42,8 +50,7 @@ sub generate_doc {
     my $program = $File::Find::name;
     $program =~ s/^$CYGROOT(.*)\.c$/$1/;
 
-    return if (exists($programs{$program}));
-
+    # run the file through the preprocessor
     my $src = "";
     open(F, "$JCPP -I$ROOT\\\\include --root=$ROOT --include=$ROOT\\\\include\\\\auto.h $cygpath |") or die("Couldn't open $TMPFILE for read: $!\n");
     while (<F>) {
@@ -63,19 +70,31 @@ sub generate_doc {
 
     # grab all the inherit statements before we strip out the strings
     %inherits = ();
+    my $i = 1;
     while ($src =~ s/^(.*?inherit.*?);//gm) {
         my $inherit = $1;
         my $prog = "";
+        # FIXME resolve relative paths to full program name
         $prog .= $2 while ($inherit =~ /(["'])((\\\1|.)*?)\1/g);
-        my $vars = [];
-        if ($inherit =~ /\s*(($MODS|\s)+)\s+variables/) {
-            $vars = [split(/\s+/, $1)];
+        # check for variable modifiers
+        my $vars = { };
+        if ($inherit =~ /\s*((?:$MODS|\s)+)\s+variables/) {
+            my $rank = 1;
+            $vars = { map { $_ => $rank++ } split(/\s+/, $1) };
         }
-        my $funcs = [];
-        if ($inherit =~ /\s*(($MODS|\s)+)\s+functions/) {
-            $funcs = [split(/\s+/, $1)];
+        # check for function modifiers
+        my $funcs = { };
+        if ($inherit =~ /\s*((?:$MODS|\s)+)\s+functions/) {
+            my $rank = 1;
+            $funcs = { map { $_ => $rank++ } split(/\s+/, $1) };
         }
-        $inherits{$prog} = [ $vars, $funcs ];
+        # check for virtual mod
+        my $mods = { };
+        if ($inherit =~ /\s*((?:$MODS|\s)+)\s+inherit/) {
+            my $rank = 1;
+            $mods = { map { $_ => $rank++ } split(/\s+/, $1) };
+        }
+        $inherits{$prog} = [ $vars, $funcs, $mods, $i++ ];
     }
 
     # first remove all the comments and function bodies
@@ -104,26 +123,29 @@ sub generate_doc {
             } elsif ($char eq "'") {
                 # open quote
                 if ($chars[$i-1] eq "#") {
+                    # closure
                     next;
                 }
                 if ($chars[$i+2] eq "'") {
+                    #quoted character, skip
                     $i += 2; 
                 }
             } elsif ($char eq "{") {
-                # open block
                 if (substr($stripped, $i-3, 3) eq "#'(") {
+                    # array constructor closure
                     next;
                 } else {
+                    # open block, descend and start/continue stripping
                     $brace++;
                     next;
                 }
             } elsif ($char eq "}") {
-                # close block
+                # close block, back out and convert to function prototype
                 $brace--;
                 $newsrc .= ";" unless($brace);
             } else {
-                # include characters if we're outside all blocks
                 if ($brace <= 0) {
+                    # include characters if we're outside all blocks
                     $newsrc .= $char;
                 }
             }
@@ -132,6 +154,7 @@ sub generate_doc {
 
     my %functions = ();
     my %variables = ();
+    my $i = 0;
     while ($newsrc =~ m/\s*(.+?)\s*;/gs) {
         my $def = $1;
         $def =~ s/\s*\*\s*/ * /g; # make arrays easier
@@ -140,20 +163,25 @@ sub generate_doc {
             my $prefix = $1;
             my $name = $2;
             my $args = [ ];
+            # parse out the args
             foreach (split /\s*,\s*/, $3) {
                 my @s = split /\s+/, $_;
                 push @$args, [ "@s[0..($#s-1)]", $s[$#s] ];
             }
-            if ($prefix =~ /(.*?)\s*(\w+)\s*(\*?)\s*$/) {
-                $mod = $1;
+            # now the type and modifiers
+            if ($prefix =~ /\s*((?:$MODS|\s)*)\s*($TYPES)\s*(\*?)\s*/) {
+                my $rank = 1;
+                $mods = { map { $_ => $rank++ } split(/\s+/, $1) };
                 $type = $2;
-                $type .= " *" if($3);
+                $type .= " $3";
             }
-            $functions{$name} = [ $mod, $type, $args, "" ];
-        } elsif ($def =~ /\s*(.*?)\s*($TYPES)\s*(.+)\s*/) {
+            $functions{$name} = [ $mods, $type, $args, "", $i++ ];
+        } elsif ($def =~ /\s*((?:$MODS|\s)*)\s*($TYPES)\s*(.+)\s*/) {
             # parse out a variable definition
-            my $mod = $1;
+            my $rank = 1;
+            $mods = { map { $_ => $rank++ } split(/\s+/, $1) };
             my $type = $2;
+            # handle multiple variable declarations on the same line
             my %names = ( );
             foreach my $name (split /\s*,\s*/, $3) {
                 if ($name =~ /^\s*(.*?)[\s=]*$/) {
@@ -170,7 +198,7 @@ sub generate_doc {
             }
             foreach (keys(%names)) {
                 $type = "$type *" if ($names{$_});
-                $variables{$_} = [ $mod, $type, "" ];
+                $variables{$_} = [ $mods, $type, "", $i++ ];
             }
         }
     }
@@ -254,13 +282,14 @@ sub parse_doc($) {
 
 sub write_doc($$$) {
     my ($program, $desc, $inherits, $functions, $variables) = @_;
+    my $rel = substr("/.." x (scalar(split(/\/+/, $program)) - 2), 1);
     $out = "";
     $out .= <<END;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>$class</title>
-<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style">
+<link rel="stylesheet" type="text/css" href="$rel/stylesheet.css" title="Style">
 </head>
 <body>
 END
@@ -277,38 +306,38 @@ END
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+END
+    if (%$inherits) {
+        $out .= <<END;
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
 <ul>
 END
-    foreach my $prog (keys(%$inherits)) {
-        my $mods = "";
-        if (@{$inherits->{$prog}->[0]}) {
-            $mods .= join("&nbsp;", @{$inherits->{$prog}->[0]});
-            $mods .= " variables";
+        my @inh = sort {
+            $inherits->{$a}->[3] <=> $inherits->{$b}->[3]
+        } keys(%$inherits);
+        foreach my $prog (@inh) {
+            my $mods = &inherit_mods($inherits->{$prog});
+            $mods = "&nbsp;[$mods]" if ($mods);
+            $out .= <<END;
+<li><a href="$rel$prog.html" title="">$prog</a>$mods</li>
+END
         }
-        if (@{$inherits->{$prog}->[1]}) {
-            $mods .= "&nbsp;" if ($mods);
-            $mods .= join("&nbsp;", @{$inherits->{$prog}->[1]});
-            $mods .= " functions";
-        }
-        $mods .= "&nbsp;" if ($mods);
         $out .= <<END;
-<li>$mods<a href="..$prog.html" title="">$prog</a></li>
+</ul>
+</dd>
+</dl>
 END
     }
 
     $out .= <<END;
-</ul>
-</dd>
-</dl>
 <hr>
 <br>
 <div class="block">$desc->[0]</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
-<a href="../../java/lang/Object.html#toString()"><code>Object.toString()</code></a>
+<a href="$rel$prg.html#toString()"><code>$prg->toString()</code></a>
 </dd></dl>
 -->
 </li>
@@ -334,18 +363,22 @@ END
 </tr>
 END
         my $color;
-        foreach my $v (keys(%$variables)) {
+        my @vars = sort keys(%$variables);
+        foreach my $v (@vars) {
             my $var = $variables->{$v};
             if ($color eq "row") { $color = "alt"; }
             else { $color = "row"; }
-            my $mod = $var->[0];
-            $mod .= "&nbsp;" if ($mod);
-            $mod .= $var->[1];
+            my $mods = &variable_mods($var);
+            $mods .= "&nbsp;" if ($mods);
+            my $type = $var->[1];
+            $type =~ s/\s+/&nbsp;/g;
+            my $summary = $var->[2]->[0];
+            $summary =~ s/^(.*?\.)\s.*/$1/s;
             $out .= <<END;
 <tr class="${color}Color">
-<td class="colFirst"><code>$mod</code></td>
-<td class="colLast"><code><strong><a href="../$program.html#$v">$v</strong></code>
-<div class="block"><!-- add summary support --></div>
+<td class="colFirst"><code>$mods$type</code></td>
+<td class="colLast"><code><strong><a href="$rel/$program.html#$v">$v</strong></code>
+<div class="block">$summary</div>
 </td>
 </tr>
 END
@@ -373,27 +406,23 @@ END
 </tr>
 END
 
-        foreach my $f (keys(%$functions)) {
+        my @funcs = sort keys(%$functions);
+        foreach my $f (@funcs) {
             my $func = $functions->{$f};
             if ($color eq "row") { $color = "alt"; }
             else { $color = "row"; }
-            $args = "";
-            my $first = 1;
-            for (@{$func->[2]}) {
-                $args .= ", " unless($first);
-                $args .= "$_->[0]";
-                $args .= "&nbsp;" unless ($_->[0] =~ /\*$/); 
-                $args .= $_->[1];
-                $first = 0;
-            }
-            my $mod = $func->[0];
-            $mod .= "&nbsp;" if ($mod);
-            $mod .= $func->[1];
+            my $mods = &function_mods($func);
+            $mods .= "&nbsp;" if ($mods);
+            my $type = $func->[1];
+            $type =~ s/\s+/&nbsp;/g;
+            my $args = &function_args($func);
+            my $summary = $func->[3]->[0];
+            $summary =~ s/^(.*?\.)\s.*/$1/s;
             $out .= <<END;
 <tr class="${color}Color">
-<td class="colFirst"><code>$mod</code></td>
-<td class="colLast"><code><strong><a href="../..$program.html#$f()">$f</a></strong>($args)</code>
-<div class="block"><!-- implement summaries --></div>
+<td class="colFirst"><code>$mod$type</code></td>
+<td class="colLast"><code><strong><a href="$rel$program.html#$f()">$f</a></strong>($args)</code>
+<div class="block">$summary</div>
 </td>
 </tr>
 END
@@ -402,10 +431,10 @@ END
 </table>
 <!--
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<li class="blockList"><a name="methods_inherited_from_class_$prg">
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.<a href="../../java/lang/Object.html" title="class in java.lang">Object</a></h3>
-<code><a href="../../java/lang/Object.html#clone()">clone</a>, <a href="../../java/lang/Object.html#finalize()">finalize</a>, <a href="../../java/lang/Object.html#getClass()">getClass</a>, <a href="../../java/lang/Object.html#notify()">notify</a>, <a href="../../java/lang/Object.html#notifyAll()">notifyAll</a>, <a href="../../java/lang/Object.html#wait()">wait</a>, <a href="../../java/lang/Object.html#wait(long)">wait</a>, <a href="../../java/lang/Object.html#wait(long,%20int)">wait</a></code></li>
+<h3>Functions inherited from program&nbsp;<a href="$rel$prg.html" title="class in java.lang">$prg</a></h3>
+<code><a href="$rel$prg.html#clone()">clone</a>, <a href="$rel$prg.html#wait(long,%20int)">wait</a></code></li>
 </ul>
 -->
 END
@@ -430,14 +459,18 @@ END
 </a>
 <h3>Variable Detail</h3>
 END
-        foreach my $v (keys(%$variables)) {
+        my @vars = sort { 
+            $variables->{$a}->[3] <=> $variables->{$b}->[3] 
+        } keys(%{$variables});
+        foreach my $v (@vars) {
             my $var = $variables->{$v};
             if ($color eq "row") { $color = "alt"; }
             else { $color = "row"; }
-            my $mod = $var->[0];
-            $mod .= "&nbsp;" if ($mod);
-            $mod .= $var->[1];
-            $mod .= "&nbsp;" if ($mod);
+            my $mods = &variable_mods($var);
+            $mods .= "&nbsp;" if ($mods);
+            my $type = $var->[1];
+            $type =~ s/\s+/&nbsp;/g;
+            $type .= "&nbsp;" if ($type);
             $out .= <<END;
 <a name="$v">
 <!--   -->
@@ -445,13 +478,8 @@ END
 <ul class="blockListLast">
 <li class="blockList">
 <h4>$v</h4>
-<pre>$mod$v</pre>
+<pre>$mods$type$v</pre>
 <div class="block">$var->[2]->[0]</div>
-<!--
-<dl><dt><span class="strong">Since:</span></dt>
-  <dd>1.2</dd>
-<dt><span class="strong">See Also:</span></dt><dd><a href="../../java/text/Collator.html#compare(java.lang.String,%20java.lang.String)"><code>Collator.compare(String, String)</code></a></dd></dl>
--->
 </li>
 </ul>
 END
@@ -473,23 +501,18 @@ END
 <h3>Function Detail</h3>
 END
 
-        foreach my $f (keys(%$functions)) {
+        my @funcs = sort { 
+            $functions->{$a}->[4] <=> $functions->{$b}->[4] 
+        } keys(%{$functions});
+        foreach my $f (@funcs) {
             my $func = $functions->{$f};
             if ($color eq "row") { $color = "alt"; }
             else { $color = "row"; }
-            $args = "";
-            my $first = 1;
-            for (@{$func->[2]}) {
-                $args .= ", " unless($first);
-                $args .= "$_->[0]";
-                $args .= "&nbsp;" unless ($_->[0] =~ /\*$/); 
-                $args .= $_->[1];
-                $first = 0;
-            }
-            my $mod = $var->[0];
-            $mod .= "&nbsp;" if ($mod);
-            $mod .= $var->[1];
-            $mod .= "&nbsp;" if ($mod);
+            my $args = &function_args($func);
+            my $mods = &function_mods($func);
+            $mods .= "&nbsp;" if ($mods);
+            my $type = $func->[1];
+            $type =~ s/\s+/&nbsp;/g;
             $out .= <<END;
 <a name="$f()">
 <!--   -->
@@ -497,13 +520,9 @@ END
 <ul class="blockList">
 <li class="blockList">
 <h4>$f</h4>
-<pre>$mod$f($args)</pre>
+<pre>$mod$type$f($args)</pre>
 <div class="block">$func->[3]->[0]</div>
 <dl>
-<!--
-<dt><strong>Specified by:</strong></dt>
-<dd><code><a href="../../java/lang/CharSequence.html#length()">length</a></code>&nbsp;in interface&nbsp;<code><a href="../../java/lang/CharSequence.html" title="interface in java.lang">CharSequence</a></code></dd>
--->
 <dl>
 END
             if (@{$func->[2]}) {
@@ -566,7 +585,7 @@ sub navbar($) {
 </a>
 <ul class="navList" title="Navigation">
 <!--
-<div class="aboutLanguage"><em><strong>LDMud Foundational Mudlib<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>GABBO Foundation<br/>version 0.1</strong></em></div>
 -->
 </div>
 <div class="subNav">
@@ -575,11 +594,11 @@ sub navbar($) {
 <li><a href="" title="class in java.lang"><span class="strong">Next Program</span></a></li>
 </ul>
 <ul class="navList">
-<li><a href="../../index.html?java/lang/String.html" target="_top">Frames</a></li>
-<li><a href="$class.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?$program.html" target="_top">Frames</a></li>
+<li><a href="$rel$program.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
-<li><a href="../../allclasses-noframe.html">All Program</a></li>
+<li><a href="$rel/allclasses-noframe.html">All Programs</a></li>
 </ul>
 <div>
 <script type="text/javascript"><!--
@@ -610,3 +629,66 @@ sub navbar($) {
 </a></div>
 END
 }
+
+sub inherit_mods($) {
+    my ($inherit, $preserve_order) = @_;
+    my %ranks;
+    my $mods = "";
+    my %v = %{ $inherit->[0] };
+    %ranks = ( $preserve_order ? %v : %MODRANKS );
+    if (%v) {
+        $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%v));
+        $mods .= "&nbsp;variables";
+    }
+    my %f = %{ $inherit->[1] };
+    %ranks = ( $preserve_order ? %f : %MODRANKS );
+    if (%f) {
+        $mods .= "&nbsp;" if ($mods);
+        $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%f));
+        $mods .= "&nbsp;functions";
+    }
+    my %m = %{ $inherit->[2] };
+    %ranks = ( $preserve_order ? %m : %MODRANKS );
+    if (%m) {
+        $mods .= "&nbsp;" if ($mods);
+        $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%m));
+    }
+    return $mods;
+}
+
+sub variable_mods($) {
+    my ($var, $preserve_order) = @_;
+    my $mods = "";
+
+    my %v = %{ $var->[0] };
+    my %ranks = ( $preserve_order ? %v : %MODRANKS );
+    if (%v) {
+        $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%v));
+    }
+    return $mods;
+}
+
+sub function_mods($) {
+    my ($func) = @_;
+    my %f = %{ $func->[0] };
+    my %ranks = ( $preserve_order ? %f : %MODRANKS );
+    if (%f) {
+        $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%f));
+    }
+    return $mods;
+}
+
+sub function_args($) {
+    my ($func) = @_;
+    my $args = "";
+    my $first = 1;
+    for (@{$func->[2]}) {
+        $args .= ",&nbsp;" unless($first);
+        $args .= "$_->[0]";
+        $args .= "&nbsp;" unless ($_->[0] =~ /\*$/); 
+        $args .= $_->[1];
+        $first = 0;
+    }
+    return $args;
+}
+
