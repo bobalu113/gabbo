@@ -1,10 +1,13 @@
 #!/usr/bin/perl
 
+$| = 1;
+
 # FUTURE
 # add @see tag support
-# add inherited methods / specified by
+# add specified by
 
 # TODO
+# add inherited methods 
 # add real summary support
 # add support for some kid of nickname (e.g. RoomCode)
 
@@ -19,13 +22,13 @@ $ROOT= `cygpath -w $CYGROOT`;
 chomp $ROOT;
 $ROOT =~ s/\\/\\\\/g;
 $DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs";
-@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj" );
 $TMPFILE = "/tmp/lpcdoc";
 
-@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/secure" );
-$TYPES = "int|string|object|mapping|closure|symbol|float|mixed";
-
-chroot $SYSROOT;
+#@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/secure" );
+@SOURCE = ( "$CYGROOT/lib/strings.c" );
+$TYPES = "void|int|string|object|mapping|closure|symbol|float|mixed";
+$MODS = "private|protected|static|public|nomask|nosave";
+%programs = ();
 
 find(\&generate_doc, @SOURCE);
 
@@ -35,15 +38,22 @@ sub generate_doc {
     return if (/^\./);
     my $cygpath = `cygpath -w $File::Find::name`;
     $cygpath =~ s/\\/\\\\/g;
-    my $src = ``;
-    open(F, "$JCPP -I$ROOT\\\\include --root=$ROOT --include=auto.h $cygpath |") or die("Couldn't open $TMPFILE for read: $!\n");
+
+    my $program = $File::Find::name;
+    $program =~ s/^$CYGROOT(.*)\.c$/$1/;
+
+    return if (exists($programs{$program}));
+
+    my $src = "";
+    open(F, "$JCPP -I$ROOT\\\\include --root=$ROOT --include=$ROOT\\\\include\\\\auto.h $cygpath |") or die("Couldn't open $TMPFILE for read: $!\n");
     while (<F>) {
         next if (/^\s*$/);
         next if (/^\#/);
-        s#(.*?)//.*\n#$1\n#;
+        
         s/^\s*(.*?)\s*\n$/$1\n/;
         $src .= $_;
     }
+    print "$src\n";
     close(F);
 
     # if the file begins with a comment, it's the class doc
@@ -53,9 +63,20 @@ sub generate_doc {
     }
 
     # grab all the inherit statements before we strip out the strings
-    @inherits = ();
+    %inherits = ();
     while ($src =~ s/^(.*?inherit.*?);//gm) {
-        push @inherits, $1;
+        my $inherit = $1;
+        my $prog = "";
+        $prog .= $2 while ($inherit =~ /(["'])((\\\1|.)*?)\1/g);
+        my $vars = [];
+        if ($inherit =~ /\s*(($MODS|\s)+)\s+variables/) {
+            $vars = [split(/\s+/, $1)];
+        }
+        my $funcs = [];
+        if ($inherit =~ /\s*(($MODS|\s)+)\s+functions/) {
+            $funcs = [split(/\s+/, $1)];
+        }
+        $inherits{$prog} = [ $vars, $funcs ];
     }
 
     # first remove all the comments and function bodies
@@ -66,7 +87,7 @@ sub generate_doc {
     my $newsrc = "";
     my $brace = 0;
 
-    for my $i (0..$#chars) {
+    for (my $i = 0; $i <= $#chars; $i++) {
         my $char = $chars[$i];
         if (defined($quote)) {
             # if we're in a string literal discard characters
@@ -79,12 +100,16 @@ sub generate_doc {
                 } 
             }
         } else {
-            if (($char eq '"') || ($char eq "'")) {
+            if ($char eq '"') {
+                $quote = $char;
+            } elsif ($char eq "'") {
                 # open quote
-                if (($char eq "'") && ($chars[$i-1] eq "#")) {
+                if ($chars[$i-1] eq "#") {
                     next;
                 }
-                $quote = $char;
+                if ($chars[$i+2] eq "'") {
+                    $i += 2; 
+                }
             } elsif ($char eq "{") {
                 # open block
                 if (substr($stripped, $i-3, 3) eq "#'(") {
@@ -111,14 +136,14 @@ sub generate_doc {
     while ($newsrc =~ m/\s*(.+?)\s*;/gs) {
         my $def = $1;
         $def =~ s/\s*\*\s*/ * /g; # make arrays easier
-        if ($def =~ /\s*(.*?)\s*(\S+)\s*\(\s*(.*?)\s*\)\s*/) {
+        if ($def =~ /\s*(.*?)\s*(\S+)\s*\(\s*(.*?)\s*\)\s*/s) {
             # parse out a function definition
             my $prefix = $1;
             my $name = $2;
             my $args = [ ];
-            foreach (split /,\s*/, $3) {
+            foreach (split /\s*,\s*/, $3) {
                 my @s = split /\s+/, $_;
-                push @$args, [ $s[0], $s[1] ];
+                push @$args, [ "@s[0..($#s-1)]", $s[$#s] ];
             }
             if ($prefix =~ /(.*?)\s*(\w+)\s*(\*?)\s*$/) {
                 $mod = $1;
@@ -169,10 +194,7 @@ sub generate_doc {
         }
     }
 
-    my $program = $File::Find::name;
-    $program =~ s/^$CYGROOT(.*)\.c$/$1/;
-
-    my $html = write_doc($program, $desc, \@inherits, \%functions, \%variables);
+    my $html = write_doc($program, $desc, \%inherits, \%functions, \%variables);
 
     my $dir = dirname("$DOCS$program.html");
     mkpath($dir);
@@ -257,15 +279,25 @@ END
 <ul class="blockList">
 <li class="blockList">
 <dl>
-<dt>All Inherited Classes:</dt>
+<dt>All Inherited Programs:</dt>
 <dd>
 <ul>
 END
 
-    foreach (@inherits) {
-        $prog .= $2 while (/(["'])((\\\1|.)*?)\1/g);
-        $out .= <<END;        
-<li><a href="..$prog.html" title="">$prog</a></li>
+    foreach my $prog (keys(%$inherits)) {
+        my $mods = "";
+        if ($inherits->{$prog}->[0]) {
+            $mods .= join("&nbsp;", @{$inherits->{$prog}->[0]});
+            $mods .= " variables";
+        }
+        if ($inherits->{$prog}->[1]) {
+            $mods .= "&nbsp;" if ($mods);
+            $mods .= join("&nbsp;", @{$inherits->{$prog}->[1]});
+            $mods .= " functions";
+        }
+        $mods .= "&nbsp;" if ($mods);
+        $out .= <<END;
+<li>$mods<a href="..$prog.html" title="">$prog</a></li>
 END
     }
 
@@ -351,7 +383,9 @@ END
             my $first = 1;
             for (@{$func->[2]}) {
                 $args .= ", " unless($first);
-                $args .= "$_->[0]&nbsp;$_->[1]";
+                $args .= "$_->[0]";
+                $args .= "&nbsp;" unless ($_->[0] =~ /\*$/); 
+                $args .= $_->[1];
                 $first = 0;
             }
             my $mod = $func->[0];
@@ -449,7 +483,9 @@ END
             my $first = 1;
             for (@{$func->[2]}) {
                 $args .= ", " unless($first);
-                $args .= "$_->[0]&nbsp;$_->[1]";
+                $args .= "$_->[0]";
+                $args .= "&nbsp;" unless ($_->[0] =~ /\*$/); 
+                $args .= $_->[1];
                 $first = 0;
             }
             my $mod = $var->[0];
@@ -537,15 +573,15 @@ sub navbar($) {
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="" title="class in java.lang"><span class="strong">Prev Class</span></a></li>
-<li><a href="" title="class in java.lang"><span class="strong">Next Class</span></a></li>
+<li><a href="" title="class in java.lang"><span class="strong">Prev Program</span></a></li>
+<li><a href="" title="class in java.lang"><span class="strong">Next Program</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?java/lang/String.html" target="_top">Frames</a></li>
 <li><a href="$class.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
-<li><a href="../../allclasses-noframe.html">All Classes</a></li>
+<li><a href="../../allclasses-noframe.html">All Program</a></li>
 </ul>
 <div>
 <script type="text/javascript"><!--
