@@ -1,3 +1,9 @@
+/**
+ * Utility library for dealing with the filesystem.
+ * 
+ * @author devo@eotl
+ * @alias FileLib
+ */
 
 int file_exists(string filename) {
   return file_size(filename) != -1;

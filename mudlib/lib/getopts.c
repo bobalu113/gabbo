@@ -1,4 +1,10 @@
-// Humbly derived from AcmeGetOpts
+/**
+ * Utility library for manipulating strings. A mostly straight port of
+ * AcmeGetOpts.
+ * 
+ * @author devo@eotl
+ * @alias GetoptsLib
+ */
 
 mixed *getopts(string *args, string validopts) {
   string badopts = "";

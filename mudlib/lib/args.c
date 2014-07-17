@@ -1,3 +1,10 @@
+/**
+ * Utility library for parsing command arguments.
+ * 
+ * @author devo@eotl
+ * @alias ArgsLib
+ */
+
 inherit StringsLib;
 
 varargs string *explode_args(string arg, int preserve_quotes) {

@@ -2,6 +2,7 @@
  * Utility library for manipulating strings.
  * 
  * @author devo
+ * @alias StringsLib
  */
 
 inherit ArrayLib;

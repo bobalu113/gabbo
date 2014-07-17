@@ -1,3 +1,10 @@
+/**
+ * A module for running user commands.
+ * 
+ * @author devo@eotl
+ * @alias CommandCode
+ */
+
 inherit FileLib;
 
 #include <sys/commands.h>

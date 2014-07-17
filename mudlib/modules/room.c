@@ -1,3 +1,10 @@
+/**
+ * Top-level Room Module.
+ * 
+ * @author devo@eotl
+ * @alias RoomCode
+ */
+
 // FUTURE light
 // FUTURE searching
 // TODO object spawning

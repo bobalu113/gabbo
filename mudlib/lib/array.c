@@ -1,3 +1,13 @@
+/**
+ * Utility library for manipulating arrays.
+ * 
+ * @author devo@eotl
+ * @alias ArrayLib
+ */
+
+inherit "/lib/doctest";
+inherit "/lib/file";
+inherit "/lib/user";
 
 varargs int anti_searcha(mixed list, mixed el, int start, int step) {
   int size = sizeof(list);

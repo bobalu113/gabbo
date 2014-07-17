@@ -1,3 +1,10 @@
+/**
+ * Utility library for dealing with users.
+ * 
+ * @author devo@eotl
+ * @alias UserLib
+ */
+
 #include <user.h>
 
 virtual inherit FileLib;
