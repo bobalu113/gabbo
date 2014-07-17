@@ -81,13 +81,9 @@ varargs int match_quote(string str, int start, string quote_chars) {
   return (end < 0) ? strlen(str) - 1 : end;
 }
 
-
-/*
-      
-*/
 /**
  * Unescape all characters in a string by one level.
- * Note: This deals with literal backslashes only.  In the examples, and ind
+ * <p>Note: This deals with literal backslashes only.  In the examples, and ind
  * the strings this function is meant to deal with "\a" is meant to represent 
  * a string containing the two characters '\\' and 'a', not a string 
  * containing a single '\a' character.
