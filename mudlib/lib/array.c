@@ -5,10 +5,6 @@
  * @alias ArrayLib
  */
 
-inherit "/lib/doctest";
-inherit "/lib/file";
-inherit "/lib/user";
-
 varargs int anti_searcha(mixed list, mixed el, int start, int step) {
   int size = sizeof(list);
   step ||= 1;
