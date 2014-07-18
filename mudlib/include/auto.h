@@ -27,13 +27,14 @@
 #define ArgsLib              LibDir "/args"
 #define GetoptsLib           LibDir "/getopts"
 
-#define CreatureCode         ModulesDir "/creature"
 #define RoomCode             ModulesDir "/room"
 #define ThingCode            ModulesDir "/thing"
+#define LivingCode           ModulesDir "/living"
+#define CreatureCode         ModulesDir "/creature"
 #define CommandCode          ModulesDir "/command"
 
-#define CommandGiverMixin    ModulesDir "/command_giver"
 #define IdMixin              ModulesDir "/id"
+#define CommandGiverMixin    ModulesDir "/command_giver"
 
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
