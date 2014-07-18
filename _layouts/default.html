@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>gabbo mudlib foundation by bobalu113</title>
+    <title>gabbo mudlib foundation<title>{% if page.url != '/index.html' %}| {{page.title}}{% endif %}</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -25,9 +25,7 @@
           <li><a class="buttons github" href="https://github.com/bobalu113/gabbo">View On GitHub</a></li>
         </ul>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/bobalu113">bobalu113</a></p>
-
-
+        <p class="header">Maintained by <a class="header name" href="https://github.com/bobalu113">bobalu113</a></p>
       </header>
       <section>
         {{ content }}
@@ -47,6 +45,5 @@
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
-
   </body>
 </html>
