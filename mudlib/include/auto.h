@@ -32,6 +32,7 @@
 #define LivingCode           ModulesDir "/living"
 #define CreatureCode         ModulesDir "/creature"
 #define CommandCode          ModulesDir "/command"
+#define ContainerCode        ModulesDir "/container"
 
 #define IdMixin              ModulesDir "/id"
 #define CommandGiverMixin    ModulesDir "/command_giver"
