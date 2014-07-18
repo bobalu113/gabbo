@@ -162,12 +162,12 @@ p img {
 
 code, pre {
 	font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  color:#FDFEFB;
   font-size:14px;
 }
 
 pre {
 	padding: 4px 12px;
+  color:#FDFEFB;
   background: #000;
   border-radius:4px;
   border:1px solid #D7D8C8;
@@ -176,6 +176,8 @@ pre {
 	margin-bottom: 32px;
 }
 
+pre code {
+  
 
 /* Tables */
 
