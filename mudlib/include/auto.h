@@ -15,8 +15,8 @@
 #define ModulesDir           "/modules"
 #define ObjDir               "/obj"
 #define BinDir               "/bin"
-#define HomeDir              "/home"
-#define DomainDir            "/domain"
+#define PublicDir            "/public"
+#define PrivateDir           "/private"
 #define StateDir             "/state"
 #define EtcDir               "/etc"
 
@@ -37,14 +37,16 @@
 
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
-#define CommonRoom           DomainDir "/common"
+#define CommonRoom           PublicDir "/common"
+#define HomeDir              PrivateDir "/home"
+#define Workroom(u)          HomeDir + "/" + u + "/workroom"
 
 #define THISO                this_object()
 #define THISP                this_player()
 #define THISI                this_interactive()
-#define FINDO(x)             find_object(x)
-#define FINDP(x)             find_player(x)
+#define FINDO(o)             find_object(o)
+#define FINDP(p)             find_player(p)
 #define PID                  THISP->query_id()
-#define CAP(x)               capitalize(x)
+#define CAP(s)               capitalize(s)
 
 #endif  // _AUTO_H

@@ -20,3 +20,5 @@
 /mudlib/LP_SWAP.*
 /mudlib/sys
 *.stackdump
+/mudlib/mudlib.sublime-project
+/mudlib/mudlib.sublime-workspace
