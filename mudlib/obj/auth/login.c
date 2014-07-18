@@ -4,7 +4,7 @@
 
 inherit UserLib;
 
-#define WELCOME_FILE "/etc/issue"
+#define WELCOME_FILE $EtcDir "/issue"
 #define TIMEOUT 180
 #define MAX_TRIES 3
 

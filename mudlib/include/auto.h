@@ -8,36 +8,43 @@
 #pragma range_check
 #pragma warn_deprecated
 
-#define LibDir "/lib"
-#define ObjDir "/obj"
-#define BinDir "/bin"
-#define ModulesDir "/modules"
-#define HomeDir "/home"
-#define DomainDir "/domain"
+#define MASTER_OBJECT        __MASTER_OBJECT__
+#define SIMUL_EFUN_OBJECT    "/secure/simul_efun"
 
-#define UserLib LibDir "/user"
-#define FileLib LibDir "/file"
-#define ArrayLib LibDir "/array"
-#define StringsLib LibDir "/strings"
-#define ArgsLib LibDir "/args"
-#define GetoptsLib LibDir "/getopts"
+#define LibDir               "/lib"
+#define ModulesDir           "/modules"
+#define ObjDir               "/obj"
+#define BinDir               "/bin"
+#define HomeDir              "/home"
+#define DomainDir            "/domain"
+#define StateDir             "/state"
+#define EtcDir               "/etc"
 
-#define CommandCode ModulesDir "/command"
-#define RoomCode ModulesDir "/room"
+#define UserLib              LibDir "/user"
+#define FileLib              LibDir "/file"
+#define ArrayLib             LibDir "/array"
+#define StringsLib           LibDir "/strings"
+#define ArgsLib              LibDir "/args"
+#define GetoptsLib           LibDir "/getopts"
 
-#define MASTER_OBJECT __MASTER_OBJECT__
-#define SIMUL_EFUN_OBJECT "/secure/simul_efun"
-#define LOGIN_OBJECT ObjDir "/auth/login"
-#define AVATAR ObjDir "/avatar"
-#define COMMON_ROOM DomainDir "/common"
+#define CreatureCode         ModulesDir "/creature"
+#define RoomCode             ModulesDir "/room"
+#define ThingCode            ModulesDir "/thing"
+#define CommandCode          ModulesDir "/command"
 
-#define THISO this_object()
-#define THISP this_player()
-#define THISI this_interactive()
-#define FINDO(x) find_object(x)
-#define FINDP(x) find_player(x)
-#define PID THISP->query_id()
+#define CommandGiverMixin    ModulesDir "/command_giver"
+#define IdMixin              ModulesDir "/id"
 
-#define CAP(x) capitalize(x)
+#define LoginObject          ObjDir "/auth/login"
+#define Avatar               ObjDir "/avatar"
+#define CommonRoom           DomainDir "/common"
+
+#define THISO                this_object()
+#define THISP                this_player()
+#define THISI                this_interactive()
+#define FINDO(x)             find_object(x)
+#define FINDP(x)             find_player(x)
+#define PID                  THISP->query_id()
+#define CAP(x)               capitalize(x)
 
 #endif  // _AUTO_H
