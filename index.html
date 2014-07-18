@@ -4,24 +4,3 @@ published: true
 ---
 
 test
-
-<!--
-
-  {% for item in site.categories.blog limit:20 %}
-    {% capture date %}{{ item.date | date: '%B %Y' }}{% endcapture %}
-    {% capture ndate %}{{ item.next.date | date: '%B %Y' }}{% endcapture %}
-
-    {% if date != ndate %}
-      <h4 class='month'>{{item.date | date: '%B %Y'}}</h4>
-    {% endif %}
-    <h3>
-      <a name="{{item.title}}" class="anchor" href="#{{item.title}}"><span class="octicon octicon-link"></span></a>{{item.title}}
-    </h3>
-    {{item.content}}
-        
-    <span class='date'>&#126; {{item.date | date:"%b %d"}}</span>
-  {% endfor %}
-        
-  {% include rss-link.html %}
-
--->
