@@ -36,6 +36,7 @@
 
 #define IdMixin              ModulesDir "/id"
 #define CommandGiverMixin    ModulesDir "/command_giver"
+#define LockMixin            ModulesDir "/lock"
 
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
