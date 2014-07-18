@@ -76,7 +76,7 @@ h4, h5, h6 {
 }
 
 a {
-  color:#C30000;
+  color:#0000C3;
   font-weight:200;
   text-decoration:none;
 }
@@ -286,13 +286,13 @@ header li {
 }
 
 header li:hover {
-	background: #C3001D;
-	background: -moz-linear-gradient(top, #C3001D 0%, #950119 100%);
+	background: #1D00C3;
+	background: -moz-linear-gradient(top, #1D00C3 0%, #190195 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
-  background: -webkit-linear-gradient(top, #C3001D 0%,#950119 100%);
-  background: -o-linear-gradient(top, #C3001D 0%,#950119 100%);
-  background: -ms-linear-gradient(top, #C3001D 0%,#950119 100%);
-  background: linear-gradient(top, #C3001D 0%,#950119 100%);
+  background: -webkit-linear-gradient(top, #1D00C3 0%,#190195 100%);
+  background: -o-linear-gradient(top, #1D00C3 0%,#190195 100%);
+  background: -ms-linear-gradient(top, #1D00C3 0%,#190195 100%);
+  background: linear-gradient(top, #1D00C3 0%,#190195 100%);
 }
 
 a.buttons {
