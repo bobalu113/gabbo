@@ -4,7 +4,6 @@ published: true
 section: blog
 ---
 
-
 {% for item in site.categories.blog limit:20 %}
   <article>
   {% capture date %}{{ item.date | date: '%B %Y' }}{% endcapture %}
@@ -22,7 +21,6 @@ section: blog
   </h3>
 
   {{item.content}}
-      
 
   </article>
 {% endfor %}
