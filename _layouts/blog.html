@@ -2,33 +2,7 @@
 layout: default
 section: blog
 ---
-
-<!--
-<script type="text/javascript" src="http://www.google.com/jsapi"></script> 
-<script type="text/javascript"> 
-  google.load("jquery", "1.7.1"); 
-</script>
-<script src='http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js'
- type='text/javascript'></script>
-<script id="GooglePlusStreamTemplate" type="text/x-jquery-tmpl">
- <li id="${id}">
- <div class="CommentAuthor">
- <a href="${actor.url}" target="_blank">
- <img class="actorPhoto" src="${ photoManipulate(actor.image.url,100) }" />
- </a>
- </div>
- <div class="CommentHeader">
- <a href="${actor.url}" target="_blank">
- <div class="CommentAuthorName">${actor.displayName}</div>
- </a>
- <div class="CommentDateTime">${updated}</div>
- </div>
- <div class="CommentContent">
- {{html object.content}}
- </div>
- </li>
-</script>
--->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <article>
 
@@ -39,39 +13,17 @@ section: blog
 
 {{content}}
 
-<!--
-<script type='text/javascript'>
- var GooglePlusPH = "GooglePlusPH";
- var GooglePlusST = "GooglePlusStreamTemplate";
- var GooglePlusStreamData = null;
- var apiKey = "AIzaSyAFyqYEQIsrSsJYw0LqR8GRNbFKn6dUaJI";
- var activityid = "z12xydka1uepd3d2u22szz0xdwulybioh04";
- var imgHeight = 150;
- var imgWidth = 150;
-$(document).ready(function () {
- if ($("#" + GooglePlusPH).length > 0) {
- activityid = $("#" + GooglePlusPH).attr("data-activityid");
- $.ajax({
- url: "https://www.googleapis.com/plus/v1/activities/" + activityid + "/comments?alt=json&maxResults=100&fields=items(actor%2Cid%2Cobject%2Fcontent%2Cpublished%2Cupdated)%2CnextLink%2CnextPageToken&key=" + apiKey + "&callback=?",
- data: "format=json", jsonp: "jsoncallback", dataType: "jsonp",
- success: function (data) { GooglePlusStreamData = data; showGooglePlusStream(); }
- });
- }
- });
-
-
-function showGooglePlusStream() {
- $("#" + GooglePlusST).tmpl(GooglePlusStreamData.items).appendTo("#" + GooglePlusPH);
- gapi.plusone.go();
- }
-
-
-function photoManipulate(imgUri, imgNewSize) {
- return imgUri.replace("sz=50", "sz=" + imgNewSize);
- }
-
-
+<div id="comments"></div>
+<script src="https://apis.google.com/js/plusone.js"></script>
+<script>
+  gapi.comments.render('comments', {
+      href: window.location,
+      width: '624',
+      first_party_property: 'BLOGGER',
+      view_type: 'FILTERED_POSTMOD'
+  });
 </script>
--->
+
+<a href="https://plus.google.com/+bobalu113?rel=author">Google</a>
 
 </article>
