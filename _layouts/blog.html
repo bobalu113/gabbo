@@ -1,0 +1,27 @@
+---
+layout: default
+section: blog
+---
+
+<article>
+
+<h3>
+<a name="{{page.title}}" class="anchor-nohover">{{page.title}}</a>
+<time datetime="%Y-%M-%d">{{page.date | date:"%B %d, %Y"}}</time>
+</h3>
+
+<div style="margin-top: 5px;"/>
+
+{{content}}
+
+<div class="g-comments"
+  data-href="{{site.baseurl}}{{page.url}}"
+  data-width="642"
+  data-first_party_property="BLOGGER"
+  data-view_type="FILTERED_POSTMOD">
+  <div class="g-commentcount" data-href="{{site.baseurl}}{{page.url}}"></div>
+</div>
+
+<a href="https://plus.google.com/100410452248868756244?rel=author">Google</a>
+
+</article>
