@@ -15,6 +15,11 @@
   </head>
   <body>
     <div class="wrapper">
+      <nav>
+        <a class="{% if page.section == "blog" %}active{% endif %}" href="{{site.baseurl}}/">Blog</a>
+        <a class="{% if page.url == "about/" %}active{% endif %}" href="{{site.baseurl}}/about">About</a>
+        <a class="{% if page.section == "docs" %}active{% endif %}"href="{{site.baseurl}}/docs/mudlib">Documentation</a>
+      </nav>
       <header>
         <h1 class="header">gabbo mudlib foundation</h1>
         <p class="header">make a messes and trashes</p>
@@ -25,11 +30,6 @@
           <li><a class="buttons github" href="https://github.com/bobalu113/gabbo">View On GitHub</a></li>
         </ul>
       </header>
-      <nav>
-        <a class="{% if page.section == "blog" %}active{% endif %}" href="{{site.baseurl}}/">Blog</a>
-        <a class="{% if page.section == "docs" %}active{% endif %}"href="{{site.baseurl}}/docs/mudlib">Documentation</a>
-        <a class="{% if page.url == "about/" %}active{% endif %}" href="{{site.baseurl}}/about">About</a>
-      </nav>
       <section>
         {{ content }}
       </section>

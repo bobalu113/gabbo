@@ -6,20 +6,25 @@ section: blog
 
 
 {% for item in site.categories.blog limit:20 %}
+  <article>
   {% capture date %}{{ item.date | date: '%B %Y' }}{% endcapture %}
   {% capture ndate %}{{ item.next.date | date: '%B %Y' }}{% endcapture %}
 
+<!--
   {% if date != ndate %}
-    <h4 class='month'>{{item.date | date: '%B %Y'}}</h4>
+    <h4 class="month">{{item.date | date: '%B %Y'}}</h4>
   {% endif %}
+-->
 
   <h3>
-    <a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}"><span class="octicon octicon-link">{{item.title}}</span></a>
+    <a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}">{{item.title}}</a>
+    <span class="date">{{item.date | date:"%B %d, %Y"}}</span>
   </h3>
 
   {{item.content}}
       
-  <span class='date'>&#126; {{item.date | date:"%b %d"}}</span>
+
+  </article>
 {% endfor %}
       
 {% include rss-link.html %}

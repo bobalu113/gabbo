@@ -26,13 +26,12 @@ time, mark, audio, video {
 /* Base text styles */
 
 body {
-  padding:10px 50px 0 0;
+  padding:5px 50px 0 0;
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	color: #232323;
 	background-color: #FBFAF7;
 	margin: 0;
-	line-height: 1.8em;
 	-webkit-font-smoothing: antialiased;
 
 }
@@ -70,9 +69,25 @@ h3 {
 	font-size: 18px;
 }
 
+h3 a {
+  color: #232323;
+}
+
 h4, h5, h6 {
 	font-family: Arvo, Monaco, serif;
 	font-weight: 700;
+}
+
+article h3 {
+  font-family: Helvetica, Verdana, sans-serif;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+article .date {
+  padding-top: 7px;
+  float: right;
+  font-size: 12px;
 }
 
 a {
@@ -319,8 +334,37 @@ section {
   width:650px;
   float:right;
   padding-bottom:50px;
+  padding-top: 15px;
 }
 
+nav {
+  width: 960px;
+  text-align: right;
+  position: fixed;
+  top: 0px;
+  background-color: #FBFAF7;
+  opacity: 1;
+  height: 35px;
+  line-height: 1.8em;
+}
+
+nav a {
+  color: #232323;
+  padding-left: 15px;
+  font-weight: bold;
+  text-shadow: -1px 1px 1px #b2a98f,
+               -1px 1px 5px rgba(0,0,0,0.15),
+               -1px 1px 1px rgba(0,0,0,0.1);
+}
+
+nav a:hover {
+  color: #0000c3;
+  text-decoration: none;
+}
+
+nav a.active {
+  color: #0000c3;
+}
 
 /* Footer */
 
