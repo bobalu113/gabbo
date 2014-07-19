@@ -18,7 +18,7 @@ section: blog
 
   <h3>
     <a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}">{{item.title}}</a>
-    <span class="date">{{item.date | date:"%B %d, %Y"}}</span>
+    <time datetime="%Y-%M-%d">{{item.date | date:"%B %d, %Y"}}</time>
   </h3>
 
   {{item.content}}
@@ -26,5 +26,3 @@ section: blog
 
   </article>
 {% endfor %}
-      
-{% include rss-link.html %}

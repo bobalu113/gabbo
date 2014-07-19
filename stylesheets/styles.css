@@ -84,7 +84,7 @@ article h3 {
   margin-top: 15px;
 }
 
-article .date {
+article time {
   padding-top: 7px;
   float: right;
   font-size: 12px;
@@ -316,6 +316,7 @@ a.buttons {
 	text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
 	padding: 2px 2px 2px 22px;
 	height: 30px;
+  z-index: 0;
 }
 
 a.github {
@@ -333,12 +334,13 @@ a.buttons:hover {
 section {
   width:650px;
   float:right;
-  padding-bottom:50px;
+  padding-bottom:20px;
   padding-top: 15px;
 }
 
 nav {
   width: 960px;
+  max-width: 90%;
   text-align: right;
   position: fixed;
   top: 0px;
@@ -346,6 +348,7 @@ nav {
   opacity: 1;
   height: 35px;
   line-height: 1.8em;
+  z-index: 9;
 }
 
 nav a {
@@ -374,6 +377,12 @@ footer {
   position:fixed;
   bottom:10px;
 	padding-left: 50px;
+  font-size: 11px;
+}
+
+footer span {
+  margin-bottom: 10px;
+  display:block;
 }
 
 @media print, screen and (max-width: 960px) {
@@ -395,6 +404,14 @@ footer {
 		padding:0;
 	}
 
+  footer span {
+    display: inline-block;
+  }
+  
+  footer .hostedby {
+    float: right;
+  }
+
   header {
     padding-right:320px;
   }
@@ -412,7 +429,7 @@ footer {
   header ul {
     position:absolute;
     right:130px;
-    top:84px;
+    top:54px;
   }
 }
 
