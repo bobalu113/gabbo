@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>gabbo mudlib foundation{% if page.url != '/index.html' %}| {{page.title}}{% endif %}</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/stylesheets/styles.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/stylesheets/pygment_trac.css">
     <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
     <div class="wrapper">
       <nav>
         <a class="{% if page.section == "blog" %}active{% endif %}" href="{{site.baseurl}}/">Blog</a>
-        <a class="{% if page.url == "about/" %}active{% endif %}" href="{{site.baseurl}}/about">About</a>
+        <a class="{% if page.section == "about" %}active{% endif %}" href="{{site.baseurl}}/about">About</a>
         <a class="{% if page.section == "docs" %}active{% endif %}"href="{{site.baseurl}}/docs/mudlib">Documentation</a>
       </nav>
       <header>
