@@ -2,10 +2,11 @@
 
 # FUTURE
 # add support for: @see, @since, @link, @deprecated, @inheritDoc
-# comment and fix the ugly
+# refactor, comment, etc
+# re-style the thing to match the blog
 
 # TODO
-# finish frames, indexes and package docs
+# package docs
 
 use File::Find;
 use File::Path;
@@ -21,10 +22,10 @@ $CYGROOT = "/cygdrive/c/Users/bobal_000/work/gabbo/mudlib";
 $ROOT= `cygpath -w $CYGROOT`;
 chomp $ROOT;
 $ROOT =~ s/\\/\\\\/g;
-$DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/mudlib";
+$DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/docs/mudlib";
 $TMPFILE = "/tmp/lpcdoc";
 
-@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/secure" );
+@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
 #@SOURCE = ( "$CYGROOT/lib/doctest.c" );
 
 %MODRANKS = ( "public" => 1,
@@ -58,7 +59,28 @@ sub process_file {
     return unless (/\.c$/);
     my $program = $File::Find::name;
     $program =~ s/^$CYGROOT(.*)\.c$/$1/;
-    &generate_program_doc($program);
+    print "found $program\n";
+    if ($program =~ m#(.*)/package-info$#) {
+      &read_package_info($1);
+    } else {
+      &generate_program_doc($program);
+    }
+}
+
+sub read_package_info($) {
+    my ($package) = @_;
+    $packages{$package} = [ undef, { } ] unless (exists($packages{$package}));
+
+    my $src = "";
+    open(F, "$CYGROOT/$package/package-info.c") or die("Couldn't open $CYGROOT/$package/package-info.c for read: $!\n");
+    $src .= $_ while(<F>);
+    close(F);
+
+    if ($src =~ m#/\*\*(.*?)\*/#s) {
+        my $doc = &parse_doc($1);
+        $packages{$package}->[0] = $doc->[0];
+    }
+    return;
 }
 
 # write out a new doc for the specified program
@@ -67,8 +89,8 @@ sub generate_program_doc($) {
 
     $programs{$program} = undef;
     my $package = dirname($program);
-    $packges{$package} = { } unless (exists($packages{$package}));
-    $packages{$package}->{$program} = 1;
+    $packages{$package} = [ undef, { } ] unless (exists($packages{$package}));
+    $packages{$package}->[1]->{$program} = 1;
 
     my $cygpath = `cygpath -w $CYGROOT$program.c`;
     $cygpath =~ s/\\/\\\\/g;
@@ -91,13 +113,7 @@ sub generate_program_doc($) {
         $desc = &parse_doc($1);
     }
 
-    if (@{$desc->[1]->{'alias'}}) {
-        # program has an alias, store it for later
-        $programs{$program} = 
-            [ $desc->[1]->{'alias'}->[0]->[1], undef, undef, undef ];
-    } else {
-        $programs{$program} = [ undef, undef, undef, undef ];
-    }
+    $programs{$program} = [ $desc, undef, undef, undef ];
 
     # grab all the inherit statements before we strip out the strings
     my %inherits = ( );
@@ -281,9 +297,14 @@ sub parse_doc($) {
     # remove the customary leading asterisk
     $doc =~ s#^\s*\*\s+##gm;
     # parse out the description
-    $doc =~ /(.*?)\s*(\@.*)/ms;
-    my $desc = $1;
-    $doc = $2;
+    my $desc = undef;
+    if ($doc =~ /(.*?)\s*(\@.*)/ms) {
+      $desc = $1;
+      $doc = $2;
+    } else {
+        $desc = $doc;
+        $doc = "";
+    }
     my %tags = ();
     my $tag = undef;
     my $arg = undef;
@@ -371,7 +392,8 @@ END
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 END
-    my $alias = $programs{$program}->[0];
+
+    my $alias = $programs{$program}->[0]->[1]->{'alias'}->[0]->[1];
     if ($alias) {
         $out .= <<END;
 <div class="subTitle">$program</div>
@@ -682,10 +704,12 @@ sub navbar($$) {
 END
     if ($package) {
         $out .= <<END;
+<!--
 <ul class="navList">
 <li><a href="#" title="class in java.lang"><span class="strong">Prev Program</span></a></li>
 <li><a href="#" title="class in java.lang"><span class="strong">Next Program</span></a></li>
 </ul>
+-->
 END
     } else {
         $out .= <<END;
@@ -854,7 +878,7 @@ sub inherited_variables($) {
             $first = 0;
         }
         if ($buf) {
-            my $alias = $programs{$program}->[0];
+            my $alias = $programs{$program}->[0]->[1]->{'alias'}->[0]->[1];
             $alias = $program unless($alias);
             $buf = <<END;
 
@@ -898,7 +922,7 @@ sub inherited_functions($) {
             $first = 0;
         }
         if ($buf) {
-            my $alias = $programs{$program}->[0];
+            my $alias = $programs{$program}->[0]->[1]->{'alias'}->[0]->[1];
             $alias = $program unless($alias);
             $buf = <<END;
 <li class="blockList"><a name="methods_inherited_from_class_$program">
@@ -991,7 +1015,7 @@ END
     }
     my @programs = undef;
     if ($package) {
-        @programs = keys(%{$packages{$package}});
+        @programs = keys(%{$packages{$package}->[1]});
     } else {
         @programs = keys(%programs);
     }
@@ -1001,7 +1025,7 @@ END
         ( $programs{$b}->[0] ? $programs{$b}->[0] : basename($b) ) 
     } @programs;
     foreach my $program (@programs) {
-        my $alias = $programs{$program}->[0];
+        my $alias = $programs{$program}->[0]->[1]->{'alias'}->[0]->[1];
         $alias = basename($program) unless($alias);
         $out .= <<END;
 <li><a href="$rel/$program.html" title="program in $package" target="classFrame">$alias</a></li>
@@ -1016,6 +1040,7 @@ END
 
     my $file = "$DOCS/allclasses-frame.html";
     $file = "$DOCS$package/package-frame.html" if ($package);
+    mkpath(dirname($file));
     open (F, ">$file") or die("Couldn't open $file for write: $!\n");
     print F $out;
     close(F);
@@ -1027,6 +1052,9 @@ sub generate_package_summary($) {
 
     my $rel = substr("/.." x (scalar(split(/\/+/, $package)) - 1), 1);
     $rel = "." unless ($rel);
+
+    my $summary = $packages{$package}->[0];
+    $summary =~ s/^(.*?\.)\s.*/$1/s;
 
     $out .= <<END;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -1054,7 +1082,7 @@ END
 <div class="header">
 <h1 title="Package" class="title">Package&nbsp;$package</h1>
 <div class="docSummary">
-<div class="block"><!-- package summary --></div>
+<div class="block">$summary</div>
 </div>
 <p>See:&nbsp;<a href="#package_description">Description</a></p>
 </div>
@@ -1071,7 +1099,7 @@ END
 END
     my @programs = undef;
     if ($package) {
-        @programs = keys(%{$packages{$package}});
+        @programs = keys(%{$packages{$package}->[1]});
     } else {
         @programs = keys(%programs);
     }
@@ -1082,15 +1110,17 @@ END
     } @programs;
     my $color = "";
     foreach my $program (@programs) {
-        my $alias = $programs{$program}->[0];
+        my $alias = $programs{$program}->[0]->[1]->{'alias'}->[0]->[1];
         $alias = basename($program) unless($alias);
         if ($color eq "row") { $color = "alt"; }
         else { $color = "row"; }
+        my $summary = $programs{$program}->[0]->[0];
+        $summary =~ s/^(.*?\.)\s.*/$1/s;
         $out .= <<END;        
 <tr class="$colorColor">
 <td class="colFirst"><a href="$rel$program.html" title="program in $package">$alias</a></td>
 <td class="colLast">
-<div class="block"><!-- program summary --></div>
+<div class="block">$summary</div>
 </td>
 </tr>
 END
@@ -1104,7 +1134,7 @@ END
 <!--   -->
 </a>
 <h2 title="Package $package Description">Package $package Description</h2>
-<div class="block"><!-- package description --></div>
+<div class="block">$packages{$package}->[0]</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 END
     $out .= &navbar("bottom", $package, 1);
@@ -1115,6 +1145,7 @@ END
 END
 
     my $file = "$DOCS$package/package-summary.html";
+    mkpath(dirname($file));
     open (F, ">$file") or die("Couldn't open $file for write: $!\n");
     print F $out;
     close(F);
@@ -1164,14 +1195,16 @@ END
 <tbody>
 END
     my $color = "";
-    for (keys(%packages)) {
+    for (sort(keys(%packages))) {
+        my $summary = $packages{$_}->[0];
+        $summary =~ s/^(.*?\.)\s.*/$1/s;
         if ($color eq "row") { $color = "alt"; }
         else { $color = "row"; }
         $out .= <<END;
 <tr class="$colorColor">
 <td class="colFirst"><a href=".$_/package-summary.html">$_</a></td>
 <td class="colLast">
-<div class="block"><!-- implement package docs --></div>
+<div class="block">$summary</div>
 </td>
 </tr>
 END
@@ -1201,3 +1234,4 @@ END
     print F $out;
     close(F);
 }
+
