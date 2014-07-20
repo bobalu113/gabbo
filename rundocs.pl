@@ -702,23 +702,6 @@ sub navbar($$) {
 </div>
 <div class="subNav">
 END
-    if ($package) {
-        $out .= <<END;
-<!--
-<ul class="navList">
-<li><a href="#" title="class in java.lang"><span class="strong">Prev Program</span></a></li>
-<li><a href="#" title="class in java.lang"><span class="strong">Next Program</span></a></li>
-</ul>
--->
-END
-    } else {
-        $out .= <<END;
-<ul class="navList">
-<li>Prev</li>
-<li>Next Program</li>
-</ul>
-END
-    }
     $out .= <<END;
 <ul class="navList">
 <li><a href="$rel/index.html?$program.html" target="_top">Frames</a></li>
@@ -1216,11 +1199,6 @@ END
 <div class="footer"><a name="overview_description">
 <!--   -->
 </a>
-<div class="subTitle">
-<div class="block">This document is the API specification for the Java&#x2122;
-Platform, Standard Edition.</div>
-</div>
-</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 END
     $out .= &navbar($bottom, "", 1);
