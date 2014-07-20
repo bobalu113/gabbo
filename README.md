@@ -1,3 +1,1 @@
-gabbo
-=====
-make a messes and trashes
+API docs - http://bobalu113.github.io/gabbo/docs/mudlib/
