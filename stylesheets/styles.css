@@ -83,10 +83,17 @@ article h3 {
   margin-bottom: 5px;
 }
 
+article .post-info {
+    float: right;
+}
+
 article time {
   padding-top: 7px;
-  float: right;
   font-size: 12px;
+}
+
+article .g-plusone-cont {
+  border: 10px;
 }
 
 a {

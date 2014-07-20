@@ -3,6 +3,7 @@ layout: default
 published: true
 section: blog
 ---
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 
 {% for item in site.categories.blog limit:20 %}
   <article>
@@ -17,10 +18,16 @@ section: blog
 
   <h3>
     <a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}">{{item.title}}</a>
-    <time datetime="%Y-%M-%d">{{item.date | date:"%B %d, %Y"}}</time>
+    <span class="post-info">
+      <time datetime="%Y-%M-%d">{{item.date | date:"%B %d, %Y"}}</time>
+      <span class="g-plusone-cont" style="border: 10px"><span class="g-plusone" data-size="small" data-annotation="bubble" data-href="{{site.baseurl}}{{item.url}}" ></span></span>
+    </span>
   </h3>
 
   {{item.content}}
 
   </article>
 {% endfor %}
+
+<!-- XXX paramaterize author? -->
+<small>Maintained by <a href="https://plus.google.com/+BobbySchaetzle?rel=author">Bobby Schaetzle</a></small>

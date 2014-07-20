@@ -3,12 +3,16 @@ layout: default
 section: blog
 ---
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 
 <article>
 
 <h3>
 <a name="{{page.title}}" class="anchor-nohover">{{page.title}}</a>
-<time datetime="%Y-%M-%d">{{page.date | date:"%B %d, %Y"}}</time>
+<span class="post-info">
+  <time datetime="%Y-%M-%d">{{page.date | date:"%B %d, %Y"}}</time>
+  <span class="g-plusone-cont" style="border: 10px"><span class="g-plusone" data-size="small" data-annotation="bubble" data-href="{{site.baseurl}}{{page.url}}" ></span></span>
+</span>
 </h3>
 
 {{content}}
@@ -24,6 +28,7 @@ section: blog
   });
 </script>
 
-<a href="https://plus.google.com/+bobalu113?rel=author">Google</a>
-
 </article>
+
+<!-- XXX paramaterize author? -->
+<small>Maintained by <a href="https://plus.google.com/+BobbySchaetzle?rel=author">Bobby Schaetzle</a></small>
