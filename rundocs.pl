@@ -26,7 +26,7 @@ $DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/docs/mudlib";
 $TMPFILE = "/tmp/lpcdoc";
 
 @SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
-#@SOURCE = ( "$CYGROOT/lib/doctest.c" );
+#@SOURCE = ( "$CYGROOT/lib" );
 
 %MODRANKS = ( "public" => 1,
               "static" => 2,
@@ -695,14 +695,14 @@ sub navbar($$) {
 </a><a href="#skip-navbar_$loc" title="Skip navigation links"></a><a name="navbar_$loc_firstrow">
 </a>
 <ul class="navList" title="Navigation">
-<!--
 <div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
--->
 </ul>
 </div>
 <div class="subNav">
 END
     $out .= <<END;
+<ul class="navList">
+<li>
 <ul class="navList">
 <li><a href="$rel/index.html?$program.html" target="_top">Frames</a></li>
 <li><a href="$rel$program.html" target="_top">No Frames</a></li>
@@ -710,7 +710,28 @@ END
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="$rel/allclasses-noframe.html">All Programs</a></li>
 </ul>
-<div>
+</li>
+END
+    unless ($package) {
+        $out .= <<END;
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+END
+    }
+    $out .= <<END;
 <script type="text/javascript"><!--
   allClassesLink = document.getElementById("allclasses_navbar_top");
   if(window==top) {
@@ -721,25 +742,6 @@ END
   }
   //-->
 </script>
-</div>
-END
-    unless ($package) {
-        $out .= <<END;
-<div>
-<ul class="subNavList">
-<li>Summary:&nbsp;</li>
-<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_summary">Function</a></li>
-</ul>
-<ul class="subNavList">
-<li>Detail:&nbsp;</li>
-<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
-<li><a href="#method_detail">Function</a></li>
-</ul>
-</div>
-END
-    }
-    $out .= <<END;
 <a name="skip-navbar_$loc">
 <!--   -->
 </a></div>
@@ -751,20 +753,20 @@ sub inherit_mods($) {
     my ($inherit, $preserve_order) = @_;
     my %ranks;
     my $mods = "";
-    my %v = %{ $inherit->[0] };
+    my %v = %{ $inherit->[1] };
     %ranks = ( $preserve_order ? %v : %MODRANKS );
     if (%v) {
         $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%v));
         $mods .= "&nbsp;variables";
     }
-    my %f = %{ $inherit->[1] };
+    my %f = %{ $inherit->[2] };
     %ranks = ( $preserve_order ? %f : %MODRANKS );
     if (%f) {
         $mods .= "&nbsp;" if ($mods);
         $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%f));
         $mods .= "&nbsp;functions";
     }
-    my %m = %{ $inherit->[2] };
+    my %m = %{ $inherit->[3] };
     %ranks = ( $preserve_order ? %m : %MODRANKS );
     if (%m) {
         $mods .= "&nbsp;" if ($mods);
@@ -821,16 +823,15 @@ sub inherit_tree($) {
         my $prog = $inh[$i];
         my $mods = &inherit_mods($inherits->{$prog});
         $mods = "&nbsp;[$mods]" if ($mods);
-        if ($programs{$prog}->[0]) {
+        if ($programs{$prog}->[0]->[1]->{'alias'}->[0]->[1]) {
             $out .= <<END;
-<li$last><a href="$rel$prog.html" title="">$programs{$prog}->[0]</a>$mods
+<li$last><a href="$rel$prog.html" title="">$programs{$prog}->[0]->[1]->{'alias'}->[0]->[1]</a>$mods
 END
         } else {
             $out .= <<END;
 <li$last><a href="$rel$prog.html" title="">$prog</a>$mods
 END
         }
-
         if (%{$programs{$prog}->[1]}) {
             # recurse down the inheritance tree
             $out .= &inherit_tree($programs{$prog}->[1], $rel);
@@ -849,7 +850,7 @@ sub inherited_variables($) {
     my $out = "";
     for $program (@inh) {
         next if (exists($found->{$program}));
-        next if (exists($inherits->{$program}->[0]->{'private'}));
+        next if (exists($inherits->{$program}->[1]->{'private'}));
         my $buf = "";
         my @vars = sort keys(%{$programs{$program}->[2]});
         my $first = 1;
@@ -1059,7 +1060,7 @@ sub generate_package_summary($) {
 </noscript>
 <!-- ========= START OF TOP NAVBAR ======= -->
 END
-    $out .= &navbar($top, $package, 1);
+    $out .= &navbar("top", $package, 1);
     $out .= <<END;
 <!-- ========= END OF TOP NAVBAR ========= -->
 <div class="header">
@@ -1196,9 +1197,6 @@ END
 </tbody>
 </table>
 </div>
-<div class="footer"><a name="overview_description">
-<!--   -->
-</a>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 END
     $out .= &navbar($bottom, "", 1);
