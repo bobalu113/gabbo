@@ -8,8 +8,8 @@
 #pragma range_check
 #pragma warn_deprecated
 
-#define MASTER_OBJECT        __MASTER_OBJECT__
-#define SIMUL_EFUN_OBJECT    "/secure/simul_efun"
+#define MasterObject         __MASTER_OBJECT__
+#define SimulEfunObject      "/secure/simul_efun"
 
 #define LibDir               "/lib"
 #define ModulesDir           "/modules"
@@ -17,6 +17,7 @@
 #define BinDir               "/bin"
 #define PublicDir            "/public"
 #define PrivateDir           "/private"
+#define SharedDir            "/shared"
 #define StateDir             "/state"
 #define EtcDir               "/etc"
 
@@ -40,7 +41,7 @@
 
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
-#define CommonRoom           PublicDir "/common"
+#define CommonRoom           SharedDir "/common"
 #define HomeDir              PrivateDir "/home"
 #define Workroom(u)          HomeDir + "/" + u + "/workroom"
 

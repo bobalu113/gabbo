@@ -1,5 +1,5 @@
 /**
- * Top-level Room Module.
+ * A base object for rooms.
  * 
  * @author devo@eotl
  * @alias RoomCode

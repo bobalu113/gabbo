@@ -1,3 +1,10 @@
+/**
+ * A login object to handle incoming connections.
+ * 
+ * @author devo@eotl
+ * @alias LoginObject
+ */
+
 #include <ansi.h>
 #include <user.h>
 #include <sys/input_to.h>

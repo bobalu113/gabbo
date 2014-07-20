@@ -1,3 +1,10 @@
+/**
+ * A standard avatar for player characters.
+ * 
+ * @author devo@eotl
+ * @alias Avatar
+ */
+
 inherit FileLib;
 
 /* names and ids and stuff */

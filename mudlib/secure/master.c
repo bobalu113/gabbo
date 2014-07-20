@@ -1,3 +1,10 @@
+/**
+ * The master object.
+ * 
+ * @author devo@eotl
+ * @alias MasterObject
+ */
+
 /*  MASTER_NAME      (#define in config.h, or as commandline option)
 **  secure/master.c  (native default)
 **

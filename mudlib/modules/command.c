@@ -1,5 +1,5 @@
 /**
- * A module for running user commands.
+ * A base object for user commands.
  * 
  * @author devo@eotl
  * @alias CommandCode
