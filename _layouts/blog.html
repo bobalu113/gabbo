@@ -17,16 +17,12 @@ section: blog
 
 {{content}}
 
-<div id="comments"></div>
-<script src="https://apis.google.com/js/plusone.js"></script>
-<script>
-  gapi.comments.render('comments', {
-      href: window.location,
-      width: '624',
-      first_party_property: 'BLOGGER',
-      view_type: 'FILTERED_POSTMOD'
-  });
-</script>
+<div class="g-comments"
+    data-href="http://localhost:4000{{site.baseurl}}{{item.url}}"
+    data-width="642"
+    data-first_party_property="BLOGGER"
+    data-view_type="FILTERED_POSTMOD">
+</div>
 
 </article>
 
