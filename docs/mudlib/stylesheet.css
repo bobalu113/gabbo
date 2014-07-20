@@ -78,7 +78,6 @@ Document title and Copyright styles
     padding:0px 21px;
     font-size:.8em;
     z-index:200;
-    margin-top:-7px;
 }
 .legalCopy {
     margin-left:.5em;
@@ -153,6 +152,7 @@ ul.navList, ul.subNavList {
     float:left;
     margin:0 25px 0 0;
     padding:0;
+    width:100%;
 }
 ul.navList li{
     list-style:none;
@@ -225,7 +225,7 @@ Page header and footer styles
     padding:0;
 }
 .footer ul {
-    margin:20px 0 5px 0;
+    margin:0px 0 5px 0;
 }
 .header ul li, .footer ul li {
     list-style:none;
