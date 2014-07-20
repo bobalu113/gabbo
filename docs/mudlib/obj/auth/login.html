@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title></title>
-<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 </head>
 <body>
 <div class="topNav"><a name="navbar_top">
@@ -20,11 +20,11 @@
 <li>Next Program</li>
 </ul>
 <ul class="navList">
-<li><a href="../../index.html?/modules/room.html" target="_top">Frames</a></li>
-<li><a href="../../modules/room.html" target="_top">No Frames</a></li>
+<li><a href="../../../index.html?/obj/auth/login.html" target="_top">Frames</a></li>
+<li><a href="../../../obj/auth/login.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
-<li><a href="../../allclasses-noframe.html">All Programs</a></li>
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
 </ul>
 <div>
 <script type="text/javascript"><!--
@@ -55,19 +55,26 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/modules/room</div>
-<h2 title="Program RoomCode " class="title">Program RoomCode </h2>
+<div class="subTitle">/obj/auth/login</div>
+<h2 title="Program LoginObject " class="title">Program LoginObject </h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li class="last"><a href="../../lib/user.html" title="">ARRAY(0x6003ae458)</a>
+<ul class="tree"><li class="last"><a href="../../lib/file.html" title="">ARRAY(0x600383f60)</a>&nbsp;[virtual]
+</li></ul></li></ul></dd>
+</dl>
 <hr>
 <br>
-<div class="block">A base object for rooms.</div>
+<div class="block">A login object to handle incoming connections.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
-<a href="...html#toString()"><code>->toString()</code></a>
+<a href="../...html#toString()"><code>->toString()</code></a>
 </dd></dl>
 -->
 </li>
@@ -88,61 +95,81 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#abort()">abort</a></strong>()</code>
+<div class="block"></div>
+</td>
+</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#add_exit()">add_exit</a></strong>(string&nbsp;dir,&nbsp;string&nbsp;dest,&nbsp;int&nbsp;hidden)</code>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#confirm_password()">confirm_password</a></strong>(string&nbsp;cpassword,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user,&nbsp;string&nbsp;password)</code>
 <div class="block"></div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#is_exit_hidden()">is_exit_hidden</a></strong>(string&nbsp;dir)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#query_description()">query_description</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#query_exit()">query_exit</a></strong>(string&nbsp;dir)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#query_exits()">query_exits</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#query_name()">query_name</a></strong>()</code>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#logon()">logon</a></strong>()</code>
 <div class="block"></div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#set_description()">set_description</a></strong>(string&nbsp;str)</code>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#new_user()">new_user</a></strong>(string&nbsp;user,&nbsp;string&nbsp;password)</code>
 <div class="block"></div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#set_exits()">set_exits</a></strong>(mapping&nbsp;map)</code>
+<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#save_passwd()">save_passwd</a></strong>(string&nbsp;user,&nbsp;mapping&nbsp;data,&nbsp;int&nbsp;overwrite)</code>
 <div class="block"></div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#set_name()">set_name</a></strong>(string&nbsp;str)</code>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#select_password()">select_password</a></strong>(string&nbsp;password,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#select_user()">select_user</a></strong>(string&nbsp;user,&nbsp;int&nbsp;tries)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#spawn_avatar()">spawn_avatar</a></strong>(string&nbsp;user)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#start_timeout()">start_timeout</a></strong>()</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#timeout()">timeout</a></strong>()</code>
 <div class="block"></div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/lib/user">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../lib/user.html" title="program /lib/user">UserLib </a></h3>
+<code><a href="../../lib/user.html#user_exists()">user_exists</a>, <a href="../../lib/user.html#valid_password()">valid_password</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/lib/file">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../lib/file.html" title="program /lib/file">FileLib </a></h3>
+<code><a href="../../lib/file.html#basename()">basename</a>, <a href="../../lib/file.html#dirname()">dirname</a>, <a href="../../lib/file.html#file_exists()">file_exists</a>, <a href="../../lib/file.html#is_directory()">is_directory</a></code></li>
+
+</ul>
 
 </li>
 </ul>
@@ -158,134 +185,154 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="set_name()">
+<a name="logon()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set_name</h4>
-<pre>void&nbsp;set_name(string&nbsp;str)</pre>
+<h4>logon</h4>
+<pre>int&nbsp;logon()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="select_user()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>select_user</h4>
+<pre>void&nbsp;select_user(string&nbsp;user,&nbsp;int&nbsp;tries)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>str</code> - </dd>
+<dd><code>user</code> - </dd>
+<dd><code>tries</code> - </dd>
 </dl>
 </li>
 </ul>
-<a name="query_name()">
+<a name="select_password()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_name</h4>
-<pre>string&nbsp;query_name()</pre>
-<div class="block"></div>
-<dl>
-<dl>
-</dl>
-</li>
-</ul>
-<a name="set_description()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_description</h4>
-<pre>void&nbsp;set_description(string&nbsp;str)</pre>
+<h4>select_password</h4>
+<pre>void&nbsp;select_password(string&nbsp;password,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>str</code> - </dd>
+<dd><code>password</code> - </dd>
+<dd><code>tries</code> - </dd>
+<dd><code>user</code> - </dd>
 </dl>
 </li>
 </ul>
-<a name="query_description()">
+<a name="confirm_password()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_description</h4>
-<pre>string&nbsp;query_description()</pre>
-<div class="block"></div>
-<dl>
-<dl>
-</dl>
-</li>
-</ul>
-<a name="set_exits()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_exits</h4>
-<pre>void&nbsp;set_exits(mapping&nbsp;map)</pre>
+<h4>confirm_password</h4>
+<pre>void&nbsp;confirm_password(string&nbsp;cpassword,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user,&nbsp;string&nbsp;password)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>map</code> - </dd>
+<dd><code>cpassword</code> - </dd>
+<dd><code>tries</code> - </dd>
+<dd><code>user</code> - </dd>
+<dd><code>password</code> - </dd>
 </dl>
 </li>
 </ul>
-<a name="add_exit()">
+<a name="start_timeout()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>add_exit</h4>
-<pre>void&nbsp;add_exit(string&nbsp;dir,&nbsp;string&nbsp;dest,&nbsp;int&nbsp;hidden)</pre>
+<h4>start_timeout</h4>
+<pre>void&nbsp;start_timeout()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="timeout()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>timeout</h4>
+<pre>void&nbsp;timeout()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="abort()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>abort</h4>
+<pre>void&nbsp;abort()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="spawn_avatar()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>spawn_avatar</h4>
+<pre>void&nbsp;spawn_avatar(string&nbsp;user)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - </dd>
-<dd><code>dest</code> - </dd>
-<dd><code>hidden</code> - </dd>
+<dd><code>user</code> - </dd>
 </dl>
 </li>
 </ul>
-<a name="query_exits()">
+<a name="new_user()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_exits</h4>
-<pre>mapping&nbsp;query_exits()</pre>
-<div class="block"></div>
-<dl>
-<dl>
-</dl>
-</li>
-</ul>
-<a name="query_exit()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_exit</h4>
-<pre>string&nbsp;query_exit(string&nbsp;dir)</pre>
+<h4>new_user</h4>
+<pre>void&nbsp;new_user(string&nbsp;user,&nbsp;string&nbsp;password)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - </dd>
+<dd><code>user</code> - </dd>
+<dd><code>password</code> - </dd>
 </dl>
 </li>
 </ul>
-<a name="is_exit_hidden()">
+<a name="save_passwd()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>is_exit_hidden</h4>
-<pre>int&nbsp;is_exit_hidden(string&nbsp;dir)</pre>
+<h4>save_passwd</h4>
+<pre>int&nbsp;save_passwd(string&nbsp;user,&nbsp;mapping&nbsp;data,&nbsp;int&nbsp;overwrite)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - </dd>
+<dd><code>user</code> - </dd>
+<dd><code>data</code> - </dd>
+<dd><code>overwrite</code> - </dd>
 </dl>
 </li>
 </ul>
@@ -315,11 +362,11 @@
 <li>Next Program</li>
 </ul>
 <ul class="navList">
-<li><a href="../../index.html?/modules/room.html" target="_top">Frames</a></li>
-<li><a href="../../modules/room.html" target="_top">No Frames</a></li>
+<li><a href="../../../index.html?/obj/auth/login.html" target="_top">Frames</a></li>
+<li><a href="../../../obj/auth/login.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
-<li><a href="../../allclasses-noframe.html">All Programs</a></li>
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
 </ul>
 <div>
 <script type="text/javascript"><!--
