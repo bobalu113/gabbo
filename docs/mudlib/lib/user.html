@@ -63,7 +63,7 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[virtual&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables]
 </li></ul></dd>
 </dl>
 <hr>
@@ -93,25 +93,18 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/user.html#user_exists()">user_exists</a></strong>(string&nbsp;username)</code>
-<div class="block"></div>
+<div class="block">Test whether a user with a given name exists.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/user.html#valid_password()">valid_password</a></strong>(string&nbsp;username,&nbsp;string&nbsp;password)</code>
-<div class="block"></div>
+<div class="block">Test whether a password is valid for the specified user.</div>
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/lib/file">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../lib/file.html" title="program /lib/file">FileLib </a></h3>
-<code><a href="../lib/file.html#basename()">basename</a>, <a href="../lib/file.html#dirname()">dirname</a>, <a href="../lib/file.html#file_exists()">file_exists</a>, <a href="../lib/file.html#is_directory()">is_directory</a></code></li>
-
-</ul>
 
 </li>
 </ul>
@@ -133,12 +126,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>user_exists</h4>
-<pre>int&nbsp;user_exists(string&nbsp;username)</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;user_exists(string&nbsp;username)</pre>
+<div class="block">Test whether a user with a given name exists.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
+<dd><code>username</code> - the username to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the user exists, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -148,13 +142,14 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>valid_password</h4>
-<pre>int&nbsp;valid_password(string&nbsp;username,&nbsp;string&nbsp;password)</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;valid_password(string&nbsp;username,&nbsp;string&nbsp;password)</pre>
+<div class="block">Test whether a password is valid for the specified user.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
-<dd><code>password</code> - </dd>
+<dd><code>username</code> - the username to test </dd>
+<dd><code>password</code> - the password </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the password matches the password on file, otherwise 0 </dd>
 </dl>
 </li>
 </ul>

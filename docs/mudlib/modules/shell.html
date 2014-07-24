@@ -16,8 +16,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/lib/array.html" target="_top">Frames</a></li>
-<li><a href="../../lib/array.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/modules/shell.html" target="_top">Frames</a></li>
+<li><a href="../../modules/shell.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>
@@ -53,16 +53,22 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/lib/array</div>
-<h2 title="Program ArrayLib " class="title">Program ArrayLib </h2>
+<div class="subTitle">/modules/shell</div>
+<h2 title="Program ShellMixin " class="title">Program ShellMixin </h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables]
+</li></ul></dd>
+</dl>
 <hr>
 <br>
-<div class="block">Utility library for manipulating arrays.</div>
+<div class="block">The ShellMixin provides the features of a Unix-like shell.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
@@ -87,24 +93,15 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../lib/array.html#anti_searcha()">anti_searcha</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;el,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
-<div class="block">Return the index of the first element of an array or string which is not
-a specified value.</div>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#query_cwd()">query_cwd</a></strong>()</code>
+<div class="block">Return the players current working directory.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../lib/array.html#anti_searcha_any()">anti_searcha_any</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;elements,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
-<div class="block">Like anti_searcha(), but instead of searching for a single item, search
-for any item of a set.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../lib/array.html#searcha_any()">searcha_any</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;elements,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
-<div class="block">Like member(), but instead of searching for a single item, search for any
-item of a set.</div>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#set_cwd()">set_cwd</a></strong>(string&nbsp;dir)</code>
+<div class="block">Set the current working directory for this player.</div>
 </td>
 </tr>
 </table>
@@ -123,63 +120,33 @@ item of a set.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="anti_searcha()">
+<a name="query_cwd()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>anti_searcha</h4>
-<pre>public&nbsp;varargs&nbsp;int&nbsp;anti_searcha(mixed&nbsp;list,&nbsp;mixed&nbsp;el,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</pre>
-<div class="block">Return the index of the first element of an array or string which is not
-a specified value.</div>
+<h4>query_cwd</h4>
+<pre>public&nbsp;string&nbsp;query_cwd()</pre>
+<div class="block">Return the players current working directory.</div>
 <dl>
 <dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>list</code> - an array or string to search </dd>
-<dd><code>el</code> - a value to search against </dd>
-<dd><code>start</code> - optional starting position of the search </dd>
-<dd><code>step</code> - optional step </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the index of the first member of list which is not el </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the player's current working directory </dd>
 </dl>
 </li>
 </ul>
-<a name="searcha_any()">
+<a name="set_cwd()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>searcha_any</h4>
-<pre>public&nbsp;varargs&nbsp;int&nbsp;searcha_any(mixed&nbsp;list,&nbsp;mixed&nbsp;elements,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</pre>
-<div class="block">Like member(), but instead of searching for a single item, search for any
-item of a set.</div>
+<h4>set_cwd</h4>
+<pre>public&nbsp;int&nbsp;set_cwd(string&nbsp;dir)</pre>
+<div class="block">Set the current working directory for this player.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>list</code> - an array or string to search </dd>
-<dd><code>elements</code> - an array of potential elements, or a string or characters to search against </dd>
-<dd><code>start</code> - optional starting position of the search </dd>
-<dd><code>step</code> - optional step </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the index of the first member of list which matches one of the specified elements </dd>
-</dl>
-</li>
-</ul>
-<a name="anti_searcha_any()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>anti_searcha_any</h4>
-<pre>public&nbsp;varargs&nbsp;int&nbsp;anti_searcha_any(mixed&nbsp;list,&nbsp;mixed&nbsp;elements,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</pre>
-<div class="block">Like anti_searcha(), but instead of searching for a single item, search
-for any item of a set.</div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>list</code> - an array or string to search </dd>
-<dd><code>elements</code> - an array of potential elements, or a string of characters to search against </dd>
-<dd><code>start</code> - optional starting position of the search </dd>
-<dd><code>step</code> - optional step </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the index of the first member of list which is not one of the specified elements </dd>
+<dd><code>dir</code> - the directory to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -205,8 +172,8 @@ for any item of a set.</div>
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/lib/array.html" target="_top">Frames</a></li>
-<li><a href="../../lib/array.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/modules/shell.html" target="_top">Frames</a></li>
+<li><a href="../../modules/shell.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>

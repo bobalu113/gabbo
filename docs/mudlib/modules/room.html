@@ -60,6 +60,12 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li class="last"><a href="../modules/id.html" title="">IdMixin </a>
+</li></ul></dd>
+</dl>
 <hr>
 <br>
 <div class="block">A base object for rooms.</div>
@@ -87,60 +93,79 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#add_exit()">add_exit</a></strong>(string&nbsp;dir,&nbsp;string&nbsp;dest,&nbsp;int&nbsp;hidden)</code>
-<div class="block"></div>
+<div class="block">Add a new exit, or replace an existing exit.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#is_exit_hidden()">is_exit_hidden</a></strong>(string&nbsp;dir)</code>
-<div class="block"></div>
+<div class="block">Test whether a given exit is hidden.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/room.html#is_room()">is_room</a></strong>()</code>
+<div class="block">Returns true to designate that this object represents a room in the game.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#query_description()">query_description</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Return a long description of the room.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#query_exit()">query_exit</a></strong>(string&nbsp;dir)</code>
-<div class="block"></div>
+<div class="block">Return the destination of a particular exit.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>mapping&nbsp;</code></td>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#query_exits()">query_exits</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Return the mapping of all the rooms exists.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#query_name()">query_name</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#set_description()">set_description</a></strong>(string&nbsp;str)</code>
-<div class="block"></div>
+<div class="block">Return the name of the room.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/room.html#set_exits()">set_exits</a></strong>(mapping&nbsp;map)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/room.html#set_description()">set_description</a></strong>(string&nbsp;str)</code>
+<div class="block">Set the room's description.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/room.html#set_exits()">set_exits</a></strong>(mapping&nbsp;map)</code>
+<div class="block">Set the room's exit mapping.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/room.html#set_name()">set_name</a></strong>(string&nbsp;str)</code>
-<div class="block"></div>
+<div class="block">Set the name of the room.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/room.html#setup_id()">setup_id</a></strong>()</code>
+<div class="block">{</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/modules/id">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../modules/id.html" title="program /modules/id">IdMixin </a></h3>
+<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
+
+</ul>
 
 </li>
 </ul>
@@ -156,46 +181,19 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="set_name()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_name</h4>
-<pre>void&nbsp;set_name(string&nbsp;str)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>str</code> - </dd>
-</dl>
-</li>
-</ul>
 <a name="query_name()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>query_name</h4>
-<pre>string&nbsp;query_name()</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;query_name()</pre>
+<div class="block">Return the name of the room. Formerly called the "short description", this
+name will be shown to the user everytime they enter the room. It should be
+short and recognizable.</div>
 <dl>
 <dl>
-</dl>
-</li>
-</ul>
-<a name="set_description()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_description</h4>
-<pre>void&nbsp;set_description(string&nbsp;str)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>str</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the name of the room </dd>
 </dl>
 </li>
 </ul>
@@ -205,42 +203,14 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>query_description</h4>
-<pre>string&nbsp;query_description()</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;query_description()</pre>
+<div class="block">Return a long description of the room. This will be displayed to the
+player when they explicitly look inside a room. It can be as long as is
+needed, but probably shouldn't take up more than a page of a user's
+screen.</div>
 <dl>
 <dl>
-</dl>
-</li>
-</ul>
-<a name="set_exits()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_exits</h4>
-<pre>void&nbsp;set_exits(mapping&nbsp;map)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>map</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="add_exit()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>add_exit</h4>
-<pre>void&nbsp;add_exit(string&nbsp;dir,&nbsp;string&nbsp;dest,&nbsp;int&nbsp;hidden)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - </dd>
-<dd><code>dest</code> - </dd>
-<dd><code>hidden</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the long description of the room </dd>
 </dl>
 </li>
 </ul>
@@ -250,10 +220,15 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>query_exits</h4>
-<pre>mapping&nbsp;query_exits()</pre>
-<div class="block"></div>
+<pre>public&nbsp;mapping&nbsp;query_exits()</pre>
+<div class="block">Return the mapping of all the rooms exists. This is a two-dimensional
+mapping, with the exit direction (e.g. "north") as the keys. The first
+value should be the program name of the room to which the player will be
+moved when using the exit. The second value is a flag designating whether
+or not the exit should be displayed when the user looks inside a room.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>a mapping of the form ([ direction : destination; hidden ]) </dd>
 </dl>
 </li>
 </ul>
@@ -263,12 +238,14 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>query_exit</h4>
-<pre>string&nbsp;query_exit(string&nbsp;dir)</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;query_exit(string&nbsp;dir)</pre>
+<div class="block">Return the destination of a particular exit. This will be the program name
+of the room to which the exit takes the user.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - </dd>
+<dd><code>dir</code> - the direction of the exit </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the program name of the destination, or 0 if no exit exists </dd>
 </dl>
 </li>
 </ul>
@@ -278,12 +255,106 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>is_exit_hidden</h4>
-<pre>int&nbsp;is_exit_hidden(string&nbsp;dir)</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;is_exit_hidden(string&nbsp;dir)</pre>
+<div class="block">Test whether a given exit is hidden.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - </dd>
+<dd><code>dir</code> - the direction of the exit to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the exit is hidden, otherwise 0 </dd>
+</dl>
+</li>
+</ul>
+<a name="set_name()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_name</h4>
+<pre>public&nbsp;int&nbsp;set_name(string&nbsp;str)</pre>
+<div class="block">Set the name of the room. S</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the name to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="set_description()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_description</h4>
+<pre>public&nbsp;int&nbsp;set_description(string&nbsp;str)</pre>
+<div class="block">Set the room's description.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the description to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="set_exits()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_exits</h4>
+<pre>public&nbsp;int&nbsp;set_exits(mapping&nbsp;map)</pre>
+<div class="block">Set the room's exit mapping.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>map</code> - the mapping of exists to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="add_exit()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add_exit</h4>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;add_exit(string&nbsp;dir,&nbsp;string&nbsp;dest,&nbsp;int&nbsp;hidden)</pre>
+<div class="block">Add a new exit, or replace an existing exit.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>dir</code> - the direction of the exit to add </dd>
+<dd><code>dest</code> - the program name of the destination room </dd>
+<dd><code>hidden</code> - 1 if the exit should be hidden, otherwise 0 </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="setup_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup_id</h4>
+<pre>protected&nbsp;void&nbsp;setup_id()</pre>
+<div class="block">{</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="is_room()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>is_room</h4>
+<pre>public&nbsp;nomask&nbsp;int&nbsp;is_room()</pre>
+<div class="block">Returns true to designate that this object represents a room in the game.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>1 </dd>
 </dl>
 </li>
 </ul>

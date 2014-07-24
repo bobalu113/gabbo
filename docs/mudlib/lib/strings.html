@@ -63,7 +63,7 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables]
 </li></ul></dd>
 </dl>
 <hr>
@@ -93,43 +93,36 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/strings.html#find_nonws()">find_nonws</a></strong>(string&nbsp;str,&nbsp;int&nbsp;start)</code>
 <div class="block">Find the first non-space character in a string.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/strings.html#is_escaped()">is_escaped</a></strong>(string&nbsp;str,&nbsp;int&nbsp;index)</code>
 <div class="block">Test whether a character in string is escaped by a backslash.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/strings.html#match_quote()">match_quote</a></strong>(string&nbsp;str,&nbsp;int&nbsp;start,&nbsp;string&nbsp;quote_chars)</code>
 <div class="block">Find the index of the last character in a possibly quoted string.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/strings.html#search_str_unescaped()">search_str_unescaped</a></strong>(string&nbsp;str,&nbsp;int&nbsp;el,&nbsp;int&nbsp;pos,&nbsp;int&nbsp;step)</code>
 <div class="block">Search a string for a character, ignoring escaped characters.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/strings.html#unescape()">unescape</a></strong>(string&nbsp;str)</code>
 <div class="block">Unescape all characters in a string by one level.</div>
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/lib/array">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../lib/array.html" title="program /lib/array">ArrayLib </a></h3>
-<code><a href="../lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../lib/array.html#searcha_any()">searcha_any</a></code></li>
-
-</ul>
 
 </li>
 </ul>
@@ -151,7 +144,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>find_nonws</h4>
-<pre>int&nbsp;find_nonws(string&nbsp;str,&nbsp;int&nbsp;start)</pre>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;find_nonws(string&nbsp;str,&nbsp;int&nbsp;start)</pre>
 <div class="block">Find the first non-space character in a string.
 Note: functionally equivilent to ArrayLib->anti_search(str, ' ', start),
 but optimized for speed.</div>
@@ -170,7 +163,7 @@ but optimized for speed.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>is_escaped</h4>
-<pre>int&nbsp;is_escaped(string&nbsp;str,&nbsp;int&nbsp;index)</pre>
+<pre>public&nbsp;int&nbsp;is_escaped(string&nbsp;str,&nbsp;int&nbsp;index)</pre>
 <div class="block">Test whether a character in string is escaped by a backslash.</div>
 <dl>
 <dl>
@@ -187,7 +180,7 @@ but optimized for speed.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>search_str_unescaped</h4>
-<pre>int&nbsp;search_str_unescaped(string&nbsp;str,&nbsp;int&nbsp;el,&nbsp;int&nbsp;pos,&nbsp;int&nbsp;step)</pre>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;search_str_unescaped(string&nbsp;str,&nbsp;int&nbsp;el,&nbsp;int&nbsp;pos,&nbsp;int&nbsp;step)</pre>
 <div class="block">Search a string for a character, ignoring escaped characters.</div>
 <dl>
 <dl>
@@ -206,7 +199,7 @@ but optimized for speed.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>match_quote</h4>
-<pre>int&nbsp;match_quote(string&nbsp;str,&nbsp;int&nbsp;start,&nbsp;string&nbsp;quote_chars)</pre>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;match_quote(string&nbsp;str,&nbsp;int&nbsp;start,&nbsp;string&nbsp;quote_chars)</pre>
 <div class="block">Find the index of the last character in a possibly quoted string.</div>
 <dl>
 <dl>
@@ -224,7 +217,7 @@ but optimized for speed.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>unescape</h4>
-<pre>string&nbsp;unescape(string&nbsp;str)</pre>
+<pre>public&nbsp;string&nbsp;unescape(string&nbsp;str)</pre>
 <div class="block">Unescape all characters in a string by one level.
 <p>Note: This deals with literal backslashes only.  In the examples, and ind
 the strings this function is meant to deal with "\a" is meant to represent

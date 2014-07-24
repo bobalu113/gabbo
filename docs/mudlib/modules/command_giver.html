@@ -74,12 +74,172 @@
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#add_command()">add_command</a></strong>(string&nbsp;command,&nbsp;string&nbsp;verb,&nbsp;int&nbsp;flag)</code>
+<div class="block">Add a new command to the user's command map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#do_command()">do_command</a></strong>(string&nbsp;arg)</code>
+<div class="block">Main command router.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command()">query_command</a></strong>(string&nbsp;verb)</code>
+<div class="block">Return the command for a given verb.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command_flag()">query_command_flag</a></strong>(string&nbsp;verb)</code>
+<div class="block">Return the action flags for a given verb.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#query_verbs()">query_verbs</a></strong>()</code>
+<div class="block">Return the mapping of all configured command verbs.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#setup_command_giver()">setup_command_giver</a></strong>()</code>
+<div class="block">Initialize CommandGiverMixin.</div>
+</td>
+</tr>
+</table>
+
+</li>
+</ul>
 </li>
 </ul>
 </div>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="query_verbs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_verbs</h4>
+<pre>public&nbsp;mapping&nbsp;query_verbs()</pre>
+<div class="block">Return the mapping of all configured command verbs. Keys are the verbs,
+the first value is the program name of the command object, the second
+value is an action flag (see add_action(E)).</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the mapping of verbs to commands </dd>
+</dl>
+</li>
+</ul>
+<a name="query_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_command</h4>
+<pre>public&nbsp;string&nbsp;query_command(string&nbsp;verb)</pre>
+<div class="block">Return the command for a given verb.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>verb</code> - the verb which is being executed </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the program name of the command object used for that verb </dd>
+</dl>
+</li>
+</ul>
+<a name="query_command_flag()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_command_flag</h4>
+<pre>public&nbsp;int&nbsp;query_command_flag(string&nbsp;verb)</pre>
+<div class="block">Return the action flags for a given verb. (see add_action(E)).</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>verb</code> - the verb which is being executed </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the action flag for the given verb </dd>
+</dl>
+</li>
+</ul>
+<a name="add_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add_command</h4>
+<pre>protected&nbsp;varargs&nbsp;int&nbsp;add_command(string&nbsp;command,&nbsp;string&nbsp;verb,&nbsp;int&nbsp;flag)</pre>
+<div class="block">Add a new command to the user's command map.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>command</code> - the program name of the command object </dd>
+<dd><code>verb</code> - the verb which will execute the command </dd>
+<dd><code>flag</code> - optional action flag (see add_action(E)) </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="setup_command_giver()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup_command_giver</h4>
+<pre>public&nbsp;void&nbsp;setup_command_giver()</pre>
+<div class="block">Initialize CommandGiverMixin. If this function is overloaded, be advised
+that the mixin's private variables are initialized in the parent
+implementation.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="do_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>do_command</h4>
+<pre>static&nbsp;int&nbsp;do_command(string&nbsp;arg)</pre>
+<div class="block">Main command router. Any added commands will pass through this action
+function before being routed to the proper command object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - the command-line argument </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of the command execution; 1 for success, 0 for failure. </dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>

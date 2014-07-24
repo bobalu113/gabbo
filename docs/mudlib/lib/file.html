@@ -87,27 +87,27 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/file.html#basename()">basename</a></strong>(string&nbsp;filename)</code>
-<div class="block"></div>
+<div class="block">Return the filename component of a complete path.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>string&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/file.html#dirname()">dirname</a></strong>(string&nbsp;filename)</code>
-<div class="block"></div>
+<div class="block">Return the name of a file's containing directory.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/file.html#file_exists()">file_exists</a></strong>(string&nbsp;filename)</code>
-<div class="block"></div>
+<div class="block">Test whether a file exists.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/file.html#is_directory()">is_directory</a></strong>(string&nbsp;filename)</code>
-<div class="block"></div>
+<div class="block">Test whether a path is a directory.</div>
 </td>
 </tr>
 </table>
@@ -132,12 +132,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>file_exists</h4>
-<pre>int&nbsp;file_exists(string&nbsp;filename)</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;file_exists(string&nbsp;filename)</pre>
+<div class="block">Test whether a file exists.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>filename</code> - </dd>
+<dd><code>filename</code> - the filename to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the file exists, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -147,12 +148,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>is_directory</h4>
-<pre>int&nbsp;is_directory(string&nbsp;filename)</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;is_directory(string&nbsp;filename)</pre>
+<div class="block">Test whether a path is a directory.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>filename</code> - </dd>
+<dd><code>filename</code> - the path to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the path is a directory, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -162,12 +164,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>basename</h4>
-<pre>string&nbsp;basename(string&nbsp;filename)</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;basename(string&nbsp;filename)</pre>
+<div class="block">Return the filename component of a complete path.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>filename</code> - </dd>
+<dd><code>filename</code> - the path to check </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the base filename of the path </dd>
 </dl>
 </li>
 </ul>
@@ -177,12 +180,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>dirname</h4>
-<pre>string&nbsp;dirname(string&nbsp;filename)</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;dirname(string&nbsp;filename)</pre>
+<div class="block">Return the name of a file's containing directory.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>filename</code> - </dd>
+<dd><code>filename</code> - the path of the file to check </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the name of the containing directory </dd>
 </dl>
 </li>
 </ul>

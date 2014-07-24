@@ -74,12 +74,235 @@
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a></strong>(string&nbsp;str)</code>
+<div class="block">Add a new secondary id to the object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#query_ids()">query_ids</a></strong>()</code>
+<div class="block">Return a list of all the ids of the object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#query_primary_id()">query_primary_id</a></strong>()</code>
+<div class="block">Returns the primary id of the object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a></strong>()</code>
+<div class="block">Return the secondary ids of the object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a></strong>(string&nbsp;str)</code>
+<div class="block">Remove a secondary id from the object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#set_primary_id()">set_primary_id</a></strong>(string&nbsp;str)</code>
+<div class="block">Set the primary id of the object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a></strong>(string *str)</code>
+<div class="block">Set all secondary ids of the object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#setup_id()">setup_id</a></strong>()</code>
+<div class="block">Initialize IdMixin.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#test_id()">test_id</a></strong>(string&nbsp;str)</code>
+<div class="block">Test whether a string matches one of the ids applied to this object.</div>
+</td>
+</tr>
+</table>
+
+</li>
+</ul>
 </li>
 </ul>
 </div>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="query_primary_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_primary_id</h4>
+<pre>public&nbsp;string&nbsp;query_primary_id()</pre>
+<div class="block">Returns the primary id of the object. An object may only have one primary
+id. This id can be used to give hints to the player about how to refer to
+the object on the command line.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the primary id, or 0 if the object has no primary id </dd>
+</dl>
+</li>
+</ul>
+<a name="query_secondary_ids()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_secondary_ids</h4>
+<pre>public&nbsp;string&nbsp;*query_secondary_ids()</pre>
+<div class="block">Return the secondary ids of the object. An object may have any number of
+secondary ids. These ids may be used to identify the object, but should
+not be used when giving player usage instructions.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the array of secondary ids </dd>
+</dl>
+</li>
+</ul>
+<a name="query_ids()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_ids</h4>
+<pre>public&nbsp;string&nbsp;*query_ids()</pre>
+<div class="block">Return a list of all the ids of the object. This is the primary id plus
+any secondary ids which have been applied to the object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>an array of all ids </dd>
+</dl>
+</li>
+</ul>
+<a name="test_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>test_id</h4>
+<pre>public&nbsp;int&nbsp;test_id(string&nbsp;str)</pre>
+<div class="block">Test whether a string matches one of the ids applied to this object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the string to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the string is a valid id, 0 if not </dd>
+</dl>
+</li>
+</ul>
+<a name="set_primary_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_primary_id</h4>
+<pre>protected&nbsp;int&nbsp;set_primary_id(string&nbsp;str)</pre>
+<div class="block">Set the primary id of the object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the new primary id </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="set_secondary_ids()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_secondary_ids</h4>
+<pre>protected&nbsp;int&nbsp;set_secondary_ids(string *str)</pre>
+<div class="block">Set all secondary ids of the object. Any previously set secondary ids will
+be overwritten by this list.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the array of secondary ids </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="add_secondary_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add_secondary_id</h4>
+<pre>protected&nbsp;int&nbsp;add_secondary_id(string&nbsp;str)</pre>
+<div class="block">Add a new secondary id to the object. If the object already has the
+secondary id, it will be shifted to the end of the array.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the secondary id </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="remove_secondary_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove_secondary_id</h4>
+<pre>protected&nbsp;int&nbsp;remove_secondary_id(string&nbsp;str)</pre>
+<div class="block">Remove a secondary id from the object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the secondary id to remove </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="setup_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup_id</h4>
+<pre>protected&nbsp;void&nbsp;setup_id()</pre>
+<div class="block">Initialize IdMixin. If this function is overloaded, be advised that the
+mixin's private variables are initialized in the parent implementation.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>

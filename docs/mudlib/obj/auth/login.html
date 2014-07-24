@@ -63,9 +63,10 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../../lib/user.html" title="">UserLib </a>
-<ul class="tree"><li class="last"><a href="../../lib/file.html" title="">FileLib </a>&nbsp;[virtual&nbsp;functions]
-</li></ul></li></ul></dd>
+<ul class="tree"><li><a href="../../lib/user.html" title="">UserLib </a>&nbsp;[private&nbsp;variables]
+<ul class="tree"><li class="last"><a href="../../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables]
+</li></ul></li><li class="last"><a href="../../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables]
+</li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -93,81 +94,68 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>static&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#abort()">abort</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Abort login.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<tr class="altColor">
+<td class="colFirst"><code>static&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#confirm_password()">confirm_password</a></strong>(string&nbsp;cpassword,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user,&nbsp;string&nbsp;password)</code>
-<div class="block"></div>
+<div class="block">Read the password again from new users for confirmation.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#logon()">logon</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Invoked by the master object when a new connection is established.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<tr class="altColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#new_user()">new_user</a></strong>(string&nbsp;user,&nbsp;string&nbsp;password)</code>
-<div class="block"></div>
+<div class="block">Create a new user.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/login.html#restart_timeout()">restart_timeout</a></strong>()</code>
+<div class="block">Restart idle timeout after user input.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int&nbsp;</code></td>
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#save_passwd()">save_passwd</a></strong>(string&nbsp;user,&nbsp;mapping&nbsp;data,&nbsp;int&nbsp;overwrite)</code>
-<div class="block"></div>
+<div class="block">Save user data to password file.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colFirst"><code>static&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#select_password()">select_password</a></strong>(string&nbsp;password,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user)</code>
-<div class="block"></div>
+<div class="block">Read input from user for password.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colFirst"><code>static&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#select_user()">select_user</a></strong>(string&nbsp;user,&nbsp;int&nbsp;tries)</code>
-<div class="block"></div>
+<div class="block">Read input from user for username.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#spawn_avatar()">spawn_avatar</a></strong>(string&nbsp;user)</code>
-<div class="block"></div>
+<div class="block">Spawn a new avatar object, move to starting location, and transfer
+interactivity from login object to new avatar.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../obj/auth/login.html#start_timeout()">start_timeout</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void&nbsp;</code></td>
+<td class="colFirst"><code>static&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../obj/auth/login.html#timeout()">timeout</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Exit login prompt because of idle timeout.</div>
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/lib/user">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../lib/user.html" title="program /lib/user">UserLib </a></h3>
-<code><a href="../../lib/user.html#user_exists()">user_exists</a>, <a href="../../lib/user.html#valid_password()">valid_password</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/lib/file">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../lib/file.html" title="program /lib/file">FileLib </a></h3>
-<code><a href="../../lib/file.html#basename()">basename</a>, <a href="../../lib/file.html#dirname()">dirname</a>, <a href="../../lib/file.html#file_exists()">file_exists</a>, <a href="../../lib/file.html#is_directory()">is_directory</a></code></li>
-
-</ul>
 
 </li>
 </ul>
@@ -189,10 +177,11 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>logon</h4>
-<pre>int&nbsp;logon()</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;logon()</pre>
+<div class="block">Invoked by the master object when a new connection is established.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -202,13 +191,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>select_user</h4>
-<pre>void&nbsp;select_user(string&nbsp;user,&nbsp;int&nbsp;tries)</pre>
-<div class="block"></div>
+<pre>static&nbsp;void&nbsp;select_user(string&nbsp;user,&nbsp;int&nbsp;tries)</pre>
+<div class="block">Read input from user for username.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user</code> - </dd>
-<dd><code>tries</code> - </dd>
+<dd><code>user</code> - the inputted username </dd>
+<dd><code>tries</code> - the number of tries used </dd>
 </dl>
 </li>
 </ul>
@@ -218,14 +207,14 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>select_password</h4>
-<pre>void&nbsp;select_password(string&nbsp;password,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user)</pre>
-<div class="block"></div>
+<pre>static&nbsp;void&nbsp;select_password(string&nbsp;password,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user)</pre>
+<div class="block">Read input from user for password.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>password</code> - </dd>
-<dd><code>tries</code> - </dd>
-<dd><code>user</code> - </dd>
+<dd><code>password</code> - the inputted password </dd>
+<dd><code>tries</code> - the number of tries used </dd>
+<dd><code>user</code> - the selected username </dd>
 </dl>
 </li>
 </ul>
@@ -235,26 +224,26 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>confirm_password</h4>
-<pre>void&nbsp;confirm_password(string&nbsp;cpassword,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user,&nbsp;string&nbsp;password)</pre>
-<div class="block"></div>
+<pre>static&nbsp;void&nbsp;confirm_password(string&nbsp;cpassword,&nbsp;int&nbsp;tries,&nbsp;string&nbsp;user,&nbsp;string&nbsp;password)</pre>
+<div class="block">Read the password again from new users for confirmation.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>cpassword</code> - </dd>
-<dd><code>tries</code> - </dd>
-<dd><code>user</code> - </dd>
-<dd><code>password</code> - </dd>
+<dd><code>cpassword</code> - the confirmed password </dd>
+<dd><code>tries</code> - the number of tries used </dd>
+<dd><code>user</code> - the selected username </dd>
+<dd><code>password</code> - the selected password </dd>
 </dl>
 </li>
 </ul>
-<a name="start_timeout()">
+<a name="restart_timeout()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>start_timeout</h4>
-<pre>void&nbsp;start_timeout()</pre>
-<div class="block"></div>
+<h4>restart_timeout</h4>
+<pre>public&nbsp;void&nbsp;restart_timeout()</pre>
+<div class="block">Restart idle timeout after user input.</div>
 <dl>
 <dl>
 </dl>
@@ -266,8 +255,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>timeout</h4>
-<pre>void&nbsp;timeout()</pre>
-<div class="block"></div>
+<pre>static&nbsp;void&nbsp;timeout()</pre>
+<div class="block">Exit login prompt because of idle timeout.</div>
 <dl>
 <dl>
 </dl>
@@ -279,8 +268,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>abort</h4>
-<pre>void&nbsp;abort()</pre>
-<div class="block"></div>
+<pre>static&nbsp;void&nbsp;abort()</pre>
+<div class="block">Abort login.</div>
 <dl>
 <dl>
 </dl>
@@ -292,12 +281,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>spawn_avatar</h4>
-<pre>void&nbsp;spawn_avatar(string&nbsp;user)</pre>
-<div class="block"></div>
+<pre>protected&nbsp;void&nbsp;spawn_avatar(string&nbsp;user)</pre>
+<div class="block">Spawn a new avatar object, move to starting location, and transfer
+interactivity from login object to new avatar.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user</code> - </dd>
+<dd><code>user</code> - the username of the new avatar </dd>
 </dl>
 </li>
 </ul>
@@ -307,13 +297,13 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>new_user</h4>
-<pre>void&nbsp;new_user(string&nbsp;user,&nbsp;string&nbsp;password)</pre>
-<div class="block"></div>
+<pre>protected&nbsp;void&nbsp;new_user(string&nbsp;user,&nbsp;string&nbsp;password)</pre>
+<div class="block">Create a new user.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user</code> - </dd>
-<dd><code>password</code> - </dd>
+<dd><code>user</code> - the username of the new user </dd>
+<dd><code>password</code> - the user's password </dd>
 </dl>
 </li>
 </ul>
@@ -323,14 +313,15 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>save_passwd</h4>
-<pre>int&nbsp;save_passwd(string&nbsp;user,&nbsp;mapping&nbsp;data,&nbsp;int&nbsp;overwrite)</pre>
-<div class="block"></div>
+<pre>protected&nbsp;int&nbsp;save_passwd(string&nbsp;user,&nbsp;mapping&nbsp;data,&nbsp;int&nbsp;overwrite)</pre>
+<div class="block">Save user data to password file.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user</code> - </dd>
-<dd><code>data</code> - </dd>
-<dd><code>overwrite</code> - </dd>
+<dd><code>user</code> - the username of the file </dd>
+<dd><code>data</code> - the password data </dd>
+<dd><code>overwrite</code> - 1 to force overwrite of existing file, 0 otherwise </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>

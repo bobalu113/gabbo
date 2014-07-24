@@ -63,8 +63,8 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../lib/strings.html" title="">StringsLib </a>
-<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>
+<ul class="tree"><li class="last"><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables]
 </li></ul></li></ul></dd>
 </dl>
 <hr>
@@ -94,26 +94,12 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>string&nbsp;*</code></td>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../lib/args.html#explode_args()">explode_args</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;preserve_quotes)</code>
-<div class="block"></div>
+<div class="block">Separate space-deliniated arguments, but keep quoted strings together.</div>
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/lib/strings">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../lib/strings.html" title="program /lib/strings">StringsLib </a></h3>
-<code><a href="../lib/strings.html#find_nonws()">find_nonws</a>, <a href="../lib/strings.html#is_escaped()">is_escaped</a>, <a href="../lib/strings.html#match_quote()">match_quote</a>, <a href="../lib/strings.html#search_str_unescaped()">search_str_unescaped</a>, <a href="../lib/strings.html#unescape()">unescape</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/lib/array">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../lib/array.html" title="program /lib/array">ArrayLib </a></h3>
-<code><a href="../lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../lib/array.html#searcha_any()">searcha_any</a></code></li>
-
-</ul>
 
 </li>
 </ul>
@@ -135,13 +121,14 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>explode_args</h4>
-<pre>string&nbsp;*explode_args(string&nbsp;arg,&nbsp;int&nbsp;preserve_quotes)</pre>
-<div class="block"></div>
+<pre>public&nbsp;varargs&nbsp;string&nbsp;*explode_args(string&nbsp;arg,&nbsp;int&nbsp;preserve_quotes)</pre>
+<div class="block">Separate space-deliniated arguments, but keep quoted strings together.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>preserve_quotes</code> - </dd>
+<dd><code>arg</code> - the string containing quoted arguments </dd>
+<dd><code>preserve_quotes</code> - set to 1 if the quote characters should be preserved in the resulting argument strings </dd>
+<dt><span class="strong">Returns:</span></dt><dd>an array of space-deliniated arguments, with the quoted strings returned as a single argument </dd>
 </dl>
 </li>
 </ul>
