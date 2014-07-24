@@ -26,7 +26,7 @@ $DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/docs/mudlib";
 $TMPFILE = "/tmp/lpcdoc";
 
 @SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
-#@SOURCE = ( "$CYGROOT/modules/id.c" );
+#@SOURCE = ( "$CYGROOT/lib/user.c" );
 
 %MODRANKS = ( "public" => 1,
               "static" => 2,
@@ -772,20 +772,20 @@ sub inherit_mods($) {
     my ($inherit, $preserve_order) = @_;
     my %ranks;
     my $mods = "";
-    my %v = %{ $inherit->[1] };
+    my %v = %{ $inherit->[0] };
     %ranks = ( $preserve_order ? %v : %MODRANKS );
     if (%v) {
         $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%v));
         $mods .= "&nbsp;variables";
     }
-    my %f = %{ $inherit->[2] };
+    my %f = %{ $inherit->[1] };
     %ranks = ( $preserve_order ? %f : %MODRANKS );
     if (%f) {
         $mods .= "&nbsp;" if ($mods);
         $mods .= join("&nbsp;", sort { $ranks{$a} <=> $ranks{$b} } keys(%f));
         $mods .= "&nbsp;functions";
     }
-    my %m = %{ $inherit->[3] };
+    my %m = %{ $inherit->[2] };
     %ranks = ( $preserve_order ? %m : %MODRANKS );
     if (%m) {
         $mods .= "&nbsp;" if ($mods);
