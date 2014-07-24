@@ -5,41 +5,66 @@
  * @alias Avatar
  */
 
-inherit FileLib;
+inherit LivingCode;
 
-/* names and ids and stuff */
+inherit NameMixin;
+inherit ShellMixin;
+inherit CommandGiverMixin;
 
-string name;
-string id;
+/* usernames */
 
-string query_name() {
-  return name;
+private string username;
+
+/**
+ * Return the username associated with this avatar. This name will be 
+ * consistent across all characters a user plays.
+ * 
+ * @return the username
+ */
+public string query_username() {
+  return username;
 }
 
-string query_id() {
-  return id;
+/**
+ * Set the username for this avatar.
+ * 
+ * @param str the username to set
+ * @return 0 for failure, 1 for success
+ */
+protected int set_username(string str) {
+  username = str;
+  return 1;
 }
 
-string *query_secondary_ids() {
-  return ({ "player" });
+/* initialization */
+
+/**
+ * Invoked by the login object to set up a newly spawned avatar. At the time
+ * this lfun is called, interactivity has not yet been transfered to the
+ * avatar. It also has not yet been moved to the player's starting location.
+ * @param  username the username to which this avatar belongs
+ */
+void setup(string username) {
+  LivingCode::setup();
+  setup_id();
+  setup_name();
+  setup_command_giver();
+
+  set_username(username);
+  set_primary_id(username);
+  add_secondary_id(CAP(username));
+  set_nickname(CAP(username));
+  set_cwd(HomeDir + "/" + username);
+  return 0;
 }
 
-string *query_ids() {
-  return ({ query_id() }) + query_secondary_ids();
-}
 
-/* command routing */
-
-// ([ verb : command_file ])
-mapping verbs;
-
-// to keep track if a command has been reloaded since init
-// ([ command_object ])
-nosave mapping commands;
-
-void initialize_actions() {
-  verbs = ([ ]);
-  commands = ([ ]);
+/**
+ * Temporary implementation to initialize a static list of commands. Will be 
+ * replaced with configuration-driven logic instead.
+ */
+void setup_command_giver() {
+  CommandGiverMixin::setup_command_giver();
 
   // TODO make this configuration-driven
   string *command_files = ({ 
@@ -77,65 +102,24 @@ void initialize_actions() {
     foreach (mixed *action : actions) {
       string verb = action[0];
       int flag = action[1];
-      verbs[verb] = command;
-      commands += ([ cmd_ob ]);
-      add_action("do_command", verb, flag);
+      add_command(command, verb, flag);
     }
   }
 }
 
-static int do_command(string arg) {
-  string verb = query_verb(1);
-  if (!member(verbs, verb)) {
-    // TODO log warning
-    return 0;
+/**
+ * Add actions for all a player's currently configured commands.
+ */
+private void initialize_actions() {
+  foreach (string verb, string command, int flag : query_verbs()) {
+    add_action("do_command", verb, flag);
   }
-  string command = verbs[verb];
-  object cmd_ob = FINDO(command);
-  if (!cmd_ob || !member(commands, cmd_ob)) {
-    // FUTURE prompt user whether or not to re-init
-    string err = catch (cmd_ob = load_object(command));
-    // TODO consolidate command loading logic (see above)
-    if (err) {
-      // TODO log error
-      printf("Caught error loading command %s: %s\n", command, err);
-      return 0;
-    } else {
-      commands += ([ cmd_ob ]);
-    }
-  }
-
-  return cmd_ob->do_command(arg);
 }
 
-
-/* file management */
-
-string cwd;
-
-int set_cwd(string dir) {
-  // FUTURE add security
-  if (!file_exists(dir)) {
-    return 0;
-  }
-  cwd = dir;
-  return 1;
-}
-
-string query_cwd() {
-  return cwd;
-}
-
-
-/* initialization */
-
-int setup(string username) {
-  id = username;
-  name = CAP(username);
-  cwd = HomeDir + "/" + username;
-  return 0;
-}
-
+/**
+ * Invoked by the login object once the avatar object is interactive and 
+ * has been moved to its start location.
+ */
 void enter_game() {
   enable_commands();
   initialize_actions();
@@ -145,4 +129,13 @@ void enter_game() {
       "> " 
     })
   ), THISO);
+}
+
+/**
+ * Returns true to designate that this object represents a player character.
+ * 
+ * @return 1 
+ */
+nomask int is_avatar() {
+  return 1;
 }

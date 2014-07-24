@@ -4,3 +4,6 @@
  * @author devo@eotl
  * @alias ThingCode
  */
+
+inherit IdMixin;
+

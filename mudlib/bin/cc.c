@@ -75,7 +75,7 @@ int do_command(string arg) {
   string err = catch (cc_ob = load_object(path); publish);
   if (err) {
     printf( "%s: %s\n", query_verb(), err);
-    mixed *last_err = get_error_file(MASTER_OBJECT->get_wiz_name(path));
+    mixed *last_err = get_error_file(MasterObject->get_wiz_name(path));
     if (last_err) {
       printf("%s line %d: %s\n", last_err[0], last_err[1], last_err[2]);
     }

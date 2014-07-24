@@ -9,23 +9,30 @@
 #include <user.h>
 #include <sys/input_to.h>
 
-inherit UserLib;
+private functions private variables inherit UserLib;
+private functions private variables inherit FileLib;
 
-#define WELCOME_FILE $EtcDir "/issue"
-#define TIMEOUT 180
+#define WELCOME_FILE EtcDir "/issue"
+#define TIMEOUT 10
 #define MAX_TRIES 3
 
 int logon();
+static void select_user(string user, int tries);
 static void select_password(string password, int tries, string user);
 static void confirm_password(string cpassword, int tries, string user, 
-                             string password);
-static void start_timeout();
+                              string password);
+public void restart_timeout();
 static void timeout();
 static void abort();
-static void spawn_avatar(string user);
-static void new_user(string user, string password);
-static int save_passwd(string user, mapping data, int overwrite);
+protected void spawn_avatar(string user);
+protected void new_user(string user, string password);
+protected int save_passwd(string user, mapping data, int overwrite);
 
+/**
+ * Invoked by the master object when a new connection is established.
+ * 
+ * @return 1 for success, 0 for failure
+ */
 int logon() {
   if (caller_stack_depth() > 0) {
     return 0;
@@ -34,10 +41,16 @@ int logon() {
   printf(read_file(WELCOME_FILE));
   input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, "Enter username: ", 
     0);
-  start_timeout();
+  restart_timeout();
   return 1;
 }
 
+/**
+ * Read input from user for username.
+ * 
+ * @param user  the inputted username 
+ * @param tries the number of tries used
+ */
 static void select_user(string user, int tries) {
   if (!strlen(user)) {
     if (tries >= MAX_TRIES) {
@@ -45,7 +58,7 @@ static void select_user(string user, int tries) {
     } else {
       input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, 
         "Enter username: ", tries + 1);
-      start_timeout();
+      restart_timeout();
     }
   } else {
     string prompt = "Enter password: ";
@@ -54,10 +67,17 @@ static void select_user(string user, int tries) {
     } 
     input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG,
       prompt, 0, user);
-    start_timeout();
+    restart_timeout();
   }
 }
 
+/**
+ * Read input from user for password.
+ * 
+ * @param password  the inputted password 
+ * @param tries     the number of tries used
+ * @param user      the selected username
+ */
 static void select_password(string password, int tries, string user) {
   printf("\n");
   if (!strlen(password)) {
@@ -70,7 +90,7 @@ static void select_password(string password, int tries, string user) {
       } 
       input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG,
         prompt, tries + 1, user);
-      start_timeout();
+      restart_timeout();
     }
   } else {
     if (user_exists(user)) {
@@ -85,19 +105,27 @@ static void select_password(string password, int tries, string user) {
           printf("Invalid password, try again. ");
           input_to("select_password", INPUT_NOECHO|INPUT_PROMPT
             |INPUT_IGNORE_BANG, "Enter password: ", tries + 1, user);
-          start_timeout();
+          restart_timeout();
         }
       }
     } else {
       input_to("confirm_password", INPUT_NOECHO|INPUT_PROMPT
         |INPUT_IGNORE_BANG, "Confirm password: ", tries, user, password);
-      start_timeout();
+      restart_timeout();
     }
   }  
 }
 
+/**
+ * Read the password again from new users for confirmation.
+ * 
+ * @param cpassword the confirmed password
+ * @param tries     the number of tries used
+ * @param user      the selected username
+ * @param password  the selected password
+ */
 static void confirm_password(string cpassword, int tries, string user, 
-                             string password) {
+                              string password) {
   printf("\n");
   if (cpassword == password) {
     remove_call_out("timeout");
@@ -108,7 +136,7 @@ static void confirm_password(string cpassword, int tries, string user,
         printf("Username %s already taken, try again. ");
         input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, 
           "Enter username: ", 0);
-        start_timeout();
+        restart_timeout();
       }
     } else {
       new_user(user, password);
@@ -121,29 +149,44 @@ static void confirm_password(string cpassword, int tries, string user,
       printf("Passwords do not match, try again. ");
       input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG, 
         "Choose a password: ", tries + 1, user);
-      start_timeout();
+      restart_timeout();
     }
   }
 }
 
-static void start_timeout() {
+/**
+ * Restart idle timeout after user input.
+ */
+public void restart_timeout() {
   if (find_call_out("timeout") != -1) {
     remove_call_out("timeout");
-    call_out("timeout", TIMEOUT);
   }
+  call_out("timeout", TIMEOUT);
 }
 
+/**
+ * Exit login prompt because of idle timeout.
+ */
 static void timeout() {
-  printf("Timeout exceeded, disconnecting...");
+  printf("Timeout exceeded, disconnecting...\n");
   abort();
 }
 
+/**
+ * Abort login.
+ */
 static void abort() {
   remove_call_out("timeout");
   destruct(THISO);
 }
 
-static void spawn_avatar(string user) {
+/**
+ * Spawn a new avatar object, move to starting location, and transfer 
+ * interactivity from login object to new avatar.
+ * 
+ * @param user the username of the new avatar
+ */
+protected void spawn_avatar(string user) {
   string err;
 
   mapping data = restore_value(read_file(PASSWD_FILE(user)));
@@ -158,7 +201,7 @@ static void spawn_avatar(string user) {
   object avatar;
   string avatar_name;
   err = catch (
-    (avatar = clone_object(AVATAR)),
+    (avatar = clone_object(Avatar)),
     (avatar_name = object_name(avatar)),
     (avatar->setup(user) && (
       destruct(avatar),
@@ -202,11 +245,16 @@ static void spawn_avatar(string user) {
   }
 }
 
-static void new_user(string user, string password) {
+/**
+ * Create a new user.
+ * @param user     the username of the new user
+ * @param password the user's password
+ */
+protected void new_user(string user, string password) {
   // TODO encrypt passwords
   mapping data = ([ "username" : user,
                     "password" : password,
-                    "location" : COMMON_ROOM,
+                    "location" : CommonRoom,
                     "connect_time" : -1,
                     "disconnect_time" : -1 ]);
   if (!save_passwd(user, data, 0)) {
@@ -219,7 +267,15 @@ static void new_user(string user, string password) {
   }
 }
 
-static int save_passwd(string user, mapping data, int overwrite) {
+/**
+ * Save user data to password file.
+ * 
+ * @param  user      the username of the file
+ * @param  data      the password data
+ * @param  overwrite 1 to force overwrite of existing file, 0 otherwise
+ * @return           1 for success, 0 for failure
+ */
+protected int save_passwd(string user, mapping data, int overwrite) {
   string passwd_file = PASSWD_FILE(user);
   if (file_exists(passwd_file)) {
     if (overwrite) {

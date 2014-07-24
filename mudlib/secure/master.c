@@ -128,12 +128,12 @@ void preload(string file) {
 }
 
 string get_simul_efun() {
-  load_object(SIMUL_EFUN_OBJECT);
-  return SIMUL_EFUN_OBJECT;
+  load_object(SimulEfunObject);
+  return SimulEfunObject;
 }
 
 object connect() {
-  return clone_object(LOGIN_OBJECT);
+  return clone_object(LoginObject);
 }
 
 void disconnect(object obj, string remaining) {
@@ -292,7 +292,7 @@ int privilege_violation(string op, mixed who, mixed arg, mixed arg2) {
   switch (op) {
 
     case "input_to":
-      if (load_name(who) == LOGIN_OBJECT) {
+      if (load_name(who) == LoginObject) {
         return 1;
       }
       break;

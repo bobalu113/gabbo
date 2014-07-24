@@ -5,7 +5,7 @@
  * @alias StringsLib
  */
 
-inherit ArrayLib;
+private variables private functions inherit ArrayLib;
 
 /**
  * Find the first non-space character in a string.

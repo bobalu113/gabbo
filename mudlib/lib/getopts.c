@@ -6,6 +6,31 @@
  * @alias GetoptsLib
  */
 
+/**
+ * Searches an argument list for valid command-line options, as described by
+ * validopts. validopts is a list of valid options, or 0 to accept any 
+ * option. An option character may be followed by a ":" to indicate the 
+ * option requires an argument; and may be followed by a - to indicate it
+ * requires an option and may be specified more than once. 
+ * 
+ * <p>Returns an array of the form: <code>({ string *other_args, mapping 
+ * options, string badopts })</code>, where other_args is the new list of 
+ * command line arguments with the options parsed out. options is a mapping 
+ * wherein the keys are the ASCII value of the option character, and the 
+ * value is the string argument passed to that option, or an array of all 
+ * arguments passed to that option if specified with ":" and "-" 
+ * respectively. Finally, badopts is a string of any options found but not 
+ * specified in the validopts string, or specified to take an argument but
+ * no argument was given.
+ *
+ * <p>An arg of "--" can be used to explicitly mark the end of options. The
+ * "--" will be consumed and any args after this will be left alone.
+ * 
+ * @param  args      the argument list to search
+ * @param  validopts a string designating valid options
+ * @return           a 3 element array additional args, options, and bad 
+ *                   options
+ */
 mixed *getopts(string *args, string validopts) {
   string badopts = "";
   mapping options = ([ ]);
@@ -89,6 +114,37 @@ mixed *getopts(string *args, string validopts) {
   return ({ args[i..], options, badopts });
 }
  
+/**
+ * Searches an argument list for valid command-line options, as described by
+ * validopts and longopts. validopts is a list of valid options, or 0 to 
+ * accept any option. An option character may be followed by a ":" to 
+ * indicate the option requires an argument; and may be followed by a - to 
+ * indicate it requires an option and may be specified more than once. 
+ * longopts is a mapping of valid long options, where the keys are the option
+ * string, and the value is an integer designating the type of option: 0 for
+ * standard long options, 1 for options which take an argument, and -1 for
+ * options which take an argument and may be specified more than once.
+ * 
+ * <p>Returns an array of the form: <code>({ string *other_args, mapping 
+ * options, string badopts })</code>, where other_args is the new list of 
+ * command line arguments with the options parsed out. options is a mapping 
+ * wherein the keys are the ASCII value of the option character, and the 
+ * value is the string argument passed to that option, or an array of all 
+ * arguments passed to that option if specified with ":" and "-" 
+ * respectively. This mapping will also contain longopts, in which case the
+ * mapping key is the entire string of the option name. Finally, badopts is 
+ * an array of any options found but not specified as validopts or longopts,
+ * or specified to take an argument but no argument was given.
+ *
+ * <p>An arg of "--" can be used to explicitly mark the end of options. The
+ * "--" will be consumed and any args after this will be left alone.
+ * 
+ * @param  args      the argument list to search
+ * @param  validopts a string designating valid options
+ * @param  longopts  a mapping of long options to their option type
+ * @return           a 3 element array additional args, options, and bad 
+ *                   options
+ */
 mixed *getopts_long(string *args, string validopts, mapping longopts) {
   mixed *badopts = ({ });
   mapping options = ([ ]);

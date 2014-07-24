@@ -32,10 +32,12 @@
 #define ThingCode            ModulesDir "/thing"
 #define LivingCode           ModulesDir "/living"
 #define CreatureCode         ModulesDir "/creature"
-#define CommandCode          ModulesDir "/command"
 #define ContainerCode        ModulesDir "/container"
+#define CommandCode          ModulesDir "/command"
 
 #define IdMixin              ModulesDir "/id"
+#define NameMixin            ModulesDir "/name"
+#define ShellMixin           ModulesDir "/shell"
 #define CommandGiverMixin    ModulesDir "/command_giver"
 #define LockMixin            ModulesDir "/lock"
 
@@ -50,7 +52,7 @@
 #define THISI                this_interactive()
 #define FINDO(o)             find_object(o)
 #define FINDP(p)             find_player(p)
-#define PID                  THISP->query_id()
+#define PID                  THISP->query_primary_id()
 #define CAP(s)               capitalize(s)
 
 #endif  // _AUTO_H

@@ -5,8 +5,17 @@
  * @alias ArgsLib
  */
 
-inherit StringsLib;
+private variables private functions inherit StringsLib;
 
+/**
+ * Separate space-deliniated arguments, but keep quoted strings together.
+ * 
+ * @param  arg             the string containing quoted arguments
+ * @param  preserve_quotes set to 1 if the quote characters should be
+ *                         preserved in the resulting argument strings
+ * @return                 an array of space-deliniated arguments, with the
+ *                         quoted strings returned as a single argument
+ */
 varargs string *explode_args(string arg, int preserve_quotes) {
   string *args = ({ });  
   if (!arg) { return args; }
