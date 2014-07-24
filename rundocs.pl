@@ -25,8 +25,8 @@ $ROOT =~ s/\\/\\\\/g;
 $DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/docs/mudlib";
 $TMPFILE = "/tmp/lpcdoc";
 
-@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
-#@SOURCE = ( "$CYGROOT/lib" );
+#@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
+@SOURCE = ( "$CYGROOT/modules/id.c" );
 
 %MODRANKS = ( "public" => 1,
               "static" => 2,
@@ -202,11 +202,25 @@ sub generate_program_doc($) {
 
     my %functions = ();
     my %variables = ();
+    my $function_defaults = { 'public' => 1 };
+    my $variable_defaults = { 'public' => 1 };
     my $i = 0;
     while ($newsrc =~ m/\s*(.+?)\s*;/gs) {
         my $def = $1;
         $def =~ s/\s*\*\s*/ * /g; # make arrays easier
-        if ($def =~ /\s*(.*?)\s*(\S+)\s*\(\s*(.*?)\s*\)\s*/s) {
+        if ($def =~ /\s*default\s+(.*)/) {
+            my $defaults = $1;
+            # check for default variable modifiers
+            if ($defaults =~ /\s*((?:$MODS|\s)+)\s+variables/) {
+                my $rank = 1;
+                $variable_defaults = { map { $_ => $rank++ } split(/\s+/, $1) };
+            }
+            # check for default function modifiers
+            if ($defaults =~ /\s*((?:$MODS|\s)+)\s+functions/) {
+                my $rank = 1;
+                $function_defaults = { map { $_ => $rank++ } split(/\s+/, $1) };
+            } 
+        } elsif ($def =~ /\s*(.*?)\s*(\S+)\s*\(\s*(.*?)\s*\)\s*/s) {
             # parse out a function definition
             my $prefix = $1;
             my $name = $2;
@@ -220,6 +234,7 @@ sub generate_program_doc($) {
             if ($prefix =~ /\s*((?:$MODS|\s)*)\s*($TYPES)\s*(\*?)\s*/) {
                 my $rank = 1;
                 $mods = { map { $_ => $rank++ } split(/\s+/, $1) };
+                &merge_mods($mods, $function_defaults);
                 $type = $2;
                 $type .= " $3";
             }
@@ -228,6 +243,7 @@ sub generate_program_doc($) {
             # parse out a variable definition
             my $rank = 1;
             $mods = { map { $_ => $rank++ } split(/\s+/, $1) };
+            &merge_mods($mods, $variable_defaults);
             my $type = $2;
             # handle multiple variable declarations on the same line
             my %names = ( );
@@ -245,7 +261,11 @@ sub generate_program_doc($) {
                 }
             }
             foreach (keys(%names)) {
-                $type = "$type *" if ($names{$_});
+                if ($names{$_}) {
+                    $type = "$type *";
+                } else {
+                    $type = "$type ";
+                }
                 $variables{$_} = [ $mods, $type, "", $i++ ];
             }
         }
@@ -532,7 +552,7 @@ END
                 $summary =~ s/^(.*?\.)\s.*/$1/s;
                 $out .= <<END;
 <tr class="${color}Color">
-<td class="colFirst"><code>$mod$type</code></td>
+<td class="colFirst"><code>$mods$type</code></td>
 <td class="colLast"><code><strong><a href="$rel$program.html#$f()">$f</a></strong>($args)</code>
 <div class="block">$summary</div>
 </td>
@@ -578,7 +598,6 @@ END
             $mods .= "&nbsp;" if ($mods);
             my $type = $var->[1];
             $type =~ s/\s+/&nbsp;/g;
-            $type .= "&nbsp;" if ($type);
             $out .= <<END;
 <a name="$v">
 <!--   -->
@@ -628,7 +647,7 @@ END
 <ul class="blockList">
 <li class="blockList">
 <h4>$f</h4>
-<pre>$mod$type$f($args)</pre>
+<pre>$mods$type$f($args)</pre>
 <div class="block">$func->[3]->[0]</div>
 <dl>
 <dl>
@@ -788,7 +807,9 @@ sub variable_mods($) {
 }
 
 sub function_mods($) {
-    my ($func) = @_;
+    my ($func, $preserve_order) = @_;
+    my $mods = "";
+
     my %f = %{ $func->[0] };
     my %ranks = ( $preserve_order ? %f : %MODRANKS );
     if (%f) {
@@ -1211,3 +1232,14 @@ END
     close(F);
 }
 
+sub merge_mods($$) {
+    my ($mods, $defaults) = @_;
+    unless (exists($mods->{'public'}) 
+        || exists($mods->{'private'}) 
+        || exists($mods->{'protected'})
+        || exists($mods->{'static'})) {
+        for (keys(%$defaults)) {
+            $mods->{$_} = -($defaults->{$_});
+        }
+    }
+}
