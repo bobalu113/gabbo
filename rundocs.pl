@@ -25,8 +25,8 @@ $ROOT =~ s/\\/\\\\/g;
 $DOCS = "/cygdrive/c/Users/bobal_000/work/gabbo-docs/docs/mudlib";
 $TMPFILE = "/tmp/lpcdoc";
 
-#@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
-@SOURCE = ( "$CYGROOT/modules/id.c" );
+@SOURCE = ( "$CYGROOT/lib", "$CYGROOT/modules", "$CYGROOT/obj", "$CYGROOT/secure" );
+#@SOURCE = ( "$CYGROOT/modules/id.c" );
 
 %MODRANKS = ( "public" => 1,
               "static" => 2,
