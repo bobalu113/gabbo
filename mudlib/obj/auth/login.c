@@ -4,17 +4,16 @@
  * @author devo@eotl
  * @alias LoginObject
  */
-
 #include <ansi.h>
 #include <user.h>
 #include <sys/input_to.h>
 
-private functions private variables inherit UserLib;
-private functions private variables inherit FileLib;
-
 #define WELCOME_FILE EtcDir "/issue"
 #define TIMEOUT 10
 #define MAX_TRIES 3
+
+private functions private variables inherit UserLib;
+private functions private variables inherit FileLib;
 
 int logon();
 static void select_user(string user, int tries);
@@ -187,13 +186,15 @@ static void abort() {
  * @param user the username of the new avatar
  */
 protected void spawn_avatar(string user) {
+  object logger = LoggerFactory->getLogger(THISO);
   string err;
 
   mapping data = restore_value(read_file(PASSWD_FILE(user)));
   data["connect_time"] = time();
   data["disconnect_time"] = -1;
   if (!save_passwd(user, data, 1)) {
-    // TODO log info
+    // TODO give friendly warning
+    logger->info("Unable to save password data for user %s", user);
   }
 
   // FUTURE implement 2-tier character selection
@@ -223,11 +224,13 @@ protected void spawn_avatar(string user) {
       err); 
   } else {
     err = catch (
-      // TODO log warning
       move_object(avatar, location);
       publish
     );
     if (err) {
+      // TODO  give friendly error
+      logger->info("Caught error moving %O to starting location %O for user "
+        "%s: %s\n", avatar, location, user, err); 
       printf("Caught error moving %O to starting location %O for user "
         "%s: %s\n", avatar, location, user, err); 
     }
@@ -238,7 +241,7 @@ protected void spawn_avatar(string user) {
     avatar->enter_game();
     destruct(THISO);
   } else {
-    // TODO log error
+    logger->error("Unable to exec user %s into avatar %O\n", user, avatar);
     printf("Unable to exec user %s into avatar %O\n", user, avatar);
     destruct(avatar);
     destruct(THISO);
@@ -260,8 +263,8 @@ protected void new_user(string user, string password) {
   if (!save_passwd(user, data, 0)) {
     destruct(THISO);
   } else {
-    if (!file_exists(HomeDir "/" + user)) {
-      mkdir(HomeDir "/" + user);
+    if (!file_exists(HomeDir(user))) {
+      mkdir(HomeDir(user));
     }
     spawn_avatar(user);
   }

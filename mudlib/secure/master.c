@@ -103,6 +103,10 @@ void inaugurate_master(int arg) {
     ({ #'set_environment, 'item, 'dest })
   )); 
 
+  set_driver_hook(H_CREATE_OB, "create");
+  set_driver_hook(H_CREATE_CLONE, "create");
+  set_driver_hook(H_CREATE_SUPER, "create");
+
 }
 
 string get_master_uid() {
@@ -298,10 +302,10 @@ int privilege_violation(string op, mixed who, mixed arg, mixed arg2) {
       break;
 
     default:
-      return 0;      
+      return 1;      
   }
 
-  return 0;
+  return 1;
 }
 
 int query_allow_shadow(object victim) {

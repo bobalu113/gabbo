@@ -4,7 +4,6 @@
  * @author devo@eotl
  * @alias UserLib
  */
-
 #include <user.h>
 
 private functions private variables inherit FileLib;

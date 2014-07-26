@@ -42,8 +42,12 @@ string basename(string filename) {
  * @return          the name of the containing directory
  */
 string dirname(string filename) {
-  if (is_directory(filename)) {
-    return filename;
+  // TODO finalize how paths get munged
+  if (filename[<1] == '/') { 
+    filename = filename[0..<2];
   }
-  return implode(explode(filename, "/")[0..<2], "/");
+  if (!strlen(filename)) { return 0; }
+  string *path = explode(filename, "/");
+
+  return implode(path[0..<2], "/");
 }

@@ -1,12 +1,14 @@
 inherit CommandCode;
 
+private variables private functions inherit FileLib;
+
 mixed *query_actions() {
   return ({ ({ "chdir", 0 }), ({ "cd", 0 }) });
 }
 
 int do_command(string arg) {
   if (!arg || !strlen(arg)) {
-    arg = HomeDir "/" + PID;
+    arg = HomeDir(PID);
   }
 
   // TODO add path expansion

@@ -1,9 +1,10 @@
+#include <sys/files.h>
+
 inherit CommandCode;
 
-inherit ArgsLib;
-inherit GetoptsLib;
-
-#include <sys/files.h>
+private variables private functions inherit ArgsLib;
+private variables private functions inherit GetoptsLib;
+private variables private functions inherit FileLib;
 
 int do_command(string arg) {
   mixed *args = getopts(explode_args(arg), "lad");

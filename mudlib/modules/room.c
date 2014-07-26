@@ -17,7 +17,7 @@ default private variables;
 string name;
 string description;
 
-// ([ dir : path; hidden ])
+/** ([ str dir : str path; int hidden ]) **/
 mapping exits;
 
 default public functions;

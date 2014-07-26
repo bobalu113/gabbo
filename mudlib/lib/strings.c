@@ -5,6 +5,9 @@
  * @alias StringsLib
  */
 
+#define UNQUOTE_CHARS "\"'"    // default quote chars to remove
+#define QUOTE_CHARS "\"'"     // default quote chars to match on
+
 private variables private functions inherit ArrayLib;
 
 /**
@@ -23,9 +26,6 @@ varargs int find_nonws(string str, int start) {
        start++);  
   return start;
 }
-
-#define UNQUOTE_CHARS "\"'"    // default quote chars to remove
-#define QUOTE_CHARS "\"'"     // default quote chars to match on
 
 /**
  * Test whether a character in string is escaped by a backslash.

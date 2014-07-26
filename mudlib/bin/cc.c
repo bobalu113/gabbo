@@ -1,13 +1,13 @@
-inherit CommandCode;
-
-inherit ArgsLib;
-inherit GetoptsLib;
-
 #include <sys/commands.h>
 
-#define CcDir sprintf("%s/%s/tmp", HomeDir, PID)
-
+#define CcDir sprintf("%s/tmp", HomeDir(UNAME))
 #define USAGE "cc<id> [-msdrf] [-h path] [-i path] code"
+
+inherit CommandCode;
+
+private variables private functions inherit ArgsLib;
+private variables private functions inherit GetoptsLib;
+private variables private functions inherit FileLib;
 
 mixed *query_actions() {
   return ({ ({ "cc", AA_SHORT }) });

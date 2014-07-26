@@ -1,5 +1,7 @@
 inherit CommandCode;
 
+private variables private functions inherit FileLib;
+
 int do_command(string arg) {
   if (!arg || !strlen(arg)) {
     notify_fail(sprintf("Usage: %s file\n", query_verb()));

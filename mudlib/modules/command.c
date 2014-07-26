@@ -4,10 +4,9 @@
  * @author devo@eotl
  * @alias CommandCode
  */
-
-inherit FileLib;
-
 #include <sys/commands.h>
+
+private variables private functions inherit FileLib;
 
 /**
  * Return a default list of actions to be associated with this command. The

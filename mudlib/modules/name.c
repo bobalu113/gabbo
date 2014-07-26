@@ -39,7 +39,7 @@ string query_nickname() {
 }
 
 /**
- * Return the full name of this character, generate first name plus last 
+ * Return the full name of this character, generally first name plus last 
  * name.
  * 
  * @return the full name of the character, or 0 if no first or last name

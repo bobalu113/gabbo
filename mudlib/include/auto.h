@@ -41,11 +41,12 @@
 #define CommandGiverMixin    ModulesDir "/command_giver"
 #define LockMixin            ModulesDir "/lock"
 
+#define LoggerFactory        ObjDir "/logger_factory"
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
 #define CommonRoom           SharedDir "/common"
-#define HomeDir              PrivateDir "/home"
-#define Workroom(u)          HomeDir + "/" + u + "/workroom"
+#define HomeDir(u)           PrivateDir "/home/" + u 
+#define Workroom(u)          HomeDir(u) + "/workroom"
 
 #define THISO                this_object()
 #define THISP                this_player()
@@ -54,5 +55,6 @@
 #define FINDP(p)             find_player(p)
 #define PID                  THISP->query_primary_id()
 #define CAP(s)               capitalize(s)
+#define UNAME                THISP->query_username()
 
 #endif  // _AUTO_H
