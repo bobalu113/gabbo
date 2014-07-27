@@ -103,9 +103,10 @@ article .excerpt {
 
 article .continue {
   font-size: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   float: right;
   display: block;
+  width: 100%;
 }
 
 a {
