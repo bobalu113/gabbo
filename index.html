@@ -26,9 +26,9 @@ section: blog
       </span>
     </h3>
 
-    {{item.excerpt}}
+    <p class="excerpt">{{item.excerpt | remove: '<p>' | remove: '</p>'}}</p>
 
-    <small><a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}">Continue reading (and comment!)...</a></small>
+    <small class="continue"><a name="{{item.title}}" class="anchor" href="{{site.baseurl}}{{item.url}}">Continue reading (and comment!)...</a></small>
 <!--
     <div class="g-comments"
         data-href="http://localhost:4000{{site.baseurl}}{{item.url}}"
