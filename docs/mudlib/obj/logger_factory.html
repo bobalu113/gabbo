@@ -106,25 +106,7 @@ logger objects which are no longer in use.</div>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;object&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger_factory.html#get_logger()">get_logger</a></strong>(mixed&nbsp;category,&nbsp;object&nbsp;rel,&nbsp;int&nbsp;reconfig)</code>
-<div class="block">([ str category : obj logger ]) **/
-mapping loggers;
-/** ([ str format : cl formatter ]) **/
-mapping formatters;
-default private functions;
-public varargs object get_logger(mixed category, object rel, int reconfig);
-public int release_logger(mixed category);
-mapping read_config(string category, string dir);
-mapping read_properties(string prop_file);
-string read_prop_value(mapping props, string prop, string dir,
-string category);
-protected mixed *parse_output_prop(string val);
-protected closure parse_format(string format);
-string parse_arg(int token, string *parts, int size, string part, int index,
-string def);
-string normalize_category(mixed category);
-public object get_null_logger();
-/**
-Retrieve a logger instance for the given category from the pool, or create
+<div class="block">Retrieve a logger instance for the given category from the pool, or create
 a new one from configuration.</div>
 </td>
 </tr>
@@ -178,25 +160,7 @@ references to it held by the factory.</div>
 <li class="blockList">
 <h4>get_logger</h4>
 <pre>public&nbsp;varargs&nbsp;object&nbsp;get_logger(mixed&nbsp;category,&nbsp;object&nbsp;rel,&nbsp;int&nbsp;reconfig)</pre>
-<div class="block">([ str category : obj logger ]) **/
-mapping loggers;
-/** ([ str format : cl formatter ]) **/
-mapping formatters;
-default private functions;
-public varargs object get_logger(mixed category, object rel, int reconfig);
-public int release_logger(mixed category);
-mapping read_config(string category, string dir);
-mapping read_properties(string prop_file);
-string read_prop_value(mapping props, string prop, string dir,
-string category);
-protected mixed *parse_output_prop(string val);
-protected closure parse_format(string format);
-string parse_arg(int token, string *parts, int size, string part, int index,
-string def);
-string normalize_category(mixed category);
-public object get_null_logger();
-/**
-Retrieve a logger instance for the given category from the pool, or create
+<div class="block">Retrieve a logger instance for the given category from the pool, or create
 a new one from configuration. A category is represented as a hierarchical
 string of the form, "supercat.category.subcat.<...>". The category may
 also be specified as a filesystem path, in which case the path
@@ -264,7 +228,7 @@ logger to format a log line. The closure will take the arguments:
 'priority: the priority of the log event
 'message: an optional error message
 'caller: an array read from
-<code>debug_info(DINFO_TRACE, DIT_CURRENT)<code>
+<code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
 for the invoking stackframe, or 0 if no caller was found
 </pre></div>
 <dl>
