@@ -102,9 +102,9 @@ article .excerpt {
 }
 
 article .continue-cont {
-  padding-bottom: 10px;
   display: block;
   width: 100%;
+  height: 20px;
 }
 
 article .continue {
