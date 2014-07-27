@@ -97,7 +97,7 @@ article .g-plusone-cont {
 }
 
 article .excerpt {
-  margin-bottom: 7px;
+  margin-bottom: 5px;
   padding-bottom: 0px;
 }
 
@@ -105,6 +105,7 @@ article .continue {
   font-size: 10px;
   margin-bottom: 20px;
   float: right;
+  display: block;
 }
 
 a {
