@@ -11,7 +11,7 @@ Point is, I knew it'd be a ton of work to make this thing but it's also a pretty
 Anyway, it's done. You can see the end product if you click on the [documentation link](http://bobalu113.github.io/gabbo/docs/mudlib/) up top (I did that too!). There are still a few fixmes and futures, and I'm sure we'll find more as soon as I start using it, but overall I'd say it came out pretty good. The main challenge was that we're dealing with LPC, and there's not really a standard or any support out there for it anywhere unless you consider other MUDs but come on let's get serious here. Here we go.
 
 1. #### adopt a doc comment spec
-So my first thought as a quick solution was to use some third-party documentation generator and just adopt their spec since I'm starting from scratch, but it became clear pretty quickly that LPC syntax was going to be a problem. I looked at Doxygen briefly and then into maybe hacking LPC support into an open source app, but before I could really get traction on any of that stuff I found myself already moving onto step 2...
+<p>So my first thought as a quick solution was to use some third-party documentation generator and just adopt their spec since I'm starting from scratch, but it became clear pretty quickly that LPC syntax was going to be a problem. I looked at Doxygen briefly and then into maybe hacking LPC support into an open source app, but before I could really get traction on any of that stuff I found myself already moving onto step 2...</p>
 
 2. #### resolve all the preprocessor directives!
 <p>So building something to do this myself would be like doubleplus difficult if I had to deal with the preprocessor myself, so I started digging into that just to see if it was even an option. I first tried cpp on cygwin (I think that's GNU?), but I had some sort of problem with getting it to read the auto include from the mudlib's /include/auto.h and not cygwin's /include/auto.h. There was no chroot option and if I chroot'd myself then I couldn't read the binary or libraries needed to run cpp.</p>
@@ -26,9 +26,9 @@ A few details for those keeping score:</p>
 	* add support for a new option which specified the root directory to be used when looking up absolute paths, take that chroot!
 
 4. #### parse doc comments and member declarations out of the source
-Basically it's all Perl from here on out. First strip out everything that's not a doc comment, an inherit statement, a variable declaration, or a function declarations. There was one expected challenge which was supporting the 'default' declaration for functions and variables. Didn't even know that was a thing until I started doing this.
+<p>Basically it's all Perl from here on out. First strip out everything that's not a doc comment, an inherit statement, a variable declaration, or a function declarations. There was one expected challenge which was supporting the 'default' declaration for functions and variables. Didn't even know that was a thing until I started doing this.</p>
 
 5. #### generated the hypertext
-I basically just view-source'd all the different types of pages from the JDK apidocs on oracle.com, then hacked all my newly scraped metadata into em. They're pretty ugly and a couple things don't work, like switching between frames and noframes. Now that I've discovered the magic of Jekyll and Liquid, though, I wanna rebuild everything to fit inside this here website.
+<p>I basically just view-source'd all the different types of pages from the JDK apidocs on oracle.com, then hacked all my newly scraped metadata into em. They're pretty ugly and a couple things don't work, like switching between frames and noframes. Now that I've discovered the magic of Jekyll and Liquid, though, I wanna rebuild everything to fit inside this here website.</p>
 
-And that's it! The code is pretty atrocious...I tried to modularize things where it made sense but it's pretty much all brute force string handling. Besides restyling for Jekyll, it'd also be nice to come up with a plain-text format for reading inside the MUD itself.
+<p>And that's it! The code is pretty atrocious...I tried to modularize things where it made sense but it's pretty much all brute force string handling. Besides restyling for Jekyll, it'd also be nice to come up with a plain-text format for reading inside the MUD itself.</p>
