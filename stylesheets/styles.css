@@ -97,12 +97,13 @@ article .g-plusone-cont {
 }
 
 article .excerpt {
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   padding-bottom: 0px;
 }
 
 article .continue {
   font-size: 10px;
+  margin-bottom: 20px;
   float: right;
 }
 
