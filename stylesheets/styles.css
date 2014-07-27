@@ -96,6 +96,16 @@ article .g-plusone-cont {
   border: 10px;
 }
 
+article .excerpt {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+article .continue {
+  font-size: 10px;
+  float: right;
+}
+
 a {
   color:#0000C3;
   font-weight:200;
