@@ -101,14 +101,18 @@ article .excerpt {
   padding-bottom: 0px;
 }
 
-article .continue {
-  font-size: 10px;
+article .continue-cont {
   margin-bottom: 10px;
-  float: right;
   display: block;
   width: 100%;
 }
 
+article .continue {
+  font-size: 10px;
+  float: right;
+}
+
+}
 a {
   color:#0000C3;
   font-weight:200;
