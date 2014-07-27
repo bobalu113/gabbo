@@ -103,10 +103,25 @@ void inaugurate_master(int arg) {
     ({ #'set_environment, 'item, 'dest })
   )); 
 
-  set_driver_hook(H_CREATE_OB, "create");
-  set_driver_hook(H_CREATE_CLONE, "create");
-  set_driver_hook(H_CREATE_SUPER, "create");
+  set_driver_hook(H_CREATE_OB, unbound_lambda(({ 'obj }),
+    ({ #'call_other, 'obj, "create" })
+  ));
+  set_driver_hook(H_CREATE_CLONE, unbound_lambda(({ 'obj }),
+    ({ #'call_other, 'obj, "create" })
+  ));
+  set_driver_hook(H_CREATE_SUPER, unbound_lambda(({ 'obj }),
+    ({ #'call_other, 'obj, "create" })
+  ));
 
+  set_driver_hook(H_RESET, unbound_lambda(
+    ({ 'obj }),
+    ({ #'call_other, 'obj, "create" })
+  ));
+
+  set_driver_hook(H_CLEAN_UP, unbound_lambda(
+    ({ 'obj }),
+    ({ #'call_other, 'obj, "create" })
+  ));
 }
 
 string get_master_uid() {

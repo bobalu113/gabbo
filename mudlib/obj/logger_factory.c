@@ -11,6 +11,7 @@
 #pragma no_clone
 #include <logger.h>
 #include <sys/debug_info.h>
+#include <sys/objectinfo.h>
 
 private variables private functions inherit FileLib;
 
@@ -41,6 +42,7 @@ string parse_arg(int token, string *parts, int size, string part, int index,
                  string def);
 string normalize_category(mixed category);
 public object get_null_logger();
+int clean_up_loggers();
 
 /**
  * Retrieve a logger instance for the given category from the pool, or create
@@ -67,7 +69,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   }
   
   // check our cache
-  if (!reconfig && member(loggers, category)) {
+  if (!reconfig && loggers[category]) {
     return loggers[category];
   }
 
@@ -516,10 +518,54 @@ public object get_null_logger() {
 }
 
 /**
- * Initialize logger and formatter maps.
+ * Clean up stale loggers, called once per reset. A logger is considered 
+ * stale if it hasn't been referenced in 5 minutes, and is referenced by 
+ * nothing except the LoggerFactory.
+ * 
+ * @return the number of loggers destroyed
  */
-public void create() {
+int clean_up_loggers() {
+  int result = 0;
+  mapping ref_counts = ([ ]);
+  foreach (string category, object logger : loggers) {
+    if (!logger) { continue; } 
+    int ref_count = (int) object_info(logger, OINFO_BASIC, OIB_REF);
+    int ref_time = (int) object_info(logger, OINFO_BASIC, OIB_TIME_OF_REF);
+    if ((time() - ref_time) >= LOGGER_STALE_TIME) {
+      if (!member(ref_counts, logger)) {          
+        ref_counts += ([ logger: ref_count; 1 ]);
+      } else {
+        ref_counts[logger, 1]++;
+      }
+    }
+  }
+  foreach (object logger, int ref_count, int this_ref_count : ref_counts) {
+    if (ref_count - (this_ref_count <= STANDING_REF_COUNT)) {
+      destruct(logger);
+      result++;
+    }
+  }
+  loggers = filter(loggers, (: $2 :));
+  return result;
+}
+
+/**
+ * Initialize logger and formatter maps.
+ * @return number of seconds until first reset
+ */
+public int create() {
   seteuid(getuid());
   loggers = ([ ]);
   formatters = ([ ]);
+  return FACTORY_RESET_TIME;
 }
+
+/**
+ * Clean up stale loggers.
+ * @return number of seconds until next reset
+ */
+public int reset() {
+  clean_up_loggers();
+  return FACTORY_RESET_TIME;
+}
+
