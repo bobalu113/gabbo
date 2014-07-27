@@ -288,7 +288,7 @@ private mixed *find_caller() {
   mixed *stack = debug_info(DINFO_TRACE, DIT_CURRENT);
   int i = sizeof(stack) - 1;
   for (; i >= 1; i--) {
-    if (strlen(stack[i][2]) && (stack[i][2] == __FILE__)) {
+    if (strlen(stack[i][2]) && (stack[i][2] == __FILE__[1..])) {
       continue;
     }
     break;
