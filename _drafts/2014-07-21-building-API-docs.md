@@ -24,6 +24,10 @@ A few details for those keeping score:
 * made it skip over the odious quote in closure literals 
 * add support for a new option which specified the root directory to be used when looking up absolute paths, take that chroot!
 
-### 4. yank all string literals and code blocks out of the source code
-Now that I had source code that was free of defines and includes, I could start the painstaking task of scraping it for member definitions and doc comments. This is basically a 5 step process:
+### 4. parse doc comments and member declarations out of the source
+Basically it's all Perl from here on out. First strip out everything that's not a doc comment, an inherit statement, a variable declaration, or a function declarations. There was one expected challenge which was supporting the 'default' declaration for functions and variables. Didn't even know that was a thing until I started doing this.
 
+### 5. generated the hypertext
+I basically just view-source'd all the different types of pages from the JDK apidocs on oracle.com, then hacked all my newly scraped metadata into em. They're pretty ugly and a couple things don't work, like switching between frames and noframes. Now that I've discovered the magic of Jekyll and Liquid, though, I wanna rebuild everything to fit inside this here website.
+
+And that's it! The code is pretty atrocious...I tried to modularize things where it made sense but it's pretty much all brute force string handling. Besides restyling for Jekyll, it'd also be nice to come up with a plain-text format for reading inside the MUD itself.
