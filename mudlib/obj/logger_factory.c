@@ -21,10 +21,10 @@ default private variables;
 
 // XXX we could probably reuse loggers between categories with some kind of
 // equality test, but I don't know if it's worth it.
-/** ([ str category : obj logger ]) **/
+/** ([ str category : obj logger ]) */
 mapping loggers;
 
-/** ([ str format : cl formatter ]) **/
+/** ([ str format : cl formatter ]) */
 mapping formatters;
 
 default private functions;
@@ -279,7 +279,7 @@ protected mixed *parse_output_prop(string val) {
    'priority: the priority of the log event
     'message: an optional error message
      'caller: an array read from 
-              <code>debug_info(DINFO_TRACE, DIT_CURRENT)<code>
+              <code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
               for the invoking stackframe, or 0 if no caller was found
    </pre>
 

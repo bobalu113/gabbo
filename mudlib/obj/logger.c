@@ -56,7 +56,7 @@ mixed *query_output() {
    'priority: the priority of the log event
     'message: an optional error message
      'caller: an array read from 
-              <code>debug_info(DINFO_TRACE, DIT_CURRENT)<code>
+              <code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
               for the invoking stackframe, or 0 if no caller was found
    </pre>
  *  
