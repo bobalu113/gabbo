@@ -53,8 +53,6 @@ int test_id(string str) {
 	return ( (str == primary_id) || (member(secondary_ids, str) != -1) );
 }
 
-default protected functions;
-
 /**
  * Set the primary id of the object.
  * 
@@ -110,7 +108,7 @@ int remove_secondary_id(string str) {
  * Initialize IdMixin. If this function is overloaded, be advised that the
  * mixin's private variables are initialized in the parent implementation.
  */
-void setup_id() {
+protected void setup_id() {
   primary_id = 0;
   secondary_ids = ({ });
 }

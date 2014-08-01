@@ -60,8 +60,6 @@ string query_full_name() {
   return result;
 }
 
-default protected functions;
-
 /**
  * Set the first name of the character. 
  * 
