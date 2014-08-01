@@ -98,7 +98,7 @@ logger objects which are no longer in use.</div>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger_factory.html#create()">create</a></strong>()</code>
 <div class="block">Initialize logger and formatter maps.</div>
 </td>
@@ -137,6 +137,12 @@ structured than a string.</div>
 references to it held by the factory.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/logger_factory.html#reset()">reset</a></strong>()</code>
+<div class="block">Clean up stale loggers.</div>
+</td>
+</tr>
 </table>
 
 </li>
@@ -173,24 +179,6 @@ delimiters (forward slashes) will be converted to the category delimiter
 <dd><code>rel</code> - optional object to use for resolving relative paths in configuration files; if unspecified, previous_object() will be used. </dd>
 <dd><code>reconfig</code> - set this flag to 1 if you need to re-read the logger configuration </dd>
 <dt><span class="strong">Returns:</span></dt><dd>a logger instance </dd>
-</dl>
-</li>
-</ul>
-<a name="release_logger()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>release_logger</h4>
-<pre>public&nbsp;int&nbsp;release_logger(mixed&nbsp;category)</pre>
-<div class="block">Releases a logger object from the logger pool, thereby removing any
-references to it held by the factory. If there are no other references,
-the logger will also be destructed.</div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>category</code> - an object or string representing the category; if an object is specfied, it's program_name(E) will be used. </dd>
-<dt><span class="strong">Returns:</span></dt><dd>1 if a logger was released, 0 if no logger was found </dd>
 </dl>
 </li>
 </ul>
@@ -253,16 +241,49 @@ for the invoking stackframe, or 0 if no caller was found
 </dl>
 </li>
 </ul>
+<a name="release_logger()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>release_logger</h4>
+<pre>public&nbsp;int&nbsp;release_logger(mixed&nbsp;category)</pre>
+<div class="block">Releases a logger object from the logger pool, thereby removing any
+references to it held by the factory. If there are no other references,
+the logger will also be destructed.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>category</code> - an object or string representing the category; if an object is specfied, it's program_name(E) will be used. </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if a logger was released, 0 if no logger was found </dd>
+</dl>
+</li>
+</ul>
 <a name="create()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;void&nbsp;create()</pre>
+<pre>public&nbsp;int&nbsp;create()</pre>
 <div class="block">Initialize logger and formatter maps.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>number of seconds until first reset </dd>
+</dl>
+</li>
+</ul>
+<a name="reset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reset</h4>
+<pre>public&nbsp;int&nbsp;reset()</pre>
+<div class="block">Clean up stale loggers.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>number of seconds until next reset </dd>
 </dl>
 </li>
 </ul>

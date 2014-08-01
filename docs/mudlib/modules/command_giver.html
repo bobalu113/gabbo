@@ -99,24 +99,30 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;object&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#load_command()">load_command</a></strong>(string&nbsp;command)</code>
+<div class="block">Load a command object (and log errors).</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command()">query_command</a></strong>(string&nbsp;verb)</code>
 <div class="block">Return the command for a given verb.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command_flag()">query_command_flag</a></strong>(string&nbsp;verb)</code>
 <div class="block">Return the action flags for a given verb.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_verbs()">query_verbs</a></strong>()</code>
 <div class="block">Return the mapping of all configured command verbs.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#setup_command_giver()">setup_command_giver</a></strong>()</code>
 <div class="block">Initialize CommandGiverMixin.</div>
@@ -183,6 +189,22 @@ value is an action flag (see add_action(E)).</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>verb</code> - the verb which is being executed </dd>
 <dt><span class="strong">Returns:</span></dt><dd>the action flag for the given verb </dd>
+</dl>
+</li>
+</ul>
+<a name="load_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>load_command</h4>
+<pre>protected&nbsp;object&nbsp;load_command(string&nbsp;command)</pre>
+<div class="block">Load a command object (and log errors).</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>command</code> - the command to load </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the loaded command object, or 0 if could not be loaded </dd>
 </dl>
 </li>
 </ul>
