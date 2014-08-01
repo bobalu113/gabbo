@@ -16,7 +16,6 @@
 private variables private functions inherit FileLib;
 
 // FUTURE add color
-// TODO implement cleanup and ref counts
 
 default private variables;
 
@@ -25,13 +24,18 @@ default private variables;
 /** ([ str category : obj logger ]) */
 mapping loggers;
 
+/** ([ obj logger : int ref_count ]) */
+mapping local_ref_counts;
+
 /** ([ str format : cl formatter ]) */
 mapping formatters;
+
+/** A Logger instance for the factory to use */
+object factory_logger;
 
 default private functions;
 
 public varargs object get_logger(mixed category, object rel, int reconfig);
-public int release_logger(mixed category);
 mapping read_config(string category, string dir);
 mapping read_properties(string prop_file);
 string read_prop_value(mapping props, string prop, string dir, 
@@ -42,6 +46,7 @@ string parse_arg(int token, string *parts, int size, string part, int index,
                  string def);
 string normalize_category(mixed category);
 public object get_null_logger();
+public int release_logger(mixed category);
 int clean_up_loggers();
 
 /**
@@ -99,26 +104,11 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   logger->set_formatter(formatter);
   logger->set_level(config["level"]);
   loggers[category] = logger;
-  return logger;
-}
-
-/**
- * Releases a logger object from the logger pool, thereby removing any 
- * references to it held by the factory. If there are no other references,
- * the logger will also be destructed.
- * 
- * @param  category an object or string representing the category; if an 
- *                  object is specfied, it's program_name(E) will be used.
- * @return          1 if a logger was released, 0 if no logger was found
- */
-public int release_logger(mixed category) {
-  // TODO check ref count and destruct
-  category = normalize_category(category);
-  if (member(loggers, category)) {
-    m_delete(loggers, category);
-    return 1;
+  if (!member(local_ref_counts, logger)) {
+    local_ref_counts[logger] = 0;
   }
-  return 0;
+  local_ref_counts[logger]++;
+  return logger;
 }
 
 /**
@@ -189,6 +179,7 @@ mapping read_config(string category, string dir) {
  */
 mapping read_properties(string prop_file) {
   mapping result = ([ ]);
+  int count = 0;
 
   string body = read_file(prop_file);
   if (!body) {
@@ -196,12 +187,14 @@ mapping read_properties(string prop_file) {
   }
   string *lines = explode(body, "\n");
   foreach (string line : lines) {
+    count++;
     if (!strlen(line)) { continue; }
     if (line[0] == '#') { continue; }
 
     int equals = member(line, '=');
     if (equals == -1) {
-      // TODO log warning
+      factory_logger->warn("Malformed property on line %d of %s", 
+        count, prop_file);
       continue;
     }
 
@@ -262,7 +255,7 @@ protected mixed *parse_output_prop(string val) {
   string *targets = explode(val, ",");
   foreach (string spec : targets) {
     if (spec[1] != ':') {
-      // TODO log warning
+      factory_logger->warn("Malformed output spec: %s", spec);
       continue;
     }
     int type = spec[0];
@@ -470,8 +463,7 @@ string parse_arg(int token, string *parts, int size, string part, int index,
       }
     }
     if (pos == -1) {
-      // TODO log error
-      // write("Invalid format: %" + part + ", resetting prompt.\n");
+      factory_logger->error("Invalid logger format: %%%s", part);
       return 0;
     }
     if (strlen(tmp)) {
@@ -495,7 +487,7 @@ string normalize_category(mixed category) {
   if (objectp(category)) {
     category = program_name(category);
   } else if (!stringp(category)) {
-    raise_error("Bad argument 1 to get_logger()");
+    raise_error("Bad argument 1 to normalize_category()");
   }
   if (category[<2..<1] == ".c") {
     category = category[0..<3];
@@ -518,34 +510,49 @@ public object get_null_logger() {
 }
 
 /**
+ * Releases a logger object from the logger pool, thereby removing any 
+ * references to it held by the factory. If there are no other references,
+ * the logger will also be destructed.
+ * 
+ * @param  category an object or string representing the category; if an 
+ *                  object is specfied, it's program_name(E) will be used.
+ * @return          1 if a logger was released, 0 if no logger was found
+ */
+public int release_logger(mixed category) {
+  category = normalize_category(category);
+  object logger = loggers[category];
+  if (logger) {
+    m_delete(loggers, category);
+    local_ref_counts[logger]--;
+    int ref_count = (int) object_info(logger, OINFO_BASIC, OIB_REF);
+    int local_ref_count = local_ref_counts[logger];
+    if ((ref_count - local_ref_count) <= STANDING_REF_COUNT) {
+      m_delete(local_ref_counts, logger);
+      destruct(logger);
+    }
+    return 1;
+  }
+  return 0;
+}
+
+/**
  * Clean up stale loggers, called once per reset. A logger is considered 
  * stale if it hasn't been referenced in 5 minutes, and is referenced by 
  * nothing except the LoggerFactory.
  * 
- * @return the number of loggers destroyed
+ * @return the number of logging categories released (may be more than the
+ *         number loggers destructed if loggers are shared between categories)
  */
 int clean_up_loggers() {
   int result = 0;
-  mapping ref_counts = ([ ]);
   foreach (string category, object logger : loggers) {
     if (!logger) { continue; } 
-    int ref_count = (int) object_info(logger, OINFO_BASIC, OIB_REF);
+
     int ref_time = (int) object_info(logger, OINFO_BASIC, OIB_TIME_OF_REF);
     if ((time() - ref_time) >= LOGGER_STALE_TIME) {
-      if (!member(ref_counts, logger)) {          
-        ref_counts += ([ logger: ref_count; 1 ]);
-      } else {
-        ref_counts[logger, 1]++;
-      }
+      result += release_logger(category);
     }
   }
-  foreach (object logger, int ref_count, int this_ref_count : ref_counts) {
-    if (ref_count - (this_ref_count <= STANDING_REF_COUNT)) {
-      destruct(logger);
-      result++;
-    }
-  }
-  loggers = filter(loggers, (: $2 :));
   return result;
 }
 
@@ -557,6 +564,11 @@ public int create() {
   seteuid(getuid());
   loggers = ([ ]);
   formatters = ([ ]);
+  factory_logger = clone_object(Logger);
+  factory_logger->set_category(normalize_category(THISO));
+  factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
+  factory_logger->set_formatter(parse_format(DEFAULT_FORMAT));
+  factory_logger->set_level(LVL_WARN);
   return FACTORY_RESET_TIME;
 }
 

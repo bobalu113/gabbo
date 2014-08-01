@@ -114,13 +114,13 @@ void inaugurate_master(int arg) {
   ));
 
   set_driver_hook(H_RESET, unbound_lambda(
-    ({ 'obj }),
-    ({ #'call_other, 'obj, "create" })
+    0,
+    ({ #'call_other, ({ #'this_object }), "reset" })
   ));
 
   set_driver_hook(H_CLEAN_UP, unbound_lambda(
-    ({ 'obj }),
-    ({ #'call_other, 'obj, "create" })
+    ({ 'ref, 'obj }),
+    ({ #'call_other, 'obj, "clean_up" })
   ));
 }
 
@@ -215,6 +215,8 @@ varargs void notify_shutdown(string crash_reason) {
 //  Error Handling
 //
 //===========================================================================
+
+// TODO rewrite these to use new Logger API (maybe)
 
 private string format_stacktrace(string curobj, int line, int caught, 
                                  mixed *debug_info);

@@ -91,11 +91,8 @@ void setup_command_giver() {
   });
 
   foreach (string command : command_files) {
-    object cmd_ob;
-    string err = catch (cmd_ob = load_object(command));
-    if (err) {
-      // TODO log error
-      printf("Caught error loading command %s: %s\n", command, err);
+    object cmd_ob = load_command(command);
+    if (!cmd_ob) {
       continue;
     }
     mixed *actions = cmd_ob->query_actions();
