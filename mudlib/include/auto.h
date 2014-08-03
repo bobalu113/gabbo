@@ -37,6 +37,8 @@
 
 #define IdMixin              ModulesDir "/id"
 #define NameMixin            ModulesDir "/name"
+#define DetailMixin          ModulesDir "/detail"
+#define PropertyMixin        ModulesDir "/property"
 #define ShellMixin           ModulesDir "/shell"
 #define CommandGiverMixin    ModulesDir "/command_giver"
 #define LockMixin            ModulesDir "/lock"
@@ -44,6 +46,7 @@
 #define LoggerFactory        ObjDir "/logger_factory"
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
+
 #define CommonRoom           SharedDir "/common"
 #define HomeDir(u)           PrivateDir "/home/" + u 
 #define Workroom(u)          HomeDir(u) + "/workroom"
@@ -56,5 +59,8 @@
 #define PID                  THISP->query_primary_id()
 #define CAP(s)               capitalize(s)
 #define UNAME                THISP->query_username()
+
+#define MAXINT               0xf0000000
+#define MININT               0xf0000001
 
 #endif  // _AUTO_H

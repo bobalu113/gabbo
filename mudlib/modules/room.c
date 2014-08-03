@@ -7,10 +7,12 @@
 
 // FUTURE light
 // FUTURE searching
+// FUTURE color
 // TODO object spawning
-// TODO details (descs)
 
 inherit IdMixin;
+inherit DetailMixin;
+inherit PropertyMixin;
 
 default private variables;
 
