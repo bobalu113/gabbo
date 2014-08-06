@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 
 Welp, I was going to try and finish path expansion tonight but I left the stupid plug for my laptop at the office today so here we are. Not looking forward to driving all the way back up to the city tomorrow to get it, but at least this gives me the opportunity to catch the blog up on some of my recent commits. Tonight I will be writing about the APIs for object ids, player names, detail descriptions.
