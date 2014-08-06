@@ -28,3 +28,16 @@ I'm still not entirely sure about this one. It's intended mainly for the use of 
 While names are distinct from ids (setting a first name of "Bobby" doesn't automatically grant me the id of "bobby"), they still have an important role to play in object identification. First of all, ids should be set in accordance with how things get named, even if we're using two different APIs to encapsulate that stuff. The IdMixin is specifically for identifying objects with the present() efun, but there are other kinds of object identification. When you "tell devo hi", I'm being identified by name, not id. There may be some contexts in which an object may easily be identified by first name, such as in a small group of players out adventuring together. Or another example could be something like conversation, where a full name is used to initiate converation by in subsequent messages a first name will suffice. In still other contexts, we must use the username to guarantee uniqueness; or it may be preferable to a player to use the username, so that the correct user is targeted no matter which player character they're actually logged in with at the time.
 
 ### DetailMixin
+Lastly there is DetailMixin. This is for setting those detail descriptions on rooms (or anything, really) where you want a player to be able to look at a more detailed description of one aspect of an object without actually having to create supplemental objects to be targeted by the look command. This API is probably the most divergent of the three from how EotL currently works.
+
+The main difference is that the detail ids and their associated descriptions are now expressed in a hierarchy instead of a flat list. For instance, say you wrote a room that mentioned a painting in its description:
+<code><pre>
+set_detail("painting", "a painting of a mermaid");
+set_detail("mermaid", "she's got no legs!", "painting");
+// or
+set_detail("painting.mermaid", "she's got no legs!");
+</pre></code>
+
+Now if the player is in the room with an actual mermaid, they can either "look mermaid" to look at the NPC, or "look painting.mermaid" to look at the painting. Furthermore, since each detail id is now contextual, we can do sugary things like automatically highlighting the words in descriptions which may be furthur inspected. Again, the whole idea behind the design of this stuff is to make the text-based interface into all this stuff more bearable than it's been in the past.
+
+That's it for now I think. As always, the API docs are in the documentation section if you want a more technical reference. There's also utility functions and stuff in the API docs that I didn't mention here.
