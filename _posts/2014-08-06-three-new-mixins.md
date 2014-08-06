@@ -14,5 +14,17 @@ Beyond that, IdMixin is pretty simple, though if people end up wanted to impleme
 ### NameMixin
 Before I get into NameMixin, it might be useful to provide a little background on how I see user accounts playing out. There are basically three levels of "youness". When you sign in for the first time, you will be asked to pick a "username". This username must not be currently in use by any other user, so it can be used to uniquely identify you in the game. When you select your username, you will also be assigned a universally unique identifier; usernames may be recycled as accounts get deleted for whatever reason, but this identifier will be unique to each newly created account. Objects which have to persist data for a player for long periods of time should always use the unique identifier, so if the user is deleted and recreated later on, they don't get access to the old user's data. Finally, there is the concept of "player names". This is what NameMixin provides.
 
-NameMixin is for encapsulating the proper names of players and NPCs (Bobby Schaetzle, Bobalu, Zelda), not places (Disneyland) or things (Excalibur). 
+NameMixin is for encapsulating the proper names of players and NPCs (Bobby Schaetzle, Bobalu, Zelda), not places (Disneyland) or things (Excalibur). The short version is:
 
+##### query_first_name(), query_last_name() 
+First and last names would most likely be specified when running the game within the context of a corporeal environment, such as a office where people tend to refer to each other by their proper names. But they could also show up in fantasy environments as well, either on NPCs (Jean-Luc Picard) or possibly players (Iffy Bonzoolie). It should be also noted that one may show up without the other, such as in the case of artists who only go by one name.
+
+##### query_full_name()
+The default implementation of this function just concatenates the first and last names, but full names have their own interface so other types of names may be provided for. For instance, an NPC may have first and last names of "James" and "Kirk" respectively, but return a full name of "James Tiberius Kirk".
+
+##### query_nickname()
+I'm still not entirely sure about this one. It's intended mainly for the use of Internet handles (Devo, Bobalu), and not necessarily for what people would customarily think of as nicknames (Bones). That's the reason why only one nickname may be returned, as opposed to a collection of names. That said, if it becomes useful to provide a mechanism for providing nicknames in the traditional sense, we may want to revisit the issue.
+
+While names are distinct from ids (setting a first name of "Bobby" doesn't automatically grant me the id of "bobby"), they still have an important role to play in object identification. 
+
+### DetailMixin
