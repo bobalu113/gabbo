@@ -367,6 +367,7 @@ section {
 
 nav {
   width: 960px;
+  max-width: 90%;
   text-align: right;
   position: fixed;
   top: 0px;
