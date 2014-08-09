@@ -1,5 +1,7 @@
 inherit CommandCode;
 
+private variables private functions inherit FileLib;
+
 int do_command(string arg) {
   // FUTURE figure out what to do when called argless
 
@@ -8,7 +10,7 @@ int do_command(string arg) {
     return 0;
   }
 
-  // TODO add path expansion
+  arg = expand_path(arg, THISP);
 
   ed(arg);
   return 1;

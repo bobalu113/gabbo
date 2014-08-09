@@ -54,7 +54,7 @@ void setup(string username) {
   set_primary_id(username);
   add_secondary_id(CAP(username));
   set_nickname(CAP(username));
-  set_cwd(HomeDir(username));
+  set_cwd(HomeDir + "/" + username);
   return 0;
 }
 

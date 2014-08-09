@@ -8,9 +8,10 @@ int do_command(string arg) {
     return 0;
   }
 
+  arg = expand_path(arg, THISP);
+
   // FUTURE add -p option
 
-  // TODO add path expansion
   if (file_exists(arg)) {
     printf("%s: %s: File exists.\n", query_verb(), arg);
     return 1;

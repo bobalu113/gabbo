@@ -1,6 +1,6 @@
 #include <sys/commands.h>
 
-#define CcDir sprintf("%s/tmp", HomeDir(UNAME))
+#define CcDir sprintf("%s/%s/tmp", HomeDir, UNAME)
 #define USAGE "cc<id> [-msdrf] [-h path] [-i path] code"
 
 inherit CommandCode;

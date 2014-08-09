@@ -564,6 +564,7 @@ public int create() {
   seteuid(getuid());
   loggers = ([ ]);
   formatters = ([ ]);
+  local_ref_counts = ([ ]);
   factory_logger = clone_object(Logger);
   factory_logger->set_category(normalize_category(THISO));
   factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));

@@ -8,6 +8,10 @@
 #pragma range_check
 #pragma warn_deprecated
 
+#if __VERSION_MAJOR__ <= 3 && __VERSION_MINOR__ <= 2
+#define LEGACY_SUPPORT
+#endif
+
 #define MasterObject         __MASTER_OBJECT__
 #define SimulEfunObject      "/secure/simul_efun"
 
@@ -48,8 +52,8 @@
 #define Avatar               ObjDir "/avatar"
 
 #define CommonRoom           SharedDir "/common"
-#define HomeDir(u)           PrivateDir "/home/" + u 
-#define Workroom(u)          HomeDir(u) + "/workroom"
+#define HomeDir              PrivateDir "/home"
+#define Workroom(u)          (HomeDir + "/" + u + "/workroom")
 
 #define THISO                this_object()
 #define THISP                this_player()

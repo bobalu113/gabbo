@@ -1,28 +1,42 @@
 inherit CommandCode;
 
+private variables private functions inherit ArgsLib;
+private variables private functions inherit GetoptsLib;
 private variables private functions inherit FileLib;
 
 int do_command(string arg) {
-  if (!arg || !strlen(arg)) {
-    notify_fail(sprintf("Usage: %s file\n", query_verb()));
-    return 0;
+  // TODO add confirmation
+  mixed *args = getopts(explode_args(arg), "v");
+
+  string *files = ({ });
+  foreach (string a : args[0]) {
+    string *f = expand_pattern(a);
+    if (!sizeof(f)) {
+      printf("%s: %s: No such file.\n", query_verb(), a);
+      return 1;
+    }
+    files += f;
   }
 
-  // TODO add path expansion
-  if (!file_exists(arg)) {
-    printf("%s: %s: no such file or permission denied.\n", query_verb(), arg);
-    return 1;
+  int count = 0;
+  foreach (string file : files) {
+    if (is_directory(file)) {
+      printf("%s: %s: use rmdir to remove directory.\n", query_verb(), file);
+      continue;
+    }
+
+    if (!rm(file)) {
+      printf("%s: %s: Unable to remove file.\n", query_verb(), file);
+      continue;
+    }
+
+    if (member(args[1], 'v')) {
+      printf("%s: removed %s\n", file);
+    }
+    count++;
   }
 
-  if (is_directory(arg)) {
-    printf("%s: %s: use rmdir to remove directory.\n", query_verb(), arg);
-    return 1;
-  }
-
-  if (!rm(arg)) {
-    printf("%s: %s: Unable to remove file.\n", query_verb(), arg);
-    return 1;
-  }
-
+  printf("%s: removed %d file%s", query_verb(), count, 
+                                  (count == 1 ? "s" : ""));
   return 1;
 }

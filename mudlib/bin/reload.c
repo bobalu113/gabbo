@@ -3,7 +3,7 @@ inherit CommandCode;
 private variables private functions inherit FileLib;
 
 int do_command(string arg) {
-  // TODO add path expansion
+  // TODO add object expansion
   // TODO add -f option to force
   // XXX messaging?
   

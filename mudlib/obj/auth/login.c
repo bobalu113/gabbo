@@ -263,8 +263,9 @@ protected void new_user(string user, string password) {
   if (!save_passwd(user, data, 0)) {
     destruct(THISO);
   } else {
-    if (!file_exists(HomeDir(user))) {
-      mkdir(HomeDir(user));
+    string homedir = HomeDir + "/" + user;
+    if (!file_exists(homedir)) {
+      mkdir(homedir);
     }
     spawn_avatar(user);
   }

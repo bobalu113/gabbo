@@ -8,7 +8,8 @@ int do_command(string arg) {
     return 0;
   }
 
-  // TODO add path expansion
+  arg = expand_path(arg, THISP);
+
   if (is_directory(arg)) {
     printf("%s: %s: can only touch regular files.\n", query_verb(), arg);
     return 1;

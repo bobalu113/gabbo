@@ -3,9 +3,18 @@
  * @alias ShellMixin
  */
 
+// TODO environment variables
+// TODO prompt
+// TODO aliases
+// TODO subs
+
 private variables private functions inherit FileLib;
 
-private string cwd;
+default private variables;
+
+string cwd;
+
+default private functions;
 
 /**
  * Return the players current working directory.
@@ -30,3 +39,4 @@ public int set_cwd(string dir) {
   cwd = dir;
   return 1;
 }
+

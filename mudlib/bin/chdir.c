@@ -8,10 +8,14 @@ mixed *query_actions() {
 
 int do_command(string arg) {
   if (!arg || !strlen(arg)) {
-    arg = HomeDir(PID);
+    arg = HomeDir +"/" + UNAME;
+  }
+  
+  arg = expand_path(arg, THISP);
+  if ((arg[<1] == '/') && (arg != "/")) {
+    arg = arg[0..<2];
   }
 
-  // TODO add path expansion
   if (!file_exists(arg)) {
     printf("%s: %s: no such directory or permission denied.\n", 
       query_verb(), arg);

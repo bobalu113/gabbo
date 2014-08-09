@@ -6,6 +6,29 @@
  */
 
 /**
+ * Return the index of the first element of an array or string which is a 
+ * specified value. Like member(), but provides the start/step capability.
+ * 
+ * @param  list  an array or string to search
+ * @param  el    a value to search against
+ * @param  start optional starting position of the search
+ * @param  step  optional step
+ * @return       the index of the first member of list which is el
+ */
+varargs int searcha(mixed list, mixed el, int start, int step) {
+  int size = sizeof(list);
+  step ||= 1;
+
+  if (step > 0) {
+    for (; (start < size) && (list[start] != el); start += step);
+    return (start < size) ? start : -1;
+  } else {
+    for (; (start >= 0) && (list[start] != el); start += step);
+    return (start >= 0)   ? start : -1;
+  }
+}
+
+/**
  * Return the index of the first element of an array or string which is not
  * a specified value.
  * 
