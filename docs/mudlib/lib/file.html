@@ -99,6 +99,19 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/file.html#expand_path()">expand_path</a></strong>(string&nbsp;pattern,&nbsp;object&nbsp;who)</code>
+<div class="block">Returns the absolute filename of the possibly relative filename described
+by pattern.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../lib/file.html#expand_pattern()">expand_pattern</a></strong>(string&nbsp;pattern)</code>
+<div class="block">Resolve a file pattern containing possible wildcards.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/file.html#file_exists()">file_exists</a></strong>(string&nbsp;filename)</code>
 <div class="block">Test whether a file exists.</div>
@@ -187,6 +200,46 @@
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>filename</code> - the path of the file to check </dd>
 <dt><span class="strong">Returns:</span></dt><dd>the name of the containing directory </dd>
+</dl>
+</li>
+</ul>
+<a name="expand_path()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>expand_path</h4>
+<pre>public&nbsp;varargs&nbsp;string&nbsp;expand_path(string&nbsp;pattern,&nbsp;object&nbsp;who)</pre>
+<div class="block">Returns the absolute filename of the possibly relative filename described
+by pattern.  Relative paths will be resolved according to
+who->query_pwd(), or dirname(object_name(who)) if 'who' does not define
+query_pwd().  'who' defaults to this_object() if not specified.  Home
+directories specified with '~' will also be resolved according to 'who'.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>pattern</code> - path to be expanded </dd>
+<dd><code>who</code> - optional object from which relative paths should be resolved </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the absolute path </dd>
+</dl>
+</li>
+</ul>
+<a name="expand_pattern()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>expand_pattern</h4>
+<pre>public&nbsp;string&nbsp;*expand_pattern(string&nbsp;pattern)</pre>
+<div class="block">Resolve a file pattern containing possible wildcards. Wildcards may be
+expressed as a '*' or '?' as specified by get_dir(E). Wildcard characters
+in the middle of the path will be expanded in place (e.g.
+"home/*&#47;workroom.c" expands to all workroom files).</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>pattern</code> - the file pattern to expand </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a list of all matching files (constrained by valid_read) </dd>
 </dl>
 </li>
 </ul>

@@ -102,6 +102,13 @@ for any item of a set.</div>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/array.html#searcha()">searcha</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;el,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
+<div class="block">Return the index of the first element of an array or string which is a
+specified value.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/array.html#searcha_any()">searcha_any</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;elements,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
 <div class="block">Like member(), but instead of searching for a single item, search for any
 item of a set.</div>
@@ -123,6 +130,26 @@ item of a set.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="searcha()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>searcha</h4>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;searcha(mixed&nbsp;list,&nbsp;mixed&nbsp;el,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</pre>
+<div class="block">Return the index of the first element of an array or string which is a
+specified value. Like member(), but provides the start/step capability.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>list</code> - an array or string to search </dd>
+<dd><code>el</code> - a value to search against </dd>
+<dd><code>start</code> - optional starting position of the search </dd>
+<dd><code>step</code> - optional step </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the index of the first member of list which is el </dd>
+</dl>
+</li>
+</ul>
 <a name="anti_searcha()">
 <!--   -->
 </a>
