@@ -1,5 +1,7 @@
 ---
-published: false
+published: true
+category: blog
+layout: blog
 ---
 
 I got a couple decisions I made early on that I haven't quite made peace with.
