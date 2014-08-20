@@ -1,5 +1,7 @@
 ---
-published: false
+published: true
+category: blog
+layout: blog
 ---
 
 Haven't coded anything for about a week. I started to code the pager but lost interest pretty quickly. It does need to get done though, having to use the editor to browse code is sub-optimal. This is the where I kinda wish I had an apprentice or an intern or something. It might be a bit much for someone who is brand new to programming, but it might not be. It's something that I don't really need personally, because I can more code externally out in zsh. It does, however, need to be done were I to throw up a demo instance anywhere. That makes it a good candidate for someone trying to learn, because they don't have to stress over too much over how quickly they're progressing. Meanwhile I'd be free to work on the more interesting stuff. Makes me think that maybe I should table this and instead put a little more effort into looking for candidates. The only reason I decided to work on it now was because I've got most of the rest of the shell done.
