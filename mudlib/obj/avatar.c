@@ -38,11 +38,19 @@ protected int set_username(string str) {
 
 /* telnet */
 
-public int query_page_width() {
+/**
+ * Returns the user's screen width. Currently hard-coded to 80 characters.
+ * @return the user's screen width
+ */
+public int query_screen_width() {
   return 80;
 }
 
-public int query_page_length() {
+/**
+ * Returns the user's screen length. Currently hard-coded to 25 lines.
+ * @return the user's screen length
+ */
+public int query_screen_length() {
   return 25;
 }
 
