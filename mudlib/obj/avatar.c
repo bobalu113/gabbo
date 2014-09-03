@@ -36,6 +36,16 @@ protected int set_username(string str) {
   return 1;
 }
 
+/* telnet */
+
+public int query_page_width() {
+  return 80;
+}
+
+public int query_page_length() {
+  return 25;
+}
+
 /* initialization */
 
 /**

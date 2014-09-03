@@ -99,7 +99,8 @@ int do_command(string arg) {
       if (member(args[1], 's')) {
         result += sprintf("total %d\n", total);
       }
-      result += sprintf("%#-80s\n", implode(out, "\n"));
+      result += sprintf("%#-*s\n", 
+                        THISP->query_page_width(), implode(out, "\n"));
     }
   }
 
