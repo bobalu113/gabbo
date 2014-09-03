@@ -16,7 +16,4 @@ Well anyway, as it turns out, the driver won't even let you pass a 0 value as ar
 However, as far as why I'd want to be able to move something to null environment, I do have my reasons. First, that's where things start out and to not be able to put them back there is silly to me. Double silly is that set\_environment() lets you do this but move\_object() doesn't. But moreover, there are times where you need to pull an object out of it's environment and stash it somewhere else temporarily, and most of the other options for doing that suck. I'm also not always a fan of putting people in The Void when things go wrong. Yeah, sometimes you want to dump them in an airlock and let them exit back out to the game, but probably more often you want to preserve their state as much as possible, to try and figure out what went wrong. 
 
 
-There will be none of that for now, though. I tip my hat to you H_MOVE_OBJECT0, you have gotten the best of me. I'll post again when I finish it for real. If you want to see the pretty (stupid) version here it is: 
-
-
-https://github.com/bobalu113/gabbo/blob/17143a80a4af403630a70bc9186684ef3881a61d/mudlib/secure/master.c
+There will be none of that for now, though. I tip my hat to you H_MOVE_OBJECT0, you have gotten the best of me. I'll post again when I finish it for real. If you want to see the pretty (stupid) version, [here it is](https://github.com/bobalu113/gabbo/blob/17143a80a4af403630a70bc9186684ef3881a61d/mudlib/secure/master.c).
