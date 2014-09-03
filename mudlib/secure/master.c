@@ -97,11 +97,177 @@ void inaugurate_master(int arg) {
     ({ #'return, "Huh?\n" })
   ));
 
-  // TODO implement init and prevent/signal functions
   set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
     ({ 'item, 'dest }),
-    ({ #'set_environment, 'item, 'dest })
-  )); 
+    ({ #',, 
+       ({ #'=, 'origin, ({ #'environment, 'item }) }),
+       ({ #'||,
+          ({ #'&&, 
+             'origin, 
+             ({ #'call_other, 'origin, "prevent_leave", 'item, 'dest })
+          }),
+          ({ #'&&,
+             'item,
+             ({ #'call_other, 'item, "prevent_move", 'dest })
+          }),
+          ({ #'&&,
+             'dest,
+             ({ #'call_other, 'dest, "prevent_enter", 'item })
+          }),
+          ({ #',,
+             ({ #'&&,
+                'item,
+                ({ #'living, 'item }),
+                ({ #',,
+                   ({ #'=, 'oldp, ({ #'this_player }) }),
+                   ({ #'set_this_player, 'item }),
+                   ({ #'&&, 
+                      'origin, 
+                      ({ #'call_other, 'origin, "release" }) 
+                   }),
+                   ({ #'&&, 
+                      'origin, 
+                      ({ #'filter,
+                         ({ #'-, 
+                            ({ #'all_inventory, 'origin }), 
+                            ({ #'({, 'item }) 
+                         }),
+                         ({ #'bind_lambda, 
+                            unbound_lambda(({ 'o, 'i }), 
+                              ({ #'&&, 
+                                 'o, 
+                                 'i, 
+                                 ({ #'call_other, 'o, "release" }) 
+                              })
+                            )
+                         }),
+                         'item
+                      })
+                   }),
+                   ({ #'set_this_player, 'oldp })
+                })
+             }),
+             ({ #'&&,
+                'item,
+                'origin,
+                ({ #'living, 'item }),
+                ({ #',,
+                   ({ #'=, 'oldp, ({ #'this_player }) }),
+                   ({ #'set_this_player, 'origin }),
+                   ({ #'call_other, 'item, "release" }),
+                   ({ #'set_this_player, 'oldp })
+                })
+             }),
+             ({ #'&&,
+                'origin,
+                ({ #'filter, 
+                   ({ #'-, 
+                      ({ #'all_inventory, 'origin }), 
+                      ({ #'({, 'item })
+                   }),
+                   ({ #'bind_lambda, 
+                      unbound_lambda(({ 'o, 'i }),
+                        ({ #'&&,
+                           'o,
+                           'i,
+                           ({ #'living, 'o }),
+                           ({ #',,
+                              ({ #'=, 'oldp, ({ #'this_player }) }),
+                              ({ #'set_this_player, 'o }),
+                              ({ #'call_other, 'i, "release" }),
+                              ({ #'set_this_player, 'oldp })
+                           })
+                        })
+                      )
+                   }),
+                   'item
+                })
+             }),
+             ({ #'&&, 'item, ({ #'set_environment, 'item, 'dest }) }),
+             ({ #'&&,
+                'item,
+                ({ #'living, 'item }),
+                ({ #',,
+                   ({ #'=, 'oldp, ({ #'this_player }) }),
+                   ({ #'set_this_player, 'item }),
+                   ({ #'&&, 
+                      'dest, 
+                      ({ #'call_other, 'dest, "init" }) 
+                   }),
+                   ({ #'&&, 
+                      'dest, 
+                      ({ #'filter,
+                         ({ #'-, 
+                            ({ #'all_inventory, 'dest }), 
+                            ({ #'({, 'item }) 
+                         }),
+                         ({ #'bind_lambda, 
+                            unbound_lambda(({ 'o, 'i }), 
+                              ({ #'&&, 
+                                 'o, 
+                                 'i, 
+                                 ({ #'call_other, 'o, "init" }) 
+                              })
+                            )
+                         }),
+                         'item
+                      })
+                   }),
+                   ({ #'set_this_player, 'oldp })
+                })
+             }),
+             ({ #'&&,
+                'item,
+                'dest,
+                ({ #'living, 'item }),
+                ({ #',,
+                   ({ #'=, 'oldp, ({ #'this_player }) }),
+                   ({ #'set_this_player, 'dest }),
+                   ({ #'call_other, 'item, "init" }),
+                   ({ #'set_this_player, 'oldp })
+                })
+             }),
+             ({ #'&&,
+                'dest,
+                ({ #'filter, 
+                   ({ #'-, 
+                      ({ #'all_inventory, 'dest }), 
+                      ({ #'({, 'item })
+                   }),
+                   ({ #'bind_lambda, 
+                      unbound_lambda(({ 'o, 'i }),
+                        ({ #'&&,
+                           'o,
+                           'i,
+                           ({ #'living, 'o }),
+                           ({ #',,
+                              ({ #'=, 'oldp, ({ #'this_player }) }),
+                              ({ #'set_this_player, 'o }),
+                              ({ #'call_other, 'i, "init" }),
+                              ({ #'set_this_player, 'oldp })
+                           })
+                        })
+                      )
+                   }),
+                   'item
+                })
+             }),
+             ({ #'&&,
+                'dest,
+                ({ #'call_other, 'dest, "signal_enter", 'item, 'origin })
+             }),
+             ({ #'&&,
+                'item,
+                ({ #'call_other, 'item, "signal_move", 'origin })
+             }),
+             ({ #'&&, 
+                'origin, 
+                ({ #'call_other, 'origin, "signal_leave", 'item })
+             })
+          })
+       })
+    })
+  ));
 
   set_driver_hook(H_CREATE_OB, unbound_lambda(({ 'obj }),
     ({ #'call_other, 'obj, "create" })
@@ -117,7 +283,6 @@ void inaugurate_master(int arg) {
     0,
     ({ #'call_other, ({ #'this_object }), "reset" })
   ));
-
   set_driver_hook(H_CLEAN_UP, unbound_lambda(
     ({ 'ref, 'obj }),
     ({ #'call_other, 'obj, "clean_up" })

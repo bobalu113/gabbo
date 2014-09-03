@@ -62,6 +62,7 @@
 #define FINDP(p)             find_player(p)
 #define PID                  THISP->query_primary_id()
 #define CAP(s)               capitalize(s)
+#define ENV(o)               environment(o)
 #define UNAME                THISP->query_username()
 
 #define MAXINT               0xf0000000
