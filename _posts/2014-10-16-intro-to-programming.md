@@ -4,7 +4,7 @@ category: blog
 layout: blog
 ---
 
-So a friend of mine is taking his first intro CS course, and I found myself ranting about education on EotL this morning about education. Most of my grumbling here is specifically about intro classes, but I really feel that's the kind of programming we're going to need for the future. 
+So a friend of mine is taking his first intro CS course, and I found myself ranting on EotL this morning about education. Most of my grumbling here is specifically about intro classes, but I really feel that's the kind of programming we're going to need for the future. 
 
 Sure, programming the big fancy thing in the big fancy building will still be done by expert programmers who are probably very well served by an advanced CS curriculum; but I'm convinced the most demand is gonna come from the programming of everyday things that are all around us -- the kind of programming done by the layman or hobbyist who probably isn't going to take more than one or two programming "classes" their entire life. 
 
