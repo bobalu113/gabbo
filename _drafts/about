@@ -1,1 +1,7 @@
 # What's a MUD?
+
+When I try to explain to people what gabbo is, this is where I usually start. To answer the question, there's a standard spiel I've been working on that kinda goes over the history, architecture, user experience, etc., so I thought this would be an easy post. I've been giving the question some more thought this past week though, and there's more to talk about here.
+
+Wikipedia sorta boils it down to "a text-based multi-player computer role-playing game" which is how I think a lot of mudders would describe it. Personally, I think that misses the mark a little bit. Let's step back and think about what we can say about _all_ MUDs. 
+
+Are they all text-based? Yes and no. MUD Connector has a section for "graphical MUDs," but the fact that they have to qualify them as such implies that the term "MUD" would otherwise mean text-based. Also, if you're talking about what you can do with just the raw telnet protocol that all the MUD drivers (that I know of), you're really limited to just text (though modern clients support different character sets which is cool). 
