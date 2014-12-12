@@ -1,5 +1,7 @@
 inherit CommandCode;
 
+private variables private functions inherit ObjectExpansionLib;
+
 // TODO the defaults could have debug info
 #define DEFAULT_SHORT          "a nondescript object"
 #define DEFAULT_LONG           "It lacks any features whatsoever."
@@ -11,8 +13,6 @@ inherit CommandCode;
 #define VOID_MSG               "You are floating in a formless void."
 
 #define DEFAULT_CONTEXT        "here"
-
-private variables private functions inherit ObjectExpansionLib;
 
 int do_command(string arg) {
   // TODO add max args param to explode_args

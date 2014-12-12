@@ -79,6 +79,7 @@ varargs int searcha_any(mixed list, mixed elements, int start, int step) {
 /**
  * Like anti_searcha(), but instead of searching for a single item, search 
  * for any item of a set.
+ * 
  * @param  list     an array or string to search
  * @param  elements an array of potential elements, or a string of characters
  *                  to search against
@@ -99,4 +100,85 @@ varargs int anti_searcha_any(mixed list, mixed elements, int start,
   }
   
   return -1;
+}
+
+/**
+ * Return a copy of an array with all duplicates removed. When an element 
+ * appears multiple times in the array, the first occurrence will be used for
+ * its position in the new array, unless keep_last!=0, in which case the last
+ * occurrence will be used.
+ *
+ * Note: If you don't care about preserving order, you probably want to forgo
+ *       using this function in favor of the more efficient: 
+ *       <code>m_indices(mkmapping(list))</code>
+ * 
+ * @param  list      the array from which to remove duplicates
+ * @param  keep_last 0 to use first occurrence, otherwise use last
+ * @return           a copy of the array with duplicates removed
+ */
+varargs mixed *unique_array(mixed *list, int keep_last) {
+  mixed *out = ({ });
+  mapping bag = ([ ]);
+  if (keep_last) {
+    for (int i = sizeof(list)- 1; i >= 0; i--) {
+      if (!member(bag, list[i])) {
+        out = ({ list[i] }) + out;
+        m_add(bag, list[i]);
+      }
+    }
+  } else {
+    for (int i = 0, int j = sizeof(list); i < j; i++) {
+      if (!member(bag, list[i])) {
+        out += ({ list[i] });
+        m_add(bag, list[i]);
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * Flatten an array one level. e.g. turns: 
+ *   <code>({ ({ a, b }), c, ({ d, ({ e }) }) })</code>
+ * into:
+ *   <code>({ a, b, c, d, ({ e }) })</code>
+ *   
+ * @param  list the array to flatten
+ * @return      the flattened array
+ */
+mixed flatten_array1(mixed *list) {
+  if (!pointerp(list)) {
+    return ({ });
+  }
+
+  mixed *newlist = ({ });
+  for (int i = 0, int j = sizeof(list); i < j; i++) {
+    if (pointerp(list[i])) {
+      newlist += list[i];
+    } else {
+      newlist += ({ list[i] });
+    }
+  }
+  return newlist;
+}
+
+/**
+ * Completely flatten an array. e.g. turns: 
+ *   <code>({ ({ a, b }), c, ({ d, ({ e }) }) })</code>
+ * into:
+ *   <code>({ a, b, c, d, e, })</code>
+ *   
+ * @param  list the array to flatten
+ * @return      the flattened array
+ */
+mixed flatten_array(mixed *list) {
+  if (!pointerp(list)) {
+    return ({ list });
+  }
+
+  mixed *newlist = ({ });
+  for (int i = 0, int j = sizeof(list); i < j; i++) {
+    newlist += flatten_array(list[i]);
+  }
+  return newlist;
 }

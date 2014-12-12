@@ -14,27 +14,27 @@ int do_command(string arg) {
     return 0;
   }
 
-  string *files = ({ });
+  mixed *files = ({ });
   foreach (string a : args[0]) {
     files += expand_pattern(a);
   }
 
   if (!sizeof(files)) {
-    printf("%s: %s: No such file.\n", query_verb(), args[0]);
+    printf("%s: %s: No such file.\n", query_verb(), implode(args[0], " "));
     return 1;
   }
 
   int count = 0;
-  foreach (string file : files) {
-    if (FINDO(file)) {
+  foreach (mixed *file : files) {
+    if (FINDO(file[0])) {
       printf("%s: %s: Already loaded. Destruct or use the reload command.\n",
-        query_verb(), file);
+             query_verb(), file);
       return 1;
     }
 
-    string err = catch(load_object(file); publish);
+    string err = catch(load_object(file[0]); publish);
     if (err) {
-      printf("%s: %s: Caught error %s\n", query_verb(), file, err); 
+      printf("%s: %s: Caught error %s\n", query_verb(), file[0], err); 
       mixed *last_err = get_error_file(MasterObject->get_wiz_name(args[0]));
       if (last_err) {
         printf("%s line %d: %s\n", last_err[0], last_err[1], last_err[2]);
@@ -43,12 +43,13 @@ int do_command(string arg) {
     } else {
       count++;
       if (member(arg, 'v')) {
-        printf("%s: %s: loaded\n", query_verb(), file);
+        printf("%s: %s: loaded\n", query_verb(), file[0]);
       }
     }
   }
   
   printf("%s: %s: %d object%s loaded.\n", 
-         query_verb(), args[0], count, (count != 1 ? "s" : ""));
+         query_verb(), implode(args[0], " "), 
+         count, (count != 1 ? "s" : ""));
   return 1;
 }

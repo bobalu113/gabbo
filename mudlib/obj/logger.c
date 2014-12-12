@@ -121,7 +121,7 @@ int set_level(string str) {
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_enabled(string priority) {
-  return level >= LEVELS[priority]; 
+  return LEVELS[level] >= LEVELS[priority]; 
 }
 
 /**

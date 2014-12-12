@@ -31,6 +31,7 @@
 #define StringsLib           LibDir "/strings"
 #define ArgsLib              LibDir "/args"
 #define GetoptsLib           LibDir "/getopts"
+#define ObjectExpansionLib   LibDir "/expand_object"
 
 #define RoomCode             ModulesDir "/room"
 #define ThingCode            ModulesDir "/thing"

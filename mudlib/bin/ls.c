@@ -100,7 +100,7 @@ int do_command(string arg) {
         result += sprintf("total %d\n", total);
       }
       result += sprintf("%#-*s\n", 
-                        THISP->query_page_width(), implode(out, "\n"));
+                        THISP->query_screen_width(), implode(out, "\n"));
     }
   }
 
