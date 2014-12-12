@@ -10,8 +10,8 @@ inherit IdMixin;
 /**
  * Set up a new living object.
  */
-protected void setup() {
-
+public void create() {
+  IdMixin::setup_id();
 }
 
 /**
@@ -19,6 +19,6 @@ protected void setup() {
  * 
  * @return 1 
  */
-nomask int is_living() {
+nomask public int is_living() {
   return 1;
 }

@@ -27,10 +27,12 @@
 
 #define UserLib              LibDir "/user"
 #define FileLib              LibDir "/file"
+#define ObjectLib            LibDir "/object"
 #define ArrayLib             LibDir "/array"
 #define StringsLib           LibDir "/strings"
 #define ArgsLib              LibDir "/args"
 #define GetoptsLib           LibDir "/getopts"
+#define FileExpansionLib     LibDir "/expand_file"
 #define ObjectExpansionLib   LibDir "/expand_object"
 
 #define RoomCode             ModulesDir "/room"
@@ -65,6 +67,7 @@
 #define CAP(s)               capitalize(s)
 #define ENV(o)               environment(o)
 #define UNAME                THISP->query_username()
+#define PNAME                THISP->query_name()
 
 #define MAXINT               0xf0000000
 #define MININT               0xf0000001

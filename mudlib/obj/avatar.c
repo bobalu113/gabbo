@@ -8,6 +8,7 @@
 inherit LivingCode;
 
 inherit NameMixin;
+inherit VisibleMixin;
 inherit ShellMixin;
 inherit CommandGiverMixin;
 
@@ -56,32 +57,35 @@ public int query_screen_length() {
 
 /* initialization */
 
+public void create() {
+  LivingCode::create();
+  NameMixin::setup_name();
+  VisibleMixin::setup_visible();
+  ShellMixin::setup_shell();
+  CommandGiverMixin::setup_command_giver();
+}
+
 /**
  * Invoked by the login object to set up a newly spawned avatar. At the time
  * this lfun is called, interactivity has not yet been transfered to the
  * avatar. It also has not yet been moved to the player's starting location.
  * @param  username the username to which this avatar belongs
  */
-void setup(string username) {
-  LivingCode::setup();
-  setup_id();
-  setup_name();
-  setup_command_giver();
-
+public void setup(string username) {
+  // TODO previous_object check
   set_username(username);
   set_primary_id(username);
   add_secondary_id(CAP(username));
   set_nickname(CAP(username));
   set_cwd(HomeDir + "/" + username);
-  return 0;
+  return;
 }
-
 
 /**
  * Temporary implementation to initialize a static list of commands. Will be 
  * replaced with configuration-driven logic instead.
  */
-void setup_command_giver() {
+protected void setup_command_giver() {
   CommandGiverMixin::setup_command_giver();
 
   // TODO make this configuration-driven
@@ -106,6 +110,10 @@ void setup_command_giver() {
     BinDir "/clone",
     BinDir "/dest", 
     BinDir "/man"
+    BinDir "/look"
+    BinDir "/get"
+    BinDir "/drop"
+    BinDir "/put"
   });
 
   foreach (string command : command_files) {

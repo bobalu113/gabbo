@@ -10,42 +10,16 @@
 // FUTURE color
 // TODO object spawning
 
-inherit IdMixin;
-inherit DetailMixin;
 inherit PropertyMixin;
+inherit IdMixin;
+inherit VisibleMixin;
 
 default private variables;
-
-string name;
-string description;
 
 /** ([ str dir : str path; int hidden ]) **/
 mapping exits;
 
 default public functions;
-
-/**
- * Return the name of the room. Formerly called the "short description", this
- * name will be shown to the user everytime they enter the room. It should be
- * short and recognizable.
- * 
- * @return the name of the room
- */
-string query_name() { 
-  return name;
-}
-
-/**
- * Return a long description of the room. This will be displayed to the 
- * player when they explicitly look inside a room. It can be as long as is
- * needed, but probably shouldn't take up more than a page of a user's 
- * screen.
- * 
- * @return the long description of the room
- */
-string query_description() { 
-  return description;
-}
 
 /**
  * Return the mapping of all the rooms exists. This is a two-dimensional 
@@ -82,30 +56,6 @@ int is_exit_hidden(string dir) {
 }
 
 /**
- * Set the name of the room. S
- * 
- * @param str the name to set
- * @return    0 for failure, 1 for success
- * @see       query_name()
- */
-int set_name(string str) {
-  name = str;
-  return 1;
-}
-
-/**
- * Set the room's description. 
- * 
- * @param str the description to set
- * @return    0 for failure, 1 for success
- * @see       query_description()
- */
-int set_description(string str) {
-  description = str;
-  return 1;
-}
-
-/**
  * Set the room's exit mapping.
  * 
  * @param map the mapping of exists to set
@@ -134,9 +84,12 @@ varargs int add_exit(string dir, string dest, int hidden) {
 /**
  * {@inheritDoc}
  */
-protected void setup_id() {
+public void create() {
+  PropertyMixin::setup_property();
   IdMixin::setup_id();
+  VisibleMixin::setup_visible();
   set_primary_id("here");
+  add_secondary_id("here");
 }
 
 /**
@@ -144,6 +97,6 @@ protected void setup_id() {
  * 
  * @return 1 
  */
-nomask int is_room() {
+nomask public int is_room() {
   return 1;
 }

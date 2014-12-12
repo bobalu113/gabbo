@@ -1,18 +1,12 @@
 inherit CommandCode;
 
+#include <look.h>
+
+#define DEFAULT_CONTEXT        "(here,me)"
+
+private variables private functions inherit ArgsLib;
+private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
-
-// TODO the defaults could have debug info
-#define DEFAULT_SHORT          "a nondescript object"
-#define DEFAULT_LONG           "It lacks any features whatsoever."
-#define DEFAULT_ROOM_SHORT     "An Unnamed Location"
-#define DEFAULT_ROOM_LONG      "You see nothing of interest."
-#define MULTI_EXIT_MSG         "Obvious exits are: "
-#define SINGLE_EXIT_MSG        "The only obvious exit is "
-#define NO_EXIT_MSG            "There are no obvious exits."
-#define VOID_MSG               "You are floating in a formless void."
-
-#define DEFAULT_CONTEXT        "here"
 
 int do_command(string arg) {
   // TODO add max args param to explode_args
@@ -23,7 +17,7 @@ int do_command(string arg) {
   mixed *targets = expand_objects(args[0], 
                                   THISP,
                                   DEFAULT_CONTEXT, 
-                                  EXPAND_DETAIL|UPDATE_CONTEXT);
+                                  UPDATE_CONTEXT|MATCH_DETAIL);
 
   if (!sizeof(targets)) {
     if (!environment(THISP)) {
@@ -79,6 +73,7 @@ string format_room(object target, object looker, string id) {
     dirs = ({ ]});
   }
 
+  // TODO the default descs could have debug info
   int width = looker->query_page_width();
   int exit_count = sizeof(dirs);
   return sprintf("%s%-=*s---- %-=*s\n%s", 
