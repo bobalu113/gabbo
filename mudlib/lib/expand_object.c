@@ -47,20 +47,32 @@ private string unnest(string ospec);
  *                      detail id in ob which matched the ospec, or 0 if no
  *                      detail was specified
  */
-mixed *expand_objects(string *ospecs, object who, string root_context, 
-                      int flags) {
+varargs mixed *expand_objects(mixed ospecs, object who, 
+                              string root_context, int flags) {
   string current_context = who->get_context();
   mixed *result = ({ });
   mapping ancestors = ([ ]);
   string *new_context = ({ });
 
-  if (!root_context) {
+  if (stringp(ospecs)) {
+    ospecs = ({ ospecs });
+  }
+  if (!pointerp(ospecs)) {
+    return ({ });
+  }
+  if (!stringp(root_context)) {
     root_context = "";
   }
 
   foreach (string ospec : ospecs) {
+    if (!stringp(ospec)) {
+      continue;
+    }
     result += expand_group(ospec, who, current_context, root_context, 
                            &new_context, flags, ancestors);
+    if (sizeof(result) && (flags & LIMIT_ONE)) {
+      break;
+    }
   }
 
   if ((flags | UPDATE_CONTEXT) && sizeof(new_context)) {
@@ -68,7 +80,11 @@ mixed *expand_objects(string *ospecs, object who, string root_context,
     who->set_context(group_specs(new_context));
   }
 
-  return result;
+  if (sizeof(result) && (flags & LIMIT_ONE)) {
+    return ({ result[0] });
+  } else {
+    return result;
+  }
 }
 
 /**
@@ -130,6 +146,9 @@ private mixed *expand_group(string ospec, object who, string context,
     foreach (string subspec : subspecs) {
       result += expand_group(subspec, who, context, root_context, 
                              &new_context, flags, ancestors);
+      if (sizeof(result) && (flags & LIMIT_ONE)) {
+        break;
+      }
     }
     return result;
   }
@@ -205,7 +224,7 @@ private string expand_single(string arg, object who, string context,
     prev = ancestors[context];
   } else {
     string prev_context, prev_arg;
-    int pos = searcha(context, CONTEXT_DELIM[0], sizeof(context), -1);
+    int pos = searcha(context, CONTEXT_DELIM[0], sizeof(context) - 1, -1);
     if (pos > 0) {
       prev_context = context[0..(pos - 1)];
       prev_arg = context[(pos + 1)..];

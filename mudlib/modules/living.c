@@ -11,7 +11,7 @@ inherit IdMixin;
  * Set up a new living object.
  */
 public void create() {
-  IdMixin::setup_id();
+  setup_id();
 }
 
 /**

@@ -3,6 +3,7 @@
 
 #define MATCH_DETAIL    0x01
 #define UPDATE_CONTEXT  0x02
+#define LIMIT_ONE       0x04
 
 #define OB_TARGET       0
 #define OB_ID           1

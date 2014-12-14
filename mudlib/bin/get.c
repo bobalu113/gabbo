@@ -8,6 +8,7 @@ inherit CommandCode;
 private variables private functions inherit ArgsLib;
 private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
+private variables private functions inherit ObjectLib;
 
 int do_command(string arg) {
   string container;
@@ -17,7 +18,7 @@ int do_command(string arg) {
     arg = implode(args[0], " ");
     args[0] = sprintf(OPEN_GROUP "%s" CLOSE_GROUP 
                       CONTEXT_DELIM 
-                      OPEN_GROUP "%s" CLONE_GROUP, 
+                      OPEN_GROUP "%s" CLOSE_GROUP, 
                       container, arg);
   } else {
     args = getopts(explode_args(arg), OPTS);

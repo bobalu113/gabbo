@@ -1,12 +1,19 @@
 inherit CommandCode;
 
 #include <look.h>
+#include <expand_object.h>
 
 #define DEFAULT_CONTEXT        "(here,me)"
 
 private variables private functions inherit ArgsLib;
 private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
+
+string format_room(object target, object looker, string id);
+string format_default(object target, object looker, string id);
+string format_detail(object target, object looker, string id, string detail);
+string format_inventory(object target, object looker);
+string format_item(object target, object looker);
 
 int do_command(string arg) {
   // TODO add max args param to explode_args
@@ -20,7 +27,7 @@ int do_command(string arg) {
                                   UPDATE_CONTEXT|MATCH_DETAIL);
 
   if (!sizeof(targets)) {
-    if (!environment(THISP)) {
+    if (!ENV(THISP)) {
       write(VOID_MSG "\n");
       return 1;
     } else {
@@ -35,23 +42,32 @@ int do_command(string arg) {
     string id = t[OB_ID];
     string detail = t[OB_DETAIL];
 
-    if (member(opts, 'h')) {
+    if (member(args[1], 'h')) {
       // TODO this should be configurable (id, short, silent, etc)
-      out += sprintf("::::: %s :::::", file_name(target));
+      out += sprintf("::::: %s :::::\n", object_name(target));
     }
-    if (detail) {
-      out += format_detail(target, THISP, id, detail);
-    } else {
-      if (target->is_room()) {
-        // TODO add brief support
-        out += format_room(target, THISP, id);
+    if (target->is_visible()) {
+      if (detail) {
+        out += format_detail(target, THISP, id, detail);
       } else {
-        out += format_default(target, THISP, id);
+        if (target->is_room()) {
+          // TODO add brief support
+          out += format_room(target, THISP, id);
+        } else {
+          out += format_default(target, THISP, id);
+        }
+      }
+    } else {
+      if (target == ENV(THISP)) {
+        // TODO invisible room should still show inventory
+        out += DEFAULT_ROOM_LONG + "\n";
+      } else {
+        out += "You sense something there, but see nothing.\n";
       }
     }
   }
 
-  if (member(opts, 'm')) {
+  if (member(args[1], 'm')) {
     // TODO add pager support
     write(out);
   } else {
@@ -68,31 +84,31 @@ string format_room(object target, object looker, string id) {
   string *dirs;
   if (mappingp(exits)) {
     dirs = m_indices(filter(exits, (: $2[1] :)));
-    dirs = sort_array(dirs, #'>);
+    dirs = sort_array(dirs, #'>); // '
   } else {
-    dirs = ({ ]});
+    dirs = ({ });
   }
 
   // TODO the default descs could have debug info
-  int width = looker->query_page_width();
+  int width = looker->query_screen_width();
   int exit_count = sizeof(dirs);
-  return sprintf("%s%-=*s---- %-=*s\n%s", 
-    (stringp(short) ? short + "\n" : DEFAULT_ROOM_SHORT),
+  return sprintf("%s%-=*s---- %-=*s%s", 
+    (stringp(short) ? short : DEFAULT_ROOM_SHORT) + "\n",
     width,
-    (stringp(long) ? sprintf("    %s\n\n", long) : DEFAULT_ROOM_LONG),
+    (stringp(long) ? sprintf("    %s\n", long) : DEFAULT_ROOM_LONG),
     width,
     ((exit_count > 1 ) ? 
-      sprintf(MULTI_EXIT_MSG "%s.", implode(dirs, ", ")) :
+      sprintf(MULTI_EXIT_MSG "%s.\n", implode(dirs, ", ")) :
       (exit_count == 1) ?
-      sprintf(SINGLE_EXIT_MSG "%s.", dirs[0]) :
+      sprintf(SINGLE_EXIT_MSG "%s.\n", dirs[0]) :
       NO_EXIT_MSG
     ),
     format_inventory(target, looker)
-    );
+  );
 }
 
 string format_default(object target, object looker, string id) {
-  int width = looker->query_page_width();
+  int width = looker->query_screen_width();
   string long = target->query_long(looker, id);
   return sprintf("%-=*s\n", 
     width, 
@@ -101,14 +117,13 @@ string format_default(object target, object looker, string id) {
 }
 
 string format_detail(object target, object looker, string id, string detail) {
-  int width = looker->query_page_width();
+  int width = looker->query_screen_width();
   string description = target->query_detail(detail);
   return sprintf("%-=*s\n", width, description);
-  );
 }
 
 string format_inventory(object target, object looker) {
-  string *items = map(all_inventory(target), #'format_item, looker);
+  string *items = map(all_inventory(target), #'format_item, looker); // '
   return implode(items, "\n") + "\n";
 }
 

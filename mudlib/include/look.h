@@ -4,7 +4,7 @@
 #define DEFAULT_SHORT          "a nondescript object"
 #define DEFAULT_LONG           "It lacks any features whatsoever."
 #define DEFAULT_ROOM_SHORT     "An Unnamed Location"
-#define DEFAULT_ROOM_LONG      "You see nothing of interest."
+#define DEFAULT_ROOM_LONG      "You see nothing in all directions."
 #define MULTI_EXIT_MSG         "Obvious exits are: "
 #define SINGLE_EXIT_MSG        "The only obvious exit is "
 #define NO_EXIT_MSG            "There are no obvious exits."

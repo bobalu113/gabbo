@@ -59,10 +59,6 @@ public int query_screen_length() {
 
 public void create() {
   LivingCode::create();
-  NameMixin::setup_name();
-  VisibleMixin::setup_visible();
-  ShellMixin::setup_shell();
-  CommandGiverMixin::setup_command_giver();
 }
 
 /**
@@ -73,11 +69,18 @@ public void create() {
  */
 public void setup(string username) {
   // TODO previous_object check
+  setup_name();
+  setup_visible();
+  setup_shell();
+  setup_command_giver();
+
   set_username(username);
   set_primary_id(username);
   add_secondary_id(CAP(username));
   set_nickname(CAP(username));
   set_cwd(HomeDir + "/" + username);
+  set_short(query_nickname());
+  set_long("A player object.");
   return;
 }
 
@@ -109,10 +112,10 @@ protected void setup_command_giver() {
     BinDir "/reload", 
     BinDir "/clone",
     BinDir "/dest", 
-    BinDir "/man"
-    BinDir "/look"
-    BinDir "/get"
-    BinDir "/drop"
+    BinDir "/man",
+    BinDir "/look",
+    BinDir "/get",
+    BinDir "/drop",
     BinDir "/put"
   });
 

@@ -40,3 +40,8 @@ public int set_cwd(string dir) {
   return 1;
 }
 
+/**
+ * Initialize ShellMixin. 
+ */
+protected void setup_shell() {
+}

@@ -45,6 +45,7 @@
 #define IdMixin              ModulesDir "/id"
 #define NameMixin            ModulesDir "/name"
 #define DetailMixin          ModulesDir "/detail"
+#define VisibleMixin         ModulesDir "/visible"
 #define PropertyMixin        ModulesDir "/property"
 #define ShellMixin           ModulesDir "/shell"
 #define CommandGiverMixin    ModulesDir "/command_giver"

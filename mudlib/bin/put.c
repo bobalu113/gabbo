@@ -9,6 +9,7 @@ inherit CommandCode;
 private variables private functions inherit ArgsLib;
 private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
+private variables private functions inherit ObjectLib;
 
 int do_command(string arg) {
   string container_spec;
@@ -38,7 +39,8 @@ int do_command(string arg) {
   mixed *targets = expand_objects(args[0], THISP, DEFAULT_CONTEXT);
   mixed *cont = expand_objects(container_spec, 
                                THISP, 
-                               CONTAINER_CONTEXT|LIMIT_ONE);
+                               CONTAINER_CONTEXT,
+                               LIMIT_ONE);
 
   if (!sizeof(targets)) {
     notify_fail("There isn't anything like that here.\n");
@@ -48,7 +50,7 @@ int do_command(string arg) {
     notify_fail("There isn't any container like that here.\n");
     return 0;
   }
-  object container = container[0][OB_TARGET];
+  object container = cont[0][OB_TARGET];
   if (!container->is_container()) {
     printf("%s isn't a container.\n", CAP(container->short()));
     return 1;
@@ -72,7 +74,7 @@ int do_command(string arg) {
     if (ENV(target)->is_container()) {
       out += sprintf("You must remove %s from %s before you can move it.\n",
                      target->short(), ENV(target)->short());
-    } else if (!reachable(target)) {
+    } else if (!is_reachable(target, THISP)) {
       out += sprintf("You can't get to %s.\n", target->short());
     } else {
       move_object(target, container);

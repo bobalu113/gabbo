@@ -28,7 +28,7 @@ int do_command(string arg) {
   foreach (mixed *file : files) {
     if (FINDO(file[0])) {
       printf("%s: %s: Already loaded. Destruct or use the reload command.\n",
-             query_verb(), file);
+             query_verb(), file[0]);
       return 1;
     }
 

@@ -85,9 +85,9 @@ varargs int add_exit(string dir, string dest, int hidden) {
  * {@inheritDoc}
  */
 public void create() {
-  PropertyMixin::setup_property();
-  IdMixin::setup_id();
-  VisibleMixin::setup_visible();
+  setup_property();
+  setup_id();
+  setup_visible();
   set_primary_id("here");
   add_secondary_id("here");
 }
