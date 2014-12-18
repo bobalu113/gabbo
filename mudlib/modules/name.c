@@ -108,3 +108,13 @@ protected void setup_name() {
   last_name = 0;
   nickname = 0;
 }
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return ([ CAP_NAME ]);
+}
+

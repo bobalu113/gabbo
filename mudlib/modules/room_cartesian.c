@@ -179,3 +179,12 @@ int set_z_coordinate(int coord) {
   coordinates[Z_COORD] = coord;
   return 1;
 }
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return RoomCode::query_capabilities();
+}

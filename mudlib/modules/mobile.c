@@ -82,12 +82,17 @@ int exit(string verb, string dir, int flags) {
   // move followers
   if (!(flags & NO_FOLLOW) && !(exit_flags & EXIT_NO_FOLLOW)) {
     followers -= ({ 0 });
+    closure follow_msg = (: 
+      sprintf("You follow %s.\n", ($1->query_name() || $1->query_short()))
+    :);
     if (flags & CMD_FOLLOW) {
       foreach (object follower : followers) {
+        tell_player(follower, follow_msg, THISO);
         command(query_command(), follower);
       }
     } else {
       foreach (object follower : followers) {
+        tell_player(follower, follow_msg, THISO);
         follower->exit(verb, dir, flags);
       }
     }
@@ -123,6 +128,10 @@ int teleport(mixed dest, int flags) {
     return 0;
   }
   object here = ENV(THISO);
+
+  if (!(flags & FORCE_TELEPORT)) {
+    // TODO check teleport properties
+  }
 
   // move us
   if (!move_object(THISO, dest)) {
@@ -462,3 +471,11 @@ void setup_mobile() {
   set_teleport_msgin(DEFAULT_TELEPORT_MSGIN);
 }
 
+/**
+ * Return the capabilities this mixin provides.
+ * 
+ * @return the 'mobile' capability
+ */
+mapping query_capabilities() {
+  return ([ CAP_MOBILE ]);
+}

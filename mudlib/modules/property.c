@@ -30,6 +30,7 @@
  */
 
 #include <property.h>
+#include <capabilities.h>
 
 private functions private variables inherit FileLib;
 
@@ -694,4 +695,13 @@ private int run_mask(mixed mask, string prop, mixed value) {
  */
 protected void setup_property() {
   check_vars();
+}
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return ([ CAP_PROPERTY ]);
 }

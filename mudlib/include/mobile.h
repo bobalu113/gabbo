@@ -5,6 +5,7 @@
 #define FOLLOW                    0x02
 #define NO_FOLLOW                 0x04
 #define CMD_FOLLOW                0x08
+#define FORCE_TELEPORT            0x10
 
 #define DEFAULT_EXIT_MSGOUT       "%u leaves %d."
 #define DEFAULT_EXIT_MSGIN        "%u arrives."

@@ -126,3 +126,12 @@ protected void setup_id() {
   primary_id = 0;
   secondary_ids = ({ });
 }
+
+/**
+ * Return the capabilities this mixin provides.
+ * 
+ * @return the 'id' capability
+ */
+mapping query_capabilities() {
+  return ([ CAP_ID ]);
+}

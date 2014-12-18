@@ -6,6 +6,7 @@
  */
 
 #include <look.h>
+#include <capabilities.h>
 
 default private variables;
 
@@ -70,4 +71,13 @@ protected void setup_visible() {
     short = DEFAULT_SHORT;
     long = DEFAULT_LONG;
   }
+}
+
+/**
+ * Return the capabilities this mixin provides.
+ * 
+ * @return the 'visible' capability
+ */
+mapping query_capabilities() {
+  return ([ CAP_VISIBLE ]);
 }

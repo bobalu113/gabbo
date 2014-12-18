@@ -21,7 +21,8 @@ int do_command(string arg) {
   mixed *args = getopts(explode_args(arg), "hm");
 
   // scope to room, include detail ids
-  mixed *targets = expand_objects(args[0], 
+  arg = implode(args[0], " ");
+  mixed *targets = expand_objects(arg, 
                                   THISP,
                                   DEFAULT_CONTEXT, 
                                   UPDATE_CONTEXT|MATCH_DETAIL);

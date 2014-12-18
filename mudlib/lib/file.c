@@ -141,14 +141,20 @@ varargs string expand_path(string pattern, object who) {
  * "home/*&#47;workroom.c" expands to all workroom files).
  * 
  * @param  pattern the file pattern to expand
+ * @param  who     optional object from which relative paths should be 
+ *                 resolved, defaults to THISO
  * @return         a list of all matching files (constrained by valid_read)
  */
-string *expand_pattern(string pattern) {
-  pattern = expand_path(pattern, THISO);
+varargs string *expand_pattern(string pattern, object who) {
+  if (!objectp(who)) {
+    who = THISO;
+  }
+  pattern = expand_path(pattern, who);
   if (pattern[<1] == '/') {
     pattern += "*";
   }
-  return expand_files(explode(pattern, "/")[1..], ({ ({ 0, "", 0, 0, 0 }) }));
+  return expand_files(explode(pattern, "/")[1..], 
+                      ({ ({ 0, "", 0, 0, 0 }) }));
 }
 
 /**

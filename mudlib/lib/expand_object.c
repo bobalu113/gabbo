@@ -25,6 +25,8 @@ private mixed *expand_id(mixed *in, string id);
 private string resolve_spec(string arg, string context);
 private string group_specs(string *ospecs);
 private string unnest(string ospec);
+private int valid_environment(object arg);
+private object find_room(object arg);
 
 /**
  * Expand one or more object specifiers into a list of matching target 
@@ -373,6 +375,75 @@ private mixed *expand_id(mixed *in, string id) {
 }
 
 /**
+ * Expand a destination string, which can be an object expression or a file
+ * pattern. If arg is applied as a file pattern and it refers to a a valid
+ * room or container, this function will attempt to load/clone the room.
+ * 
+ * @param  arg          the destination specifier
+ * @param  who          object 
+ * @param  root_context an optional object ospec which will be used if no 
+ *                      objects can be found for 'who'
+ * @param  flags        control flags
+ * @param  error        passed by reference, will be assigned an error string
+ * @return              the destination object, or 0 if no destination was 
+ *                      found
+ */
+varargs object expand_destination(string arg, object who, 
+                                  string root_context, int flags, 
+                                  string error) {
+  object dest;
+  mixed *targets = expand_objects(arg, who, root_context, flags);
+  if (sizeof(targets)) {
+    foreach (mixed *t : targets) {
+      object target = find_room(t[OB_TARGET]);
+      if (!target) {
+        error = "not inside a valid room or container";
+        continue;
+      }
+      if (!clonep(target)) {
+        error = "destination must not be a blueprint";
+        continue;
+      }
+      dest = target;
+      break;
+    }
+  } else {
+    string *files = expand_pattern(arg, who);
+    foreach (string file : files) {
+      if ((strlen(file)) < 3 || (file[<2..<1] != ".c")) {
+        continue;
+      }
+      object blueprint = load_object(file);
+      if (!blueprint) {
+        error = "error loading object";
+        continue;
+      }
+      object *clones = clones(blueprint);
+      foreach (object clone : clones) {
+        dest = find_room(clone);
+        if (dest) {
+          break;
+        }
+      }
+      if (valid_environment(blueprint)) {
+        dest = clone_object(blueprint);
+        if (dest) {
+          break;
+        } else {
+          error = "error cloning object";
+          continue;
+        }
+      } else {
+        error = "not a valid room or container";
+        continue;
+      }
+    }
+  }
+
+  return dest;
+}
+
+/**
  * Create a canonical ospec from arg and context.
  * 
  * @param  arg     the argument being searched
@@ -414,4 +485,30 @@ private string unnest(string ospec) {
          && (find_close_char(ospec, 0, 0, OPEN_GROUP, CLOSE_GROUP) == len ))
     ospec = ospec[1..<2];
   return ospec;
+}
+
+/**
+ * Returns true if an object is either a room or a container.
+ * 
+ * @param  arg the object to test
+ * @return     true if arg is valid environment
+ */
+private int valid_environment(object arg) {
+  return (arg->is_room() || arg->is_container());
+}
+
+/**
+ * Locate the first valid environment in an object's environment path.
+ * 
+ * @param  arg the object to test
+ * @return     the first room or container containing arg, or 0 if no room
+ *             was found
+ */
+private object find_room(object arg) {
+  foreach (object room : ({ arg }) + all_environment(arg)) {
+    if (valid_environment(room)) {
+      return room;
+    }
+  }
+  return 0;
 }

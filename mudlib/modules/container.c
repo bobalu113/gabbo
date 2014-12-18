@@ -19,3 +19,12 @@ public void create() {
 nomask public int is_container() {
   return 1;
 }
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return ThingCode::query_capabilities();
+}

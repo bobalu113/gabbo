@@ -260,3 +260,12 @@ protected void setup_detail() {
   descriptions = ({ });
   details = ([ ]);
 }
+
+/**
+ * Return the capabilities this mixin provides.
+ * 
+ * @return the 'detail' capability
+ */
+mapping query_capabilities() {
+  return ([ CAP_DETAIL ]);
+}

@@ -14,6 +14,7 @@
 
 inherit PropertyMixin;
 inherit IdMixin;
+inherit DetailMixin;
 inherit VisibleMixin;
 
 private variables private functions inherit FormatStringsLib;
@@ -313,6 +314,7 @@ int set_teleport_msgin(string fmt) {
 public void create() {
   setup_property();
   setup_id();
+  setup_detail();
   setup_visible();
   set_primary_id("here");
   add_secondary_id("here");
@@ -327,4 +329,16 @@ public void create() {
  */
 nomask public int is_room() {
   return 1;
+}
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return PropertyMixin::query_capabilities()
+             + IdMixin::query_capabilities()
+         + DetailMixin::query_capabilities()
+        + VisibleMixin::query_capabilities();
 }

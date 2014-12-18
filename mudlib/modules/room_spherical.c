@@ -162,3 +162,11 @@ int set_phi_coordinate(int coord) {
   return 1;
 }
 
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return RoomCode::query_capabilities();
+}

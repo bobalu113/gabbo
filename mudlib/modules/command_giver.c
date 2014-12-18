@@ -5,6 +5,8 @@
  * @alias CommandGiverMixin
  */
 
+#include <capabilities.h>
+
 default private variables;
 
 /** 
@@ -126,4 +128,13 @@ static int do_command(string arg) {
   }
 
   return cmd_ob->do_command(arg);
+}
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+mapping query_capabilities() {
+  return ([ CAP_COMMAND_GIVER ]);
 }
