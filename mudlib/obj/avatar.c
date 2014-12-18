@@ -134,6 +134,22 @@ protected void setup_command_giver() {
 }
 
 /**
+ * Implementation of the modify_command hook. Every command executed by the
+ * player will have a chance to be modified before being parsed by this
+ * function.
+ * 
+ * @param  cmd the command string being executed
+ * @return     the new command string to execute
+ */
+mixed modify_command(string cmd) {
+  // TODO add support for default exit verb setting
+  if (ENV(THISO)->query_exit(cmd)) {
+    return "walk " + cmd;
+  }
+  return 0;
+}
+
+/**
  * Add actions for all a player's currently configured commands.
  */
 private void initialize_actions() {

@@ -21,6 +21,16 @@ string query_first_name() {
 }
 
 /**
+ * Set the first name of the character. 
+ * 
+ * @param str the first name to set
+ * @see       query_first_name()
+ */
+void set_first_name(string str) {
+  first_name = str;
+}
+
+/**
  * Return the last name of this character, or 0 if unnamed.
  * 
  * @return the character's last name, or 0
@@ -30,12 +40,32 @@ string query_last_name() {
 }
 
 /**
+ * Set the last name of the character. 
+ * 
+ * @param str the last name to set
+ * @see       query_last_name()
+ */
+void set_last_name(string str) {
+  last_name = str;
+}
+
+/**
  * Return the nickname of this character, or 0 if unnamed.
  * 
  * @return the character's nickname, or 0
  */
 string query_nickname() {
   return nickname;
+}
+
+/**
+ * Set the nickname of the character. 
+ * 
+ * @param str the nickname to set
+ * @see       query_nickname()
+ */
+void set_nickname(string str) {
+  nickname = str;
 }
 
 /**
@@ -61,33 +91,12 @@ string query_full_name() {
 }
 
 /**
- * Set the first name of the character. 
- * 
- * @param str the first name to set
- * @see       query_first_name()
+ * Return the display name based on user preferences.
+ * @return display name
  */
-void set_first_name(string str) {
-  first_name = str;
-}
-
-/**
- * Set the last name of the character. 
- * 
- * @param str the last name to set
- * @see       query_last_name()
- */
-void set_last_name(string str) {
-  last_name = str;
-}
-
-/**
- * Set the nickname of the character. 
- * 
- * @param str the nickname to set
- * @see       query_nickname()
- */
-void set_nickname(string str) {
-  nickname = str;
+string query_name() {
+  // TODO make this work
+  return nickname;
 }
 
 /**

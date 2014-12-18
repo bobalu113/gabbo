@@ -49,9 +49,9 @@ default public functions;
 
 varargs int init_prop(string prop, int flags, mixed method);
 varargs int configure_prop(string prop, int flags, mixed method);
+mixed query_prop(string prop);
 int set_prop(string prop, mixed value);
 int remove_prop(string prop);
-mixed query_prop(string prop);
 int mask_prop(string prop, mixed method);
 int unmask_prop(string prop, mixed owner);
 int query_masking_prop(string prop, mixed owner);
@@ -170,6 +170,40 @@ varargs int configure_prop(string prop, int flags, mixed method) {
 }
 
 /**
+ * Get the value of a property. The caller must first pass the QUERY_PROP
+ * access check.
+ * 
+ * @param  prop the name of the property 
+ * @return      if the property exists and is accessible, returns the 
+ *              property value, otherwise 0
+ */
+mixed query_prop(string prop) {
+  // make sure prop exists
+  int checked = check_prop(prop);
+  if (!(checked & PROP_PUBLIC)) { return 0; }
+    
+  // make sure we're allowed to query this prop
+  if (extern_call() && 
+      check_access(prop, QUERY_PROP, previous_object())) {
+    return 0;
+  }
+
+  // get correct mapping
+  mapping map;
+  if (checked & PROP_NOSAVE)
+    map = prop_values;
+  else
+    map = saved_prop_values;
+
+  // overload value and remove any bad masks from array
+  mixed value = map[prop];
+  masks[prop] = filter(masks[prop], "run_mask", prop, &value);
+
+  // return value
+  return value;
+}
+
+/**
  * Set the value of a property. The caller must first pass the SET_PROP
  * access check.
  * 
@@ -235,40 +269,6 @@ int remove_prop(string prop) {
   m_delete(value_map, prop);
   m_delete(masks, prop);
   return 1;
-}
-
-/**
- * Get the value of a property. The caller must first pass the QUERY_PROP
- * access check.
- * 
- * @param  prop the name of the property 
- * @return      if the property exists and is accessible, returns the 
- *              property value, otherwise 0
- */
-mixed query_prop(string prop) {
-  // make sure prop exists
-  int checked = check_prop(prop);
-  if (!(checked & PROP_PUBLIC)) { return 0; }
-    
-  // make sure we're allowed to query this prop
-  if (extern_call() && 
-      check_access(prop, QUERY_PROP, previous_object())) {
-    return 0;
-  }
-
-  // get correct mapping
-  mapping map;
-  if (checked & PROP_NOSAVE)
-    map = prop_values;
-  else
-    map = saved_prop_values;
-
-  // overload value and remove any bad masks from array
-  mixed value = map[prop];
-  masks[prop] = filter(masks[prop], "run_mask", prop, &value);
-
-  // return value
-  return value;
 }
 
 /**

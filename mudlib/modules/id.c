@@ -7,9 +7,11 @@
 
 default private variables;
 
-string primary_id, *secondary_ids;
+string primary_id, *secondary_ids, *ids;
 
 default public functions;
+
+private void update_ids();
 
 /**
  * Returns the primary id of the object. An object may only have one primary
@@ -23,6 +25,19 @@ string query_primary_id() {
 }
 
 /**
+ * Set the primary id of the object.
+ * 
+ * @param str the new primary id
+ * @return    0 for failure, 1 for success
+ * @see       query_id()
+ */
+int set_primary_id(string str) {
+  primary_id = str;
+  update_ids();
+  return 1;
+}
+
+/**
  * Return the secondary ids of the object. An object may have any number of
  * secondary ids. These ids may be used to identify the object, but should
  * not be used when giving player usage instructions.
@@ -31,6 +46,48 @@ string query_primary_id() {
  */
 string *query_secondary_ids() {
   return secondary_ids;
+}
+
+/**
+ * Set all secondary ids of the object. Any previously set secondary ids will
+ * be overwritten by this list.
+ * 
+ * @param str the array of secondary ids
+ * @return    0 for failure, 1 for success
+ * @see       query_secondary_ids()
+ */
+int set_secondary_ids(string *str) {
+  secondary_ids = str;
+  update_ids();
+  return 1;
+}
+
+/**
+ * Add a new secondary id to the object. If the object already has the 
+ * secondary id, it will be shifted to the end of the array.
+ * 
+ * @param str the secondary id
+ * @return    0 for failure, 1 for success
+ * @see       query_secondary_ids()
+ */
+int add_secondary_id(string str) {
+  secondary_ids -= ({ str });
+  secondary_ids += ({ str });
+  update_ids();
+  return 1;
+}
+
+/**
+ * Remove a secondary id from the object.
+ * 
+ * @param str the secondary id to remove
+ * @return    0 for failure, 1 for success
+ * @see       query_secondary_ids()
+ */
+int remove_secondary_id(string str) {
+  secondary_ids -= ({ str });
+  update_ids();
+  return 1;
 }
 
 /**
@@ -54,54 +111,11 @@ int test_id(string str) {
 }
 
 /**
- * Set the primary id of the object.
- * 
- * @param str the new primary id
- * @return    0 for failure, 1 for success
- * @see       query_id()
+ * Update the list of combined primary and secondary ids.
  */
-int set_primary_id(string str) {
-  primary_id = str;
-  return 1;
-}
-
-/**
- * Set all secondary ids of the object. Any previously set secondary ids will
- * be overwritten by this list.
- * 
- * @param str the array of secondary ids
- * @return    0 for failure, 1 for success
- * @see       query_secondary_ids()
- */
-int set_secondary_ids(string *str) {
-  secondary_ids = str;
-  return 1;
-}
-
-/**
- * Add a new secondary id to the object. If the object already has the 
- * secondary id, it will be shifted to the end of the array.
- * 
- * @param str the secondary id
- * @return    0 for failure, 1 for success
- * @see       query_secondary_ids()
- */
-int add_secondary_id(string str) {
-  secondary_ids -= ({ str });
-  secondary_ids += ({ str });
-  return 1;
-}
-
-/**
- * Remove a secondary id from the object.
- * 
- * @param str the secondary id to remove
- * @return    0 for failure, 1 for success
- * @see       query_secondary_ids()
- */
-int remove_secondary_id(string str) {
-  secondary_ids -= ({ str });
-  return 1;
+private void update_ids() {
+  ids = unique_array(({ primary_id }) + secondary_ids);
+  return;
 }
 
 /**

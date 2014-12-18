@@ -182,3 +182,24 @@ mixed flatten_array(mixed *list) {
   }
   return newlist;
 }
+
+/**
+ * Return all the values associated with a mapping key in the form of an 
+ * array. The resulting array will have the same width as the specified 
+ * mapping.
+ * 
+ * @param  map the mapping to index
+ * @param  key the mapping key
+ * @return     an array of the mapping values for key, in order
+ */
+mixed *m_value(mapping map, string k) {
+  if (!member(map, k)) {
+    return 0;
+  }
+  int width = m_width(map);
+  mixed *result = allocate(width);
+  for (int i = 0; i < width; i++) {
+    result[i] = map[k, i];
+  }
+  return result;
+}

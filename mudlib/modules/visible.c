@@ -9,8 +9,7 @@
 
 default private variables;
 
-string short;
-string long;
+string short, long;
 
 default public functions;
 
@@ -25,18 +24,6 @@ string query_short() {
 }
 
 /**
- * Return a long description of the room. This will be displayed to the 
- * player when they explicitly look inside a room. It can be as long as is
- * needed, but probably shouldn't take up more than a page of a user's 
- * screen.
- * 
- * @return the long description of the room
- */
-string query_long() { 
-  return long;
-}
-
-/**
  * Set the short description of the room.
  * 
  * @param str the short to set
@@ -46,6 +33,18 @@ string query_long() {
 int set_short(string str) {
   short = str;
   return 1;
+}
+
+/**
+ * Return a long description of the room. This will be displayed to the 
+ * player when they explicitly look inside a room. It can be as long as is
+ * needed, but probably shouldn't take up more than a page of a user's 
+ * screen.
+ * 
+ * @return the long description of the room
+ */
+string query_long() { 
+  return long;
 }
 
 /**
