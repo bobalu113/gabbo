@@ -6,6 +6,27 @@
  */
 
 // TODO refactor into a generic parse_format() function
+#define FMT_CATEGORY       'c'
+#define FMT_OBJECT         'C'
+#define FMT_DATE           'd'
+#define FMT_LOCATION       'l'
+#define FMT_LINE           'L'
+#define FMT_MSG            'm'
+#define FMT_NEWLINE        'n'
+#define FMT_PRIORITY       'p'
+#define FMT_MILLIS         'r'
+#define FMT_PERCENT        '%'
+
+#define FMT_VERB           'v'
+#define FMT_DIRECTION      'c'
+#define FMT_NAME           'a'
+#define FMT_SHORT          's'
+
+#include <sys/debug_info.h>
+
+#define DEFAULT_VERB       "move"
+#define DEFAULT_NAME       "Something"
+#define DEFAULT_SHORT      "something"
 
 /**
  * Parse a format token which takes an optional argument.
@@ -109,7 +130,7 @@ closure parse_mobile_format(string format) {
         break;
 
         case FMT_VERB:
-        output_args += ({ 'verb });
+        output_args += ({ ({ #'||, 'verb, DEFAULT_VERB }) });
         output_fmt += "%s";
         if (strlen(part) > 1) {
           output_fmt += part[1..];
@@ -118,10 +139,7 @@ closure parse_mobile_format(string format) {
 
         case FMT_DIRECTION:
         string arg = parse_arg(FMT_OBJECT, parts, size, &part, &i, 0);
-        if (!arg) {
-          arg = DEFAULT_DIRECTION;
-        }
-        output_args += ({ #'||, 'dir, arg });
+        output_args += ({ 'dir });
         output_fmt += "%s";
         if (strlen(part) > 1) {
           output_fmt += part[1..];
@@ -133,10 +151,10 @@ closure parse_mobile_format(string format) {
         if (!arg) {
           arg = DEFAULT_NAME;
         }
-        output_args += ({ #'||, 
+        output_args += ({ ({ #'||, 
                           ({ #'call_other, 'who, "query_name" }),
                           arg
-                        });
+                        }) });
         output_fmt += "%s";
         if (strlen(part) > 1) {
           output_fmt += part[1..];
@@ -148,10 +166,10 @@ closure parse_mobile_format(string format) {
         if (!arg) {
           arg = DEFAULT_SHORT;
         }
-        output_args += ({ #'||, 
+        output_args += ({ ({ #'||, 
                           ({ #'call_other, 'who, "query_short" }),
                           arg
-                        });
+                       }) });
         output_fmt += "%s";
         if (strlen(part) > 1) {
           output_fmt += part[1..];

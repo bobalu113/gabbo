@@ -21,7 +21,7 @@ int do_command(string arg) {
       path = path + "/";
     }
 
-    string *f = expand_pattern(path);
+    string *f = expand_pattern(path, THISP);
     if (!sizeof(f)) {
       printf("%s: %s: no such file or directory\n", query_verb(), path);
       continue;

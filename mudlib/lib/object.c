@@ -52,7 +52,7 @@ varargs void tell_players(object *players, mixed msg, varargs mixed *args) {
     msg = (: apply(#'sprintf, $1, $2) :);
   }
   foreach (object player : players) {
-    if (is_living(player)) {
+    if (living(player)) {
       set_this_player(player);
       string str;
       if (stringp(msg)) {
@@ -98,6 +98,6 @@ int is_capable(object ob, string cap) {
  * @param  ob the object to display
  * @return    the object's display name
  */
-string query_display(object ob) {
+string get_display(object ob) {
   return ob->query_name() || ob->query_short();
 }

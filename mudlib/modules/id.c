@@ -5,6 +5,10 @@
  * @alias IdMixin
  */
 
+#include <capabilities.h>
+
+private variables private functions inherit ArrayLib;
+
 default private variables;
 
 string primary_id, *secondary_ids, *ids;

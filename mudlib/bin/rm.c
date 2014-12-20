@@ -10,7 +10,7 @@ int do_command(string arg) {
 
   string *files = ({ });
   foreach (string a : args[0]) {
-    string *f = expand_pattern(a);
+    string *f = expand_pattern(a, THISP);
     if (!sizeof(f)) {
       printf("%s: %s: No such file.\n", query_verb(), a);
       return 1;

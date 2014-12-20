@@ -27,6 +27,7 @@ int do_command(string arg) {
 
   object here = ENV(THISP);
   string display = get_display(THISP);
+  string out = "";
   foreach (mixed *t : targets) {
     object target = t[OB_TARGET];
     if (!member(args[1], 'f') && (ENV(target) != here)) {
@@ -49,7 +50,8 @@ int do_command(string arg) {
     out += sprintf("You begin following %s.\n", get_display(target));
     tell_player(target, "%s begins following you.\n", display);
   }
- 
+
+  tell_player(THISP, out);
   return 1;
 }
 

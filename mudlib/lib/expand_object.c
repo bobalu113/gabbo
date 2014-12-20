@@ -9,6 +9,7 @@
 
 private variables private functions inherit ArrayLib;
 private variables private functions inherit ArgsLib;
+private variables private functions inherit FileLib;
 
 private mixed *expand_group(string ospec, object who, string context, 
                             string root_context, string *new_context, 
@@ -20,13 +21,14 @@ private string expand_single(string arg, object who, string context,
                              string root_context, string *new_context, 
                              int flags, mapping ancestors);
 private mixed *expand_term(string term, mixed *prev, object who, 
-                           string context);
+                           string context, int flags);
 private mixed *expand_id(mixed *in, string id);
 private string resolve_spec(string arg, string context);
 private string group_specs(string *ospecs);
 private string unnest(string ospec);
 private int valid_environment(object arg);
 private object find_room(object arg);
+private object clone_room(object blueprint, string error);
 
 /**
  * Expand one or more object specifiers into a list of matching target 
@@ -51,7 +53,7 @@ private object find_room(object arg);
  */
 varargs mixed *expand_objects(mixed ospecs, object who, 
                               string root_context, int flags) {
-  string current_context = who->get_context();
+  string current_context = who->get_context() || "";
   mixed *result = ({ });
   mapping ancestors = ([ ]);
   string *new_context = ({ });
@@ -284,7 +286,7 @@ private string expand_single(string arg, object who, string context,
     ancestors[resolved] = next;
   } else {
     prev = filter(prev, (: objectp($1[OB_TARGET]) :));
-    ancestors[resolved] = expand_term(arg, prev, who, context);
+    ancestors[resolved] = expand_term(arg, prev, who, context, flags);
   }
     return resolved;
 }
@@ -299,10 +301,11 @@ private string expand_single(string arg, object who, string context,
  * @param  who     the subject doing the expanding
  * @param  context the current context in which to look for target 
  *                 objects from ospec
+ * @param  flags   control flags
  * @return         the list of matching target objects
  */
 private mixed *expand_term(string term, mixed *prev, object who, 
-                           string context) {
+                           string context, int flags) {
   switch (term) {
   case "users":
     if (!strlen(context)) {
@@ -341,8 +344,42 @@ private mixed *expand_term(string term, mixed *prev, object who,
       return map(prev, (: ({ environment($1[OB_TARGET]), $2, 0 }) :), term);
     }
   default:
-    prev = map(prev, #'expand_id, term); //'
-    prev -= ({ 0 });
+    // first look for matching ids
+    mixed *id_matches = map(prev, #'expand_id, term); //'
+    id_matches -= ({ 0 });
+    if (sizeof(id_matches)) {
+      prev = id_matches;
+    } else {
+      // look for a matching object name
+      object *matches = ({ });
+      object exact_match = FINDO(term);
+      if (exact_match) {
+        matches += ({ exact_match });
+      } else {
+        // look for matching program names and get their clones
+        mixed *files = expand_pattern(term, who);
+        foreach (mixed *f : files) {
+          string file = f[0];
+          if (!is_loadable(file)) {
+            continue;
+          }
+          object ob;
+          string ret = catch(ob = load_object(file));
+          if (ret || !ob) {
+            continue;
+          }
+          if (flags & MATCH_BLUEPRINTS) {
+            matches += ({ ob });
+          }
+          matches += clones(ob, ((flags & STALE_CLONES) ? 2 : 0));
+        }
+      }
+      if (!strlen(context)) {
+        return matches;
+      } else {
+        prev = filter(prev, mkmapping(matches));
+      }
+    }
     return prev;
   }
   return ({ });
@@ -401,6 +438,10 @@ varargs object expand_destination(string arg, object who,
         continue;
       }
       if (!clonep(target)) {
+        dest = clone_room(target, &error);
+        if (dest) {
+          break;
+        }
         error = "destination must not be a blueprint";
         continue;
       }
@@ -409,8 +450,9 @@ varargs object expand_destination(string arg, object who,
     }
   } else {
     string *files = expand_pattern(arg, who);
-    foreach (string file : files) {
-      if ((strlen(file)) < 3 || (file[<2..<1] != ".c")) {
+    foreach (mixed *f : files) {
+      string file = f[0];
+      if (!is_loadable(file)) {
         continue;
       }
       object blueprint = load_object(file);
@@ -418,24 +460,9 @@ varargs object expand_destination(string arg, object who,
         error = "error loading object";
         continue;
       }
-      object *clones = clones(blueprint);
-      foreach (object clone : clones) {
-        dest = find_room(clone);
-        if (dest) {
-          break;
-        }
-      }
-      if (valid_environment(blueprint)) {
-        dest = clone_object(blueprint);
-        if (dest) {
-          break;
-        } else {
-          error = "error cloning object";
-          continue;
-        }
-      } else {
-        error = "not a valid room or container";
-        continue;
+      dest = clone_room(blueprint, &error);
+      if (dest) {
+        break;
       }
     }
   }
@@ -498,17 +525,49 @@ private int valid_environment(object arg) {
 }
 
 /**
- * Locate the first valid environment in an object's environment path.
+ * Locate the first valid environment in an object's environment path, 
+ * starting with the object itself.
  * 
  * @param  arg the object to test
  * @return     the first room or container containing arg, or 0 if no room
  *             was found
  */
 private object find_room(object arg) {
-  foreach (object room : ({ arg }) + all_environment(arg)) {
+  foreach (object room : ({ arg }) + (all_environment(arg) || ({ }))) {
     if (valid_environment(room)) {
       return room;
     }
+  }
+  return 0;
+}
+
+/**
+ * For a blueprint object, first look for any clones that are already in the
+ * game, and return their room/container (or the objects themselves). If no
+ * clone is found and blueprint is a room/container, return a new clone of
+ * blueprint.
+ * 
+ * @param  blueprint the blueprint to find/clone
+ * @param  error     an error string to set, passed by reference
+ * @return           the first found clone, a new clone, or 0 for error
+ */
+private object clone_room(object blueprint, string error) {
+  object *clones = clones(blueprint);
+  foreach (object clone : clones) {
+    object dest = find_room(clone);
+    if (dest) {
+      return dest;
+    }
+  }
+  if (valid_environment(blueprint)) {
+    object dest = clone_object(blueprint);
+    if (dest) {
+      return dest;
+    } else {
+      error = "error cloning object";
+    }
+  } else {
+    error = "not a valid room or container";
   }
   return 0;
 }

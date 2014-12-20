@@ -1,6 +1,7 @@
 inherit CommandCode;
 
 #include <expand_object.h>
+#include <mobile.h>
 
 #define DEFAULT_CONTEXT        "users"
 

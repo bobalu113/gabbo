@@ -16,7 +16,7 @@ int do_command(string arg) {
 
   mixed *files = ({ });
   foreach (string a : args[0]) {
-    files += expand_pattern(a);
+    files += expand_pattern(a, THISP);
   }
 
   if (!sizeof(files)) {

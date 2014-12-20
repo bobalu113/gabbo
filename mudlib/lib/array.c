@@ -196,7 +196,7 @@ mixed *m_value(mapping map, string k) {
   if (!member(map, k)) {
     return 0;
   }
-  int width = m_width(map);
+  int width = widthof(map);
   mixed *result = allocate(width);
   for (int i = 0; i < width; i++) {
     result[i] = map[k, i];

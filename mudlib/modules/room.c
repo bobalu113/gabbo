@@ -185,8 +185,8 @@ int set_exit_room(string dir, object room) {
  * @return      the exit message
  */
 string query_exit_msgout(string verb, string dir) {
-  if (closurep(exits[dir, EXIT_MSGOUT])) {
-    return funcall(exits[dir, EXIT_MSGOUT], verb, dir);
+  if (closurep(messages[exits[dir, EXIT_MSGOUT_FMT]])) {
+    return funcall(messages[exits[dir, EXIT_MSGOUT_FMT]], verb, dir);
   }
   return 0;
 }
@@ -221,8 +221,8 @@ int set_exit_msgout(string dir, string fmt) {
  * @return      the entrance message
  */
 string query_exit_msgin(string verb, string dir) {
-  if (closurep(exits[dir, EXIT_MSGIN])) {
-    return funcall(exits[dir, EXIT_MSGIN], verb, dir);
+  if (closurep(messages[exits[dir, EXIT_MSGIN_FMT]])) {
+    return funcall(messages[exits[dir, EXIT_MSGIN_FMT]], verb, dir);
   }
 }
 
@@ -252,8 +252,8 @@ int set_exit_msgin(string dir, string fmt) {
  * @return      the exit message
  */
 string query_teleport_msgout() {
-  if (closurep(teleport_msgout)) {
-    return funcall(teleport_msgout);
+  if (closurep(messages[teleport_msgout_fmt])) {
+    return funcall(messages[teleport_msgout_fmt]);
   }
   return 0;
 }
@@ -267,10 +267,10 @@ string query_teleport_msgout() {
  * @return     1 for success, 0 for failure
  */
 int set_teleport_msgout(string fmt) {
-  if (!stringp(dir)) {
+  if (!stringp(fmt)) {
     return 0;
   }
-  exits[dir, TELEPORT_MSGOUT_FMT] = fmt;
+  teleport_msgout_fmt = fmt;
   if (!closurep(messages[fmt])) {
     messages[fmt] = parse_mobile_format(fmt);
   }
@@ -283,8 +283,8 @@ int set_teleport_msgout(string fmt) {
  * @return      the entrance message
  */
 string query_teleport_msgin() {
-  if (closurep(teleport_msgin)) {
-    return funcall(teleport_msgin);
+  if (closurep(messages[teleport_msgin_fmt])) {
+    return funcall(messages[teleport_msgin_fmt]);
   }
   return 0;
 }
@@ -298,10 +298,10 @@ string query_teleport_msgin() {
  * @return     1 for success, 0 for failure
  */
 int set_teleport_msgin(string fmt) {
-  if (!stringp(dir)) {
+  if (!stringp(fmt)) {
     return 0;
   }
-  exits[dir, TELEPORT_MSGOUT_FMT] = fmt;
+  teleport_msgin_fmt = fmt;
   if (!closurep(messages[fmt])) {
     messages[fmt] = parse_mobile_format(fmt);
   }
@@ -318,7 +318,7 @@ public void create() {
   setup_visible();
   set_primary_id("here");
   add_secondary_id("here");
-  exits = m_allocate(0, 7);
+  exits = m_allocate(0, 5);
   messages = m_allocate(0, 1);
 }
 

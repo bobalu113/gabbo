@@ -13,6 +13,8 @@
  * @alias DetailMixin
  */
 
+#include <capabilities.h>
+
 // FUTURE configure mixin to automatically highlight valid ids inside descs
 
 #define PATH_DELIM "."

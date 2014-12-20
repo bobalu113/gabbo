@@ -7,6 +7,12 @@
 #define EXIT_NO_FOLLOW    0x08
 #define EXIT_PEDESTRIAN   0x10
 
+#define EXIT_DEST         0
+#define EXIT_FLAGS        1
+#define EXIT_ROOM         2
+#define EXIT_MSGOUT_FMT   3
+#define EXIT_MSGIN_FMT    4
+
 #define GRID_DIRS         ([ "north"     : "south",      \
                              "south"     : "north",      \
                              "east"      : "west",       \

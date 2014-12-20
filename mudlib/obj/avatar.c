@@ -117,7 +117,11 @@ protected void setup_command_giver() {
     BinDir "/look",
     BinDir "/get",
     BinDir "/drop",
-    BinDir "/put"
+    BinDir "/put",
+    BinDir "/goto",
+    BinDir "/trans",
+    BinDir "/walk",
+    BinDir "/follow"
   });
 
   foreach (string command : command_files) {

@@ -5,6 +5,8 @@
  * @alias LockMixin
  */
 
+#include <capabilities.h>
+
 /**
  * Return a zero-width mapping of the capabilities this program provides.
  * 

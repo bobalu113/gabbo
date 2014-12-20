@@ -5,6 +5,8 @@
  * @alias NameMixin
  */
 
+#include <capabilities.h>
+
 default private variables;
 
 string first_name, last_name, nickname;

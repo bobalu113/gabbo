@@ -145,7 +145,7 @@ varargs string expand_path(string pattern, object who) {
  *                 resolved, defaults to THISO
  * @return         a list of all matching files (constrained by valid_read)
  */
-varargs string *expand_pattern(string pattern, object who) {
+varargs mixed *expand_pattern(string pattern, object who) {
   if (!objectp(who)) {
     who = THISO;
   }
@@ -164,9 +164,9 @@ varargs string *expand_pattern(string pattern, object who) {
  * @param  dirs a running array of directories to inspect for matching files
  * @return      the list of all matching files
  */
-private string *expand_files(string *path, mixed *dirs) {
+private mixed *expand_files(string *path, mixed *dirs) {
   // FUTURE add '**' support
-  string *result = ({ });
+  mixed *result = ({ });
   string pattern = "/" + path[0];
 
   object logger = LoggerFactory->get_logger(THISO);
@@ -247,4 +247,14 @@ private mixed *collate_files(string dir, string pattern) {
   accessed[pos..] = ({ });
   modes[pos..] = ({ });
   return ({ names, sizes, modified, accessed, modes });
+}
+
+/**
+ * Return true if a file can be loaded (ends in .c basically).
+ * 
+ * @param  file the filename
+ * @return      1 if file can be loaded, otherwise 0
+ */
+int is_loadable(string file) {
+  return ((strlen(file) > 2) || (file[<2..<1] == ".c"));
 }

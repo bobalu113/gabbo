@@ -23,9 +23,10 @@ int do_command(string arg) {
   }
 
   string error = "destination unknown";
-  object dest = expand_destination(arg[0][1], THISP, DEFAULT_CONTEXT, &error);
+  object dest = expand_destination(args[0][1], THISP, DEFAULT_CONTEXT, 0,
+                                   &error);
   if (!dest) {
-    notify_fail(sprintf("%s: %s: %s\n", query_verb(), arg[0][1], error));
+    notify_fail(sprintf("%s: %s: %s\n", query_verb(), args[0][1], error));
     return 0;
   }
 
@@ -34,7 +35,7 @@ int do_command(string arg) {
   if (member(args[1], 'f')) { flags |= FORCE_TELEPORT; }
   if (member(args[1], 'w')) { flags |= FOLLOW; }
 
-  mixed *targets = expand_objects(({ arg[0][0] }), THISP, DEFAULT_CONTEXT);
+  mixed *targets = expand_objects(({ args[0][0] }), THISP, DEFAULT_CONTEXT);
   int count = 0;
   foreach (mixed *t : targets) {
     object target = t[OB_TARGET];

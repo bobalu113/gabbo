@@ -5,6 +5,7 @@
  * @alias MobileMixin
  */
 
+#include <capabilities.h>
 #include <mobile.h>
 #include <room.h>
 
@@ -111,6 +112,7 @@ int exit(string verb, string dir, int flags) {
  * @return       1 for success, 0 for failure
  */
 int teleport(mixed dest, int flags) {
+  LoggerFactory->get_logger(THISO)->info("dest = %O", dest);
   if (stringp(dest)) {
     object tmp = find_object(dest);
     if (objectp(tmp)) {
@@ -119,7 +121,7 @@ int teleport(mixed dest, int flags) {
       // try loading a new room
       string ret = catch(dest = load_object(dest); publish);
       // now clone it
-      if (clonep(dest)) {
+      if (!clonep(dest)) {
         string ret = catch(dest = clone_object(dest); publish);
       }
     }

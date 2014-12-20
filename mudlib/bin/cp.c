@@ -12,7 +12,7 @@ int do_command(string arg) {
     return 0;
   }
 
-  string *src = expand_pattern(args[0][0]);
+  string *src = expand_pattern(args[0][0], THISP);
   if (!sizeof(src)) {
     printf("%s: %s: no such file.\n", query_verb(), args[0][0]);
     return 1;
