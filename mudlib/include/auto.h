@@ -53,6 +53,7 @@
 #define ShellMixin           ModulesDir "/shell"
 #define CommandGiverMixin    ModulesDir "/command_giver"
 #define LockMixin            ModulesDir "/lock"
+#define MobileMixin          ModulesDir "/mobile"
 
 #define LoggerFactory        ObjDir "/logger_factory"
 #define LoginObject          ObjDir "/auth/login"

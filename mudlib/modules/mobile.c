@@ -27,145 +27,7 @@ nosave mapping following;
 
 default public functions;
 
-/**
- * Move this object through an exit.
- * 
- * @param  verb  the verb causing the movement, infinitive tense 
- *               (e.g. "walk"); should not be null.
- * @param  dir   the direction of the exit being used; must not be null
- * @param  flags some behavior flags
- * @return       1 for success, 0 for failure
- */
-int exit(string verb, string dir, int flags) {
-  // validate and move
-  object here = ENV(THISO);
-  object dest = env->load_exit_room(dir);
-  if (!objectp(dest)) {
-    tell_player(THISP, "Sorry, that area is incomplete.\n");
-    return 0;
-  }
-  int exit_flags = here->query_exit_flags(dir);
-  if (exit_flags & EXIT_BLOCKED) {
-    tell_player(THISP, "The exit is blocked.\n");
-    return 0;
-  }
-  if ((exit_flags & EXIT_PEDESTRIAN) && THISO->is_vehicle()) {
-    tell_player(THISP, "Sorry, pedestrians only.\n");
-    return 0;
-  }
-  if (!move_object(THISO, dest)) {
-    tell_player(THISO, "An unseen force prevents you from exiting.\n");
-    return 0;
-  }
-
-  string here_zone = get_zone(here);
-  string dest_zone = get_zone(dest);
-
-  // echo move message
-  if (!(flags & MUFFLED_MOVE) && !(exit_flags & EXIT_MUFFLED)) {
-    if (here_zone == dest_zone) {
-      tell_players(all_inventory(here), (: 
-        $1->query_exit_msgout($2, $3) || query_exit_msgout($2, $3) 
-      :), here, verb, dir);
-      tell_players((all_inventory(dest - ({ THISO })), (: 
-        $1->query_exit_msgin($2, $3) || query_exit_msgin($2, $3) 
-      :), dest, verb, backdir);
-    } else {
-      tell_players(all_inventory(here), (: 
-        $1->query_exit_msgout($2, $3) || query_zone_msgout($2, $3) 
-      :), here, verb, dir);
-      tell_players((all_inventory(dest - ({ THISO })), (: 
-        $1->query_exit_msgin($2, $3) || query_zone_msgin($2, $3) 
-      :), dest, verb, backdir);
-    }
-  }
-
-  // move followers
-  if (!(flags & NO_FOLLOW) && !(exit_flags & EXIT_NO_FOLLOW)) {
-    followers -= ({ 0 });
-    closure follow_msg = (: 
-      sprintf("You follow %s.\n", ($1->query_name() || $1->query_short()))
-    :);
-    if (flags & CMD_FOLLOW) {
-      foreach (object follower : followers) {
-        tell_player(follower, follow_msg, THISO);
-        command(query_command(), follower);
-      }
-    } else {
-      foreach (object follower : followers) {
-        tell_player(follower, follow_msg, THISO);
-        follower->exit(verb, dir, flags);
-      }
-    }
-  }
-
-  THISO->set_context("here");
-  command("look");
-  return 1;
-}
-
-/**
- * Teleport this object to another room.
- * 
- * @param  dest  the destination, expressed as an object or string
- * @param  flags some behavior flags
- * @return       1 for success, 0 for failure
- */
-int teleport(mixed dest, int flags) {
-  LoggerFactory->get_logger(THISO)->info("dest = %O", dest);
-  if (stringp(dest)) {
-    object tmp = find_object(dest);
-    if (objectp(tmp)) {
-      dest = tmp;
-    } else {
-      // try loading a new room
-      string ret = catch(dest = load_object(dest); publish);
-      // now clone it
-      if (!clonep(dest)) {
-        string ret = catch(dest = clone_object(dest); publish);
-      }
-    }
-  } 
-  if(!objectp(dest)) {
-    return 0;
-  }
-  object here = ENV(THISO);
-
-  if (!(flags & FORCE_TELEPORT)) {
-    // TODO check teleport properties
-  }
-
-  // move us
-  if (!move_object(THISO, dest)) {
-    return 0;
-  }
-
-  // echo move message
-  if (!(flags & MUFFLED_MOVE) && ) {
-    tell_players(all_inventory(here), (: 
-      $1->query_teleport_msgout() || query_teleport_msgout() 
-    :), here);
-    tell_players((all_inventory(dest - ({ THISO })), (: 
-      $1->query_teleport_msgin() || query_teleport_msgin() 
-    :), dest);
-  }
-
-  // move followers
-  followers -= ({ 0 });
-  if (flags & CMD_FOLLOW) {
-    foreach (object follower : followers) {
-      command(query_command(), follower);
-    }
-  } else if(flags & FOLLOW) {
-    foreach (object follower : followers) {
-      follower->teleport(dest, flags);
-    }
-  }
-
-  THISO->set_context("here");
-  command("look");
-  return 1;
-}
+private string format_msg(string msg);
 
 /**
  * Return the message displayed to source room upon using an exit within the
@@ -457,6 +319,155 @@ int remove_following(object f) {
  */
 int is_following(object f) {
   return member(following, f);
+}
+
+/**
+ * Move this object through an exit.
+ * 
+ * @param  verb  the verb causing the movement, infinitive tense 
+ *               (e.g. "walk"); should not be null.
+ * @param  dir   the direction of the exit being used; must not be null
+ * @param  flags some behavior flags
+ * @return       1 for success, 0 for failure
+ */
+int exit(string verb, string dir, int flags) {
+  // validate and move
+  object here = ENV(THISO);
+  object dest = here->load_exit_room(dir);
+  if (!objectp(dest)) {
+    tell_player(THISP, "Sorry, that area is incomplete.\n");
+    return 0;
+  }
+  int exit_flags = here->query_exit_flags(dir);
+  if (exit_flags & EXIT_BLOCKED) {
+    tell_player(THISP, "The exit is blocked.\n");
+    return 0;
+  }
+  if ((exit_flags & EXIT_PEDESTRIAN) && THISO->is_vehicle()) {
+    tell_player(THISP, "Sorry, pedestrians only.\n");
+    return 0;
+  }
+  if (!move_object(THISO, dest)) {
+    tell_player(THISO, "An unseen force prevents you from exiting.\n");
+    return 0;
+  }
+
+  string here_zone = get_zone(here);
+  string dest_zone = get_zone(dest);
+  string backdir = GRID_DIRS[dir];
+
+  // echo move message
+  if (!(flags & MUFFLED_MOVE) && !(exit_flags & EXIT_MUFFLED)) {
+    if (here_zone == dest_zone) {
+      tell_players(all_inventory(here), (: 
+        format_msg($1->query_exit_msgout($2, $3) || query_exit_msgout($2, $3)) 
+      :), here, verb, dir);
+      tell_players((all_inventory(dest) - ({ THISO })), (: 
+        format_msg($1->query_exit_msgin($2, $3) || query_exit_msgin($2, $3)) 
+      :), dest, verb, backdir);
+    } else {
+      tell_players(all_inventory(here), (: 
+        format_msg($1->query_exit_msgout($2, $3) || query_zone_msgout($2, $3))
+      :), here, verb, dir);
+      tell_players((all_inventory(dest) - ({ THISO })), (: 
+        format_msg($1->query_exit_msgin($2, $3) || query_zone_msgin($2, $3))
+      :), dest, verb, backdir);
+    }
+  }
+
+  // move followers
+  if (!(flags & NO_FOLLOW) && !(exit_flags & EXIT_NO_FOLLOW)) {
+    followers -= ({ 0 });
+    closure follow_msg = (: 
+      sprintf("You follow %s.\n", ($1->query_name() || $1->query_short()))
+    :);
+    if (flags & CMD_FOLLOW) {
+      foreach (object follower : followers) {
+        tell_player(follower, follow_msg, THISO);
+        command(query_command(), follower);
+      }
+    } else {
+      foreach (object follower : followers) {
+        tell_player(follower, follow_msg, THISO);
+        follower->exit(verb, dir, flags);
+      }
+    }
+  }
+
+  THISO->set_context("here");
+  command("look");
+  return 1;
+}
+
+/**
+ * Teleport this object to another room.
+ * 
+ * @param  dest  the destination, expressed as an object or string
+ * @param  flags some behavior flags
+ * @return       1 for success, 0 for failure
+ */
+int teleport(mixed dest, int flags) {
+  LoggerFactory->get_logger(THISO)->trace("dest = %O", dest);
+  if (stringp(dest)) {
+    object tmp = find_object(dest);
+    if (objectp(tmp)) {
+      dest = tmp;
+    } else {
+      // try loading a new room
+      string ret = catch (dest = load_object(dest); publish);
+      // now clone it
+      if (!clonep(dest)) {
+        ret = catch (dest = clone_object(dest); publish);
+      }
+    }
+  } 
+  if(!objectp(dest)) {
+    return 0;
+  }
+  object here = ENV(THISO);
+
+  if (!(flags & FORCE_TELEPORT)) {
+    // TODO check teleport properties
+  }
+
+  // move us
+  if (!move_object(THISO, dest)) {
+    return 0;
+  }
+
+  // echo move message
+  if (!(flags & MUFFLED_MOVE)) {
+    tell_players(all_inventory(here), (: 
+      format_msg($1->query_teleport_msgout() || query_teleport_msgout())
+    :), here);
+    tell_players((all_inventory(dest) - ({ THISO })), (: 
+      format_msg($1->query_teleport_msgin() || query_teleport_msgin())
+    :), dest);
+  }
+
+  // move followers
+  followers -= ({ 0 });
+  if (flags & CMD_FOLLOW) {
+    foreach (object follower : followers) {
+      command(query_command(), follower);
+    }
+  } else if(flags & FOLLOW) {
+    foreach (object follower : followers) {
+      follower->teleport(dest, flags);
+    }
+  }
+
+  THISO->set_context("here");
+  command("look");
+  return 1;
+}
+
+private string format_msg(string msg) {
+  if (stringp(msg)) {
+    return msg + "\n";
+  } else {
+    return "";
+  }
 }
 
 /**

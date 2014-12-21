@@ -21,7 +21,7 @@ int do_command(string arg) {
     }
   }
 
-  string err = catch(load_object(arg); publish);
+  string err = catch (load_object(arg); publish);
   if (err) {
     printf("%s: %s: Caught error %s\n", query_verb(), arg, err); 
     mixed *last_err = get_error_file(MasterObject->get_wiz_name(arg));

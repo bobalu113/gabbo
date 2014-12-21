@@ -11,7 +11,7 @@ int do_command(string arg) {
     return 1;
   }
 
-  string err = catch(destruct(ob); publish);
+  string err = catch (destruct(ob); publish);
   if (err) {
     printf("%s: %s: Caught error %s\n", query_verb(), arg, err); 
     return 1;

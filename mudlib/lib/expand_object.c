@@ -306,10 +306,12 @@ private string expand_single(string arg, object who, string context,
  */
 private mixed *expand_term(string term, mixed *prev, object who, 
                            string context, int flags) {
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->trace("term = %O, context = %O\n", term, context);
   switch (term) {
   case "users":
     if (!strlen(context)) {
-      return map(users(), (: ({ $1, $2, 0 }) :), term);
+      return map(users(), (: ({ $1, "", 0 }) :));
     } else {
       return filter(prev, (: interactive($1[OB_TARGET]) :));
     }
@@ -317,31 +319,33 @@ private mixed *expand_term(string term, mixed *prev, object who,
     return filter(prev, (: living($1[OB_TARGET]) :));
   case "me": 
     if (!strlen(context)) {
-      return ({ ({ who, term, 0 }) });
+      return ({ ({ who, "", 0 }) });
     } else {
       return filter(prev, (: $1[OB_TARGET] == $2 :), who);
     }
   case "here": 
     if (!strlen(context)) {
-      return ({ ({ ENV(who), term, 0 }) });
+      return ({ ({ ENV(who), "", 0 }) });
     } else {
       return filter(prev, (: $1[OB_TARGET] == $2 :), ENV(who));
     }
   case "i":
     if (!strlen(context)) {
-      return map(all_inventory(who), (: ({ $1, $2, 0 }) :), term);
+      return map(all_inventory(who), (: ({ $1, "", 0 }) :));
     } else {
       prev = map(prev, (: map(all_inventory($1[OB_TARGET]), 
-                              (: ({ $1, $2, 0 }) :), 
-                              term)
+                              (: ({ $1, "", 0 }) :))
                        :));
       return flatten_array1(prev);
     }
   case "e":
     if (!strlen(context)) {
-      return ({ ({ ENV(who), term, 0 }) });
+      return ({ ({ ENV(who), "", 0 }) });
     } else {
-      return map(prev, (: ({ environment($1[OB_TARGET]), $2, 0 }) :), term);
+      return map(prev, (: ({ environment($1[OB_TARGET]), 
+                             $1[OB_ID], 
+                             $1[OB_DETAIL] 
+                          }) :));
     }
   default:
     // first look for matching ids
@@ -358,13 +362,14 @@ private mixed *expand_term(string term, mixed *prev, object who,
       } else {
         // look for matching program names and get their clones
         mixed *files = expand_pattern(term, who);
+        logger->trace("files = %O\n", files);
         foreach (mixed *f : files) {
           string file = f[0];
           if (!is_loadable(file)) {
             continue;
           }
           object ob;
-          string ret = catch(ob = load_object(file));
+          string ret = catch (ob = load_object(file));
           if (ret || !ob) {
             continue;
           }
@@ -374,10 +379,13 @@ private mixed *expand_term(string term, mixed *prev, object who,
           matches += clones(ob, ((flags & STALE_CLONES) ? 2 : 0));
         }
       }
+      logger->trace("matches = %O\n", matches);
       if (!strlen(context)) {
         return matches;
       } else {
-        prev = filter(prev, mkmapping(matches));
+        prev = filter(prev, 
+                      (: member($2, $1[OB_TARGET]) :), 
+                      mkmapping(matches));
       }
     }
     return prev;
@@ -428,6 +436,7 @@ private mixed *expand_id(mixed *in, string id) {
 varargs object expand_destination(string arg, object who, 
                                   string root_context, int flags, 
                                   string error) {
+  object logger = LoggerFactory->get_logger(THISO);
   object dest;
   mixed *targets = expand_objects(arg, who, root_context, flags);
   if (sizeof(targets)) {
@@ -552,7 +561,10 @@ private object find_room(object arg) {
  * @return           the first found clone, a new clone, or 0 for error
  */
 private object clone_room(object blueprint, string error) {
+  object logger = LoggerFactory->get_logger(THISO);
   object *clones = clones(blueprint);
+  logger->trace("blueprint = %O", blueprint);
+  logger->trace("clones = %O", clones);
   foreach (object clone : clones) {
     object dest = find_room(clone);
     if (dest) {
@@ -561,6 +573,7 @@ private object clone_room(object blueprint, string error) {
   }
   if (valid_environment(blueprint)) {
     object dest = clone_object(blueprint);
+    logger->trace("dest = %O", dest);
     if (dest) {
       return dest;
     } else {

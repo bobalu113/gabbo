@@ -18,12 +18,17 @@ closure formatter;
 
 string level;
 
+// ([ program : ([ lines... ]) ])
+mapping muted;
+
 default public functions;
 
 int is_enabled(string priority);
+int is_muted(string program, int line);
 void log(string priority, string message, varargs string *args);
 private void do_output(string msg);
 private mixed *find_caller();
+private string parse_program(string dbg_program);
 private object *expand_objects(string ospec);
 
 /**
@@ -32,6 +37,16 @@ private object *expand_objects(string ospec);
  */
 string query_category() {
   return category;
+}
+
+/**
+ * Set the logger category.
+ * @param  str the category to set
+ * @return     1 for success, 0 for failure
+ */
+int set_category(string str) { 
+  category = str;
+  return 1;
 }
 
 /**
@@ -45,6 +60,16 @@ string query_category() {
  */
 mixed *query_output() {
   return output;
+}
+
+/**
+ * Set the logger output target list.
+ * @param  arr the output targets
+ * @return     1 for success, 0 for failure
+ */
+int set_output(mixed *arr) {
+  output = arr;
+  return 1;
 }
 
 /**
@@ -67,34 +92,6 @@ closure query_formatter() {
 }
 
 /**
- * Get the minimum level for which messages will be output.
- * @return the minimum log level
- */
-string query_level() {
-  return level;
-}
-
-/**
- * Set the logger category.
- * @param  str the category to set
- * @return     1 for success, 0 for failure
- */
-int set_category(string str) { 
-  category = str;
-  return 1;
-}
-
-/**
- * Set the logger output target list.
- * @param  arr the output targets
- * @return     1 for success, 0 for failure
- */
-int set_output(mixed *arr) {
-  output = arr;
-  return 1;
-}
-
-/**
  * Set the formatter.
  * @param  cl the formatter to set
  * @return    1 for success, 0 for failure
@@ -102,6 +99,14 @@ int set_output(mixed *arr) {
 int set_formatter(closure cl) {
   formatter = cl;
   return 1;
+}
+
+/**
+ * Get the minimum level for which messages will be output.
+ * @return the minimum log level
+ */
+string query_level() {
+  return level;
 }
 
 /**
@@ -179,6 +184,77 @@ int is_trace_enabled() {
 }
 
 /**
+ * Mute logging for a specified compilation unit. 
+ * 
+ * @param  program absolute pathname of compilation unit
+ * @param  line    optional line number to mute, or 0 to mute entire file
+ * @return         1 if muted, otherwise 0
+ */
+varargs int mute(string program, int line) {
+  if (program[0] == '/') {
+    program = program[1..];
+  }
+  if (program[<2..<1] != ".c") {
+    program += ".c";
+  }
+  if (!line) {
+    muted[program] = 1;
+  } else {
+    if (!member(muted, program)) {
+      muted[program] = ([ line ]);
+    } else if (mappingp(muted[program])) {
+      muted[program] += ([ line ]);
+    } 
+  }
+  return 1;
+}
+
+/**
+ * Unmute logging for a specified compilation unit. 
+ * 
+ * @param  program absolute pathname of compilation unit
+ * @param  line    optional line number to mute, or 0 to mute entire file
+ * @return         1 if muted, otherwise 0
+ */
+varargs int unmute(string program, int line) {
+  if (program[0] == '/') {
+    program = program[1..];
+  }
+  if (!line) {
+    m_delete(muted, program);
+  } else {
+    if (member(muted, program)) {
+      if (mappingp(muted[program])) {
+        m_delete(muted[program], line);
+      } else {
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
+/**
+ * Test whether a specified line and compilation unit should be muted from
+ * logging.
+ * 
+ * @param  program absolute path to the compilation unit doing the logging, 
+ *                 minus the leadingslash
+ * @param  line    the line number of the log statement
+ * @return         1 if logging is muted, otherwise 0
+ */
+int is_muted(string program, int line) {
+  if (member(muted, program)) {
+    if (mappingp(muted[program])) {
+      return member(muted[program], line);
+    } else {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+/**
  * Record a log message with the FATAL priority.
  * 
  * @param msg_fmt the log message format string 
@@ -252,8 +328,11 @@ void log(string priority, string msg_fmt, varargs string *args) {
 
   string msg = apply(#'sprintf, ({ msg_fmt }) + args);
   mixed *caller = find_caller();
-  msg = funcall(formatter, category, priority, msg, caller);
-  do_output(msg);
+  if (!is_muted(parse_program(caller[TRACE_PROGRAM]), caller[TRACE_LOC])) {
+    msg = funcall(formatter, category, priority, msg, caller);
+    do_output(msg);
+  }
+  return;
 }
 
 /**
@@ -291,12 +370,32 @@ private mixed *find_caller() {
     if (strlen(stack[i][2]) && (stack[i][2] == __FILE__[1..])) {
       continue;
     }
+    if (stack[i][1] == "CATCH") {
+      continue;
+    }
     break;
   }
   if (i >= 1) {
     return stack[i];
   }
   return 0;
+}
+
+/**
+ * Parse the compilation unit out of program string returned by debug_info.
+ * If there are parenthesis, return the inner string minus the leading slash.
+ * Otherwise, assume the entire string is the compilation unit.
+ * 
+ * @param  dbg_program the TRACE_PROGRAM string from debug_info(DINFO_TRACE)
+ * @return             the compilation unit
+ */
+private string parse_program(string dbg_program) {
+  if (dbg_program[<1] == ')') {
+    int start = member(dbg_program, ')') + 2;
+    return dbg_program[start..<2];
+  } else {
+    return dbg_program;
+  }
 }
 
 /**
@@ -310,4 +409,8 @@ private object *expand_objects(string ospec) {
   } else {
     return ({ });
   }
+}
+
+void create() { 
+  muted = ([ ]);
 }

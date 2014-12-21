@@ -11,6 +11,7 @@ inherit NameMixin;
 inherit VisibleMixin;
 inherit ShellMixin;
 inherit CommandGiverMixin;
+inherit MobileMixin;
 
 /* usernames */
 
@@ -121,7 +122,8 @@ protected void setup_command_giver() {
     BinDir "/goto",
     BinDir "/trans",
     BinDir "/walk",
-    BinDir "/follow"
+    BinDir "/follow",
+    BinDir "/trace"
   });
 
   foreach (string command : command_files) {

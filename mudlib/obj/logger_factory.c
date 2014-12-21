@@ -79,8 +79,9 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   }
 
   // check our cache
-  if (!reconfig && loggers[category]) {
-    return loggers[category];
+  object logger = loggers[category];
+  if (!reconfig && logger) {
+    return logger;
   }
 
   // build our configuration
@@ -103,16 +104,18 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   }
   
   // configure our logger
-  object logger = clone_object(Logger);
+  if (!logger) {
+    logger = clone_object(Logger);
+    loggers[category] = logger;
+    if (!member(local_ref_counts, logger)) {
+      local_ref_counts[logger] = 0;
+    }
+    local_ref_counts[logger]++;
+  }
   logger->set_category(category);
   logger->set_output(config["output"]);
   logger->set_formatter(formatter);
   logger->set_level(config["level"]);
-  loggers[category] = logger;
-  if (!member(local_ref_counts, logger)) {
-    local_ref_counts[logger] = 0;
-  }
-  local_ref_counts[logger]++;
   return logger;
 }
 

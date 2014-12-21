@@ -32,7 +32,7 @@ int do_command(string arg) {
       return 1;
     }
 
-    string err = catch(load_object(file[0]); publish);
+    string err = catch (load_object(file[0]); publish);
     if (err) {
       printf("%s: %s: Caught error %s\n", query_verb(), file[0], err); 
       mixed *last_err = get_error_file(MasterObject->get_wiz_name(args[0]));

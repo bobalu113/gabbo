@@ -65,7 +65,7 @@ int query_command_flag(string verb) {
  */
 protected object load_command(string command) {
   object cmd_ob;
-  string err = catch (cmd_ob = load_object(command));
+  string err = catch (cmd_ob = load_object(command); publish);
   if (err) {
     object logger = LoggerFactory->get_logger(THISO);
     logger->error("Caught error loading command object %s: %s", command, err);

@@ -30,8 +30,8 @@ varargs int is_reachable(object ob, object who) {
  * @param  ob the object to query
  * @return    the object's zone
  */
-string query_zone(object ob) {
-  return "";
+string get_zone(object ob) {
+  return "zone";
 }
 
 /**

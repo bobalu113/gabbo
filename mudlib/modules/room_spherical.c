@@ -61,7 +61,7 @@ object load_exit_room(string dir) {
   }
   // try loading a new room
   if (!objectp(room)) {
-    string ret = catch(room = load_object(dest); publish);
+    string ret = catch (room = load_object(dest); publish);
   } 
   // it wouldn't load or dest refered to a clone
   if (!objectp(room)) {
@@ -69,7 +69,7 @@ object load_exit_room(string dir) {
   }
   // we have a room, but it's a blueprint
   if (!clonep(room)) {
-    string ret = catch(room = clone_object(dest); publish);
+    string ret = catch (room = clone_object(dest); publish);
   }
   // cloning the blueprint failed
   if (!objectp(room)) {
