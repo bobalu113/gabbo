@@ -1,13 +1,12 @@
 ---
 category: blog
 layout: blog
-published: false
+published: true
 ---
 
 This weekend I finished MobileMixin, a module that provides the capability for objects to move on their own. This is the evolution of EotL's move_player() lfun in the player body. The new API provides two distinct functions, one for movement via a room exit, and one movement via teleportation:
 
-<code><pre><!--
--->int exit(string verb, string dir, int flags);
+<code><pre>int exit(string verb, string dir, int flags);
 int teleport(mixed dest, int flags);
 </pre></code>
 
