@@ -65,3 +65,4 @@ Finally, I made a slight change to the relationship between follower and followe
 
 
 That's about it. All player avatars inherit MobileMixin, but I'm not sure if I want all LivingCode objects to. What if someone wants to code some sort of animated plant? It should probably inherit LivingCode even though MobileMixin wouldn't make much sense. On the other hand, you still might want it to have a teleportation capability with movement message support, et al. The VehicleCode idea is also not really flushed out beyond me wanting an example of something that used ThingCode and MobileMixin together. The basics are all there, though. I also put H_MOVE_OBJECT back to the EotL version, save for a few syntactic changes, so all that seems to be working fine. 
+  
