@@ -6,6 +6,8 @@
 #define NO_FOLLOW                 0x04
 #define CMD_FOLLOW                0x08
 #define FORCE_TELEPORT            0x10
+#define SUPPRESS_ERRORS           0x20
+#define SUPPRESS_LOOK             0x40
 
 #define DEFAULT_EXIT_MSGOUT       "%u leaves %d."
 #define DEFAULT_EXIT_MSGIN        "%u arrives."

@@ -13,11 +13,9 @@ int do_command(string arg) {
   }
 
   // TODO limit number of rooms walkable
-  for (int i = 0, int j = sizeof(args[0]); i < j; i++) {
-    if (!THISP->exit(args[0][i])) {
-      if (i < (j - 1)) {
-        tell_player(THISP, "You stop walking.\n");
-      }
+  foreach (string dir : args[0]) {
+    if (!THISP->exit(dir)) {
+      tell_player(THISP, "You stop walking.\n");
       break;
     }
   }

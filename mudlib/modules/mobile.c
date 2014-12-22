@@ -335,20 +335,29 @@ int exit(string verb, string dir, int flags) {
   object here = ENV(THISO);
   object dest = here->load_exit_room(dir);
   if (!objectp(dest)) {
-    tell_player(THISP, "Sorry, that area is incomplete.\n");
+    if (!(flags & SUPPRESS_ERRORS)) {
+      tell_player(THISP, "Sorry, that area is incomplete.\n");
+    }
     return 0;
   }
   int exit_flags = here->query_exit_flags(dir);
   if (exit_flags & EXIT_BLOCKED) {
-    tell_player(THISP, "The exit is blocked.\n");
+    if (!(flags & SUPPRESS_ERRORS)) {
+      tell_player(THISP, "The exit is blocked.\n");
+    }
     return 0;
   }
   if ((exit_flags & EXIT_PEDESTRIAN) && THISO->is_vehicle()) {
-    tell_player(THISP, "Sorry, pedestrians only.\n");
+    if (!(flags & SUPPRESS_ERRORS)) {
+      tell_player(THISP, "Sorry, pedestrians only.\n");
+    }
     return 0;
   }
-  if (!move_object(THISO, dest)) {
-    tell_player(THISO, "An unseen force prevents you from exiting.\n");
+  move_object(THISO, dest);
+  if (ENV(THISO) != dest) {
+    if (!(flags & SUPPRESS_ERRORS)) {
+      tell_player(THISP, "An unseen force prevents you from exiting.\n");
+    }
     return 0;
   }
 
@@ -395,7 +404,9 @@ int exit(string verb, string dir, int flags) {
   }
 
   THISO->set_context("here");
-  command("look");
+  if (!(flags & SUPPRESS_LOOK)) {
+    command("look");
+  }
   return 1;
 }
 
@@ -422,6 +433,9 @@ int teleport(mixed dest, int flags) {
     }
   } 
   if(!objectp(dest)) {
+    if (!(flags & SUPPRESS_ERRORS)) {
+      tell_player(THISP, "Sorry, that area is incomplete.\n");
+    }
     return 0;
   }
   object here = ENV(THISO);
@@ -431,7 +445,11 @@ int teleport(mixed dest, int flags) {
   }
 
   // move us
-  if (!move_object(THISO, dest)) {
+  move_object(THISO, dest);
+  if (ENV(THISO) != dest) {
+    if (!(flags & SUPPRESS_ERRORS)) {
+      tell_player(THISP, "An unseen force prevents you from teleporting.\n");
+    }
     return 0;
   }
 
@@ -458,7 +476,9 @@ int teleport(mixed dest, int flags) {
   }
 
   THISO->set_context("here");
-  command("look");
+  if (!(flags & SUPPRESS_LOOK)) {
+    command("look");
+  }
   return 1;
 }
 

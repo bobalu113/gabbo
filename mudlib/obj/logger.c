@@ -191,6 +191,7 @@ int is_trace_enabled() {
  * @return         1 if muted, otherwise 0
  */
 varargs int mute(string program, int line) {
+  // TODO needs security
   if (program[0] == '/') {
     program = program[1..];
   }

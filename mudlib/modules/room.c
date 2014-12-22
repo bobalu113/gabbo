@@ -177,6 +177,38 @@ int set_exit_room(string dir, object room) {
 }
 
 /**
+ * Get the room this exit is to move the user into, loading/cloning it from 
+ * exit_dest if necessary. This will return 0 only if the blueprint couldn't 
+ * load or the new room could otherwise not be cloned.
+ * 
+ * @param  dir the direction of the exit
+ * @return     the cloned destination room, or 0 if the room could not be 
+ *             created
+ */
+object load_exit_room(string dir) {
+  // room is already loaded, return it
+  if (objectp(exits[dir, EXIT_ROOM])) {
+    return exits[dir, EXIT_ROOM];
+  }
+  // null destination, return 0
+  string dest = exits[dir, EXIT_DEST]; 
+  if (!stringp(dest)) {
+    return 0;
+  }
+  // first look for the object named dest
+  object room = find_object(dest);
+  // try loading a new room
+  if (!objectp(room)) {
+    string ret = catch (room = load_object(dest); publish);
+  } 
+  // it wouldn't load or dest refered to a clone
+  if (!objectp(room)) {
+    return 0;
+  }
+  return room;
+}
+
+/**
  * Get exit message override for objects exiting this room.
  * 
  * @param  verb the verb causing the movement, infinitive tense 

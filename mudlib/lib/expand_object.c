@@ -28,7 +28,6 @@ private string group_specs(string *ospecs);
 private string unnest(string ospec);
 private int valid_environment(object arg);
 private object find_room(object arg);
-private object clone_room(object blueprint, string error);
 
 /**
  * Expand one or more object specifiers into a list of matching target 
@@ -436,25 +435,16 @@ private mixed *expand_id(mixed *in, string id) {
 varargs object expand_destination(string arg, object who, 
                                   string root_context, int flags, 
                                   string error) {
-  object logger = LoggerFactory->get_logger(THISO);
   object dest;
+
   mixed *targets = expand_objects(arg, who, root_context, flags);
   if (sizeof(targets)) {
     foreach (mixed *t : targets) {
-      object target = find_room(t[OB_TARGET]);
-      if (!target) {
+      dest = find_room(t[OB_TARGET]);
+      if (!dest) {
         error = "not inside a valid room or container";
         continue;
       }
-      if (!clonep(target)) {
-        dest = clone_room(target, &error);
-        if (dest) {
-          break;
-        }
-        error = "destination must not be a blueprint";
-        continue;
-      }
-      dest = target;
       break;
     }
   } else {
@@ -464,15 +454,12 @@ varargs object expand_destination(string arg, object who,
       if (!is_loadable(file)) {
         continue;
       }
-      object blueprint = load_object(file);
-      if (!blueprint) {
+      dest = load_object(file);
+      if (!dest) {
         error = "error loading object";
         continue;
       }
-      dest = clone_room(blueprint, &error);
-      if (dest) {
-        break;
-      }
+      break;
     }
   }
 
@@ -546,41 +533,6 @@ private object find_room(object arg) {
     if (valid_environment(room)) {
       return room;
     }
-  }
-  return 0;
-}
-
-/**
- * For a blueprint object, first look for any clones that are already in the
- * game, and return their room/container (or the objects themselves). If no
- * clone is found and blueprint is a room/container, return a new clone of
- * blueprint.
- * 
- * @param  blueprint the blueprint to find/clone
- * @param  error     an error string to set, passed by reference
- * @return           the first found clone, a new clone, or 0 for error
- */
-private object clone_room(object blueprint, string error) {
-  object logger = LoggerFactory->get_logger(THISO);
-  object *clones = clones(blueprint);
-  logger->trace("blueprint = %O", blueprint);
-  logger->trace("clones = %O", clones);
-  foreach (object clone : clones) {
-    object dest = find_room(clone);
-    if (dest) {
-      return dest;
-    }
-  }
-  if (valid_environment(blueprint)) {
-    object dest = clone_object(blueprint);
-    logger->trace("dest = %O", dest);
-    if (dest) {
-      return dest;
-    } else {
-      error = "error cloning object";
-    }
-  } else {
-    error = "not a valid room or container";
   }
   return 0;
 }

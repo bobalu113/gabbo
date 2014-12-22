@@ -97,177 +97,153 @@ void inaugurate_master(int arg) {
     ({ #'return, "Huh?\n" })
   ));
 
-  set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
-    ({ 'item, 'dest }),
-    ({ #',, 
-       ({ #'=, 'origin, ({ #'environment, 'item }) }),
-       ({ #'||,
+  set_driver_hook(H_MOVE_OBJECT0, unbound_lambda( 
+    ({'item, 'dest }),
+    ({ #'?,
+       ({ #',, 
+          ({ #'=, 'origin, ({ #'environment, 'item }) }),
+          0
+       }),
+       0, // no op
+       ({ #'?,
+          // check prevent_leave
           ({ #'&&, 
              'origin, 
-             ({ #'call_other, 'origin, "prevent_leave", 'item, 'dest })
-          }),
-          ({ #'&&,
-             'item,
-             ({ #'call_other, 'item, "prevent_move", 'dest })
-          }),
-          ({ #'&&,
-             'dest,
-             ({ #'call_other, 'dest, "prevent_enter", 'item })
-          }),
-          ({ #',,
-             ({ #'&&,
-                'item,
-                ({ #'living, 'item }),
-                ({ #',,
-                   ({ #'=, 'oldp, ({ #'this_player }) }),
-                   ({ #'set_this_player, 'item }),
-                   ({ #'&&, 
-                      'origin, 
-                      ({ #'call_other, 'origin, "release" }) 
-                   }),
-                   ({ #'&&, 
-                      'origin, 
-                      ({ #'filter,
-                         ({ #'-, 
-                            ({ #'all_inventory, 'origin }), 
-                            ({ #'({, 'item }) 
-                         }),
-                         ({ #'bind_lambda, 
-                            unbound_lambda(({ 'o, 'i }), 
-                              ({ #'&&, 
-                                 'o, 
-                                 'i, 
-                                 ({ #'call_other, 'o, "release" }) 
-                              })
-                            )
-                         }),
-                         'item
-                      })
-                   }),
-                   ({ #'set_this_player, 'oldp })
-                })
-             }),
-             ({ #'&&,
-                'item,
-                'origin,
-                ({ #'living, 'item }),
-                ({ #',,
-                   ({ #'=, 'oldp, ({ #'this_player }) }),
-                   ({ #'set_this_player, 'origin }),
-                   ({ #'call_other, 'item, "release" }),
-                   ({ #'set_this_player, 'oldp })
-                })
-             }),
-             ({ #'&&,
-                'origin,
-                ({ #'filter, 
-                   ({ #'-, 
-                      ({ #'all_inventory, 'origin }), 
-                      ({ #'({, 'item })
-                   }),
-                   ({ #'bind_lambda, 
-                      unbound_lambda(({ 'o, 'i }),
-                        ({ #'&&,
-                           'o,
-                           'i,
-                           ({ #'living, 'o }),
-                           ({ #',,
-                              ({ #'=, 'oldp, ({ #'this_player }) }),
-                              ({ #'set_this_player, 'o }),
-                              ({ #'call_other, 'i, "release" }),
-                              ({ #'set_this_player, 'oldp })
-                           })
-                        })
-                      )
-                   }),
-                   'item
-                })
-             }),
-             ({ #'&&, 'item, ({ #'set_environment, 'item, 'dest }) }),
-             ({ #'&&,
-                'item,
-                ({ #'living, 'item }),
-                ({ #',,
-                   ({ #'=, 'oldp, ({ #'this_player }) }),
-                   ({ #'set_this_player, 'item }),
-                   ({ #'&&, 
-                      'dest, 
-                      ({ #'call_other, 'dest, "init" }) 
-                   }),
-                   ({ #'&&, 
-                      'dest, 
-                      ({ #'filter,
-                         ({ #'-, 
-                            ({ #'all_inventory, 'dest }), 
-                            ({ #'({, 'item }) 
-                         }),
-                         ({ #'bind_lambda, 
-                            unbound_lambda(({ 'o, 'i }), 
-                              ({ #'&&, 
-                                 'o, 
-                                 'i, 
-                                 ({ #'call_other, 'o, "init" }) 
-                              })
-                            )
-                         }),
-                         'item
-                      })
-                   }),
-                   ({ #'set_this_player, 'oldp })
-                })
-             }),
-             ({ #'&&,
-                'item,
-                'dest,
-                ({ #'living, 'item }),
-                ({ #',,
-                   ({ #'=, 'oldp, ({ #'this_player }) }),
-                   ({ #'set_this_player, 'dest }),
-                   ({ #'call_other, 'item, "init" }),
-                   ({ #'set_this_player, 'oldp })
-                })
-             }),
-             ({ #'&&,
-                'dest,
-                ({ #'filter, 
-                   ({ #'-, 
-                      ({ #'all_inventory, 'dest }), 
-                      ({ #'({, 'item })
-                   }),
-                   ({ #'bind_lambda, 
-                      unbound_lambda(({ 'o, 'i }),
-                        ({ #'&&,
-                           'o,
-                           'i,
-                           ({ #'living, 'o }),
-                           ({ #',,
-                              ({ #'=, 'oldp, ({ #'this_player }) }),
-                              ({ #'set_this_player, 'o }),
-                              ({ #'call_other, 'i, "init" }),
-                              ({ #'set_this_player, 'oldp })
-                           })
-                        })
-                      )
-                   }),
-                   'item
-                })
-             }),
-             ({ #'&&,
-                'dest,
-                ({ #'call_other, 'dest, "signal_enter", 'item, 'origin })
-             }),
-             ({ #'&&,
-                'item,
-                ({ #'call_other, 'item, "signal_move", 'origin })
-             }),
-             ({ #'&&, 
+             ({ #'call_other, 
                 'origin, 
-                ({ #'call_other, 'origin, "signal_leave", 'item })
-             })
+                "prevent_leave", 
+                'item, 
+                'dest 
+             }),
+          }),
+          1, // fail prevent_leave
+          ({ #'!, 'item }),
+          1,
+          ({ #'!, 'dest }),
+          1,
+          // check prevent_move
+          ({ #'call_other, 
+             'item, 
+             "prevent_move", 
+             'dest
+          }),
+          1,
+          ({ #'!, 'item }),
+          1,
+          ({ #'!, 'dest }),
+          1,
+          // check prevent_enter
+          ({ #'call_other, 
+             'dest, 
+             "prevent_enter", 
+             'item 
+          }),
+          1, // fail prevent_enter
+          ({ #'!, 'item }),
+          1,
+          ({ #'!, 'dest }),
+          1,
+          0 // all pass
+       }),
+       0, // prevent failed
+       // move
+       ({ #',, ({ #'efun::set_environment, 'item, 'dest }), 0 }),
+       0, // no op
+       // signal leave
+       ({ #'&&, 
+          'origin,
+          ({ #'call_other, 
+             'origin, 
+             "leave_signal", 
+             'item, 
+             'dest
+          }), 
+          0
+       }),
+       0, // no op
+       ({ #'!, 'item }),
+       0,
+       ({ #'!, 'dest }),
+       0,
+       // signal move
+       ({ #',, 
+          ({ #'call_other, 
+            'item, 
+            "move_signal", 
+            'origin
+          }), 
+          0 
+       }),
+       0, // no op
+       ({ #'!, 'item }),
+       0,
+       ({ #'!, 'dest }),
+       0,
+       // signal enter
+       ({ #',, 
+          ({ #'call_other, 
+             'dest, 
+             "enter_signal", 
+             'origin 
+          }), 
+          0 
+       }),
+       0, // no op
+       ({ #'!, 'item }),
+       0,
+       ({ #'!, 'dest }),
+       0,
+       // sanity check
+       ({ #'==, ({ #'environment, 'item }), 'dest }),
+       ({ #',,
+          // dest->init(item)
+          ({ #'?, 
+             ({ #'living, 'item }), 
+             ({ #',,
+                ({ #'efun::set_this_player, 'item }),
+                ({ #'call_other, 'dest, "init" }),
+                ({ #'?, 
+                   ({ #'!=, ({ #'environment, 'item }), 'dest }), 
+                   ({ #'return })
+                })
+             }) 
+          }),
+          // item->init(inv(dest))
+          ({ #'=, 'others, ({ #'all_inventory, 'dest }) }),
+          ({ #'=, ({ #'[, 'others, ({ #'member, 'others, 'item }) }), 0 }),
+          ({ #'filter, 
+             'others, 
+             ({ #'bind_lambda, unbound_lambda( 
+                ({ 'ob, 'item }),
+                ({ #'?, 
+                   ({ #'living, 'ob }), 
+                   ({ #',, 
+                      ({ #'efun::set_this_player, 'ob }), 
+                      ({ #'call_other, 'item, "init" }) 
+                   }) 
+                })
+             ) }),
+            'item
+          }),
+          // inv(dest)->init(item)
+          ({ #'?, 
+             ({ #'living, 'item }), 
+             ({ #',,
+                ({ #'efun::set_this_player, 'item }),
+                ({ #'filter_objects, 'others, "init" }),
+             }) 
+          }),
+          // item->init(dest)
+          ({ #'?, 
+             ({ #'living, 'dest }), 
+             ({ #',,
+                ({ #'efun::set_this_player, 'dest }),
+                ({ #'call_other, 'item, "init" }),
+             }) 
           })
        })
-    })
-  ));
+    }) 
+  ) );
 
   set_driver_hook(H_CREATE_OB, unbound_lambda(({ 'obj }),
     ({ #'call_other, 'obj, "create" })

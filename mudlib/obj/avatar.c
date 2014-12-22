@@ -74,6 +74,7 @@ public void setup(string username) {
   setup_visible();
   setup_shell();
   setup_command_giver();
+  setup_mobile();
 
   set_username(username);
   set_primary_id(username);

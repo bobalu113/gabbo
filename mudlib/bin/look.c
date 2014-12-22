@@ -2,12 +2,14 @@ inherit CommandCode;
 
 #include <look.h>
 #include <expand_object.h>
+#include <capabilities.h>
 
 #define DEFAULT_CONTEXT        "(here,me)"
 
 private variables private functions inherit ArgsLib;
 private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
+private variables private functions inherit ObjectLib;
 
 string format_room(object target, object looker, string id);
 string format_default(object target, object looker, string id);
@@ -47,7 +49,7 @@ int do_command(string arg) {
       // TODO this should be configurable (id, short, silent, etc)
       out += sprintf("::::: %s :::::\n", object_name(target));
     }
-    if (target->is_visible()) {
+    if (is_capable(target, CAP_VISIBLE)) {
       if (detail) {
         out += format_detail(target, THISP, id, detail);
       } else {
@@ -124,7 +126,8 @@ string format_detail(object target, object looker, string id, string detail) {
 }
 
 string format_inventory(object target, object looker) {
-  string *items = map(all_inventory(target), #'format_item, looker); // '
+  string *items = map(all_inventory(target) - ({ looker }), 
+                      #'format_item, looker); // '
   return implode(items, "\n") + "\n";
 }
 
