@@ -6,7 +6,8 @@ published: true
 
 This weekend I finished MobileMixin, a module that provides the capability for objects to move on their own. This is the evolution of EotL's move_player() lfun in the player body. The new API provides two distinct functions, one for movement via a room exit, and one movement via teleportation:
 
-<code><pre>int exit(string verb, string dir, int flags);
+<code><pre><!--
+-->int exit(string verb, string dir, int flags);
 int teleport(mixed dest, int flags);
 </pre></code>
 
@@ -16,7 +17,7 @@ That's the basic overview, now I'll break down some of the finer points.
 
 ### exit verbs 
 
-One major deviation from EotL's model is that the exit direction itself is no longer the verb. Instead, movement will be done via one of several movement commands, usually of the form <verb> <direction>. Examples could be 'walk <dir>' or 'run <dir>' for movement by foot, or 'drive <dir>' when using a vehicle. There will still be support for the exit directions themselves as valid commands, but a hook in modify command will expand the command from '<dir>' to '<verb> <dir>' based on a player setting for default verb. Right now the only verb I've written is 'walk', but the support for different verbs opens up some interesting possibilities. 
+One major deviation from EotL's model is that the exit direction itself is no longer the verb. Instead, movement will be done via one of several movement commands, usually of the form &lt;verb&gt; &lt;direction&gt;. Examples could be 'walk &lt;dir&gt;' or 'run &lt;dir&gt;' for movement by foot, or 'drive &lt;dir&gt;' when using a vehicle. There will still be support for the exit directions themselves as valid commands, but a hook in modify command will expand the command from '&lt;dir&gt;' to '&lt;verb&gt; &lt;dir&gt;' based on a player setting for default verb. Right now the only verb I've written is 'walk', but the support for different verbs opens up some interesting possibilities. 
 
 With movement verbs, you can now let different forms of movement do different things. One of the ideas I'm playing with right now is letting you 'walk dir1, dir2, ..., dir n' and the game will advance you automatically through each of those rooms in a single execution. The goal is to remove some of the tedium of moving around medium to large distances inside the game. This doesn't mean you can't still have events take place along the way to affect the player's ability to advance to the next room. It just means that instead of basing the outcome of those events on the player's connection speed and their ability to use telnet, we can base them on discrete movement types. Maybe running through rooms instead of walking reduces your chance to be auto'd by some aggressive monster, but costs fatigue and rolls on endurance or something.
 
@@ -55,6 +56,8 @@ However, you may have custom exits outside of (and including) the ten standard e
 The API for movement messages has evolved somewhat as well. Instead of static strings which simply have the exit direction appended onto the end, the movement messages are now format strings which have replacement specifiers. There are currently specifiers for verb (infinitive tense), direction, and display name. I haven't gotten to the conjugation stuff I mentioned earlier, but the place is to let the verb specifier take an argument that denotes verb tense. The display name thing is another concept that's not fully flushed out. It's some configurable derivative of names from NameMixin short from VisibleMixin, with some eventual hooks for things like stealth and invisibility.
 
 There are 6 configurable messages: exit message and entrance message for each of intrazone exit, interzone exit, and teleportation.  Unlike EotL's API, we can now guaranteed a valid direction for entrance messages through intrazone exits, so you can do things like "Devo enters from the south." For interzone entrance messages, we do a best guess at what the direction might be based on the room of origin's exit map, but there's no guarantee that a direction will be supplied. Still not sure what to do about this yet; may possibly support a default direction as an arg to the format specifier, but I'm not sure how useful that would be.
+
+Since I'm giving players the ability to set fancy movement messages for thsemselves like 'From the west, Devo sneaks in quietly.', we will need to resolve the issue of players setting misleading messages to gain an advantage in the game. I haven't really pondered on this much, but I'm not too worried about it. There are things we can do, like highlighting certain terms and allowing message overloads and stuff.
 
 ### multiple follow targets
 
