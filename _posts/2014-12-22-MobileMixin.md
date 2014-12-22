@@ -15,7 +15,8 @@ There's also an extra argument for some control flags. I'll break those down in 
 
 That's the basic overview, now I'll break down some of the finer points.
 
-### exit verbs 
+
+#### exit verbs 
 
 One major deviation from EotL's model is that the exit direction itself is no longer the verb. Instead, movement will be done via one of several movement commands, usually of the form &lt;verb&gt; &lt;direction&gt;. Examples could be 'walk &lt;dir&gt;' or 'run &lt;dir&gt;' for movement by foot, or 'drive &lt;dir&gt;' when using a vehicle. There will still be support for the exit directions themselves as valid commands, but a hook in modify command will expand the command from '&lt;dir&gt;' to '&lt;verb&gt; &lt;dir&gt;' based on a player setting for default verb. Right now the only verb I've written is 'walk', but the support for different verbs opens up some interesting possibilities. 
 
@@ -25,33 +26,36 @@ This new feature doesn't come without some cost. First, there is no longer any r
 
 Another challenge is how best to integrate the new verb support into movement messaging. I'd like a player to be able to customize their default movement message with the correct conjugation of the verb without the code doing the movement having to know anything about what's happening on the other end. Right now I've decided to set a standard that the verb should always be passed in its infinitive form (minus to 'to' prefix). Them we can create format specifiers (more on format strings later) that force the necessary conversion (e.g. 'walk' to 'walks' or 'is walking'). Hopefully there will be a webservice we can use in the near future to do the actual verb conjugation, but until then I wouldn't think that maintaining static support for specific verbs should be too cumbersome.
 
-### movement flags
+
+#### movement flags
 
 As I mentioned earlier, instead of muffling movement messages with a special direction string, you'll now use exit flags. There are already support for a number of flags, here they are:
 
-* MUFFLED_MOVE: suppress movement messages
-* FOLLOW: force followers to follow, even when teleporting
-* NO_FOLLOW: prevent followers from following, even when using an exit
-* CMD_FOLLOW: following is implemented using command(), instead of follower->exit()
-* FORCE_TELEPORT: override NoTeleport properties (which aren't actually implemented yet)
-* SUPPRESS_ERRORS: do not echo error messages to THISP (things like "Sorry this area is incomplete." when a room doesn't load)
-* SUPPRESS_LOOK: do not execute the 'look' command upon successfully movement
+* <strong>MUFFLED_MOVE</strong>: suppress movement messages
+* <strong>FOLLOW</strong>: force followers to follow, even when teleporting
+* <strong>NO_FOLLOW</strong>: prevent followers from following, even when using an exit
+* <strong>CMD_FOLLOW</strong>: following is implemented using command(), instead of follower->exit()
+* <strong>FORCE_TELEPORT</strong>: override NoTeleport properties (which aren't actually implemented yet)
+* <strong>SUPPRESS_ERRORS</strong>: do not echo error messages to THISP (things like "Sorry this area is incomplete." when a room doesn't load)
+* <strong>SUPPRESS_LOOK</strong>: do not execute the 'look' command upon successfully movement
 
 There will be a breakdown of the RoomCode API in a later post, but I'll also mention that MobileMixin also supports some flags on the exits themselves:
 
-* EXIT_BLOCKED: the exit is blocked by something
-* EXIT_MUFFLED: exit messages should muffled
-* ENTRANCE_MUFFLED: entrance messages should muffled
-* EXIT_NO_FOLLOW: prevent following through this exit
-* EXIT_PEDESTRIAN: prevent vehicles from moving through the exit
+* <strong>EXIT_BLOCKED</strong>: the exit is blocked by something
+* <strong>EXIT_MUFFLED</strong>: exit messages should muffled
+* <strong>ENTRANCE_MUFFLED</strong>: entrance messages should muffled
+* <strong>EXIT_NO_FOLLOW</strong>: prevent following through this exit
+* <strong>EXIT_PEDESTRIAN</strong>: prevent vehicles from moving through the exit
 
-### intrazone exits vs. interzone exits 
+
+#### intrazone exits vs. interzone exits 
 
 With MobileMixin comes the introduction of 'zones' as a game concept. It's a much broader idea that can be discussed here, but here's the basic idea. With the new RoomCode, all rooms within a zone must be laid out in a 3d Cartesian grid. That is, every room is given a coordinate in 3d space, and the exits must be laid out in that space accordingly. Only the 10 standard directions are allowed: up, down north, northeast, east, southeast, south, southwest, west, northwest. If roomA exits west to roomB, then roomB must exit east to roomA. The distance between rooms is fixed within the zone.
 
 However, you may have custom exits outside of (and including) the ten standard exits that move a player between different zones. Between different zones there is no referential integrity; that is, there is no guaranteed method for a player that moves through an exit from zoneA to zoneB to find his way back to zoneA. This doesn't mean the code can't make guesses about which exits goes where, it just means there's no expectation of referential integrity.
 
-### movement messages
+
+#### movement messages
 
 The API for movement messages has evolved somewhat as well. Instead of static strings which simply have the exit direction appended onto the end, the movement messages are now format strings which have replacement specifiers. There are currently specifiers for verb (infinitive tense), direction, and display name. I haven't gotten to the conjugation stuff I mentioned earlier, but the place is to let the verb specifier take an argument that denotes verb tense. The display name thing is another concept that's not fully flushed out. It's some configurable derivative of names from NameMixin short from VisibleMixin, with some eventual hooks for things like stealth and invisibility.
 
@@ -59,7 +63,8 @@ There are 6 configurable messages: exit message and entrance message for each of
 
 Since I'm giving players the ability to set fancy movement messages for thsemselves like 'From the west, Devo sneaks in quietly.', we will need to resolve the issue of players setting misleading messages to gain an advantage in the game. I haven't really pondered on this much, but I'm not too worried about it. There are things we can do, like highlighting certain terms and allowing message overloads and stuff.
 
-### multiple follow targets
+
+#### multiple follow targets
 
 Finally, I made a slight change to the relationship between follower and followees. Departing from the EotL model, an object using MobileMixin may now follow multiple objects. If you're in the room with two people whom you are both following, you will follow whichever one moves first. I also changed the follow command so that you can initiate following with players not in the same room with you. I see no reason why you can't declare that you want to follow someone, should they enter your environment. I should think this will make moving around in groups much more manageable. I haven't written any code that deals with an infinite follow loop, but I believe there is code I can borrow from EotL for this.
 
