@@ -5,6 +5,7 @@ layout: blog
 ---
 
 Welp, I was going to try and finish path expansion tonight but I left the stupid plug for my laptop at the office today so here we are. Not looking forward to driving all the way back up to the city tomorrow to get it, but at least this gives me the opportunity to catch the blog up on some of my recent commits. Tonight I will be writing about the APIs for object ids, player names, detail descriptions.
+<!-- more -->
 
 #### IdMIxin
 With IdMixin, the main purpose here was to augment the lfun id(str) applied by the driver with something that would help create more friendly user-interfaces. The id() lfun is very versitile because it's just a true/false test; you can throw whatever crazy logic in there you want without regard to what, if anything, it has to do with the id string you got passed as an argument. However, it's not super great when you want to ask "hey what ids are valid for this object?" That's the problem the IdMixin attempts to solve.

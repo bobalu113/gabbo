@@ -10,7 +10,7 @@ This weekend I finished MobileMixin, a module that provides the capability for o
 -->int exit(string verb, string dir, int flags);
 int teleport(mixed dest, int flags);
 </pre></code>
-
+<!-- more -->
 There's also an extra argument for some control flags. I'll break those down in detail later, but they're there so you don't have to have esoteric markers like "XX" for direction to muffle the movement messages. You'll also notice that the exit() function does not take a destination. Since we now <i>know</i> that we're using an exit, we can infer the destination from the exit direction. This means you can't do weird things like set the direction to 'into the cave', or to 'west' when the player's really moving east. The teleport function, on the other hand, does not take a direction, it only takes a destination room. No longer can you just make up movement messages willy-nilly, they have to come from some sort of well-formed API.
 
 That's the basic overview, now I'll break down some of the finer points.

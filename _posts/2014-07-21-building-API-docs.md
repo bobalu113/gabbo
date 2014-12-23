@@ -5,6 +5,7 @@ layout: blog
 ---
 
 By far the most involved project of the week was building the LPC API documentation generator. Lesse I started programming for EotL in '94 or so, and in that time I've probably had to deal with a dozen different languages at some point. Deal with, as in, making something that does something. That's a dozen different langauges with at least a dozen different ways of doing things (and that's just Perl!). One of the few constants, though, is how important the documentation was when I showed up to the party. When it comes to programming, I've always been more a grab-a-book guy than a take-a-class guy. Hell, pretty much the only reason I was able to land my first coding job was because I grabbed a copy of the Camel book off someone's desk during the interview.
+<!-- more -->
 
 Point is, I knew it'd be a ton of work to make this thing but it's also a pretty damn important thing to have right from day one if I expect anyone else to wanna help build this thing. Not to mention, if other people do come along and start coding stuff with me, I'm going to want quitmud insurance.
 

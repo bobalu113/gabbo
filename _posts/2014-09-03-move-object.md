@@ -5,7 +5,7 @@ layout: blog
 ---
 
 I tried to break the coding deadlock today by implementing the move\_object driver hook in master.c. And I did to a certain point. I picked move\_object because it's simple and figured I could bag it in a day. And I was right, to a certain point. I was all committed and pushed to origin and started to write about it and I just then realized that I did it wrong and I'm gonna have to rewrite a large amount of it tomorrow.
-
+<!-- more -->
 
 Basically, I started with the implementation on EotL. Some bright people have worked on it and I should have just stuck to what EotL does, but I decided to get fancy. Basically I decided to let people move\_object() something to a null environment; set\_environment() allows you do this and I see no reason why move\_object() shouldn't. Since now the destination could be 0, it changes the types of values the signal functions need to handle. To keep things consistent, I also made it so the item or destination could be dested along the way and the 0 would still be passed along to the signal functions. Then, since I didn't have to worry about null checks except for as call\_other() targets, I could line up my code all pretty with a chain of #'&& blocks instead of the nested #'? blocks that EotL uses. I realize that's a dummy reason to redesign the whole thing but lambda closures are just so, so ugly.
 
