@@ -4,7 +4,7 @@ category: blog
 layout: blog
 ---
 
-This weekend I finished MobileMixin, a module that provides the capability for objects to move on their own. This is the evolution of EotL's move_player lfun in the player body. The new API provides two distinct functions, one for movement via a room exit, and one movement via teleportation:
+This weekend I finished [MobileMixin](http://bobalu113.github.io/gabbo/docs/mudlib//modules/mobile.html), a module that provides the capability for objects to move on their own. This is the evolution of EotL's move_player lfun in the player body. The new API provides two distinct functions, one for movement via a room exit, and one movement via teleportation:
 
 <code><pre><!--
 -->int exit(string verb, string dir, int flags);
