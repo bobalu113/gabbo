@@ -65,11 +65,16 @@
 <dd>
 <ul class="tree"><li><a href="../modules/living.html" title="">LivingCode </a>
 <ul class="tree"><li class="last"><a href="../modules/id.html" title="">IdMixin </a>
-</li></ul></li><li><a href="../modules/name.html" title="">NameMixin </a>
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></li><li><a href="../modules/name.html" title="">NameMixin </a>
+</li><li><a href="../modules/visible.html" title="">VisibleMixin </a>
 </li><li><a href="../modules/shell.html" title="">ShellMixin </a>
 <ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../modules/command_giver.html" title="">CommandGiverMixin </a>
-</li></ul></dd>
+</li></ul></li><li><a href="../modules/command_giver.html" title="">CommandGiverMixin </a>
+</li><li class="last"><a href="../modules/mobile.html" title="">MobileMixin </a>
+<ul class="tree"><li><a href="../lib/object.html" title="">ObjectLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li class="last"><a href="../lib/format_strings.html" title="">FormatStringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -99,15 +104,39 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/avatar.html#create()">create</a></strong>()</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#enter_game()">enter_game</a></strong>()</code>
 <div class="block">Invoked by the login object once the avatar object is interactive and
 has been moved to its start location.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#is_avatar()">is_avatar</a></strong>()</code>
 <div class="block">Returns true to designate that this object represents a player character.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/avatar.html#modify_command()">modify_command</a></strong>(string&nbsp;cmd)</code>
+<div class="block">Implementation of the modify_command hook.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/avatar.html#query_screen_length()">query_screen_length</a></strong>()</code>
+<div class="block">Returns the user's screen length.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/avatar.html#query_screen_width()">query_screen_width</a></strong>()</code>
+<div class="block">Returns the user's screen width.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -129,7 +158,7 @@ has been moved to its start location.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#setup_command_giver()">setup_command_giver</a></strong>()</code>
 <div class="block">Temporary implementation to initialize a static list of commands.</div>
 </td>
@@ -139,35 +168,49 @@ has been moved to its start location.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/modules/living">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/living.html" title="program /modules/living">LivingCode </a></h3>
-<code><a href="../modules/living.html#is_living()">is_living</a>, <a href="../modules/living.html#setup()">setup</a></code></li>
+<code><a href="../modules/living.html#create()">create</a>, <a href="../modules/living.html#is_living()">is_living</a>, <a href="../modules/living.html#query_capabilities()">query_capabilities</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/modules/id">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/id.html" title="program /modules/id">IdMixin </a></h3>
-<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
+<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_capabilities()">query_capabilities</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/modules/name">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/name.html" title="program /modules/name">NameMixin </a></h3>
-<code><a href="../modules/name.html#query_first_name()">query_first_name</a>, <a href="../modules/name.html#query_full_name()">query_full_name</a>, <a href="../modules/name.html#query_last_name()">query_last_name</a>, <a href="../modules/name.html#query_nickname()">query_nickname</a>, <a href="../modules/name.html#set_first_name()">set_first_name</a>, <a href="../modules/name.html#set_last_name()">set_last_name</a>, <a href="../modules/name.html#set_nickname()">set_nickname</a>, <a href="../modules/name.html#setup_name()">setup_name</a></code></li>
+<code><a href="../modules/name.html#query_capabilities()">query_capabilities</a>, <a href="../modules/name.html#query_first_name()">query_first_name</a>, <a href="../modules/name.html#query_full_name()">query_full_name</a>, <a href="../modules/name.html#query_last_name()">query_last_name</a>, <a href="../modules/name.html#query_name()">query_name</a>, <a href="../modules/name.html#query_nickname()">query_nickname</a>, <a href="../modules/name.html#set_first_name()">set_first_name</a>, <a href="../modules/name.html#set_last_name()">set_last_name</a>, <a href="../modules/name.html#set_nickname()">set_nickname</a>, <a href="../modules/name.html#setup_name()">setup_name</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/modules/visible">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../modules/visible.html" title="program /modules/visible">VisibleMixin </a></h3>
+<code><a href="../modules/visible.html#query_capabilities()">query_capabilities</a>, <a href="../modules/visible.html#query_long()">query_long</a>, <a href="../modules/visible.html#query_short()">query_short</a>, <a href="../modules/visible.html#set_long()">set_long</a>, <a href="../modules/visible.html#set_short()">set_short</a>, <a href="../modules/visible.html#setup_visible()">setup_visible</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/modules/shell">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/shell.html" title="program /modules/shell">ShellMixin </a></h3>
-<code><a href="../modules/shell.html#query_cwd()">query_cwd</a>, <a href="../modules/shell.html#set_cwd()">set_cwd</a></code></li>
+<code><a href="../modules/shell.html#query_cwd()">query_cwd</a>, <a href="../modules/shell.html#query_homedir()">query_homedir</a>, <a href="../modules/shell.html#set_cwd()">set_cwd</a>, <a href="../modules/shell.html#set_homedir()">set_homedir</a>, <a href="../modules/shell.html#setup_shell()">setup_shell</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/modules/command_giver">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/command_giver.html" title="program /modules/command_giver">CommandGiverMixin </a></h3>
-<code><a href="../modules/command_giver.html#add_command()">add_command</a>, <a href="../modules/command_giver.html#do_command()">do_command</a>, <a href="../modules/command_giver.html#load_command()">load_command</a>, <a href="../modules/command_giver.html#query_command()">query_command</a>, <a href="../modules/command_giver.html#query_command_flag()">query_command_flag</a>, <a href="../modules/command_giver.html#query_verbs()">query_verbs</a>, <a href="../modules/command_giver.html#setup_command_giver()">setup_command_giver</a></code></li>
+<code><a href="../modules/command_giver.html#add_command()">add_command</a>, <a href="../modules/command_giver.html#do_command()">do_command</a>, <a href="../modules/command_giver.html#load_command()">load_command</a>, <a href="../modules/command_giver.html#query_capabilities()">query_capabilities</a>, <a href="../modules/command_giver.html#query_command()">query_command</a>, <a href="../modules/command_giver.html#query_command_flag()">query_command_flag</a>, <a href="../modules/command_giver.html#query_verbs()">query_verbs</a>, <a href="../modules/command_giver.html#setup_command_giver()">setup_command_giver</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/modules/mobile">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../modules/mobile.html" title="program /modules/mobile">MobileMixin </a></h3>
+<code><a href="../modules/mobile.html#add_follower()">add_follower</a>, <a href="../modules/mobile.html#add_following()">add_following</a>, <a href="../modules/mobile.html#exit()">exit</a>, <a href="../modules/mobile.html#is_follower()">is_follower</a>, <a href="../modules/mobile.html#is_following()">is_following</a>, <a href="../modules/mobile.html#query_capabilities()">query_capabilities</a>, <a href="../modules/mobile.html#query_exit_msgin()">query_exit_msgin</a>, <a href="../modules/mobile.html#query_exit_msgout()">query_exit_msgout</a>, <a href="../modules/mobile.html#query_followers()">query_followers</a>, <a href="../modules/mobile.html#query_following()">query_following</a>, <a href="../modules/mobile.html#query_teleport_msgin()">query_teleport_msgin</a>, <a href="../modules/mobile.html#query_teleport_msgout()">query_teleport_msgout</a>, <a href="../modules/mobile.html#query_zone_msgin()">query_zone_msgin</a>, <a href="../modules/mobile.html#query_zone_msgout()">query_zone_msgout</a>, <a href="../modules/mobile.html#remove_follower()">remove_follower</a>, <a href="../modules/mobile.html#remove_following()">remove_following</a>, <a href="../modules/mobile.html#set_exit_msgin()">set_exit_msgin</a>, <a href="../modules/mobile.html#set_exit_msgout()">set_exit_msgout</a>, <a href="../modules/mobile.html#set_followers()">set_followers</a>, <a href="../modules/mobile.html#set_following()">set_following</a>, <a href="../modules/mobile.html#set_teleport_msgin()">set_teleport_msgin</a>, <a href="../modules/mobile.html#set_teleport_msgout()">set_teleport_msgout</a>, <a href="../modules/mobile.html#set_zone_msgin()">set_zone_msgin</a>, <a href="../modules/mobile.html#set_zone_msgout()">set_zone_msgout</a>, <a href="../modules/mobile.html#setup_mobile()">setup_mobile</a>, <a href="../modules/mobile.html#teleport()">teleport</a></code></li>
 
 </ul>
 
@@ -216,6 +259,47 @@ consistent across all characters a user plays.</div>
 </dl>
 </li>
 </ul>
+<a name="query_screen_width()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_screen_width</h4>
+<pre>public&nbsp;int&nbsp;query_screen_width()</pre>
+<div class="block">Returns the user's screen width. Currently hard-coded to 80 characters.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the user's screen width </dd>
+</dl>
+</li>
+</ul>
+<a name="query_screen_length()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_screen_length</h4>
+<pre>public&nbsp;int&nbsp;query_screen_length()</pre>
+<div class="block">Returns the user's screen length. Currently hard-coded to 25 lines.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the user's screen length </dd>
+</dl>
+</li>
+</ul>
+<a name="create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="setup()">
 <!--   -->
 </a>
@@ -239,11 +323,29 @@ avatar. It also has not yet been moved to the player's starting location.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>setup_command_giver</h4>
-<pre>public&nbsp;void&nbsp;setup_command_giver()</pre>
+<pre>protected&nbsp;void&nbsp;setup_command_giver()</pre>
 <div class="block">Temporary implementation to initialize a static list of commands. Will be
 replaced with configuration-driven logic instead.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="modify_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>modify_command</h4>
+<pre>public&nbsp;mixed&nbsp;modify_command(string&nbsp;cmd)</pre>
+<div class="block">Implementation of the modify_command hook. Every command executed by the
+player will have a chance to be modified before being parsed by this
+function.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>cmd</code> - the command string being executed </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the new command string to execute </dd>
 </dl>
 </li>
 </ul>

@@ -16,8 +16,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/shell.html" target="_top">Frames</a></li>
-<li><a href="../../modules/shell.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/modules/visible.html" target="_top">Frames</a></li>
+<li><a href="../../modules/visible.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>
@@ -53,22 +53,16 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/modules/shell</div>
-<h2 title="Program ShellMixin " class="title">Program ShellMixin </h2>
+<div class="subTitle">/modules/visible</div>
+<h2 title="Program VisibleMixin " class="title">Program VisibleMixin </h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Inherited Programs:</dt>
-<dd>
-<ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></dd>
-</dl>
 <hr>
 <br>
-<div class="block">The ShellMixin provides the features of a Unix-like shell.</div>
+<div class="block">Support for items which can be seen with the "look" command.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
@@ -93,33 +87,39 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#query_cwd()">query_cwd</a></strong>()</code>
-<div class="block">Return the player's current working directory.</div>
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/visible.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return the capabilities this mixin provides.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#query_homedir()">query_homedir</a></strong>()</code>
-<div class="block">Return the player's home directory.</div>
+<td class="colLast"><code><strong><a href="../modules/visible.html#query_long()">query_long</a></strong>()</code>
+<div class="block">Return a long description of the room.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#set_cwd()">set_cwd</a></strong>(string&nbsp;dir)</code>
-<div class="block">Set the current working directory for this player.</div>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/visible.html#query_short()">query_short</a></strong>()</code>
+<div class="block">Return a short description of the room.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#set_homedir()">set_homedir</a></strong>(string&nbsp;dir)</code>
-<div class="block">Set the home directory for this player.</div>
+<td class="colLast"><code><strong><a href="../modules/visible.html#set_long()">set_long</a></strong>(string&nbsp;str)</code>
+<div class="block">Set the room's long description.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/visible.html#set_short()">set_short</a></strong>(string&nbsp;str)</code>
+<div class="block">Set the short description of the room.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#setup_shell()">setup_shell</a></strong>()</code>
-<div class="block">Initialize ShellMixin.</div>
+<td class="colLast"><code><strong><a href="../modules/visible.html#setup_visible()">setup_visible</a></strong>()</code>
+<div class="block">Initialize VisibleMixin.</div>
 </td>
 </tr>
 </table>
@@ -138,76 +138,94 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="query_cwd()">
+<a name="query_short()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_cwd</h4>
-<pre>public&nbsp;string&nbsp;query_cwd()</pre>
-<div class="block">Return the player's current working directory.</div>
+<h4>query_short</h4>
+<pre>public&nbsp;string&nbsp;query_short()</pre>
+<div class="block">Return a short description of the room. This name will be shown to the
+user everytime they enter the room so it should be short and recognizable.</div>
 <dl>
 <dl>
-<dt><span class="strong">Returns:</span></dt><dd>the player's current working directory </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the short description </dd>
 </dl>
 </li>
 </ul>
-<a name="set_cwd()">
+<a name="set_short()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set_cwd</h4>
-<pre>public&nbsp;int&nbsp;set_cwd(string&nbsp;dir)</pre>
-<div class="block">Set the current working directory for this player.</div>
+<h4>set_short</h4>
+<pre>public&nbsp;int&nbsp;set_short(string&nbsp;str)</pre>
+<div class="block">Set the short description of the room.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - the directory to set </dd>
+<dd><code>str</code> - the short to set </dd>
 <dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
-<a name="query_homedir()">
+<a name="query_long()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_homedir</h4>
-<pre>public&nbsp;string&nbsp;query_homedir()</pre>
-<div class="block">Return the player's home directory.</div>
+<h4>query_long</h4>
+<pre>public&nbsp;string&nbsp;query_long()</pre>
+<div class="block">Return a long description of the room. This will be displayed to the
+player when they explicitly look inside a room. It can be as long as is
+needed, but probably shouldn't take up more than a page of a user's
+screen.</div>
 <dl>
 <dl>
-<dt><span class="strong">Returns:</span></dt><dd>the player's home directory. </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the long description of the room </dd>
 </dl>
 </li>
 </ul>
-<a name="set_homedir()">
+<a name="set_long()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set_homedir</h4>
-<pre>public&nbsp;int&nbsp;set_homedir(string&nbsp;dir)</pre>
-<div class="block">Set the home directory for this player.</div>
+<h4>set_long</h4>
+<pre>public&nbsp;int&nbsp;set_long(string&nbsp;str)</pre>
+<div class="block">Set the room's long description.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - the directory to set </dd>
+<dd><code>str</code> - the description to set </dd>
 <dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
-<a name="setup_shell()">
+<a name="setup_visible()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setup_shell</h4>
-<pre>protected&nbsp;void&nbsp;setup_shell()</pre>
-<div class="block">Initialize ShellMixin.</div>
+<h4>setup_visible</h4>
+<pre>protected&nbsp;void&nbsp;setup_visible()</pre>
+<div class="block">Initialize VisibleMixin.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return the capabilities this mixin provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the 'visible' capability </dd>
 </dl>
 </li>
 </ul>
@@ -233,8 +251,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/shell.html" target="_top">Frames</a></li>
-<li><a href="../../modules/shell.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/modules/visible.html" target="_top">Frames</a></li>
+<li><a href="../../modules/visible.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>

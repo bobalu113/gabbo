@@ -63,7 +63,8 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li class="last"><a href="../lib/format_strings.html" title="">FormatStringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
 </li></ul></dd>
 </dl>
 <hr>
@@ -117,27 +118,20 @@ a new one from configuration.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected&nbsp;closure&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../obj/logger_factory.html#parse_format()">parse_format</a></strong>(string&nbsp;format)</code>
-<div class="block">Parse a format string into a closure that can be invoked later by the
-logger to format a log line.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger_factory.html#parse_output_prop()">parse_output_prop</a></strong>(string&nbsp;val)</code>
 <div class="block">Translate the property value of an output property to something more
 structured than a string.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger_factory.html#release_logger()">release_logger</a></strong>(mixed&nbsp;category)</code>
 <div class="block">Releases a logger object from the logger pool, thereby removing any
 references to it held by the factory.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger_factory.html#reset()">reset</a></strong>()</code>
 <div class="block">Clean up stale loggers.</div>
@@ -199,31 +193,6 @@ path, for console output or file output, respectively.</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>val</code> - the value of the output property </dd>
 <dt><span class="strong">Returns:</span></dt><dd>an array of output targets </dd>
-</dl>
-</li>
-</ul>
-<a name="parse_format()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parse_format</h4>
-<pre>protected&nbsp;closure&nbsp;parse_format(string&nbsp;format)</pre>
-<div class="block">Parse a format string into a closure that can be invoked later by the
-logger to format a log line. The closure will take the arguments:
-<pre>
-'category: the category of the logger
-'priority: the priority of the log event
-'message: an optional error message
-'caller: an array read from
-<code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
-for the invoking stackframe, or 0 if no caller was found
-</pre></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>format</code> - the format string </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the formatter closure, bound to the factory </dd>
 </dl>
 </li>
 </ul>

@@ -16,8 +16,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/creature.html" target="_top">Frames</a></li>
-<li><a href="../../modules/creature.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/modules/vehicle.html" target="_top">Frames</a></li>
+<li><a href="../../modules/vehicle.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>
@@ -53,8 +53,7 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/modules/creature</div>
-<h2 title="Program CreatureCode " class="title">Program CreatureCode </h2>
+<h2 title="Program /modules/vehicle" class="title">Program /modules/vehicle</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -63,14 +62,18 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../modules/living.html" title="">LivingCode </a>
+<ul class="tree"><li><a href="../modules/container.html" title="">ContainerCode </a>
+<ul class="tree"><li class="last"><a href="../modules/thing.html" title="">ThingCode </a>
 <ul class="tree"><li class="last"><a href="../modules/id.html" title="">IdMixin </a>
 <ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></li></ul></dd>
+</li></ul></li></ul></li></ul></li><li class="last"><a href="../modules/mobile.html" title="">MobileMixin </a>
+<ul class="tree"><li><a href="../lib/object.html" title="">ObjectLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li class="last"><a href="../lib/format_strings.html" title="">FormatStringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></dd>
 </dl>
 <hr>
 <br>
-<div class="block">A base object for non-player characters.</div>
+<div class="block"></div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
@@ -95,23 +98,30 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/creature.html#is_creature()">is_creature</a></strong>()</code>
-<div class="block">Returns true to designate that this object is a non-player character.</div>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/vehicle.html#is_vehicle()">is_vehicle</a></strong>()</code>
+<div class="block">Returns true to designate that this object represents a vehicle.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/creature.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<td class="colLast"><code><strong><a href="../modules/vehicle.html#query_capabilities()">query_capabilities</a></strong>()</code>
 <div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
 </td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/modules/living">
+<li class="blockList"><a name="methods_inherited_from_class_/modules/container">
 </a>
-<h3>Functions inherited from program&nbsp;<a href="../modules/living.html" title="program /modules/living">LivingCode </a></h3>
-<code><a href="../modules/living.html#create()">create</a>, <a href="../modules/living.html#is_living()">is_living</a>, <a href="../modules/living.html#query_capabilities()">query_capabilities</a></code></li>
+<h3>Functions inherited from program&nbsp;<a href="../modules/container.html" title="program /modules/container">ContainerCode </a></h3>
+<code><a href="../modules/container.html#create()">create</a>, <a href="../modules/container.html#is_container()">is_container</a>, <a href="../modules/container.html#query_capabilities()">query_capabilities</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/modules/thing">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../modules/thing.html" title="program /modules/thing">ThingCode </a></h3>
+<code><a href="../modules/thing.html#create()">create</a>, <a href="../modules/thing.html#id()">id</a>, <a href="../modules/thing.html#is_thing()">is_thing</a>, <a href="../modules/thing.html#query_capabilities()">query_capabilities</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -119,6 +129,13 @@
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/id.html" title="program /modules/id">IdMixin </a></h3>
 <code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_capabilities()">query_capabilities</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/modules/mobile">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../modules/mobile.html" title="program /modules/mobile">MobileMixin </a></h3>
+<code><a href="../modules/mobile.html#add_follower()">add_follower</a>, <a href="../modules/mobile.html#add_following()">add_following</a>, <a href="../modules/mobile.html#exit()">exit</a>, <a href="../modules/mobile.html#is_follower()">is_follower</a>, <a href="../modules/mobile.html#is_following()">is_following</a>, <a href="../modules/mobile.html#query_capabilities()">query_capabilities</a>, <a href="../modules/mobile.html#query_exit_msgin()">query_exit_msgin</a>, <a href="../modules/mobile.html#query_exit_msgout()">query_exit_msgout</a>, <a href="../modules/mobile.html#query_followers()">query_followers</a>, <a href="../modules/mobile.html#query_following()">query_following</a>, <a href="../modules/mobile.html#query_teleport_msgin()">query_teleport_msgin</a>, <a href="../modules/mobile.html#query_teleport_msgout()">query_teleport_msgout</a>, <a href="../modules/mobile.html#query_zone_msgin()">query_zone_msgin</a>, <a href="../modules/mobile.html#query_zone_msgout()">query_zone_msgout</a>, <a href="../modules/mobile.html#remove_follower()">remove_follower</a>, <a href="../modules/mobile.html#remove_following()">remove_following</a>, <a href="../modules/mobile.html#set_exit_msgin()">set_exit_msgin</a>, <a href="../modules/mobile.html#set_exit_msgout()">set_exit_msgout</a>, <a href="../modules/mobile.html#set_followers()">set_followers</a>, <a href="../modules/mobile.html#set_following()">set_following</a>, <a href="../modules/mobile.html#set_teleport_msgin()">set_teleport_msgin</a>, <a href="../modules/mobile.html#set_teleport_msgout()">set_teleport_msgout</a>, <a href="../modules/mobile.html#set_zone_msgin()">set_zone_msgin</a>, <a href="../modules/mobile.html#set_zone_msgout()">set_zone_msgout</a>, <a href="../modules/mobile.html#setup_mobile()">setup_mobile</a>, <a href="../modules/mobile.html#teleport()">teleport</a></code></li>
 
 </ul>
 
@@ -136,14 +153,14 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="is_creature()">
+<a name="is_vehicle()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>is_creature</h4>
-<pre>public&nbsp;nomask&nbsp;int&nbsp;is_creature()</pre>
-<div class="block">Returns true to designate that this object is a non-player character.</div>
+<h4>is_vehicle</h4>
+<pre>public&nbsp;int&nbsp;is_vehicle()</pre>
+<div class="block">Returns true to designate that this object represents a vehicle.</div>
 <dl>
 <dl>
 <dt><span class="strong">Returns:</span></dt><dd>1 </dd>
@@ -186,8 +203,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/creature.html" target="_top">Frames</a></li>
-<li><a href="../../modules/creature.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/modules/vehicle.html" target="_top">Frames</a></li>
+<li><a href="../../modules/vehicle.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>

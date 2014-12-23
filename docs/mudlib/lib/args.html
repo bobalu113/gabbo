@@ -63,9 +63,10 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
 <ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
+</li></ul></li><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -99,6 +100,27 @@
 <div class="block">Separate space-deliniated arguments, but keep quoted strings together.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../lib/args.html#explode_nested()">explode_nested</a></strong>(string&nbsp;str,&nbsp;string&nbsp;delim,&nbsp;object&nbsp;logger,&nbsp;string&nbsp;open,&nbsp;string&nbsp;close)</code>
+<div class="block">Explode a string into substrings by a delimiter, ignoring any escaped
+delimiters, and delimiters nested within open/close characters.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../lib/args.html#explode_unescaped()">explode_unescaped</a></strong>(string&nbsp;str,&nbsp;string&nbsp;delim)</code>
+<div class="block">Explode a string into substrings by a delimter, ignoring any escaped
+delimters in the string when performing the separation.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/args.html#find_close_char()">find_close_char</a></strong>(string&nbsp;str,&nbsp;int&nbsp;start,&nbsp;object&nbsp;logger,&nbsp;string&nbsp;open,&nbsp;string&nbsp;close)</code>
+<div class="block">Find closing brace/paren/bracket/quote in a string that matches a
+specified set of open characters.</div>
+</td>
+</tr>
 </table>
 
 </li>
@@ -129,6 +151,68 @@
 <dd><code>arg</code> - the string containing quoted arguments </dd>
 <dd><code>preserve_quotes</code> - set to 1 if the quote characters should be preserved in the resulting argument strings </dd>
 <dt><span class="strong">Returns:</span></dt><dd>an array of space-deliniated arguments, with the quoted strings returned as a single argument </dd>
+</dl>
+</li>
+</ul>
+<a name="find_close_char()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>find_close_char</h4>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;find_close_char(string&nbsp;str,&nbsp;int&nbsp;start,&nbsp;object&nbsp;logger,&nbsp;string&nbsp;open,&nbsp;string&nbsp;close)</pre>
+<div class="block">Find closing brace/paren/bracket/quote in a string that matches a
+specified set of open characters. The open and close strings must be the
+same legnth and in the correct order so that open[i] matches close[i].</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the string to search </dd>
+<dd><code>start</code> - the position of the open brace/paran/bracket/quote </dd>
+<dd><code>logger</code> - an optional logger object, to which to report errors </dd>
+<dd><code>open</code> - a string of OPEN characters; defaults to "\"([{" </dd>
+<dd><code>close</code> - a string of CLOSE characters; defaults to "\")]}" </dd>
+<dt><span class="strong">Returns:</span></dt><dd>ret > 0: the position of the matching char in str ret ==0: error: str[start] was not an OPEN char ret < 0: error: failed to match open char at str[-ret - 1] </dd>
+</dl>
+</li>
+</ul>
+<a name="explode_unescaped()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>explode_unescaped</h4>
+<pre>public&nbsp;string&nbsp;*explode_unescaped(string&nbsp;str,&nbsp;string&nbsp;delim)</pre>
+<div class="block">Explode a string into substrings by a delimter, ignoring any escaped
+delimters in the string when performing the separation. See is_escaped().</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the string to explode </dd>
+<dd><code>delim</code> - the string delimiting the substrings </dd>
+<dt><span class="strong">Returns:</span></dt><dd>an array of strings separated by the delimiter </dd>
+</dl>
+</li>
+</ul>
+<a name="explode_nested()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>explode_nested</h4>
+<pre>public&nbsp;string&nbsp;*explode_nested(string&nbsp;str,&nbsp;string&nbsp;delim,&nbsp;object&nbsp;logger,&nbsp;string&nbsp;open,&nbsp;string&nbsp;close)</pre>
+<div class="block">Explode a string into substrings by a delimiter, ignoring any escaped
+delimiters, and delimiters nested within open/close characters. See
+explode_nested().</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the string to explode </dd>
+<dd><code>delim</code> - the string delimiting the substrings </dd>
+<dd><code>logger</code> - an optional logger object, to which to report errors </dd>
+<dd><code>open</code> - a string of OPEN characters; defaults to "\"([{" </dd>
+<dd><code>close</code> - a string of CLOSE characters; defaults to "\")]}" </dd>
+<dt><span class="strong">Returns:</span></dt><dd>an array of strings separated by the delimiter </dd>
 </dl>
 </li>
 </ul>

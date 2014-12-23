@@ -64,7 +64,8 @@
 <dt>All Inherited Programs:</dt>
 <dd>
 <ul class="tree"><li class="last"><a href="../modules/id.html" title="">IdMixin </a>
-</li></ul></dd>
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -93,15 +94,21 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/living.html#create()">create</a></strong>()</code>
+<div class="block">Set up a new living object.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/living.html#is_living()">is_living</a></strong>()</code>
 <div class="block">Returns true to designate that this object is a living character.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/living.html#setup()">setup</a></strong>()</code>
-<div class="block">Set up a new living object.</div>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/living.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
 </td>
 </tr>
 </table>
@@ -109,7 +116,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/modules/id">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/id.html" title="program /modules/id">IdMixin </a></h3>
-<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
+<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_capabilities()">query_capabilities</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
 
 </ul>
 
@@ -127,13 +134,13 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="setup()">
+<a name="create()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setup</h4>
-<pre>protected&nbsp;void&nbsp;setup()</pre>
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
 <div class="block">Set up a new living object.</div>
 <dl>
 <dl>
@@ -151,6 +158,20 @@
 <dl>
 <dl>
 <dt><span class="strong">Returns:</span></dt><dd>1 </dd>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

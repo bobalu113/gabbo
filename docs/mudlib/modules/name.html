@@ -87,22 +87,34 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/name.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/name.html#query_first_name()">query_first_name</a></strong>()</code>
 <div class="block">Return the first name of this character, or 0 if unnamed.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/name.html#query_full_name()">query_full_name</a></strong>()</code>
 <div class="block">Return the full name of this character, generally first name plus last
 name.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/name.html#query_last_name()">query_last_name</a></strong>()</code>
 <div class="block">Return the last name of this character, or 0 if unnamed.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/name.html#query_name()">query_name</a></strong>()</code>
+<div class="block">Return the display name based on user preferences.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -165,49 +177,6 @@ name.</div>
 </dl>
 </li>
 </ul>
-<a name="query_last_name()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_last_name</h4>
-<pre>public&nbsp;string&nbsp;query_last_name()</pre>
-<div class="block">Return the last name of this character, or 0 if unnamed.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>the character's last name, or 0 </dd>
-</dl>
-</li>
-</ul>
-<a name="query_nickname()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_nickname</h4>
-<pre>public&nbsp;string&nbsp;query_nickname()</pre>
-<div class="block">Return the nickname of this character, or 0 if unnamed.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>the character's nickname, or 0 </dd>
-</dl>
-</li>
-</ul>
-<a name="query_full_name()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_full_name</h4>
-<pre>public&nbsp;string&nbsp;query_full_name()</pre>
-<div class="block">Return the full name of this character, generally first name plus last
-name.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>the full name of the character, or 0 if no first or last name </dd>
-</dl>
-</li>
-</ul>
 <a name="set_first_name()">
 <!--   -->
 </a>
@@ -220,6 +189,20 @@ name.</div>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>str</code> - the first name to set </dd>
+</dl>
+</li>
+</ul>
+<a name="query_last_name()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_last_name</h4>
+<pre>public&nbsp;string&nbsp;query_last_name()</pre>
+<div class="block">Return the last name of this character, or 0 if unnamed.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the character's last name, or 0 </dd>
 </dl>
 </li>
 </ul>
@@ -238,6 +221,20 @@ name.</div>
 </dl>
 </li>
 </ul>
+<a name="query_nickname()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_nickname</h4>
+<pre>public&nbsp;string&nbsp;query_nickname()</pre>
+<div class="block">Return the nickname of this character, or 0 if unnamed.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the character's nickname, or 0 </dd>
+</dl>
+</li>
+</ul>
 <a name="set_nickname()">
 <!--   -->
 </a>
@@ -253,6 +250,35 @@ name.</div>
 </dl>
 </li>
 </ul>
+<a name="query_full_name()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_full_name</h4>
+<pre>public&nbsp;string&nbsp;query_full_name()</pre>
+<div class="block">Return the full name of this character, generally first name plus last
+name.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the full name of the character, or 0 if no first or last name </dd>
+</dl>
+</li>
+</ul>
+<a name="query_name()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_name</h4>
+<pre>public&nbsp;string&nbsp;query_name()</pre>
+<div class="block">Return the display name based on user preferences.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>display name </dd>
+</dl>
+</li>
+</ul>
 <a name="setup_name()">
 <!--   -->
 </a>
@@ -264,6 +290,20 @@ name.</div>
 mixin's private variables are initialized in the parent implementation.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

@@ -16,8 +16,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/shell.html" target="_top">Frames</a></li>
-<li><a href="../../modules/shell.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/lib/format_strings.html" target="_top">Frames</a></li>
+<li><a href="../../lib/format_strings.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>
@@ -53,22 +53,16 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/modules/shell</div>
-<h2 title="Program ShellMixin " class="title">Program ShellMixin </h2>
+<div class="subTitle">/lib/format_strings</div>
+<h2 title="Program FormatStringsLib " class="title">Program FormatStringsLib </h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Inherited Programs:</dt>
-<dd>
-<ul class="tree"><li class="last"><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></dd>
-</dl>
 <hr>
 <br>
-<div class="block">The ShellMixin provides the features of a Unix-like shell.</div>
+<div class="block">Utility library for parsing format strings into runnable lambda closures.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
@@ -94,32 +88,22 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#query_cwd()">query_cwd</a></strong>()</code>
-<div class="block">Return the player's current working directory.</div>
+<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_arg()">parse_arg</a></strong>(int&nbsp;token,&nbsp;string *parts,&nbsp;int&nbsp;size,&nbsp;string&nbsp;part,&nbsp;int&nbsp;cursor,&nbsp;string&nbsp;def)</code>
+<div class="block">Parse a format token which takes an optional argument.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#query_homedir()">query_homedir</a></strong>()</code>
-<div class="block">Return the player's home directory.</div>
+<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_logger_format()">parse_logger_format</a></strong>(string&nbsp;format)</code>
+<div class="block">Parse a format string into a closure that can be invoked later by the
+logger to format a log line.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#set_cwd()">set_cwd</a></strong>(string&nbsp;dir)</code>
-<div class="block">Set the current working directory for this player.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#set_homedir()">set_homedir</a></strong>(string&nbsp;dir)</code>
-<div class="block">Set the home directory for this player.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/shell.html#setup_shell()">setup_shell</a></strong>()</code>
-<div class="block">Initialize ShellMixin.</div>
+<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_mobile_format()">parse_mobile_format</a></strong>(string&nbsp;format)</code>
+<div class="block">Parse a format string into a closure that can be invoked later by the
+logger to format a log line.</div>
 </td>
 </tr>
 </table>
@@ -138,76 +122,72 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="query_cwd()">
+<a name="parse_arg()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_cwd</h4>
-<pre>public&nbsp;string&nbsp;query_cwd()</pre>
-<div class="block">Return the player's current working directory.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>the player's current working directory </dd>
-</dl>
-</li>
-</ul>
-<a name="set_cwd()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_cwd</h4>
-<pre>public&nbsp;int&nbsp;set_cwd(string&nbsp;dir)</pre>
-<div class="block">Set the current working directory for this player.</div>
+<h4>parse_arg</h4>
+<pre>public&nbsp;string&nbsp;parse_arg(int&nbsp;token,&nbsp;string *parts,&nbsp;int&nbsp;size,&nbsp;string&nbsp;part,&nbsp;int&nbsp;cursor,&nbsp;string&nbsp;def)</pre>
+<div class="block">Parse a format token which takes an optional argument.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - the directory to set </dd>
-<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+<dd><code>token</code> - the token (i.e. the 't' part of %t{%d}) </dd>
+<dd><code>parts</code> - an array of all the tokenized parts of the format string </dd>
+<dd><code>size</code> - sizeof(parts) </dd>
+<dd><code>part</code> - the part currently being parsed </dd>
+<dd><code>cursor</code> - the index of the part currently being parsed, passed by reference (this cursor may need to be advanced) </dd>
+<dd><code>def</code> - default value of arg if no arg could be found, or 0 to return 0 in the absense of an arg </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the argument string (i.e. the "%d" part of %t{%d}) </dd>
 </dl>
 </li>
 </ul>
-<a name="query_homedir()">
+<a name="parse_mobile_format()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_homedir</h4>
-<pre>public&nbsp;string&nbsp;query_homedir()</pre>
-<div class="block">Return the player's home directory.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>the player's home directory. </dd>
-</dl>
-</li>
-</ul>
-<a name="set_homedir()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_homedir</h4>
-<pre>public&nbsp;int&nbsp;set_homedir(string&nbsp;dir)</pre>
-<div class="block">Set the home directory for this player.</div>
+<h4>parse_mobile_format</h4>
+<pre>public&nbsp;closure&nbsp;parse_mobile_format(string&nbsp;format)</pre>
+<div class="block">Parse a format string into a closure that can be invoked later by the
+logger to format a log line. The closure will take the arguments:
+<pre>
+'verb: the verb being used to travel
+'dir:  for out msg, the exit direction. for in msg, the entrance
+direction, or 0 if entrance could not be discerned. always 0 for
+teleport messages.
+</pre></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>dir</code> - the directory to set </dd>
-<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+<dd><code>format</code> - the format string </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the formatter closure, bound to THISO </dd>
 </dl>
 </li>
 </ul>
-<a name="setup_shell()">
+<a name="parse_logger_format()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setup_shell</h4>
-<pre>protected&nbsp;void&nbsp;setup_shell()</pre>
-<div class="block">Initialize ShellMixin.</div>
+<h4>parse_logger_format</h4>
+<pre>public&nbsp;closure&nbsp;parse_logger_format(string&nbsp;format)</pre>
+<div class="block">Parse a format string into a closure that can be invoked later by the
+logger to format a log line. The closure will take the arguments:
+<pre>
+'category: the category of the logger
+'priority: the priority of the log event
+'message: an optional error message
+'caller: an array read from
+<code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
+for the invoking stackframe, or 0 if no caller was found
+</pre></div>
 <dl>
 <dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>format</code> - the format string </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the formatter closure, bound to the factory </dd>
 </dl>
 </li>
 </ul>
@@ -233,8 +213,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/shell.html" target="_top">Frames</a></li>
-<li><a href="../../modules/shell.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/lib/format_strings.html" target="_top">Frames</a></li>
+<li><a href="../../lib/format_strings.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>

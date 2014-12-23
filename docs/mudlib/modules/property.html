@@ -159,36 +159,42 @@ in use at the time the function is called.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/property.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/property.html#query_masking_prop()">query_masking_prop</a></strong>(string&nbsp;prop,&nbsp;mixed&nbsp;owner)</code>
 <div class="block">Test whether a specified object is currently masking a specified property.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/property.html#query_prop()">query_prop</a></strong>(string&nbsp;prop)</code>
 <div class="block">Get the value of a property.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/property.html#remove_prop()">remove_prop</a></strong>(string&nbsp;prop)</code>
 <div class="block">Completely remove a property from an object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/property.html#set_prop()">set_prop</a></strong>(string&nbsp;prop,&nbsp;mixed&nbsp;value)</code>
 <div class="block">Set the value of a property.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/property.html#setup_property()">setup_property</a></strong>()</code>
 <div class="block">Initialize PropertyMixin.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/property.html#unmask_prop()">unmask_prop</a></strong>(string&nbsp;prop,&nbsp;mixed&nbsp;owner)</code>
 <div class="block">Removes a mask placed on a specified property by a specified object.</div>
@@ -250,6 +256,23 @@ access check must be passed.</div>
 </dl>
 </li>
 </ul>
+<a name="query_prop()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_prop</h4>
+<pre>public&nbsp;mixed&nbsp;query_prop(string&nbsp;prop)</pre>
+<div class="block">Get the value of a property. The caller must first pass the QUERY_PROP
+access check.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>prop</code> - the name of the property </dd>
+<dt><span class="strong">Returns:</span></dt><dd>if the property exists and is accessible, returns the property value, otherwise 0 </dd>
+</dl>
+</li>
+</ul>
 <a name="set_prop()">
 <!--   -->
 </a>
@@ -282,23 +305,6 @@ the REMOVE_PROP access check.</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>prop</code> - the name of the property to be removed </dd>
 <dt><span class="strong">Returns:</span></dt><dd>1 if the property was successfully removed, otherwise 0 </dd>
-</dl>
-</li>
-</ul>
-<a name="query_prop()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_prop</h4>
-<pre>public&nbsp;mixed&nbsp;query_prop(string&nbsp;prop)</pre>
-<div class="block">Get the value of a property. The caller must first pass the QUERY_PROP
-access check.</div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>prop</code> - the name of the property </dd>
-<dt><span class="strong">Returns:</span></dt><dd>if the property exists and is accessible, returns the property value, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -436,6 +442,20 @@ configured a valid access method. See check_access().</div>
 <div class="block">Initialize PropertyMixin.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

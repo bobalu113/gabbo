@@ -64,7 +64,8 @@
 <dt>All Inherited Programs:</dt>
 <dd>
 <ul class="tree"><li class="last"><a href="../modules/id.html" title="">IdMixin </a>
-</li></ul></dd>
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -86,11 +87,42 @@
 <!--   -->
 </a>
 <h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/thing.html#create()">create</a></strong>()</code>
+<div class="block">Set up a new thing.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/thing.html#id()">id</a></strong>(string&nbsp;str)</code>
+<div class="block">Boilerplate id() implementation</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/thing.html#is_thing()">is_thing</a></strong>()</code>
+<div class="block">Returns true to designate that this object represents a thing in the game.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/thing.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/modules/id">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/id.html" title="program /modules/id">IdMixin </a></h3>
-<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
+<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_capabilities()">query_capabilities</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
 
 </ul>
 
@@ -102,6 +134,73 @@
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Set up a new thing.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>id</h4>
+<pre>public&nbsp;int&nbsp;id(string&nbsp;str)</pre>
+<div class="block">Boilerplate id() implementation</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the potential id </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero if the id matches </dd>
+</dl>
+</li>
+</ul>
+<a name="is_thing()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>is_thing</h4>
+<pre>public&nbsp;nomask&nbsp;int&nbsp;is_thing()</pre>
+<div class="block">Returns true to designate that this object represents a thing in the game.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>1 </dd>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>

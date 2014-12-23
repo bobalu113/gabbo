@@ -105,24 +105,30 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command()">query_command</a></strong>(string&nbsp;verb)</code>
 <div class="block">Return the command for a given verb.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command_flag()">query_command_flag</a></strong>(string&nbsp;verb)</code>
 <div class="block">Return the action flags for a given verb.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_verbs()">query_verbs</a></strong>()</code>
 <div class="block">Return the mapping of all configured command verbs.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#setup_command_giver()">setup_command_giver</a></strong>()</code>
 <div class="block">Initialize CommandGiverMixin.</div>
@@ -255,6 +261,20 @@ function before being routed to the proper command object.</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>arg</code> - the command-line argument </dd>
 <dt><span class="strong">Returns:</span></dt><dd>the result of the command execution; 1 for success, 0 for failure. </dd>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

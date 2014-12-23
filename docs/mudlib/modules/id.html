@@ -60,6 +60,12 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></dd>
+</dl>
 <hr>
 <br>
 <div class="block">Support for objects which can be identified on the command line.</div>
@@ -93,48 +99,54 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return the capabilities this mixin provides.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_ids()">query_ids</a></strong>()</code>
 <div class="block">Return a list of all the ids of the object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_primary_id()">query_primary_id</a></strong>()</code>
 <div class="block">Returns the primary id of the object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a></strong>()</code>
 <div class="block">Return the secondary ids of the object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a></strong>(string&nbsp;str)</code>
 <div class="block">Remove a secondary id from the object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#set_primary_id()">set_primary_id</a></strong>(string&nbsp;str)</code>
 <div class="block">Set the primary id of the object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a></strong>(string *str)</code>
 <div class="block">Set all secondary ids of the object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#setup_id()">setup_id</a></strong>()</code>
 <div class="block">Initialize IdMixin.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#test_id()">test_id</a></strong>(string&nbsp;str)</code>
 <div class="block">Test whether a string matches one of the ids applied to this object.</div>
@@ -172,53 +184,6 @@ the object on the command line.</div>
 </dl>
 </li>
 </ul>
-<a name="query_secondary_ids()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_secondary_ids</h4>
-<pre>public&nbsp;string&nbsp;*query_secondary_ids()</pre>
-<div class="block">Return the secondary ids of the object. An object may have any number of
-secondary ids. These ids may be used to identify the object, but should
-not be used when giving player usage instructions.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>the array of secondary ids </dd>
-</dl>
-</li>
-</ul>
-<a name="query_ids()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_ids</h4>
-<pre>public&nbsp;string&nbsp;*query_ids()</pre>
-<div class="block">Return a list of all the ids of the object. This is the primary id plus
-any secondary ids which have been applied to the object.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>an array of all ids </dd>
-</dl>
-</li>
-</ul>
-<a name="test_id()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>test_id</h4>
-<pre>public&nbsp;int&nbsp;test_id(string&nbsp;str)</pre>
-<div class="block">Test whether a string matches one of the ids applied to this object.</div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>str</code> - the string to test </dd>
-<dt><span class="strong">Returns:</span></dt><dd>1 if the string is a valid id, 0 if not </dd>
-</dl>
-</li>
-</ul>
 <a name="set_primary_id()">
 <!--   -->
 </a>
@@ -232,6 +197,22 @@ any secondary ids which have been applied to the object.</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>str</code> - the new primary id </dd>
 <dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="query_secondary_ids()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_secondary_ids</h4>
+<pre>public&nbsp;string&nbsp;*query_secondary_ids()</pre>
+<div class="block">Return the secondary ids of the object. An object may have any number of
+secondary ids. These ids may be used to identify the object, but should
+not be used when giving player usage instructions.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the array of secondary ids </dd>
 </dl>
 </li>
 </ul>
@@ -285,6 +266,37 @@ secondary id, it will be shifted to the end of the array.</div>
 </dl>
 </li>
 </ul>
+<a name="query_ids()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_ids</h4>
+<pre>public&nbsp;string&nbsp;*query_ids()</pre>
+<div class="block">Return a list of all the ids of the object. This is the primary id plus
+any secondary ids which have been applied to the object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>an array of all ids </dd>
+</dl>
+</li>
+</ul>
+<a name="test_id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>test_id</h4>
+<pre>public&nbsp;int&nbsp;test_id(string&nbsp;str)</pre>
+<div class="block">Test whether a string matches one of the ids applied to this object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the string to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the string is a valid id, 0 if not </dd>
+</dl>
+</li>
+</ul>
 <a name="setup_id()">
 <!--   -->
 </a>
@@ -296,6 +308,20 @@ secondary id, it will be shifted to the end of the array.</div>
 mixin's private variables are initialized in the parent implementation.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return the capabilities this mixin provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the 'id' capability </dd>
 </dl>
 </li>
 </ul>

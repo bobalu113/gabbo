@@ -106,8 +106,8 @@ by pattern.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
-<td class="colLast"><code><strong><a href="../lib/file.html#expand_pattern()">expand_pattern</a></strong>(string&nbsp;pattern)</code>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;mixed&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../lib/file.html#expand_pattern()">expand_pattern</a></strong>(string&nbsp;pattern,&nbsp;object&nbsp;who)</code>
 <div class="block">Resolve a file pattern containing possible wildcards.</div>
 </td>
 </tr>
@@ -121,6 +121,12 @@ by pattern.</div>
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/file.html#is_directory()">is_directory</a></strong>(string&nbsp;filename)</code>
 <div class="block">Test whether a path is a directory.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/file.html#is_loadable()">is_loadable</a></strong>(string&nbsp;file)</code>
+<div class="block">Return true if a file can be loaded (ends in .c basically).</div>
 </td>
 </tr>
 </table>
@@ -230,7 +236,7 @@ directories specified with '~' will also be resolved according to 'who'.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>expand_pattern</h4>
-<pre>public&nbsp;string&nbsp;*expand_pattern(string&nbsp;pattern)</pre>
+<pre>public&nbsp;varargs&nbsp;mixed&nbsp;*expand_pattern(string&nbsp;pattern,&nbsp;object&nbsp;who)</pre>
 <div class="block">Resolve a file pattern containing possible wildcards. Wildcards may be
 expressed as a '*' or '?' as specified by get_dir(E). Wildcard characters
 in the middle of the path will be expanded in place (e.g.
@@ -239,7 +245,24 @@ in the middle of the path will be expanded in place (e.g.
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>pattern</code> - the file pattern to expand </dd>
+<dd><code>who</code> - optional object from which relative paths should be resolved, defaults to THISO </dd>
 <dt><span class="strong">Returns:</span></dt><dd>a list of all matching files (constrained by valid_read) </dd>
+</dl>
+</li>
+</ul>
+<a name="is_loadable()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>is_loadable</h4>
+<pre>public&nbsp;int&nbsp;is_loadable(string&nbsp;file)</pre>
+<div class="block">Return true if a file can be loaded (ends in .c basically).</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>file</code> - the filename </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if file can be loaded, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
