@@ -8,8 +8,10 @@ I got a couple decisions I made early on that I haven't quite made peace with.
 
 The first is canonical names for directories and files. I went with directories being defined with a leading slash but no trailing slash. So you'll see stuff like this in the global include file:
 
-<pre><code> #define ModulesDir  "/modules"
- #define RoomCode    ModulesDir "/room"</code></pre>
+<pre><code><!--
+-->#define ModulesDir  "/modules"
+#define RoomCode    ModulesDir "/room"<!--
+--></code></pre>
 
 This is usually how I represent directories in code, though I'm too tired right now to try and articulate any reason why. Something about this still smells wrong to me, though, so I dunno.
 <!-- more -->
