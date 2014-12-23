@@ -1,4 +1,4 @@
 baseurl: /gabbo
 permalink: pretty
 markdown: rdiscount
-excerpt_separator: <!--more-->
+excerpt_separator: <!-- more -->
