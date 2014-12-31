@@ -25,6 +25,6 @@ nomask public int is_container() {
  * 
  * @return a zero-width mapping of capabilities
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ThingCode::query_capabilities();
 }

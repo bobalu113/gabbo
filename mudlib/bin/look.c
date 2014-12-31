@@ -24,6 +24,9 @@ int do_command(string arg) {
 
   // scope to room, include detail ids
   arg = implode(args[0], " ");
+  if (!strlen(arg)) {
+    arg = "here";
+  }
   mixed *targets = expand_objects(arg, 
                                   THISP,
                                   DEFAULT_CONTEXT, 

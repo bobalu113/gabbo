@@ -1,3 +1,10 @@
+/**
+ * A base object for vehicles.
+ * 
+ * @author devo@eotl
+ * @alias VehicleCode
+ */
+
 inherit ContainerCode;
 
 inherit MobileMixin;
@@ -15,7 +22,7 @@ int is_vehicle() {
  * Return a zero-width mapping of the capabilities this program provides.
  * @return a zero-width mapping of capabilities
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ContainerCode::query_capabilities() 
          + MobileMixin::query_capabilities();
 }

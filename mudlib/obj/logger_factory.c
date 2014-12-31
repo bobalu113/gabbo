@@ -4,8 +4,8 @@
  * throughout the filesystem. When new loggers are created, they are added to
  * a pool so that they may be reused again in a later execution without the
  * overhead of re-configuration. The factory is responsible for cleaning up
- * logger objects which are no longer in use. 
- * 
+ * logger objects which are no longer in use.
+ *
  * @alias LoggerFactory
  */
 #pragma no_clone
@@ -39,11 +39,9 @@ default private functions;
 public varargs object get_logger(mixed category, object rel, int reconfig);
 mapping read_config(string category, string dir);
 mapping read_properties(string prop_file);
-string read_prop_value(mapping props, string prop, string dir, 
+string read_prop_value(mapping props, string prop, string dir,
                        string category);
 protected mixed *parse_output_prop(string val);
-string parse_arg(int token, string *parts, int size, string part, int index, 
-                 string def);
 string normalize_category(mixed category);
 public object get_null_logger();
 public int release_logger(mixed category);
@@ -52,12 +50,12 @@ int clean_up_loggers();
 /**
  * Retrieve a logger instance for the given category from the pool, or create
  * a new one from configuration. A category is represented as a hierarchical
- * string of the form, "supercat.category.subcat.<...>". The category may 
+ * string of the form, "supercat.category.subcat.<...>". The category may
  * also be specified as a filesystem path, in which case the path
  * delimiters (forward slashes) will be converted to the category delimiter
  * (periods).
  *
- * @param  category an object or string representing the category; if an 
+ * @param  category an object or string representing the category; if an
  *                  object is specfied, it's program_name(E) will be used.
  * @param  rel      optional object to use for resolving relative paths in
  *                  configuration files; if unspecified, previous_object()
@@ -72,7 +70,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   if (!rel) {
     rel = previous_object();
   }
-  
+
   // special check for LoggeryFactory's logger
   if (normalize_category(THISO) == category) {
     return factory_logger;
@@ -100,9 +98,10 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   // compile formatter
   closure formatter = formatters[config["format"]];
   if (!formatter) {
-    formatter = parse_logger_format(config["format"]);
+    formatter = parse_format(config["format"], LOGGER_FORMAT,
+                             ({ 'category, 'priority, 'message, 'caller }));
   }
-  
+
   // configure our logger
   if (!logger) {
     logger = clone_object(Logger);
@@ -121,8 +120,8 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
 
 /**
  * Read in logger configuration for the specified category. Starting in the
- * specified directory, this function will look for the file 
- * "etc/logger.properties", and inspect the file for any configuration 
+ * specified directory, this function will look for the file
+ * "etc/logger.properties", and inspect the file for any configuration
  * properties which apply to the specified category. The result is a mapping
  * of the form:
  * <code>
@@ -131,9 +130,9 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
  *    "level"  : str level
  * ])
  * </code>
- * 
+ *
  * @param  category the category to match configuration properties against
- * @param  dir      the starting directory from which to search for 
+ * @param  dir      the starting directory from which to search for
  *                  properties files
  * @return          the configuration mapping
  */
@@ -180,7 +179,7 @@ mapping read_config(string category, string dir) {
  * Parse a properties file into a mapping of property names to their values.
  * Properties are defined in a single line, of the format "name=value". Lines
  * beginning with "#" will be treated as comments.
- * 
+ *
  * @param  prop_file the path to the property file
  * @return           a mapping of property names to values, or 0 if the file
  *                   could not be read
@@ -201,7 +200,7 @@ mapping read_properties(string prop_file) {
 
     int equals = member(line, '=');
     if (equals == -1) {
-      factory_logger->warn("Malformed property on line %d of %s", 
+      factory_logger->warn("Malformed property on line %d of %s",
         count, prop_file);
       continue;
     }
@@ -214,18 +213,18 @@ mapping read_properties(string prop_file) {
 }
 
 /**
- * Look for a property in the property mapping by name which matches a 
+ * Look for a property in the property mapping by name which matches a
  * specific category, and return its value.
- * 
+ *
  * @param  props    the property map
  * @param  prop     the name of the property to find
- * @param  path     categories in the property file will be resolved relative 
+ * @param  path     categories in the property file will be resolved relative
  *                  to this path (delimited by periods or forward slashes)
  * @param  category the category which a property must match to be returned
  * @return          the property value for the specified property name and
  *                  category, or 0 if no matching property could be found
  */
-string read_prop_value(mapping props, string prop, string path, 
+string read_prop_value(mapping props, string prop, string path,
                        string category) {
   path = implode(explode(path, "/"), ".");
   if (category[0..(strlen(path)-1)] != path) {
@@ -243,18 +242,18 @@ string read_prop_value(mapping props, string prop, string path,
     }
     rel_category = rel_category[0..(pos-1)];
   }
-  return 0;  
+  return 0;
 }
 
 /**
- * Translate the property value of an output property to something more 
+ * Translate the property value of an output property to something more
  * structured than a string. The result will be of the form:
- * 
+ *
  * <code>({ ({ int type, string target }), ... })</code>
- * 
- * where type is one of 'c' or 'f' and target is an object spec or a file 
+ *
+ * where type is one of 'c' or 'f' and target is an object spec or a file
  * path, for console output or file output, respectively.
- * 
+ *
  * @param  val the value of the output property
  * @return     an array of output targets
  */
@@ -276,7 +275,7 @@ protected mixed *parse_output_prop(string val) {
 /**
  * Derive the cannonical category name from object or filesystem path input.
  * @param  category an object, filesystem path, or category name
- * @return          the cannonical category 
+ * @return          the cannonical category
  */
 string normalize_category(mixed category) {
   if (objectp(category)) {
@@ -305,11 +304,11 @@ public object get_null_logger() {
 }
 
 /**
- * Releases a logger object from the logger pool, thereby removing any 
+ * Releases a logger object from the logger pool, thereby removing any
  * references to it held by the factory. If there are no other references,
  * the logger will also be destructed.
- * 
- * @param  category an object or string representing the category; if an 
+ *
+ * @param  category an object or string representing the category; if an
  *                  object is specfied, it's program_name(E) will be used.
  * @return          1 if a logger was released, 0 if no logger was found
  */
@@ -331,17 +330,17 @@ public int release_logger(mixed category) {
 }
 
 /**
- * Clean up stale loggers, called once per reset. A logger is considered 
- * stale if it hasn't been referenced in 5 minutes, and is referenced by 
+ * Clean up stale loggers, called once per reset. A logger is considered
+ * stale if it hasn't been referenced in 5 minutes, and is referenced by
  * nothing except the LoggerFactory.
- * 
+ *
  * @return the number of logging categories released (may be more than the
  *         number loggers destructed if loggers are shared between categories)
  */
 int clean_up_loggers() {
   int result = 0;
   foreach (string category, object logger : loggers) {
-    if (!logger) { continue; } 
+    if (!logger) { continue; }
 
     int ref_time = (int) object_info(logger, OINFO_BASIC, OIB_TIME_OF_REF);
     if ((time() - ref_time) >= LOGGER_STALE_TIME) {
@@ -363,7 +362,10 @@ public int create() {
   factory_logger = clone_object(Logger);
   factory_logger->set_category(normalize_category(THISO));
   factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
-  factory_logger->set_formatter(parse_logger_format(DEFAULT_FORMAT));
+  factory_logger->set_formatter(
+    parse_format(DEFAULT_FORMAT, LOGGER_FORMAT,
+                 ({ 'category, 'priority, 'message, 'caller }))
+  );
   factory_logger->set_level(LVL_WARN);
   return FACTORY_RESET_TIME;
 }

@@ -51,7 +51,7 @@ string query_exit_msgout(string verb, string dir) {
  * @return     1 for success, 0 for failure
  */
 int set_exit_msgout(string fmt) {
-  exit_msgout = parse_mobile_format(fmt);
+  exit_msgout = parse_format(fmt, MESSAGE_FORMAT, ({ 'who, 'verb, 'dir }));
   exit_msgout_fmt = fmt;
   return 1;
 }
@@ -79,7 +79,7 @@ string query_exit_msgin(string verb, string dir) {
  * @return     1 for success, 0 for failure
  */
 int set_exit_msgin(string fmt) {
-  exit_msgin = parse_mobile_format(fmt);
+  exit_msgin = parse_format(fmt, MESSAGE_FORMAT, ({ 'who, 'verb, 'dir }));
   exit_msgin_fmt = fmt;
   return 1;
 }
@@ -106,7 +106,7 @@ string query_zone_msgout(string verb, string dir) {
  * @return     1 for success, 0 for failure
  */
 int set_zone_msgout(string fmt) {
-  zone_msgout = parse_mobile_format(fmt);
+  zone_msgout = parse_format(fmt, MESSAGE_FORMAT, ({ 'who, 'verb, 'dir }));
   zone_msgout_fmt = fmt;
   return 1;
 }
@@ -134,7 +134,7 @@ string query_zone_msgin(string verb, string dir) {
  * @return     1 for success, 0 for failure
  */
 int set_zone_msgin(string fmt) {
-  zone_msgin = parse_mobile_format(fmt);
+  zone_msgin = parse_format(fmt, MESSAGE_FORMAT, ({ 'who, 'verb, 'dir }));
   zone_msgin_fmt = fmt;
   return 1;
 }
@@ -158,7 +158,8 @@ string query_teleport_msgout() {
  * @return     1 for success, 0 for failure
  */
 int set_teleport_msgout(string fmt) {
-  teleport_msgout = parse_mobile_format(fmt);
+  teleport_msgout = 
+    parse_format(fmt, MESSAGE_FORMAT, ({ 'who, 'verb, 'dir }));
   teleport_msgout_fmt = fmt;
   return 1;
 }
@@ -182,7 +183,8 @@ string query_teleport_msgin() {
  * @return     1 for success, 0 for failure
  */
 int set_teleport_msgin(string fmt) {
-  teleport_msgin = parse_mobile_format(fmt);
+  teleport_msgin = 
+    parse_format(fmt, MESSAGE_FORMAT, ({ 'who, 'verb, 'dir }));
   teleport_msgin_fmt = fmt;
   return 1;
 }
@@ -509,6 +511,6 @@ void setup_mobile() {
  * 
  * @return the 'mobile' capability
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_MOBILE ]);
 }

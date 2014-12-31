@@ -1,64 +1,56 @@
 /**
  * Utility library for parsing format strings into runnable lambda closures.
- * 
+ *
  * @author devo
  * @alias FormatStringsLib
  */
 
-// TODO refactor into a generic parse_format() function
-#define FMT_CATEGORY       'c'
-#define FMT_OBJECT         'C'
-#define FMT_DATE           'd'
-#define FMT_LOCATION       'l'
-#define FMT_LINE           'L'
-#define FMT_MSG            'm'
-#define FMT_NEWLINE        'n'
-#define FMT_PRIORITY       'p'
-#define FMT_MILLIS         'r'
-#define FMT_PERCENT        '%'
-
-#define FMT_VERB           'v'
-#define FMT_DIRECTION      'c'
-#define FMT_NAME           'a'
-#define FMT_SHORT          's'
-
 #include <sys/debug_info.h>
 
-#define DEFAULT_VERB       "move"
-#define DEFAULT_NAME       "Something"
-#define DEFAULT_SHORT      "something"
+#define DEFAULT_ARG  0
+#define SPRINTF_FMT  1
+#define FMT_LAMBDA   2
+
+private variables private functions inherit ArrayLib;
 
 /**
  * Parse a format token which takes an optional argument.
- * 
- * @param  token  the token (i.e. the 't' part of %t{%d})
+ *
  * @param  parts  an array of all the tokenized parts of the format string
  * @param  size   sizeof(parts)
- * @param  part   the part currently being parsed
+ * @param  part   the part currently being parsed, minus the leading format
+ *                token, passed by reference; after this function finishes,
+ *                any args found in part will be parsed out and its value
+ *                will be any remaining content found after arg
  * @param  cursor the index of the part currently being parsed, passed by
- *                reference (this cursor may need to be advanced)
- * @param  def    default value of arg if no arg could be found, or 0 to 
+ *                reference (this cursor may need to be advanced if arg spans
+ *                across parts)
+ * @param  def    default value of arg if no arg could be found, or 0 to
  *                return 0 in the absense of an arg
  * @return        the argument string (i.e. the "%d" part of %t{%d})
  */
-string parse_arg(int token, string *parts, int size, string part, int cursor, 
+string parse_arg(string *parts, int size, string part, int cursor,
                  string def) {
   object logger = LoggerFactory->get_logger(THISO);
   string arg;
-  if (sscanf(part, to_string(({ token })) + "{%s}%s", arg, part) == 2);
-  else if (strlen(part) < 2) {
-    part = "";
+  if (sscanf(part, "{%s}%s", arg, part) == 2) {
+    // found entire arg in this part, parse it out
+  } else if (!strlen(part)) {
+    // no arg and no more chars, assign default arg
     arg = def;
-  } else if (part[1] != '{') {  
-    part = part[1..];
+  } else if (part[0] != '{') {
+    // no arg but extra chars, assign default and normalize part
     arg = def;
   } else {
-    if (strlen(part) > 2) {
-      arg = part[2..];
+    if (strlen(part) > 1) {
+      // arg found, parse out all remaining content from the current part
+      arg = part[1..];
     } else {
+      // no more content left in this part, initialize arg with empty string
       arg = "";
     }
 
+    // now go looking for close brace in parts that follow
     int j = cursor + 1, pos = -1;
     string tmp;
     for (; j < size; j++) {
@@ -68,36 +60,26 @@ string parse_arg(int token, string *parts, int size, string part, int cursor,
       }
     }
     if (pos == -1) {
+      // no close brace found
       logger->error("Invalid format: %%%s", part);
       return 0;
     }
-    if (strlen(tmp)) { 
-      tmp = "%" + tmp;
-    }
-    arg = sprintf("%s%s%s", arg, implode(parts[cursor+1..pos-1], "%"), tmp);
+    // concatenate arg-so-far, all the arg-containing parts, and whatever was
+    // found inside the closing curly brace, restoring all the format tokens
+    arg = sprintf("%s%s%%%s", arg, implode(parts[cursor+1..pos-1], "%"), tmp);
+    /* I dunno why this is here
     if (arg[0] != '%') {
       arg = "%" + arg;
     }
+    */
+    // move cursor forward to next part
     cursor = j;
   }
   return arg;
 }
 
-/**
- * Parse a format string into a closure that can be invoked later by the 
- * logger to format a log line. The closure will take the arguments:
-
-   <pre>
-   'verb: the verb being used to travel
-   'dir:  for out msg, the exit direction. for in msg, the entrance 
-          direction, or 0 if entrance could not be discerned. always 0 for
-          teleport messages.
-   </pre>
-
- * @param  format the format string
- * @return        the formatter closure, bound to THISO
- */
-closure parse_mobile_format(string format) {
+closure parse_format(string format, mapping infomap, symbol *args) {
+  object logger = LoggerFactory->get_logger(THISO);
   string output_fmt = "";
   mixed *output_args = ({ });
 
@@ -106,242 +88,24 @@ closure parse_mobile_format(string format) {
 
   if (!size || (size == 1 && (!strlen(format) || format[0] != '%'))) {
     // static string, just use as-is
-    output_args += ({ ({ #'return, format }) });
-    output_fmt = "%s";
+    output_fmt = format;
   } else {
     output_fmt += parts[0];
 
     for (int i = 1; i < size; i++) {
-      string part = parts[i];
-      switch (part[0]) {
-        
-        case FMT_NEWLINE: 
-        output_fmt += "\n";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_PERCENT: 
-        output_fmt += "%%";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_VERB:
-        output_args += ({ ({ #'||, 'verb, DEFAULT_VERB }) });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_DIRECTION:
-        string arg = parse_arg(FMT_OBJECT, parts, size, &part, &i, 0);
-        output_args += ({ 'dir });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_NAME:
-        string arg = parse_arg(FMT_OBJECT, parts, size, &part, &i, 0);
-        if (!arg) {
-          arg = DEFAULT_NAME;
-        }
-        output_args += ({ ({ #'||, 
-                          ({ #'call_other, 'who, "query_name" }),
-                          arg
-                        }) });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_SHORT:
-        string arg = parse_arg(FMT_OBJECT, parts, size, &part, &i, 0);
-        if (!arg) {
-          arg = DEFAULT_SHORT;
-        }
-        output_args += ({ ({ #'||, 
-                          ({ #'call_other, 'who, "query_short" }),
-                          arg
-                       }) });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
+      string part = parts[i][1..];
+      if (!member(infomap, parts[i][0])) {
+        logger->warn("Unknown format specifier: %c", parts[i][0]);
+        continue;
       }
+      mixed *info = infomap[parts[i][0]];
+      output_fmt = sprintf("%s%s%s", output_fmt, info[SPRINTF_FMT], part);
+      string arg = parse_arg(parts, size, &part, &i, info[DEFAULT_ARG]);
+      output_args += funcall(
+        reconstruct_lambda(({ 'arg }), info[FMT_LAMBDA]),
+        arg);
     }
   }
 
-  return lambda(({ 'who, 'verb, 'dir }), 
-                ({ #'sprintf, output_fmt }) + output_args);
+  return lambda(args, ({ #'sprintf, output_fmt }) + output_args);
 }
-
-
-/**
- * Parse a format string into a closure that can be invoked later by the 
- * logger to format a log line. The closure will take the arguments:
-
-   <pre>
-   'category: the category of the logger
-   'priority: the priority of the log event
-    'message: an optional error message
-     'caller: an array read from 
-              <code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
-              for the invoking stackframe, or 0 if no caller was found
-   </pre>
-
- * @param  format the format string
- * @return        the formatter closure, bound to the factory
- */
-closure parse_logger_format(string format) {
-  string output_fmt = "";
-  mixed *output_args = ({ });
-
-  string *parts = explode(format, "%");
-  int size = sizeof(parts);
-
-  if (!size || (size == 1 && (!strlen(format) || format[0] != '%'))) {
-    // static string, just use as-is
-    output_args += ({ ({ #'return, format }) });
-    output_fmt = "%s";
-  } else {
-    output_fmt += parts[0];
-
-    for (int i = 1; i < size; i++) {
-      string part = parts[i];
-      switch (part[0]) {
-        
-        case FMT_NEWLINE: 
-        output_fmt += "\n";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_PERCENT: 
-        output_fmt += "%%";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_CATEGORY:
-        int arg = to_int(
-          parse_arg(FMT_CATEGORY, parts, size, &part, &i, "0"));
-        if (arg) {
-          output_args += ({ ({ #'implode, 
-                          ({ #'[<.., ({ #'explode, 'category, "." }), arg }), 
-                          "."
-                    }) });
-                     
-        } else {
-          output_args += ({ 'category });
-        }
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_OBJECT:
-        int arg = to_int(parse_arg(FMT_OBJECT, parts, size, &part, &i, "0"));
-        mixed oname = ({ #'?, 
-                         'caller, 
-                         ({ #'[, 'caller, TRACE_PROGRAM }), 
-                         "" 
-                      });
-        if (arg) {
-          output_args += ({ ({ #'implode, 
-                          ({ #'[<.., ({ #'explode, oname, "/" }), arg }), 
-                          "."
-                    }) });
-                     
-        } else {
-          output_args += ({ oname });
-        }
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_LOCATION:
-        output_args += ({ ({ #'?,
-                             'caller,
-                             ({ #'sprintf, 
-                                "%s->%s(%s:%d)", 
-                                ({ #'[, 'caller, TRACE_OBJECT }),
-                                ({ #'[, 'caller, TRACE_NAME }),
-                                ({ #'[, 'caller, TRACE_PROGRAM }),
-                                ({ #'[, 'caller, TRACE_LOC })
-                             }),
-                             ""
-                       }) });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_LINE:
-        output_args += ({ ({ #'?,
-                             'caller,
-                             ({ #'[, 'caller, TRACE_LOC }),
-                             -1
-                       }) });
-        output_fmt += "%d";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_MSG:
-        output_args += ({ 'message });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_PRIORITY:
-        output_args += ({ ({ #'sprintf, "%-5s", 'priority }) });
-        output_fmt += "%s";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_MILLIS:
-        output_args += ({ ({ #'[, ({ #'utime }), 1 }) });
-        output_fmt += "%d";
-        if (strlen(part) > 1) {
-          output_fmt += part[1..];
-        }
-        break;
-
-        case FMT_DATE: 
-        string arg = parse_arg(FMT_DATE, parts, size, &part, &i, "%F %T");
-        output_args += ({ ({ #'||, 
-                             ({ #'strftime, arg, ({ #'time }) }), 
-                             "" 
-                       }) });
-        output_fmt += "%s";
-        if (strlen(part)) {
-          output_fmt += part;
-        }
-        break;
-      }
-    }
-  }
-
-  return lambda(({ 'category, 'priority, 'message, 'caller }), 
-    ({ #'sprintf, output_fmt }) + output_args);
-}
-

@@ -100,6 +100,6 @@ int set_z_coordinate(int coord) {
  * 
  * @return a zero-width mapping of capabilities
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return RoomCode::query_capabilities();
 }

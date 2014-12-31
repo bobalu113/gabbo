@@ -49,15 +49,17 @@ string get_zone(object ob) {
 varargs void tell_players(object *players, mixed msg, varargs mixed *args) {
   object oldp = THISP;
   if (stringp(msg)) {
-    msg = (: apply(#'sprintf, $1, $2) :);
+    // static string
+    msg = apply(#'sprintf, msg, args);
   }
   foreach (object player : players) {
     if (living(player)) {
-      set_this_player(player);
       string str;
       if (stringp(msg)) {
-        str = funcall((: apply(#'sprintf, $1, $2) :), msg, args);
+        str = msg;
       } else {
+        // message closure
+        set_this_player(player);
         str = apply(msg, args);
       }
       tell_object(player, str);
@@ -101,3 +103,16 @@ int is_capable(object ob, string cap) {
 string get_display(object ob) {
   return ob->query_name() || ob->query_short();
 }
+
+/**
+ * Is the object diegetic? Diegetic objects are the people, places, and 
+ * things that comprise the game world. Non-diegetic objects would be things
+ * like commands, daemons, or libraries.
+ * 
+ * @param  ob the object to test
+ * @return    1 if the object is diegetic, otherwise 0
+ */
+int is_diegetic(object ob) {
+  return ob->is_living() || ob->is_room() || ob-> is_thing();
+}
+

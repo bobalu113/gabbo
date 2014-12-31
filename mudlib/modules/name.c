@@ -116,7 +116,7 @@ protected void setup_name() {
  * 
  * @return a zero-width mapping of capabilities
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_NAME ]);
 }
 

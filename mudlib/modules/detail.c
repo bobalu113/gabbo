@@ -268,6 +268,6 @@ protected void setup_detail() {
  * 
  * @return the 'detail' capability
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_DETAIL ]);
 }

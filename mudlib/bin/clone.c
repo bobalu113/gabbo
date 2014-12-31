@@ -45,10 +45,12 @@ int do_command(string arg) {
       out += sprintf("%s: %s: Caught error cloning object\n", 
                      query_verb(), file); 
     } else {
-      err = catch (move_object(clone, THISP));
-      if (err) {
-        out += sprintf("%s: %s: Caught error moving to inventory\n", 
-                       query_verb(), file); 
+      if (!clone->is_room()) { 
+        err = catch (move_object(clone, THISP); publish);
+        if (err) {
+          out += sprintf("%s: %s: Caught error moving to inventory\n", 
+                         query_verb(), file); 
+        }
       }
       count++;
       if (member(arg, 'v')) {

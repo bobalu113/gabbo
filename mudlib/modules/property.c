@@ -702,6 +702,6 @@ protected void setup_property() {
  * 
  * @return a zero-width mapping of capabilities
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_PROPERTY ]);
 }

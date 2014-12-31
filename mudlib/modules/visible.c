@@ -78,6 +78,6 @@ protected void setup_visible() {
  * 
  * @return the 'visible' capability
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_VISIBLE ]);
 }

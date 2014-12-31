@@ -189,3 +189,17 @@ void enter_game() {
 nomask int is_avatar() {
   return 1;
 }
+
+/**
+ * Return a zero-width mapping of the capabilities this program provides.
+ * 
+ * @return a zero-width mapping of capabilities
+ */
+public mapping query_capabilities() {
+  return     LivingCode::query_capabilities()
+            + NameMixin::query_capabilities()
+         + VisibleMixin::query_capabilities()
+           + ShellMixin::query_capabilities()
+    + CommandGiverMixin::query_capabilities()
+          + MobileMixin::query_capabilities();
+}

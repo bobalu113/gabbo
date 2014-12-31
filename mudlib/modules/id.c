@@ -136,6 +136,6 @@ protected void setup_id() {
  * 
  * @return the 'id' capability
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_ID ]);
 }

@@ -74,8 +74,9 @@ protected void setup_shell() {
 
 /**
  * Return a zero-width mapping of the capabilities this program provides.
+ * 
  * @return a zero-width mapping of capabilities
  */
-mapping query_capabilities() {
+public mapping query_capabilities() {
   return ([ CAP_SHELL ]);
 }
