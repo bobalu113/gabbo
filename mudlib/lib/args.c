@@ -1,6 +1,6 @@
 /**
  * Utility library for parsing command arguments.
- * 
+ *
  * @author devo@eotl
  * @alias ArgsLib
  */
@@ -10,12 +10,12 @@
 private variables private functions inherit StringsLib;
 private variables private functions inherit ArrayLib;
 
-private int _find_close_char(string str, int start, string open, 
+private int _find_close_char(string str, int start, string open,
                              string close, int len, int style, string both);
 
 /**
  * Separate space-deliniated arguments, but keep quoted strings together.
- * 
+ *
  * @param  arg             the string containing quoted arguments
  * @param  preserve_quotes set to 1 if the quote characters should be
  *                         preserved in the resulting argument strings
@@ -23,9 +23,9 @@ private int _find_close_char(string str, int start, string open,
  *                         quoted strings returned as a single argument
  */
 varargs string *explode_args(string arg, int preserve_quotes) {
-  string *args = ({ });  
+  string *args = ({ });
   if (!arg) { return args; }
-  
+
   int pos = 0;
   int len = strlen(arg);
   while (pos < len) {
@@ -42,9 +42,9 @@ varargs string *explode_args(string arg, int preserve_quotes) {
 }
 
 /**
- * The recursive part of the find_char_char() process. Note: the validity 
+ * The recursive part of the find_char_char() process. Note: the validity
  * of len, style, and both is not checked.
- * 
+ *
  * @param  str   the string to search through
  * @param  start the position of the open char
  * @param  open  a string of OPEN characters
@@ -53,10 +53,10 @@ varargs string *explode_args(string arg, int preserve_quotes) {
  * @param  style position of str[0] in open: (member(open, str[0]))
  * @param  both  open + close
  * @return       a positive number indicates the position of the matching
- *               char in str; a zero/negative result indicates a failure to 
+ *               char in str; a zero/negative result indicates a failure to
  *               match the open char at str[-result]
  */
-private int _find_close_char(string str, int start, string open, 
+private int _find_close_char(string str, int start, string open,
                              string close, int len, int style, string both) {
   int cursor = start + 1;
   while (cursor < len) {
@@ -79,16 +79,16 @@ private int _find_close_char(string str, int start, string open,
     }
 
     // Must be an OPEN char.  Recurse.
-    int tmp = _find_close_char(str, first, open, close, len, 
+    int tmp = _find_close_char(str, first, open, close, len,
                                member(open, str[first]), both);
     if (tmp < 0) {
       return tmp;
     }
 
     // Move past the closing char of the subexpression
-    cursor = tmp + 1; 
+    cursor = tmp + 1;
 
-  } 
+  }
 
   // Got to the end of the string and didn't find a match.
   // This would happen for "[..(..)"
@@ -97,20 +97,19 @@ private int _find_close_char(string str, int start, string open,
 
 
 /**
- * Find closing brace/paren/bracket/quote in a string that matches a 
+ * Find closing brace/paren/bracket/quote in a string that matches a
  * specified set of open characters. The open and close strings must be the
  * same legnth and in the correct order so that open[i] matches close[i].
- * 
+ *
  * @param  str    the string to search
  * @param  start  the position of the open brace/paran/bracket/quote
- * @param  logger an optional logger object, to which to report errors
  * @param  open   a string of OPEN characters; defaults to "\"([{"
  * @param  close  a string of CLOSE characters; defaults to "\")]}"
  * @return        ret > 0: the position of the matching char in str
  *                ret ==0: error: str[start] was not an OPEN char
  *                ret < 0: error: failed to match open char at str[-ret - 1]
  */
-varargs int find_close_char(string str, int start, object logger, 
+varargs int find_close_char(string str, int start,
                             string open, string close) {
   // If you explicitly specify 0 for open, you will get errors.
   if (!stringp(close)) {
@@ -121,20 +120,13 @@ varargs int find_close_char(string str, int start, object logger,
   // Must be an OPEN char.
   int style = member(open, str[start]);
   if (style == -1) {
-    if (objectp(logger)) {
-      logger->error("Not an OPEN char:\n%s\n%*s\n", str, start, "^");
-    }
     return 0;
   }
-  
-  int result = _find_close_char(str, start, open, close, strlen(str), style, 
+
+  int result = _find_close_char(str, start, open, close, strlen(str), style,
                                 open + close);
 
   if (result <= 0) {
-    if (objectp(logger)) {
-      logger->error("Unmatched %c\n%s\n%*s\n", 
-                    str[-result], str, -result + 1, "^");
-    }
     return result - 1;
   }
 
@@ -142,9 +134,9 @@ varargs int find_close_char(string str, int start, object logger,
 }
 
 /**
- * Explode a string into substrings by a delimter, ignoring any escaped 
+ * Explode a string into substrings by a delimter, ignoring any escaped
  * delimters in the string when performing the separation. See is_escaped().
- * 
+ *
  * @param  str   the string to explode
  * @param  delim the string delimiting the substrings
  * @return       an array of strings separated by the delimiter
@@ -154,7 +146,7 @@ string *explode_unescaped(string str, string delim) {
   if (delim_len == 0) {
     return explode(str, delim);
   }
-  
+
   string *result = ({ });
   int max = strlen(str) - delim_len;
 
@@ -175,29 +167,28 @@ string *explode_unescaped(string str, string delim) {
   }
 
   result += ({ str[start..] });
-  
+
   return result;
 }
 
 /**
- * Explode a string into substrings by a delimiter, ignoring any escaped 
+ * Explode a string into substrings by a delimiter, ignoring any escaped
  * delimiters, and delimiters nested within open/close characters. See
  * explode_nested().
- * 
+ *
  * @param  str    the string to explode
  * @param  delim  the string delimiting the substrings
- * @param  logger an optional logger object, to which to report errors
  * @param  open   a string of OPEN characters; defaults to "\"([{"
  * @param  close  a string of CLOSE characters; defaults to "\")]}"
  * @return        an array of strings separated by the delimiter
  */
-string *explode_nested(string str, string delim, object logger, 
-                       string open, string close) {
+varargs string *explode_nested(string str, string delim,
+                               string open, string close) {
   int delim_len = strlen(delim);
   if (delim_len == 0) {
     return explode(str, delim);
   }
-  
+
   // If you explicitly specify 0 for open, you will get errors.
   if (!stringp(close)) {
     open  = DEFAULT_OPEN;
@@ -221,7 +212,7 @@ string *explode_nested(string str, string delim, object logger,
            || ((next_open = searcha_any(str, open, cursor)) != -1))
           && (next_open < next_delim)) {
         // Skip over the matching close char
-        cursor = 1 + find_close_char(str, next_open, logger, open, close);
+        cursor = 1 + find_close_char(str, next_open, open, close);
         if (cursor <= 1) {
           // Something went wrong
           return 0;
@@ -235,6 +226,6 @@ string *explode_nested(string str, string delim, object logger,
   }
 
   result += ({ str[start..] });
-  
-  return result;  
+
+  return result;
 }

@@ -20,8 +20,6 @@ private variables private functions inherit FormatStringsLib;
 
 default private variables;
 
-// XXX we could probably reuse loggers between categories with some kind of
-// equality test, but I don't know if it's worth it.
 /** ([ str category : obj logger ]) */
 mapping loggers;
 

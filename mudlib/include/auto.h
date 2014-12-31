@@ -30,6 +30,7 @@
 #define ObjectLib            LibDir "/object"
 #define ArrayLib             LibDir "/array"
 #define StringsLib           LibDir "/strings"
+#define ClosureLib           LibDir "/closure"
 #define ArgsLib              LibDir "/args"
 #define GetoptsLib           LibDir "/getopts"
 #define ObjectExpansionLib   LibDir "/expand_object"
