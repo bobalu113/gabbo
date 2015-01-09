@@ -4,7 +4,7 @@ category: blog
 layout: blog
 ---
 <p>Taking a little break from LPC this week to play around with the web client. I actually already built a prototype with Iffy for a different incarnation of gabbo a few years ago that is mostly reusable. The UI was pretty basic, there's a big console window on the bottom of the screen for typing commands looking at output. Then there were a few other panes for displaying current room description, exits, what's in your inventory...I think that's it. I also had it working so the exits were links and you could click em to move around. Another cool piece was the rendering engine I wrote, where the server would send output with a buncha XML markup and it'd run it through an xslt transform to render/style the xhtml. The xhtml was then nested inside a larger declarative language sorta thing for drawing everything out in the DOM that the client code would execute. I didn't get to take it very far so I'm not sure how well the model would hold up for more complicated tasks down the road, but for the few things I did have it doing I thought it worked pretty well.</p>
-
+<br/>
 
 <p>The biggest change since the first prototype is that support for websockets is now common. Iffy got it working so you could telnet to the server over flash, and we never got to handling things like telnet negotiations. There was also this token you had to host somewhere if I remember correctly...it was just weird. From what I'd read, websockets were great. I remember the first time I saw it in use was this pretty impressive multiuser game, so I know it can do what I want it to do.</p>
 
