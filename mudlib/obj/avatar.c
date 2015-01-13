@@ -1,6 +1,6 @@
 /**
  * A standard avatar for player characters.
- * 
+ *
  * @author devo@eotl
  * @alias Avatar
  */
@@ -18,9 +18,9 @@ inherit MobileMixin;
 private string username;
 
 /**
- * Return the username associated with this avatar. This name will be 
+ * Return the username associated with this avatar. This name will be
  * consistent across all characters a user plays.
- * 
+ *
  * @return the username
  */
 public string query_username() {
@@ -29,7 +29,7 @@ public string query_username() {
 
 /**
  * Set the username for this avatar.
- * 
+ *
  * @param str the username to set
  * @return 0 for failure, 1 for success
  */
@@ -88,33 +88,33 @@ public void setup(string username) {
 }
 
 /**
- * Temporary implementation to initialize a static list of commands. Will be 
+ * Temporary implementation to initialize a static list of commands. Will be
  * replaced with configuration-driven logic instead.
  */
 protected void setup_command_giver() {
   CommandGiverMixin::setup_command_giver();
 
   // TODO make this configuration-driven
-  string *command_files = ({ 
+  string *command_files = ({
     BinDir "/pwd",
     BinDir "/chdir",
     BinDir "/mkdir",
     BinDir "/rmdir",
-    BinDir "/ls", 
-    BinDir "/cp", 
-    BinDir "/mv", 
-    BinDir "/rm", 
+    BinDir "/ls",
+    BinDir "/cp",
+    BinDir "/mv",
+    BinDir "/rm",
     BinDir "/touch",
-    BinDir "/ed", 
+    BinDir "/ed",
     BinDir "/more",
-    BinDir "/tail", 
-    BinDir "/grep", 
-    BinDir "/cc", 
-    BinDir "/call", 
-    BinDir "/load", 
-    BinDir "/reload", 
+    BinDir "/tail",
+    BinDir "/grep",
+    BinDir "/cc",
+    BinDir "/call",
+    BinDir "/load",
+    BinDir "/reload",
     BinDir "/clone",
-    BinDir "/dest", 
+    BinDir "/dest",
     BinDir "/man",
     BinDir "/look",
     BinDir "/get",
@@ -124,7 +124,8 @@ protected void setup_command_giver() {
     BinDir "/trans",
     BinDir "/walk",
     BinDir "/follow",
-    BinDir "/trace"
+    BinDir "/trace",
+    BinDir "/logger"
   });
 
   foreach (string command : command_files) {
@@ -145,7 +146,7 @@ protected void setup_command_giver() {
  * Implementation of the modify_command hook. Every command executed by the
  * player will have a chance to be modified before being parsed by this
  * function.
- * 
+ *
  * @param  cmd the command string being executed
  * @return     the new command string to execute
  */
@@ -167,24 +168,24 @@ private void initialize_actions() {
 }
 
 /**
- * Invoked by the login object once the avatar object is interactive and 
+ * Invoked by the login object once the avatar object is interactive and
  * has been moved to its start location.
  */
 void enter_game() {
   enable_commands();
   initialize_actions();
-  set_prompt(lambda(0, 
-    ({ #'+, 
-      ({ #'call_other, THISO, "query_cwd" }), 
-      "> " 
+  set_prompt(lambda(0,
+    ({ #'+,
+      ({ #'call_other, THISO, "query_cwd" }),
+      "> "
     })
   ), THISO);
 }
 
 /**
  * Returns true to designate that this object represents a player character.
- * 
- * @return 1 
+ *
+ * @return 1
  */
 nomask int is_avatar() {
   return 1;
@@ -192,7 +193,7 @@ nomask int is_avatar() {
 
 /**
  * Return a zero-width mapping of the capabilities this program provides.
- * 
+ *
  * @return a zero-width mapping of capabilities
  */
 public mapping query_capabilities() {

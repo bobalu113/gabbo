@@ -19,14 +19,12 @@
 #define DEFAULT_VERB              "move"
 
 #define FMT_NEWLINE     ({ 0, "\n", ({ }) })
-#define FMT_PERCENT     ({ 0, "%%", ({ }) })
 #define FMT_DIRECTION   ({ 0, "%s", ({ ''dir }) })
 #define FMT_VERB        ({ 0, "%s", ({ ({ #'||, ''verb, DEFAULT_VERB }) }) })
 #define FMT_DISPLAY     ({ 0, "%s", ({ ({ #'get_display, ''who }) }) })
 
-#define MESSAGE_FORMAT ([  \
+#define MOBILE_MESSAGE ([  \
   'n' : FMT_NEWLINE,       \
-  '%' : FMT_PERCENT,       \
   'd' : FMT_DIRECTION,     \
   'v' : FMT_VERB,          \
   'y' : FMT_DISPLAY        \

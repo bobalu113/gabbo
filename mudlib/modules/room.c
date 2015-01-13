@@ -1,11 +1,12 @@
 /**
  * A base object for rooms.
- * 
+ *
  * @author devo@eotl
  * @alias RoomCode
  */
 
 #include <room.h>
+#include <mobile.h>
 
 // FUTURE light
 // FUTURE searching
@@ -19,10 +20,11 @@ inherit VisibleMixin;
 
 private variables private functions inherit FormatStringsLib;
 private variables private functions inherit ArrayLib;
+private variables private functions inherit ObjectLib;
 
 default private variables;
 
-/** ([ str dir : str dest; int hidden; obj room, 
+/** ([ str dir : str dest; int hidden; obj room,
                  str msgout_fmt, str msgin_fmt ]) **/
 mapping exits;
 
@@ -34,12 +36,12 @@ mapping messages;
 default public functions;
 
 /**
- * Return the mapping of all the rooms exists. This is a two-dimensional 
+ * Return the mapping of all the rooms exists. This is a two-dimensional
  * mapping, with the exit direction (e.g. "north") as the keys. The first
  * value should be the load name of the room to which the player will be
  * moved when using the exit. The second value is a flag designating whether
  * or not the exit should be displayed when the user looks inside a room.
- * 
+ *
  * @return a mapping of the form ([ direction : destination; flags; room ])
  */
 mapping query_exits() {
@@ -48,7 +50,7 @@ mapping query_exits() {
 
 /**
  * Set the room's exit mapping.
- * 
+ *
  * @param map the mapping of exits to set
  * @return    0 for failure, 1 for success
  * @see       query_exits()
@@ -63,9 +65,9 @@ int set_exits(mapping map) {
 }
 
 /**
- * Return the values associated with the specified exit. This returns an 
+ * Return the values associated with the specified exit. This returns an
  * array the same length as the exit mapping's width.
- * 
+ *
  * @param  dir the exit direction
  * @return     the exit values
  */
@@ -75,7 +77,7 @@ mixed *query_exit(string dir) {
 
 /**
  * Add a new exit, or replace an existing exit.
- * 
+ *
  * @param dir    the direction of the exit to add
  * @param dest   the program name of the destination room
  * @param flags  some behavior flags (see <room.h>)
@@ -96,9 +98,9 @@ varargs int set_exit(string dir, string dest, int flags, object room,
 /**
  * Return the destination of a specified exit. This will be either a load
  * name to clone, or an object name of a clone.
- * 
+ *
  * @param  dir the direction of the exit
- * @return     the load/object name of the destination, or 0 if no exit 
+ * @return     the load/object name of the destination, or 0 if no exit
  *             exists
  */
 string query_exit_dest(string dir) {
@@ -108,7 +110,7 @@ string query_exit_dest(string dir) {
 /**
  * Set the destination of a specified exit. This will be either a load name
  * to clone later, or the object name of a previously cloned room.
- * 
+ *
  * @param  dir  the direction of the exit
  * @param  dest the exit destination
  * @return      0 for failure, 1 for success
@@ -123,7 +125,7 @@ int set_exit_dest(string dir, string dest) {
 
 /**
  * Get the exit flags of a specfied exit.
- * 
+ *
  * @param  dir the direction of the exit
  * @return     the exit flag bitvector
  */
@@ -133,7 +135,7 @@ int query_exit_flags(string dir) {
 
 /**
  * Set the exit flags of a specfied exit.
- * 
+ *
  * @param  dir   the direction of the exit
  * @param  flags the exit flag bitvector
  * @return       0 for failure, 1 for success
@@ -149,7 +151,7 @@ int set_exit_flags(string dir, int flags) {
 /**
  * Get the room this exit is to move the user into. This may be 0 if the
  * room hasn't been loaded yet.
- * 
+ *
  * @param  dir the direction of the exit
  * @return     the cloned destination room, or 0 if not yet loaded
  */
@@ -160,7 +162,7 @@ object query_exit_room(string dir) {
 /**
  * Set the room this exit is to move the user into. This should always be a
  * clone.
- * 
+ *
  * @param  dir  the direction of the exit
  * @param  room the cloned destination room
  * @return      0 for failure, 1 for success
@@ -177,12 +179,12 @@ int set_exit_room(string dir, object room) {
 }
 
 /**
- * Get the room this exit is to move the user into, loading/cloning it from 
- * exit_dest if necessary. This will return 0 only if the blueprint couldn't 
+ * Get the room this exit is to move the user into, loading/cloning it from
+ * exit_dest if necessary. This will return 0 only if the blueprint couldn't
  * load or the new room could otherwise not be cloned.
- * 
+ *
  * @param  dir the direction of the exit
- * @return     the cloned destination room, or 0 if the room could not be 
+ * @return     the cloned destination room, or 0 if the room could not be
  *             created
  */
 object load_exit_room(string dir) {
@@ -191,7 +193,7 @@ object load_exit_room(string dir) {
     return exits[dir, EXIT_ROOM];
   }
   // null destination, return 0
-  string dest = exits[dir, EXIT_DEST]; 
+  string dest = exits[dir, EXIT_DEST];
   if (!stringp(dest)) {
     return 0;
   }
@@ -200,7 +202,7 @@ object load_exit_room(string dir) {
   // try loading a new room
   if (!objectp(room)) {
     string ret = catch (room = load_object(dest); publish);
-  } 
+  }
   // it wouldn't load or dest refered to a clone
   if (!objectp(room)) {
     return 0;
@@ -210,8 +212,8 @@ object load_exit_room(string dir) {
 
 /**
  * Get exit message override for objects exiting this room.
- * 
- * @param  verb the verb causing the movement, infinitive tense 
+ *
+ * @param  verb the verb causing the movement, infinitive tense
  *              (e.g. "walk"); should not be null.
  * @param  dir  the direction of the exit being used; must not be null
  * @return      the exit message
@@ -224,10 +226,10 @@ string query_exit_msgout(string verb, string dir) {
 }
 
 /**
- * Set the message override for objects exiting this room, expressed as a 
- * format string which will be parsed into a closure that is run at exit 
+ * Set the message override for objects exiting this room, expressed as a
+ * format string which will be parsed into a closure that is run at exit
  * time to generate the final message.
- * 
+ *
  * @param  dir  the direction of the exit being used; must not be null
  * @param  fmt the format string
  * @return     1 for success, 0 for failure
@@ -238,15 +240,16 @@ int set_exit_msgout(string dir, string fmt) {
   }
   exits[dir, EXIT_MSGOUT_FMT] = fmt;
   if (!closurep(messages[fmt])) {
-    messages[fmt] = parse_mobile_format(fmt);
+    messages[fmt] = parse_format(fmt, MOBILE_MESSAGE,
+                                 ({ 'who, 'verb, 'dir }));
   }
   return 1;
 }
 
 /**
  * Get exit message override for objects entering this room.
- * 
- * @param  verb the verb causing the movement, infinitive tense 
+ *
+ * @param  verb the verb causing the movement, infinitive tense
  *              (e.g. "walk"); should not be null.
  * @param  dir  the direction of the exit being used; may be null if 'back'
  *              direction could not be discerned
@@ -259,10 +262,10 @@ string query_exit_msgin(string verb, string dir) {
 }
 
 /**
- * Set the message override for objects entering this room, expressed as a 
- * format string which will be parsed into a closure that is run at exit 
+ * Set the message override for objects entering this room, expressed as a
+ * format string which will be parsed into a closure that is run at exit
  * time to generate the final message.
- * 
+ *
  * @param  dir  the direction of the exit being used; must not be null
  * @param  fmt the format string
  * @return     1 for success, 0 for failure
@@ -273,14 +276,15 @@ int set_exit_msgin(string dir, string fmt) {
   }
   exits[dir, EXIT_MSGIN_FMT] = fmt;
   if (!closurep(messages[fmt])) {
-    messages[fmt] = parse_mobile_format(fmt);
+    messages[fmt] = parse_format(fmt, MOBILE_MESSAGE,
+                                 ({ 'who, 'verb, 'dir }));
   }
   return 1;
 }
 
 /**
  * Get exit message override for objects teleporting out of this room.
- * 
+ *
  * @return      the exit message
  */
 string query_teleport_msgout() {
@@ -291,10 +295,10 @@ string query_teleport_msgout() {
 }
 
 /**
- * Set the message override for objects teleporting out of this room, 
- * expressed as a format string which will be parsed into a closure that is 
+ * Set the message override for objects teleporting out of this room,
+ * expressed as a format string which will be parsed into a closure that is
  * run at exit time to generate the final message.
- * 
+ *
  * @param  fmt the format string
  * @return     1 for success, 0 for failure
  */
@@ -304,14 +308,15 @@ int set_teleport_msgout(string fmt) {
   }
   teleport_msgout_fmt = fmt;
   if (!closurep(messages[fmt])) {
-    messages[fmt] = parse_mobile_format(fmt);
+    messages[fmt] = parse_format(fmt, MOBILE_MESSAGE,
+                                 ({ 'who, 'verb, 'dir }));
   }
   return 1;
 }
 
 /**
  * Get exit message override for objects teleporting into this room.
- * 
+ *
  * @return      the entrance message
  */
 string query_teleport_msgin() {
@@ -322,10 +327,10 @@ string query_teleport_msgin() {
 }
 
 /**
- * Set the message override for objects teleporting into this room, expressed 
- * as a format string which will be parsed into a closure that is run at exit 
+ * Set the message override for objects teleporting into this room, expressed
+ * as a format string which will be parsed into a closure that is run at exit
  * time to generate the final message.
- * 
+ *
  * @param  fmt the format string
  * @return     1 for success, 0 for failure
  */
@@ -335,7 +340,8 @@ int set_teleport_msgin(string fmt) {
   }
   teleport_msgin_fmt = fmt;
   if (!closurep(messages[fmt])) {
-    messages[fmt] = parse_mobile_format(fmt);
+    messages[fmt] = parse_format(fmt, MOBILE_MESSAGE,
+                                 ({ 'who, 'verb, 'dir }));
   }
   return 1;
 }
@@ -356,8 +362,8 @@ public void create() {
 
 /**
  * Returns true to designate that this object represents a room in the game.
- * 
- * @return 1 
+ *
+ * @return 1
  */
 nomask public int is_room() {
   return 1;
@@ -365,7 +371,7 @@ nomask public int is_room() {
 
 /**
  * Return a zero-width mapping of the capabilities this program provides.
- * 
+ *
  * @return a zero-width mapping of capabilities
  */
 public mapping query_capabilities() {

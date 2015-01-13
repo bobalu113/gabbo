@@ -27,9 +27,9 @@ int do_command(string arg) {
   if (!strlen(arg)) {
     arg = "here";
   }
-  mixed *targets = expand_objects(arg, 
+  mixed *targets = expand_objects(arg,
                                   THISP,
-                                  DEFAULT_CONTEXT, 
+                                  DEFAULT_CONTEXT,
                                   UPDATE_CONTEXT|MATCH_DETAIL);
 
   if (!sizeof(targets)) {
@@ -98,15 +98,15 @@ string format_room(object target, object looker, string id) {
   // TODO the default descs could have debug info
   int width = looker->query_screen_width();
   int exit_count = sizeof(dirs);
-  return sprintf("%s%-=*s---- %-=*s%s", 
-    (stringp(short) ? short : DEFAULT_ROOM_SHORT) + "\n",
+  return sprintf("%s\n%-=*s\n---- %-=*s\n%s",
+    (stringp(short) ? short : DEFAULT_ROOM_SHORT),
     width,
-    (stringp(long) ? sprintf("    %s\n", long) : DEFAULT_ROOM_LONG),
+    sprintf("    %s", (stringp(long) ? long : DEFAULT_ROOM_LONG)),
     width,
-    ((exit_count > 1 ) ? 
-      sprintf(MULTI_EXIT_MSG "%s.\n", implode(dirs, ", ")) :
+    ((exit_count > 1 ) ?
+      sprintf(MULTI_EXIT_MSG "%s.", implode(dirs, ", ")) :
       (exit_count == 1) ?
-      sprintf(SINGLE_EXIT_MSG "%s.\n", dirs[0]) :
+      sprintf(SINGLE_EXIT_MSG "%s.", dirs[0]) :
       NO_EXIT_MSG
     ),
     format_inventory(target, looker)
@@ -116,10 +116,18 @@ string format_room(object target, object looker, string id) {
 string format_default(object target, object looker, string id) {
   int width = looker->query_screen_width();
   string long = target->query_long(looker, id);
-  return sprintf("%-=*s\n", 
-    width, 
-    (stringp(long) ? long : DEFAULT_LONG)
+  string inv = format_inventory(target, looker);
+  string out = sprintf("%-=*s\n%s",
+    width,
+    (stringp(long) ? long : DEFAULT_LONG),
+    (strlen(inv)
+      ? sprintf("%s is %s:\n%s",
+        CAP(objective(target)),
+        (target->is_living() ? "carrying" : "holding"),
+        inv)
+      : "")
   );
+  return out;
 }
 
 string format_detail(object target, object looker, string id, string detail) {
@@ -129,9 +137,10 @@ string format_detail(object target, object looker, string id, string detail) {
 }
 
 string format_inventory(object target, object looker) {
-  string *items = map(all_inventory(target) - ({ looker }), 
+  string *items = map(all_inventory(target) - ({ looker }),
                       #'format_item, looker); // '
-  return implode(items, "\n") + "\n";
+
+  return (sizeof(items) ? (implode(items, "\n") + "\n") : "");
 }
 
 string format_item(object target, object looker) {

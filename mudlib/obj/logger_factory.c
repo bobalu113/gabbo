@@ -29,8 +29,12 @@ mapping local_ref_counts;
 /** ([ str format : cl formatter ]) */
 mapping formatters;
 
-/** A Logger instance for the factory to use */
+/** a Logger instance for the factory to use */
 object factory_logger;
+
+/** all Logger instances must share a Logger
+    (or else things would get crazy pretty fast) */
+object logger_logger;
 
 default private functions;
 
@@ -69,9 +73,12 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
     rel = previous_object();
   }
 
-  // special check for LoggeryFactory's logger
-  if (normalize_category(THISO) == category) {
+  // check for special loggers
+  if (FACTORY_CATEGORY == category) {
     return factory_logger;
+  }
+  if (LOGGER_CATEGORY == category) {
+    return logger_logger;
   }
 
   // check our cache
@@ -96,7 +103,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   // compile formatter
   closure formatter = formatters[config["format"]];
   if (!formatter) {
-    formatter = parse_format(config["format"], LOGGER_FORMAT,
+    formatter = parse_format(config["format"], LOGGER_MESSAGE,
                              ({ 'category, 'priority, 'message, 'caller }));
   }
 
@@ -159,7 +166,7 @@ mapping read_config(string category, string dir) {
             case "level":
               if (!member(result, "level")) {
                 if (member(LEVELS, val) != -1) {
-                  result["level"] = LEVELS[val];
+                  result["level"] = val;
                 }
               }
               break;
@@ -350,6 +357,7 @@ int clean_up_loggers() {
 
 /**
  * Initialize logger and formatter maps.
+ *
  * @return number of seconds until first reset
  */
 public int create() {
@@ -357,14 +365,25 @@ public int create() {
   loggers = ([ ]);
   formatters = ([ ]);
   local_ref_counts = ([ ]);
+
   factory_logger = clone_object(Logger);
   factory_logger->set_category(normalize_category(THISO));
   factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
   factory_logger->set_formatter(
-    parse_format(DEFAULT_FORMAT, LOGGER_FORMAT,
+    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
                  ({ 'category, 'priority, 'message, 'caller }))
   );
   factory_logger->set_level(LVL_WARN);
+
+  logger_logger = clone_object(Logger);
+  logger_logger->set_category(normalize_category(THISO));
+  logger_logger->set_output(parse_output_prop("c:me"));
+  logger_logger->set_formatter(
+    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
+                 ({ 'category, 'priority, 'message, 'caller }))
+  );
+  logger_logger->set_level(LVL_WARN);
+
   return FACTORY_RESET_TIME;
 }
 

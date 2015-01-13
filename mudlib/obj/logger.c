@@ -1,12 +1,15 @@
 /**
  * A logger object which is capable of writing to log files, or the console
- * of users. This object should not be cloned directly, but rather be 
+ * of users. This object should not be cloned directly, but rather be
  * accessed through LoggerFactory->get_logger().
- * 
+ *
  * @alias Logger
  */
 #include <logger.h>
+#include <expand_object.h>
 #include <sys/debug_info.h>
+
+private variables private functions inherit ObjectExpansionLib;
 
 default private variables;
 
@@ -44,18 +47,18 @@ string query_category() {
  * @param  str the category to set
  * @return     1 for success, 0 for failure
  */
-int set_category(string str) { 
+int set_category(string str) {
   category = str;
   return 1;
 }
 
 /**
  * Get the output specs.
- * @return an array of output targets, of the form 
- * 
+ * @return an array of output targets, of the form
+ *
  *         <code>({ int spec : string target })</code>
- *   
- *         where type is one of 'c' or 'f' and target is an object spec or a 
+ *
+ *         where type is one of 'c' or 'f' and target is an object spec or a
  *         file path, for console output or file output, respectively.
  */
 mixed *query_output() {
@@ -75,16 +78,16 @@ int set_output(mixed *arr) {
 /**
  * Get the closure which will be used to format logging events for output.
  * The closure will take the arguments:
- * 
+ *
  * <pre>
    'category: the category of the logger
    'priority: the priority of the log event
     'message: an optional error message
-     'caller: an array read from 
+     'caller: an array read from
               <code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
               for the invoking stackframe, or 0 if no caller was found
    </pre>
- *  
+ *
  * @return the formatter closure, bound to LoggerFactory
  */
 closure query_formatter() {
@@ -121,17 +124,17 @@ int set_level(string str) {
 
 /**
  * Test whether logging is enabled for a specified priority.
- * 
+ *
  * @param  priority the priority of the logging event
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_enabled(string priority) {
-  return level >= LEVELS[priority]; 
+  return LEVELS[level] >= LEVELS[priority];
 }
 
 /**
  * Test whether logging is enabled for FATAL events.
- * 
+ *
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_fatal_enabled() {
@@ -140,7 +143,7 @@ int is_fatal_enabled() {
 
 /**
  * Test whether logging is enabled for ERROR events.
- * 
+ *
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_error_enabled() {
@@ -149,7 +152,7 @@ int is_error_enabled() {
 
 /**
  * Test whether logging is enabled for WARN events.
- * 
+ *
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_warn_enabled() {
@@ -158,7 +161,7 @@ int is_warn_enabled() {
 
 /**
  * Test whether logging is enabled for INFO events.
- * 
+ *
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_info_enabled() {
@@ -167,7 +170,7 @@ int is_info_enabled() {
 
 /**
  * Test whether logging is enabled for DEBUG events.
- * 
+ *
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_debug_enabled() {
@@ -176,7 +179,7 @@ int is_debug_enabled() {
 
 /**
  * Test whether logging is enabled for TRACE events.
- * 
+ *
  * @return          1 if logging is enabled, otherwise 0
  */
 int is_trace_enabled() {
@@ -184,8 +187,8 @@ int is_trace_enabled() {
 }
 
 /**
- * Mute logging for a specified compilation unit. 
- * 
+ * Mute logging for a specified compilation unit.
+ *
  * @param  program absolute pathname of compilation unit
  * @param  line    optional line number to mute, or 0 to mute entire file
  * @return         1 if muted, otherwise 0
@@ -205,14 +208,14 @@ varargs int mute(string program, int line) {
       muted[program] = ([ line ]);
     } else if (mappingp(muted[program])) {
       muted[program] += ([ line ]);
-    } 
+    }
   }
   return 1;
 }
 
 /**
- * Unmute logging for a specified compilation unit. 
- * 
+ * Unmute logging for a specified compilation unit.
+ *
  * @param  program absolute pathname of compilation unit
  * @param  line    optional line number to mute, or 0 to mute entire file
  * @return         1 if muted, otherwise 0
@@ -238,27 +241,37 @@ varargs int unmute(string program, int line) {
 /**
  * Test whether a specified line and compilation unit should be muted from
  * logging.
- * 
- * @param  program absolute path to the compilation unit doing the logging, 
+ *
+ * @param  program absolute path to the compilation unit doing the logging,
  *                 minus the leadingslash
  * @param  line    the line number of the log statement
  * @return         1 if logging is muted, otherwise 0
  */
 int is_muted(string program, int line) {
+  int result = 0;
   if (member(muted, program)) {
     if (mappingp(muted[program])) {
-      return member(muted[program], line);
+      result = member(muted[program], line);
     } else {
-      return 1;
+      result = 1;
     }
   }
-  return 0;
+  return result;
+}
+
+/**
+ * Returns the muted mapping. ([ program : 0|([ line, ...]) ])
+ *
+ * @return the muted mapping
+ */
+mapping query_muted() {
+  return muted;
 }
 
 /**
  * Record a log message with the FATAL priority.
- * 
- * @param msg_fmt the log message format string 
+ *
+ * @param msg_fmt the log message format string
  * @param args    the values to be passed to sprintf() as args
  */
 void fatal(string msg_fmt, varargs string *args) {
@@ -267,8 +280,8 @@ void fatal(string msg_fmt, varargs string *args) {
 
 /**
  * Record a log message with the ERROR priority.
- * 
- * @param msg_fmt the log message format string 
+ *
+ * @param msg_fmt the log message format string
  * @param args    the values to be passed to sprintf() as args
  */
 void error(string msg_fmt, varargs string *args) {
@@ -277,8 +290,8 @@ void error(string msg_fmt, varargs string *args) {
 
 /**
  * Record a log message with the WARN priority.
- * 
- * @param msg_fmt the log message format string 
+ *
+ * @param msg_fmt the log message format string
  * @param args    the values to be passed to sprintf() as args
  */
 void warn(string msg_fmt, varargs string *args) {
@@ -287,8 +300,8 @@ void warn(string msg_fmt, varargs string *args) {
 
 /**
  * Record a log message with the INFO priority.
- * 
- * @param msg_fmt the log message format string 
+ *
+ * @param msg_fmt the log message format string
  * @param args    the values to be passed to sprintf() as args
  */
 void info(string msg_fmt, varargs string *args) {
@@ -297,8 +310,8 @@ void info(string msg_fmt, varargs string *args) {
 
 /**
  * Record a log message with the DEBUG priority.
- * 
- * @param msg_fmt the log message format string 
+ *
+ * @param msg_fmt the log message format string
  * @param args    the values to be passed to sprintf() as args
  */
 void debug(string msg_fmt, varargs string *args) {
@@ -307,8 +320,8 @@ void debug(string msg_fmt, varargs string *args) {
 
 /**
  * Record a log message with the TRACE priority.
- * 
- * @param msg_fmt the log message format string 
+ *
+ * @param msg_fmt the log message format string
  * @param args    the values to be passed to sprintf() as args
  */
 void trace(string msg_fmt, varargs string *args) {
@@ -319,7 +332,7 @@ void trace(string msg_fmt, varargs string *args) {
  * Record a log message with the specified priority.
  *
  * @param priority the priority of the log message
- * @param msg_fmt  the log message format string 
+ * @param msg_fmt  the log message format string
  * @param args     the values to be passed to sprintf() as args
  */
 void log(string priority, string msg_fmt, varargs string *args) {
@@ -340,12 +353,22 @@ void log(string priority, string msg_fmt, varargs string *args) {
  * Output the formatted log message to all the configured places.
  * @param msg the formatted log message
  */
+int logging = 0;
 private void do_output(string msg) {
+  if (logging) { return; }
+  logging = 1;
   foreach (mixed *target : output) {
     switch (target[0]) {
       case OUT_CONSOLE:
-      foreach (object ob : expand_objects(target[1])) {
-        tell_object(ob, msg + "\n");
+      mixed *consoles;
+      string err = catch (
+        consoles = expand_objects(target[1], THISP, "", STALE_CLONES);
+        publish
+      );
+      //if (err) { continue; }
+      consoles = ({ ({ THISP, "", 0 }) });
+      foreach (mixed *ob : consoles) {
+        catch (tell_object(ob[OB_TARGET], msg + "\n"));
       }
       break;
 
@@ -354,14 +377,15 @@ private void do_output(string msg) {
       break;
     }
   }
+  logging = 0;
 }
 
 /**
  * Find the last external call in the call stack and return it.
- * @return the info for the last external stack frame from 
- * 
+ * @return the info for the last external stack frame from
+ *
  *         <code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
- *         
+ *
  *         or 0 if no external caller was found.
  */
 private mixed *find_caller() {
@@ -386,7 +410,7 @@ private mixed *find_caller() {
  * Parse the compilation unit out of program string returned by debug_info.
  * If there are parenthesis, return the inner string minus the leading slash.
  * Otherwise, assume the entire string is the compilation unit.
- * 
+ *
  * @param  dbg_program the TRACE_PROGRAM string from debug_info(DINFO_TRACE)
  * @return             the compilation unit
  */
@@ -399,19 +423,6 @@ private string parse_program(string dbg_program) {
   }
 }
 
-/**
- * Resolve an ospec. This is just a stub.
- * @param  ospec the ospec
- * @return       the matching objects
- */
-private object *expand_objects(string ospec) {
-  if (ospec == "thisp") {
-    return ({ THISP });
-  } else {
-    return ({ });
-  }
-}
-
-void create() { 
+void create() {
   muted = ([ ]);
 }

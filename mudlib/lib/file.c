@@ -1,17 +1,22 @@
 /**
  * Utility library for dealing with the filesystem.
- * 
+ *
  * @author devo@eotl
  * @alias FileLib
  */
 #include <sys/files.h>
+
+// TODO need to clean up old patterns periodically
+// TODO externalize caching
+// ([ pattern : time; result ])
+private nosave mapping pattern_cache = ([ ]);
 
 private string *expand_files(string *path, string *dirs);
 private mixed *collate_files(string dir, string pattern);
 
 /**
  * Test whether a file exists.
- * 
+ *
  * @param  filename the filename to test
  * @return          1 if the file exists, otherwise 0
  */
@@ -21,7 +26,7 @@ int file_exists(string filename) {
 
 /**
  * Test whether a path is a directory.
- * 
+ *
  * @param  filename the path to test
  * @return          1 if the path is a directory, otherwise 0
  */
@@ -31,7 +36,7 @@ int is_directory(string filename) {
 
 /**
  * Return the filename component of a complete path.
- * 
+ *
  * @param  filename the path to check
  * @return          the base filename of the path
  */
@@ -41,13 +46,13 @@ string basename(string filename) {
 
 /**
  * Return the name of a file's containing directory.
- * 
+ *
  * @param  filename the path of the file to check
  * @return          the name of the containing directory
  */
 string dirname(string filename) {
   // TODO finalize how paths get munged
-  if (filename[<1] == '/') { 
+  if (filename[<1] == '/') {
     filename = filename[0..<2];
   }
   if (!strlen(filename)) { return 0; }
@@ -57,14 +62,14 @@ string dirname(string filename) {
 }
 
 /**
- * Returns the absolute filename of the possibly relative filename described 
- * by pattern.  Relative paths will be resolved according to 
- * who->query_pwd(), or dirname(object_name(who)) if 'who' does not define 
+ * Returns the absolute filename of the possibly relative filename described
+ * by pattern.  Relative paths will be resolved according to
+ * who->query_pwd(), or dirname(object_name(who)) if 'who' does not define
  * query_pwd().  'who' defaults to this_object() if not specified.  Home
  * directories specified with '~' will also be resolved according to 'who'.
- * 
+ *
  * @param  pattern path to be expanded
- * @param  who     optional object from which relative paths should be 
+ * @param  who     optional object from which relative paths should be
  *                 resolved
  * @return         the absolute path
  */
@@ -85,6 +90,7 @@ varargs string expand_path(string pattern, object who) {
     case '~':   /* home dir */
       string name = who->query_username();
       if (pattern == "~") {
+        // TODO add support for ~+ and ~-
         if (name) {
           pattern = HomeDir + "/" + name;
         } else {
@@ -120,7 +126,7 @@ varargs string expand_path(string pattern, object who) {
         break;
     }
   }
-  
+
   // put it all back together
   if (!sizeof(path)) {
     pattern =  "/";
@@ -139,9 +145,9 @@ varargs string expand_path(string pattern, object who) {
  * expressed as a '*' or '?' as specified by get_dir(E). Wildcard characters
  * in the middle of the path will be expanded in place (e.g.
  * "home/*&#47;workroom.c" expands to all workroom files).
- * 
+ *
  * @param  pattern the file pattern to expand
- * @param  who     optional object from which relative paths should be 
+ * @param  who     optional object from which relative paths should be
  *                 resolved, defaults to THISO
  * @return         a list of all matching files (constrained by valid_read)
  */
@@ -153,13 +159,22 @@ varargs mixed *expand_pattern(string pattern, object who) {
   if (pattern[<1] == '/') {
     pattern += "*";
   }
-  return expand_files(explode(pattern, "/")[1..], 
-                      ({ ({ 0, "", 0, 0, 0 }) }));
+  if (member(pattern_cache, pattern)) {
+    int time = time();
+    if (pattern_cache[pattern, 0] == time()) {
+      return pattern_cache[pattern, 1];
+    }
+  }
+
+  mixed *result = expand_files(explode(pattern, "/")[1..],
+                               ({ ({ 0, "", 0, 0, 0 }) }));
+  pattern_cache += ([ pattern : time(); result ]);
+  return result;
 }
 
 /**
  * Recursive function to resolve wildcards in the middle of a path.
- * 
+ *
  * @param  path the path to resolve, split by '/'
  * @param  dirs a running array of directories to inspect for matching files
  * @return      the list of all matching files
@@ -204,7 +219,7 @@ private mixed *expand_files(string *path, mixed *dirs) {
  * <pre><code>
  * ({ names, sizes, modified_dates, accessed_dates, modes })
  * </code></pre>
- * 
+ *
  * @param  dir     the parent directory of the files being collated
  * @param  pattern the file pattern, may contain wildcards
  * @return         an alist of the target directory's contents
@@ -251,7 +266,7 @@ private mixed *collate_files(string dir, string pattern) {
 
 /**
  * Return true if a file can be loaded (ends in .c basically).
- * 
+ *
  * @param  file the filename
  * @return      1 if file can be loaded, otherwise 0
  */

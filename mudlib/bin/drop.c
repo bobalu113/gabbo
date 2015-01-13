@@ -7,6 +7,7 @@ inherit CommandCode;
 private variables private functions inherit ArgsLib;
 private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
+private variables private functions inherit ObjectLib;
 
 int do_command(string arg) {
   mixed *args;
@@ -24,26 +25,65 @@ int do_command(string arg) {
     return 0;
   }
 
+  object *moved = ({ });
   string out = "";
   string room_out = "";
   foreach (mixed *t : targets) {
     object target = t[OB_TARGET];
     string id = t[OB_ID];
-    
-    if (ENV(target)->is_container()) {
-      out += sprintf("You must remove %s from %s before you can drop it.\n",
-                     target->short(), ENV(target)->short());
+
+    if (target->prevent_drop()) {
+      out += sprintf("You can't drop %s.\n", get_display(target));
+    } else if (ENV(target)->is_container()) {
+      object *env = all_environment(target);
+      int pass = 1;
+      object e;
+      foreach (e : env) {
+        if (e->is_container()) {
+          // check all nested containers are open
+          if (!e->is_open()) {
+            out += sprintf("You must open %s before you can drop %s.\n",
+                           e->short(), get_display(target));
+            pass = 0;
+            break;
+          }
+        } else {
+          // first non-container must be THISP
+          if (e != THISP) {
+            out += sprintf("You aren't carrying %s.\n", get_display(target));
+            pass = 0;
+          }
+          break;
+        }
+      }
+      if (!pass) {
+        continue;
+      }
+      if (move_resolved(target, ENV(THISP))) {
+        out += sprintf("You drop %s.\n", get_display(target));
+        room_out += sprintf("%s drops %s.\n", PNAME, get_display(target));
+        moved += ({ target });
+      } else {
+        out += sprintf("An unseed force prevents you from dropping %s.\n",
+                       get_display(target));
+      }
     } else if (ENV(target) != THISP) {
-      out += sprintf("You aren't holding %s.\n", target->short());
+      out += sprintf("You aren't carrying %s.\n", get_display(target));
     } else {
-      move_object(target, ENV(THISP));
-      out += sprintf("You drop %s.\n", target->short());
-      room_out += sprintf("%s drops %s.\n", PNAME, target->short());
+      if (move_resolved(target, ENV(THISP))) {
+        out += sprintf("You drop %s.\n", get_display(target));
+        room_out += sprintf("%s drops %s.\n", PNAME, get_display(target));
+        moved += ({ target });
+      } else {
+        out += sprintf("An unknown force prevents you from dropping %s.\n",
+                       get_display(target));
+      }
     }
   }
 
   write(out);
   tell_room(ENV(THISP), room_out, ({ THISP }));
+  filter_objects(moved, "drop_signal");
 
   return 1;
 }

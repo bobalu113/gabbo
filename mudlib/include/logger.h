@@ -3,6 +3,9 @@
 
 #define Logger             ObjDir "/logger"
 
+#define FACTORY_CATEGORY   ".obj.logger_factory"
+#define LOGGER_CATEGORY    ".obj.logger"
+
 #define LOGGER_STALE_TIME  300
 #define FACTORY_RESET_TIME 300
 #define STANDING_REF_COUNT 3
@@ -37,7 +40,6 @@
 
 
 #define FMT_NEWLINE   ({ 0, "\n", ({ }) })
-#define FMT_PERCENT   ({ 0, "%%", ({ }) })
 #define FMT_CATEGORY  ({ "0", "%s", ({                           \
   ({ #'?,                                                        \
      'arg,                                                       \
@@ -103,17 +105,16 @@
   ({ #'[, ({ #'utime }), 1 })                                    \
 }) })
 
-#define LOGGER_FORMAT ([ \
-  'n' : FMT_NEWLINE,     \
-  '%' : FMT_PERCENT,     \
-  'c' : FMT_CATEGORY,    \
-  'C' : FMT_OBJECT,      \
-  'd' : FMT_DATE,        \
-  'l' : FMT_LOCATION,    \
-  'L' : FMT_LINE,        \
-  'm' : FMT_MSG,         \
-  'p' : FMT_PRIORITY,    \
-  'r' : FMT_MILLIS       \
+#define LOGGER_MESSAGE ([ \
+  'n' : FMT_NEWLINE,      \
+  'c' : FMT_CATEGORY,     \
+  'C' : FMT_OBJECT,       \
+  'd' : FMT_DATE,         \
+  'l' : FMT_LOCATION,     \
+  'L' : FMT_LINE,         \
+  'm' : FMT_MSG,          \
+  'p' : FMT_PRIORITY,     \
+  'r' : FMT_MILLIS        \
 ])
 
 #endif  // _LOGGER_H
