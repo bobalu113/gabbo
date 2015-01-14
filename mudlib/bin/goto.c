@@ -10,8 +10,6 @@ private variables private functions inherit GetoptsLib;
 private variables private functions inherit ObjectExpansionLib;
 
 int do_command(string arg) {
-  LoggerFactory->get_logger(THISO)->mute(FileLib);
-  LoggerFactory->get_logger(THISO)->mute(ObjectExpansionLib);
   mixed *args;
   args = getopts(explode_args(arg), "sfw");
   if (!sizeof(args[0])) {
@@ -21,8 +19,8 @@ int do_command(string arg) {
   arg = implode(args[0], " ");
 
   string error = "destination unknown";
-  object dest = expand_destination(arg, THISP, DEFAULT_CONTEXT, LIMIT_ONE, 
-                                   &error);
+  object dest = expand_destination(arg, THISP, DEFAULT_CONTEXT,
+                                   LIMIT_ONE|MATCH_BLUEPRINTS, &error);
 
   if (!dest) {
     notify_fail(sprintf("%s: %s: %s\n", query_verb(), arg, error));
@@ -42,7 +40,7 @@ int do_command(string arg) {
     printf("%s: %s: teleport failed\n", query_verb(), arg);
     return 1;
   }
-  
+
   return 1;
 }
 

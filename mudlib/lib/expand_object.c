@@ -10,11 +10,12 @@
 private variables private functions inherit ArrayLib;
 private variables private functions inherit ArgsLib;
 private variables private functions inherit FileLib;
+private variables private functions inherit StringsLib;
 
 private mixed *expand_group(string ospec, object who, string context,
                             string root_context, string *new_context,
                             int flags, mapping ancestors);
-private mixed *expand_spec(string ospec, object who, string context,
+private string expand_spec(string ospec, object who, string context,
                            string *new_context, int flags,
                            mapping ancestors);
 private string expand_single(string arg, object who, string context,
@@ -52,6 +53,8 @@ private object find_room(object arg);
  */
 varargs mixed *expand_objects(mixed ospecs, object who,
                               string root_context, int flags) {
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->trace("expand_objects(%O)", ospecs);
   string current_context = who->query_context() || "";
   mixed *result = ({ });
   mapping ancestors = ([ ]);
@@ -78,13 +81,13 @@ varargs mixed *expand_objects(mixed ospecs, object who,
     }
   }
 
-  if ((flags | UPDATE_CONTEXT) && sizeof(new_context)) {
+  if ((flags & UPDATE_CONTEXT) && sizeof(new_context)) {
     new_context = unique_array(new_context);
     who->set_context(group_specs(new_context));
   }
 
   if (sizeof(result) && (flags & LIMIT_ONE)) {
-    return ({ result[0] });
+    return result[0..0];
   } else {
     return result;
   }
@@ -114,20 +117,25 @@ varargs mixed *expand_objects(mixed ospecs, object who,
 private mixed *expand_group(string ospec, object who, string context,
                             string root_context, string *new_context,
                             int flags, mapping ancestors) {
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->trace("expand_group, context = %O", context);
   string *subspecs = explode_nested(ospec, SPEC_DELIM,
                                     OPEN_GROUP, CLOSE_GROUP);
+  logger->trace("expand_group(%O) => %O", ospec, subspecs);
 
   if (sizeof(subspecs) == 1) {
     mixed *result;
     do {
-      result = expand_spec(ospec, who, context, &new_context, flags,
-                           ancestors);
+      string ctx = expand_spec(ospec, who, context, &new_context, flags,
+                               ancestors);
+      result = ancestors[ctx];
       // found matching object in this context
       if (sizeof(result)) {
-        new_context += ({ context });
+        new_context += ({ ctx });
+        logger->trace("expand_group context = %O", ctx);
         break;
       }
-      int pos = searcha(context, CONTEXT_DELIM[0], sizeof(context), -1);
+      int pos = searcha(context, CONTEXT_DELIM[0], sizeof(context) - 1, -1);
       if (pos > 0) {
         // check the next context up the path
         context = context[0..(pos - 1)];
@@ -140,10 +148,11 @@ private mixed *expand_group(string ospec, object who, string context,
 
     // check the root context
     if (!sizeof(result)) {
-      result = expand_spec(ospec, who, context, &new_context, flags,
-                           ancestors);
+      string ctx = expand_spec(ospec, who, context, &new_context, flags,
+                               ancestors);
+      result = ancestors[ctx];
       if (sizeof(result)) {
-        new_context += ({ context });
+        new_context += ({ ctx });
       }
     }
     return result;
@@ -175,23 +184,22 @@ private mixed *expand_group(string ospec, object who, string context,
  * @param  flags        control flags
  * @param  ancestors    a mapping of contexts we've found along the way,
  *                      mapped to the list of matching target objects
- * @return              the list of target objects matching this spec
+ * @return              the new context built from list of target objects
+ *                      matching this spec, which can be found in ancestors
  *                      (see expand_objects())
  */
-private mixed *expand_spec(string ospec, object who, string context,
+private string expand_spec(string ospec, object who, string context,
                            string *new_context, int flags,
                            mapping ancestors) {
+  object logger = LoggerFactory->get_logger(THISO);
   string *args = explode_nested(ospec, CONTEXT_DELIM,
                                 OPEN_GROUP, CLOSE_GROUP);
+  logger->trace("expand_spec(%O) => %O", ospec, args);
   foreach (string arg : args) {
     context = expand_single(arg, who, context, &new_context, flags,
                             ancestors);
   }
-
-  if (sizeof(ancestors[context]) && referencep(&new_context)) {
-    new_context += ({ context });
-  }
-  return ancestors[context];
+  return context;
 }
 
 /**
@@ -209,13 +217,13 @@ private mixed *expand_spec(string ospec, object who, string context,
  * @param  flags        control flags
  * @param  ancestors    a mapping of contexts we've found along the way,
  *                      mapped to the list of matching target objects
- * @return              the new context where in ancestors where the matching
+ * @return              the new context in ancestors where the matching
  *                      target objects may be found
  */
 private string expand_single(string arg, object who, string context,
                              string *new_context, int flags,
                              mapping ancestors) {
-
+  object logger = LoggerFactory->get_logger(THISO);
   string resolved = resolve_spec(arg, context);
   if (member(ancestors, resolved)) {
     return resolved;
@@ -237,8 +245,9 @@ private string expand_single(string arg, object who, string context,
     if (!strlen(prev_arg)) {
       prev = ({ });
     } else {
-      prev = expand_spec(prev_arg, who, prev_context, &new_context, flags,
-                         ancestors);
+      string ctx = expand_spec(prev_arg, who, prev_context, &new_context,
+                               flags, ancestors);
+      prev = ancestors[ctx];
     }
   }
 
@@ -253,7 +262,7 @@ private string expand_single(string arg, object who, string context,
     // special nested handling
     string *args = explode_nested(tmp, SPEC_DELIM,
                                   OPEN_GROUP, CLOSE_GROUP);
-    mapping new_contexts = ([ ]);
+    mapping new_contexts = m_allocate(0, 2);
     int i = 0;
     // the list of target objects to make up our new context
     mixed *next = ({ });
@@ -271,22 +280,23 @@ private string expand_single(string arg, object who, string context,
       if (!member(new_contexts, key)) {
         new_contexts += ([ key : ({ }); i++ ]);
       }
-      new_contexts[key,0] += ({ ctx[<(len - 1)..] });
+      new_contexts[key, 0] += ({ ctx[<(len - 1)..] });
     }
 
     // build a new resolved context based on all the contexts we found the
     // individual args in
     string *nc = sort_array(m_indices(new_contexts),
-                            (: $3[$1,1] > $3[$2,1] :),
+                            (: $3[$1, 1] > $3[$2, 1] :),
                             new_contexts);
-    nc = map(nc, (: group_specs($2[$1,0]) :), new_contexts);
+    nc = map(nc, (: group_specs($2[$1, 0]) :), new_contexts);
     resolved = implode(nc, SPEC_DELIM);
     ancestors[resolved] = next;
   } else {
     prev = filter(prev, (: objectp($1[OB_TARGET]) :));
     ancestors[resolved] = expand_term(arg, prev, who, context, flags);
   }
-    return resolved;
+
+  return resolved;
 }
 
 /**
@@ -305,6 +315,7 @@ private string expand_single(string arg, object who, string context,
 private mixed *expand_term(string term, mixed *prev, object who,
                            string context, int flags) {
   object logger = LoggerFactory->get_logger(THISO);
+  term = unescape(term);
   switch (term) {
   case "users":
     if (!strlen(context)) {
@@ -331,7 +342,7 @@ private mixed *expand_term(string term, mixed *prev, object who,
       return map(all_inventory(who), (: ({ $1, "i", 0 }) :));
     } else {
       prev = map(prev, (: map(all_inventory($1[OB_TARGET]),
-                              (: ({ $1, "", 0 }) :))
+                              (: ({ $1, "i", 0 }) :))
                        :));
       return flatten_array1(prev);
     }
@@ -339,10 +350,11 @@ private mixed *expand_term(string term, mixed *prev, object who,
     if (!strlen(context)) {
       return ({ ({ ENV(who), "e", 0 }) });
     } else {
-      return map(prev, (: ({ environment($1[OB_TARGET]),
-                             $1[OB_ID],
-                             $1[OB_DETAIL]
-                          }) :));
+      prev = map(prev, (: { object e = environment($1[OB_TARGET]);
+                            return (objectp(e) ? ({ e, "e", 0 }) : 0);
+                       } :));
+      prev -= ({ 0 });
+      return prev;
     }
   default:
     // first look for matching ids
@@ -370,6 +382,7 @@ private mixed *expand_term(string term, mixed *prev, object who,
           object ob;
           string ret = catch (ob = load_object(file));
           if (ret || !ob) {
+            logger->debug("Caught error loading %s: %s", file, ret);
             continue;
           }
           if (flags & MATCH_BLUEPRINTS) {
@@ -378,7 +391,7 @@ private mixed *expand_term(string term, mixed *prev, object who,
           matches += clones(ob, ((flags & STALE_CLONES) ? 2 : 0));
         }
       }
-      logger->trace("matches = %O\n", matches);
+      logger->trace("context = %O, matches = %O\n", context, matches);
       if (!strlen(context)) {
         return map(matches, (: ({ $1, term, 0 }) :));
       } else {
@@ -449,6 +462,7 @@ varargs object expand_destination(string arg, object who,
       break;
     }
   } else {
+    return 0;
     string *files = expand_pattern(arg, who);
     foreach (mixed *f : files) {
       string file = f[0];
@@ -475,11 +489,17 @@ varargs object expand_destination(string arg, object who,
  * @return         a resolved spec, including context
  */
 private string resolve_spec(string arg, string context) {
-  string result = context;
-  if (strlen(arg)) {
-    result += CONTEXT_DELIM + arg;
+  if (member(COLLAPSIBLE, arg)) {
+    int pos = searcha(context, CONTEXT_DELIM[0], strlen(context) - 1, -1);
+    if (context[(pos + 1)..] == arg) {
+      return context;
+    }
   }
-  return result;
+
+  return sprintf("%s%s%s",
+                 context,
+                 ((strlen(context) && strlen(arg)) ? CONTEXT_DELIM : ""),
+                 arg);
 }
 
 /**

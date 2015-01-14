@@ -271,5 +271,5 @@ private mixed *collate_files(string dir, string pattern) {
  * @return      1 if file can be loaded, otherwise 0
  */
 int is_loadable(string file) {
-  return ((strlen(file) > 2) || (file[<2..<1] == ".c"));
+  return (file[<2..<1] == ".c");
 }

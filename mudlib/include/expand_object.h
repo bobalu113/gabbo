@@ -8,6 +8,8 @@
 #define IGNORE_CLONES     0x10
 #define STALE_CLONES      0x20
 
+#define COLLAPSIBLE       ([ "me", "here", "living", "users" ])
+
 #define OB_TARGET         0
 #define OB_ID             1
 #define OB_DETAIL         2

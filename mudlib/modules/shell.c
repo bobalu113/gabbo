@@ -123,6 +123,10 @@ public string query_context() {
  * @return   1 for success, 0 for failure
  */
 public int set_context(string c) {
+  LoggerFactory->get_logger(THISO)->trace("set_context(%O)", c);
+  if (!stringp(c)) {
+    return 0;
+  }
   context = c;
   return 1;
 }
@@ -132,6 +136,7 @@ public int set_context(string c) {
  */
 protected void setup_shell() {
   dirstack = ({ });
+  context = "";
   return;
 }
 

@@ -177,7 +177,7 @@ void enter_game() {
   initialize_actions();
   set_prompt(lambda(0,
     ({ #'+,
-      ({ #'call_other, THISO, "query_cwd" }),
+      ({ #'call_other, THISO, "query_context" }),
       "> "
     })
   ), THISO);

@@ -122,7 +122,7 @@ varargs int set_detail(mixed ids, string description, string parent) {
     if (desc_index == -1) {
       // new description, new child map
       desc_index = add_description(description);
-      children = ([ ]);
+      children = m_allocate(0, 2);
     } else {
       // find the first matching detail description and share its children
       foreach (string key, int di, mapping c : det) {
@@ -284,7 +284,7 @@ private int add_description(string description) {
  */
 protected void setup_detail() {
   descriptions = ({ });
-  details = ([ ]);
+  details = m_allocate(0, 2);
 }
 
 /**

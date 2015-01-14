@@ -42,6 +42,7 @@ int do_command(string arg) {
     }
   }
 
+  LoggerFactory->get_logger(THISO)->trace("targets = %O", targets);
   string out = "";
   foreach (mixed *t : targets) {
     object target = t[OB_TARGET];
