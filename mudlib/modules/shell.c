@@ -14,7 +14,7 @@ private variables private functions inherit FileLib;
 
 default private variables;
 
-string cwd, homedir, *dirstack;
+string cwd, homedir, *dirstack, context;
 
 default private functions;
 
@@ -105,6 +105,25 @@ public int set_homedir(string dir) {
     return 0;
   }
   homedir = dir;
+  return 1;
+}
+
+/**
+ * Get the user's current context for object expansion.
+ *
+ * @return the current context
+ */
+public string query_context() {
+  return context;
+}
+
+/**
+  * Set the user's current context for object expansion.
+ * @param  c context to set
+ * @return   1 for success, 0 for failure
+ */
+public int set_context(string c) {
+  context = c;
   return 1;
 }
 

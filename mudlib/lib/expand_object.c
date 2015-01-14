@@ -52,7 +52,7 @@ private object find_room(object arg);
  */
 varargs mixed *expand_objects(mixed ospecs, object who,
                               string root_context, int flags) {
-  string current_context = who->get_context() || "";
+  string current_context = who->query_context() || "";
   mixed *result = ({ });
   mapping ancestors = ([ ]);
   string *new_context = ({ });
@@ -401,6 +401,7 @@ private mixed *expand_term(string term, mixed *prev, object who,
  * @return    a new target object with id/detail id expanded
  */
 private mixed *expand_id(mixed *in, string id) {
+  LoggerFactory->get_logger(THISO)->trace("expand_id, id= %O, in = %O", id, in);
   if (in[OB_DETAIL]) {
     if (in[OB_TARGET]->query_detail(id, in[OB_DETAIL])) {
       return ({ in[OB_TARGET], in[OB_ID], resolve_spec(id, in[OB_DETAIL]) });

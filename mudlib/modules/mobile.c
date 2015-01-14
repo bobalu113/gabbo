@@ -405,7 +405,6 @@ int exit(string verb, string dir, int flags) {
     }
   }
 
-  THISO->set_context("here");
   if (!(flags & SUPPRESS_LOOK)) {
     command("look");
   }
@@ -477,7 +476,6 @@ int teleport(mixed dest, int flags) {
     }
   }
 
-  THISO->set_context("here");
   if (!(flags & SUPPRESS_LOOK)) {
     command("look");
   }

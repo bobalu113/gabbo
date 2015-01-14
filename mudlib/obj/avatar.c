@@ -125,7 +125,8 @@ protected void setup_command_giver() {
     BinDir "/walk",
     BinDir "/follow",
     BinDir "/trace",
-    BinDir "/logger"
+    BinDir "/logger",
+    BinDir "/qvars"
   });
 
   foreach (string command : command_files) {
