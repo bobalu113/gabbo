@@ -67,7 +67,7 @@ You may have noticed a problem with the example above. What happens if our curre
 
 Even if the parser backtracks all the way to the beginning of the context path and still doesn't find anything, there's one last hope to get a matching object. The command which is executing the parser may pass a "root context" string, which will be checked in this scenario. This is meant to replace the concept of priority strings in AcmeOSpec, which was how different commands prioritized different possible targets in the search. The 'look' command passes a root context of "(here,me)", so that you can always look at anything in your room or immediate inventory. The 'goto' command passes a root context of "users", to find users in other rooms.
 
-### ObjectExpansionLib API
+#### ObjectExpansionLib API
 
 The object expansion code is housed in a new library, ObjectExpansionLib. There is only one public function:
 
