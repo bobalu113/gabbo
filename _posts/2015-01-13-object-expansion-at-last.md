@@ -28,11 +28,11 @@ For instance, the term "users" by itself will return the collection of all inter
   * &lt;id&gt;: a present object with the specified id
 
 <p>Special:</p>
- * &lt;detail&gt;: the end of an ospec may include a fully-qualified detail id on the object, as provided by DetailMixin; if a matching detail id is found, the object is returned (see below for an explanation of detail handling)
+ * &lt;detail&gt;: the end of an ospec may include a fully-qualified detail id on the object, as provided by [DetailMixin](/gabbo/blog/2014/08/06/three-new-mixins/); if a matching detail id is found, the object is returned (see below for an explanation of detail handling)
 
 Two or more terms may be grouped together with parenthesis and separated by commas, in which case the union of all terms will be returned. The ospec "(me,here)" evaluates to my avatar and the room I'm in. The escape character '\' is respected, in case you need to use a special character in a term (such as a period in a filename).
 
-One last thing, the context-free terms may also be used contextually, in which case they will return their respective objects only if the object is already in the current context. So an ospec of "~/workroom\.c.here" will return you current environment, but only if it's your workroom, otherwise no objects will be returned. It should be noticed that this is functionally the same thing as "here.~/workroom\.c".
+One last thing, the context-free terms may also be used contextually, in which case they will return their respective objects only if the object is already in the current context. So an ospec of "~/workroom\\.c.here" will return you current environment, but only if it's your workroom, otherwise no objects will be returned. It should be noted that this is functionally the same thing as "here.~/workroom\\.c".
 
 ### Context
 
