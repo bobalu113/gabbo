@@ -52,14 +52,14 @@ You may explicitly update your context with the 'context' command, though some c
     It is holding:
     an apple
     here.bag> look apple
-    A juicy apple.
+    A juicy apple. There's still a sticker on it.
     here.bag.apple> look sticker
     "Product of USA."
     here.bag.apple.sticker> walk north
     A Red Room
-         Tis room is painted red.
+         This room is painted red.
     ---- The only obvious exit is south.
-    here>
+    here> 
 
 ### Backtracking and Root Context
 
