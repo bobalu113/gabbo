@@ -105,9 +105,22 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/object.html#is_diegetic()">is_diegetic</a></strong>(object&nbsp;ob)</code>
+<div class="block">Is the object diegetic? Diegetic objects are the people, places, and
+things that comprise the game world.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/object.html#is_reachable()">is_reachable</a></strong>(object&nbsp;ob,&nbsp;object&nbsp;who)</code>
 <div class="block">Test whether an object is reachable from another object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/object.html#objective()">objective</a></strong>(object&nbsp;what)</code>
+<div class="block">Return the objective pronoun for a given object.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -240,6 +253,40 @@ original value.</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>ob</code> - the object to display </dd>
 <dt><span class="strong">Returns:</span></dt><dd>the object's display name </dd>
+</dl>
+</li>
+</ul>
+<a name="is_diegetic()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>is_diegetic</h4>
+<pre>public&nbsp;int&nbsp;is_diegetic(object&nbsp;ob)</pre>
+<div class="block">Is the object diegetic? Diegetic objects are the people, places, and
+things that comprise the game world. Non-diegetic objects would be things
+like commands, daemons, or libraries.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>ob</code> - the object to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the object is diegetic, otherwise 0 </dd>
+</dl>
+</li>
+</ul>
+<a name="objective()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>objective</h4>
+<pre>public&nbsp;string&nbsp;objective(object&nbsp;what)</pre>
+<div class="block">Return the objective pronoun for a given object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>what</code> - the object </dd>
+<dt><span class="strong">Returns:</span></dt><dd>"he, "she", or "it", depending on gender </dd>
 </dl>
 </li>
 </ul>

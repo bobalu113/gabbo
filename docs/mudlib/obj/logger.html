@@ -60,6 +60,20 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li class="last"><a href="../lib/expand_object.html" title="">ObjectExpansionLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li><a href="../lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li class="last"><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></li></ul></dd>
+</dl>
 <hr>
 <br>
 <div class="block">A logger object which is capable of writing to log files, or the console
@@ -198,48 +212,54 @@ logging.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/logger.html#query_muted()">query_muted</a></strong>()</code>
+<div class="block">Returns the muted mapping.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#query_output()">query_output</a></strong>()</code>
 <div class="block">Get the output specs.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#set_category()">set_category</a></strong>(string&nbsp;str)</code>
 <div class="block">Set the logger category.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#set_formatter()">set_formatter</a></strong>(closure&nbsp;cl)</code>
 <div class="block">Set the formatter.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#set_level()">set_level</a></strong>(string&nbsp;str)</code>
 <div class="block">Set the minimum log level.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#set_output()">set_output</a></strong>(mixed *arr)</code>
 <div class="block">Set the logger output target list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#trace()">trace</a></strong>(string&nbsp;msg_fmt,&nbsp;varargs string *args)</code>
 <div class="block">Record a log message with the TRACE priority.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#unmute()">unmute</a></strong>(string&nbsp;program,&nbsp;int&nbsp;line)</code>
 <div class="block">Unmute logging for a specified compilation unit.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/logger.html#warn()">warn</a></strong>(string&nbsp;msg_fmt,&nbsp;varargs string *args)</code>
 <div class="block">Record a log message with the WARN priority.</div>
@@ -539,6 +559,20 @@ logging.</div>
 <dd><code>program</code> - absolute path to the compilation unit doing the logging, minus the leadingslash </dd>
 <dd><code>line</code> - the line number of the log statement </dd>
 <dt><span class="strong">Returns:</span></dt><dd>1 if logging is muted, otherwise 0 </dd>
+</dl>
+</li>
+</ul>
+<a name="query_muted()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_muted</h4>
+<pre>public&nbsp;mapping&nbsp;query_muted()</pre>
+<div class="block">Returns the muted mapping. ([ program : 0|([ line, ...]) ])</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the muted mapping </dd>
 </dl>
 </li>
 </ul>

@@ -74,7 +74,14 @@
 </li><li class="last"><a href="../modules/mobile.html" title="">MobileMixin </a>
 <ul class="tree"><li><a href="../lib/object.html" title="">ObjectLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
 </li><li class="last"><a href="../lib/format_strings.html" title="">FormatStringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
+<ul class="tree"><li><a href="../lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -128,36 +135,42 @@ has been moved to its start location.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/avatar.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#query_screen_length()">query_screen_length</a></strong>()</code>
 <div class="block">Returns the user's screen length.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#query_screen_width()">query_screen_width</a></strong>()</code>
 <div class="block">Returns the user's screen width.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#query_username()">query_username</a></strong>()</code>
 <div class="block">Return the username associated with this avatar.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#set_username()">set_username</a></strong>(string&nbsp;str)</code>
 <div class="block">Set the username for this avatar.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#setup()">setup</a></strong>(string&nbsp;username)</code>
 <div class="block">Invoked by the login object to set up a newly spawned avatar.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../obj/avatar.html#setup_command_giver()">setup_command_giver</a></strong>()</code>
 <div class="block">Temporary implementation to initialize a static list of commands.</div>
@@ -168,7 +181,7 @@ has been moved to its start location.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/modules/living">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/living.html" title="program /modules/living">LivingCode </a></h3>
-<code><a href="../modules/living.html#create()">create</a>, <a href="../modules/living.html#is_living()">is_living</a>, <a href="../modules/living.html#query_capabilities()">query_capabilities</a></code></li>
+<code><a href="../modules/living.html#create()">create</a>, <a href="../modules/living.html#is_living()">is_living</a>, <a href="../modules/living.html#query_capabilities()">query_capabilities</a>, <a href="../modules/living.html#query_gender()">query_gender</a>, <a href="../modules/living.html#set_gender()">set_gender</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -196,7 +209,7 @@ has been moved to its start location.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/modules/shell">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../modules/shell.html" title="program /modules/shell">ShellMixin </a></h3>
-<code><a href="../modules/shell.html#query_cwd()">query_cwd</a>, <a href="../modules/shell.html#query_homedir()">query_homedir</a>, <a href="../modules/shell.html#set_cwd()">set_cwd</a>, <a href="../modules/shell.html#set_homedir()">set_homedir</a>, <a href="../modules/shell.html#setup_shell()">setup_shell</a></code></li>
+<code><a href="../modules/shell.html#clear_dirs()">clear_dirs</a>, <a href="../modules/shell.html#pop_dir()">pop_dir</a>, <a href="../modules/shell.html#push_dir()">push_dir</a>, <a href="../modules/shell.html#query_capabilities()">query_capabilities</a>, <a href="../modules/shell.html#query_context()">query_context</a>, <a href="../modules/shell.html#query_cwd()">query_cwd</a>, <a href="../modules/shell.html#query_dirs()">query_dirs</a>, <a href="../modules/shell.html#query_homedir()">query_homedir</a>, <a href="../modules/shell.html#set_context()">set_context</a>, <a href="../modules/shell.html#set_cwd()">set_cwd</a>, <a href="../modules/shell.html#set_homedir()">set_homedir</a>, <a href="../modules/shell.html#setup_shell()">setup_shell</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -374,6 +387,20 @@ has been moved to its start location.</div>
 <dl>
 <dl>
 <dt><span class="strong">Returns:</span></dt><dd>1 </dd>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

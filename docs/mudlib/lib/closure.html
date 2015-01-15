@@ -16,8 +16,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/creature.html" target="_top">Frames</a></li>
-<li><a href="../../modules/creature.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/lib/closure.html" target="_top">Frames</a></li>
+<li><a href="../../lib/closure.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>
@@ -53,24 +53,16 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/modules/creature</div>
-<h2 title="Program CreatureCode " class="title">Program CreatureCode </h2>
+<div class="subTitle">/lib/closure</div>
+<h2 title="Program ClosureLib " class="title">Program ClosureLib </h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Inherited Programs:</dt>
-<dd>
-<ul class="tree"><li class="last"><a href="../modules/living.html" title="">LivingCode </a>
-<ul class="tree"><li class="last"><a href="../modules/id.html" title="">IdMixin </a>
-<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></li></ul></dd>
-</dl>
 <hr>
 <br>
-<div class="block">A base object for non-player characters.</div>
+<div class="block">Utility library for manipulating closures.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
@@ -95,32 +87,13 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/creature.html#is_creature()">is_creature</a></strong>()</code>
-<div class="block">Returns true to designate that this object is a non-player character.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../modules/creature.html#query_capabilities()">query_capabilities</a></strong>()</code>
-<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../lib/closure.html#reconstruct_lambda()">reconstruct_lambda</a></strong>(symbol *args,&nbsp;mixed *arr)</code>
+<div class="block">This function will return a lambda closure that, upon execution, will
+return the array used to construct the same closure.</div>
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/modules/living">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../modules/living.html" title="program /modules/living">LivingCode </a></h3>
-<code><a href="../modules/living.html#create()">create</a>, <a href="../modules/living.html#is_living()">is_living</a>, <a href="../modules/living.html#query_capabilities()">query_capabilities</a>, <a href="../modules/living.html#query_gender()">query_gender</a>, <a href="../modules/living.html#set_gender()">set_gender</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/modules/id">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../modules/id.html" title="program /modules/id">IdMixin </a></h3>
-<code><a href="../modules/id.html#add_secondary_id()">add_secondary_id</a>, <a href="../modules/id.html#query_capabilities()">query_capabilities</a>, <a href="../modules/id.html#query_ids()">query_ids</a>, <a href="../modules/id.html#query_primary_id()">query_primary_id</a>, <a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a>, <a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a>, <a href="../modules/id.html#set_primary_id()">set_primary_id</a>, <a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a>, <a href="../modules/id.html#setup_id()">setup_id</a>, <a href="../modules/id.html#test_id()">test_id</a></code></li>
-
-</ul>
 
 </li>
 </ul>
@@ -136,31 +109,30 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="is_creature()">
+<a name="reconstruct_lambda()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>is_creature</h4>
-<pre>public&nbsp;nomask&nbsp;int&nbsp;is_creature()</pre>
-<div class="block">Returns true to designate that this object is a non-player character.</div>
+<h4>reconstruct_lambda</h4>
+<pre>public&nbsp;closure&nbsp;reconstruct_lambda(symbol *args,&nbsp;mixed *arr)</pre>
+<div class="block">This function will return a lambda closure that, upon execution, will
+return the array used to construct the same closure. The new closure will
+take the specified args, which, when evaluated, will end up as constants
+in the newly compiled closure. All other symbols found in the input array
+will appear in the new lambda closure unquoted one level.
+Example:
+<code><pre>
+funcall(reconstruct_lambda(({ 'arg })),
+({ #'+, 'arg, ''s })), "str")</pre></code>
+returns:
+<code><pre>({ #'+, "str", 's})</pre></code></div>
 <dl>
 <dl>
-<dt><span class="strong">Returns:</span></dt><dd>1 </dd>
-</dl>
-</li>
-</ul>
-<a name="query_capabilities()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_capabilities</h4>
-<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
-<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>args</code> - an array of arguments to the new lambda closure </dd>
+<dd><code>arr</code> - the closure which is to be reconstructed </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a closure which, when executed, should return arr </dd>
 </dl>
 </li>
 </ul>
@@ -186,8 +158,8 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../index.html?/modules/creature.html" target="_top">Frames</a></li>
-<li><a href="../../modules/creature.html" target="_top">No Frames</a></li>
+<li><a href="../../index.html?/lib/closure.html" target="_top">Frames</a></li>
+<li><a href="../../lib/closure.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
 <li><a href="../../allclasses-noframe.html">All Programs</a></li>

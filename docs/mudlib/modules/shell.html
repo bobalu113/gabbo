@@ -93,9 +93,46 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#clear_dirs()">clear_dirs</a></strong>()</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#pop_dir()">pop_dir</a></strong>()</code>
+<div class="block">Remove the last pushed directory from the directory stack and return it.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#push_dir()">push_dir</a></strong>(string&nbsp;dir)</code>
+<div class="block">Push a directory onto the directory stack.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#query_context()">query_context</a></strong>()</code>
+<div class="block">Get the user's current context for object expansion.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/shell.html#query_cwd()">query_cwd</a></strong>()</code>
 <div class="block">Return the player's current working directory.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#query_dirs()">query_dirs</a></strong>()</code>
+<div class="block">Return the directory stack as an array, starting with the most recently
+added directory.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -106,17 +143,23 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/shell.html#set_context()">set_context</a></strong>(string&nbsp;c)</code>
+<div class="block">Set the user's current context for object expansion.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/shell.html#set_cwd()">set_cwd</a></strong>(string&nbsp;dir)</code>
 <div class="block">Set the current working directory for this player.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/shell.html#set_homedir()">set_homedir</a></strong>(string&nbsp;dir)</code>
 <div class="block">Set the home directory for this player.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/shell.html#setup_shell()">setup_shell</a></strong>()</code>
 <div class="block">Initialize ShellMixin.</div>
@@ -168,6 +211,63 @@
 </dl>
 </li>
 </ul>
+<a name="query_dirs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_dirs</h4>
+<pre>public&nbsp;string&nbsp;*query_dirs()</pre>
+<div class="block">Return the directory stack as an array, starting with the most recently
+added directory.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the directory stack </dd>
+</dl>
+</li>
+</ul>
+<a name="push_dir()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>push_dir</h4>
+<pre>public&nbsp;void&nbsp;push_dir(string&nbsp;dir)</pre>
+<div class="block">Push a directory onto the directory stack.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>dir</code> - the directory to add </dd>
+</dl>
+</li>
+</ul>
+<a name="pop_dir()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pop_dir</h4>
+<pre>public&nbsp;string&nbsp;pop_dir()</pre>
+<div class="block">Remove the last pushed directory from the directory stack and return it.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the most recently pushed directory </dd>
+</dl>
+</li>
+</ul>
+<a name="clear_dirs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clear_dirs</h4>
+<pre>public&nbsp;void&nbsp;clear_dirs()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="query_homedir()">
 <!--   -->
 </a>
@@ -198,6 +298,36 @@
 </dl>
 </li>
 </ul>
+<a name="query_context()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_context</h4>
+<pre>public&nbsp;string&nbsp;query_context()</pre>
+<div class="block">Get the user's current context for object expansion.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the current context </dd>
+</dl>
+</li>
+</ul>
+<a name="set_context()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_context</h4>
+<pre>public&nbsp;int&nbsp;set_context(string&nbsp;c)</pre>
+<div class="block">Set the user's current context for object expansion.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>c</code> - context to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
+</dl>
+</li>
+</ul>
 <a name="setup_shell()">
 <!--   -->
 </a>
@@ -208,6 +338,20 @@
 <div class="block">Initialize ShellMixin.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

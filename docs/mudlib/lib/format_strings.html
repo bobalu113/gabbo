@@ -60,6 +60,18 @@
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li><a href="../lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></dd>
+</dl>
 <hr>
 <br>
 <div class="block">Utility library for parsing format strings into runnable lambda closures.</div>
@@ -87,23 +99,9 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_arg()">parse_arg</a></strong>(int&nbsp;token,&nbsp;string *parts,&nbsp;int&nbsp;size,&nbsp;string&nbsp;part,&nbsp;int&nbsp;cursor,&nbsp;string&nbsp;def)</code>
-<div class="block">Parse a format token which takes an optional argument.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_logger_format()">parse_logger_format</a></strong>(string&nbsp;format)</code>
-<div class="block">Parse a format string into a closure that can be invoked later by the
-logger to format a log line.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_mobile_format()">parse_mobile_format</a></strong>(string&nbsp;format)</code>
-<div class="block">Parse a format string into a closure that can be invoked later by the
-logger to format a log line.</div>
+<td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_format()">parse_format</a></strong>(string&nbsp;format,&nbsp;mapping&nbsp;infomap,&nbsp;symbol *args)</code>
+<div class="block"></div>
 </td>
 </tr>
 </table>
@@ -122,72 +120,20 @@ logger to format a log line.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="parse_arg()">
+<a name="parse_format()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>parse_arg</h4>
-<pre>public&nbsp;string&nbsp;parse_arg(int&nbsp;token,&nbsp;string *parts,&nbsp;int&nbsp;size,&nbsp;string&nbsp;part,&nbsp;int&nbsp;cursor,&nbsp;string&nbsp;def)</pre>
-<div class="block">Parse a format token which takes an optional argument.</div>
+<h4>parse_format</h4>
+<pre>public&nbsp;closure&nbsp;parse_format(string&nbsp;format,&nbsp;mapping&nbsp;infomap,&nbsp;symbol *args)</pre>
+<div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>token</code> - the token (i.e. the 't' part of %t{%d}) </dd>
-<dd><code>parts</code> - an array of all the tokenized parts of the format string </dd>
-<dd><code>size</code> - sizeof(parts) </dd>
-<dd><code>part</code> - the part currently being parsed </dd>
-<dd><code>cursor</code> - the index of the part currently being parsed, passed by reference (this cursor may need to be advanced) </dd>
-<dd><code>def</code> - default value of arg if no arg could be found, or 0 to return 0 in the absense of an arg </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the argument string (i.e. the "%d" part of %t{%d}) </dd>
-</dl>
-</li>
-</ul>
-<a name="parse_mobile_format()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parse_mobile_format</h4>
-<pre>public&nbsp;closure&nbsp;parse_mobile_format(string&nbsp;format)</pre>
-<div class="block">Parse a format string into a closure that can be invoked later by the
-logger to format a log line. The closure will take the arguments:
-<pre>
-'verb: the verb being used to travel
-'dir:  for out msg, the exit direction. for in msg, the entrance
-direction, or 0 if entrance could not be discerned. always 0 for
-teleport messages.
-</pre></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>format</code> - the format string </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the formatter closure, bound to THISO </dd>
-</dl>
-</li>
-</ul>
-<a name="parse_logger_format()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parse_logger_format</h4>
-<pre>public&nbsp;closure&nbsp;parse_logger_format(string&nbsp;format)</pre>
-<div class="block">Parse a format string into a closure that can be invoked later by the
-logger to format a log line. The closure will take the arguments:
-<pre>
-'category: the category of the logger
-'priority: the priority of the log event
-'message: an optional error message
-'caller: an array read from
-<code>debug_info(DINFO_TRACE, DIT_CURRENT)</code>
-for the invoking stackframe, or 0 if no caller was found
-</pre></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>format</code> - the format string </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the formatter closure, bound to the factory </dd>
+<dd><code>format</code> - </dd>
+<dd><code>infomap</code> - </dd>
+<dd><code>args</code> - </dd>
 </dl>
 </li>
 </ul>
