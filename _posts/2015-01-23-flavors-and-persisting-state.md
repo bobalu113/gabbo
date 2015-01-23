@@ -1,0 +1,22 @@
+---
+published: true
+category: blog
+layout: blog
+---
+Flavors provide a framework for modding the basic mudlib. It's an idea I came up with while plotting out how [zones](https://github.com/bobalu113/gabbo/wiki/zones) will work, because I wanted it so that any zone could be running an alternate version of any module if it so desired, but also retain some continuity for the player as they move across zones. This may result in shaking up how I'm organizing things in github, as a lot of the things I'm currently calling part of the "gabbo foundation" project might now be considered part of the "gabbo-basic" flavor, and I might want to bundle those two things separately. I'm getting ahead of myself though.
+
+<!-- more -->
+
+It's easier to talk about flavors with some examples, so let's start there. I mentioned the "gabbo-basic" flavor. That's what I'm working on right now. It provides some support for basic organisms, rooms, and things, movement and communication. You might expect something like the player lounge to be running the "gabbo-basic" flavor. With this flavor, there's a physical world around you but that's about it. When you exit the lounge to say, the Heart of Eternal City, you're now in the "eternal" zone which is running the "eotl" flavor. In addition to all the features provided by the "gabbo-basic" flavor, this flavor provides support for combat, including player stats and skills, and a wide variety of different object classes like weapons, armor, and heals.
+
+Every .c file will declare what flavor it wants to be using, in some fashion. I'm thinking I'll be able to do this with some clever preprocessor logic, but I haven't tried it out yet so I'm not sure if it'll work. If that doesn't work out I can always make the world editors figure everything for you. Either way, that's what a flavor is: a commonly-used collection of inheritable modules and support objects. Once an object is created, its flavor will not change. 
+
+However, there is one sort-of exception. Avatars assume the zone of whichever zone they're currently inhabiting, and thus, your interactive connection may be transfered to a new avatar object when moving between different flavor zones. It's not really an exception since the flavor of any cloned avatar object will not change over its lifetime, but it will appear to change to the user when the transition is made.
+
+At the time of transition, the old avatar will first save its state to disk. Then the new avatar will be cloned and it will restore state from disk. Every player has a different state file for every different flavor avatar they've used, so no matter what specific zone you're in, the same "you" is playing. A flavor may inherit another flavor, and then only override specific programs. When inheriting another flavor, your avatar will also save/restore state for that flavor and all of its ancestors. This means that if "eotl" inherits "gabbo-basic", and you've earned some achievement provided by the gabbo-basic flavor, that achievement will follow you from the lounge to the heart and back. If the eotl flavor wants to manipulate some variables provided by the gabbo-basic flavor, it can, and they will still be saved/restored from the same place.
+
+That's how it's supposed to work, at least. I was banking on using restore_value() and save_value() efuns along with some introspection to figure out what needs to get saved where. I found out that the only way the driver lets an object set a private inherited variable is using restore_object(). Not even symbol_variable() works.
+
+I've still got a couple options. I could use a bunch of state objects to break up the variables into a different save file for each flavor. I think then I can just restore the flavors in order and that should be safe enough I would think. There's some fanciness that happens if multiple inherits declare private variables with the same name, but I think I'm okay with just saying "don't do that" than trying to figure out the right business logic (and then figuring out a way to code it). This means you need to write_file() LPC source for every flavor to proxy all the variables
+
+If I can't make that work there's also the possibility of a driver hack. I really really don't want to have to do this, but it might be worth it for this one. I'm really pleased with this design, even though I haven't seen it in action yet.
