@@ -1,0 +1,14 @@
+@mixin container {
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+@mixin scrollable {
+	overflow-x: auto;
+    overflow-y: auto;
+}
+
+$default_background: #222222;
+$default_foreground: #F6F3F2;
+$default_font: "Lucida Console", Monaco, fixed, monospace;

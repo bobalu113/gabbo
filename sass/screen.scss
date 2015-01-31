@@ -1,0 +1,99 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "base";
+
+html {
+	min-height: 100%;
+	height: 100%;
+}
+
+body.gmf {
+	color: #000000;
+	background-color: #ffffff;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	height: 100%;
+	overflow: hidden;
+
+    #container {
+    	@include container;
+    	background-color: #ffffff;
+    	border: 1px solid black;
+    	display: flex;
+    	flex-direction: column;
+    	height: 100%;
+    }
+
+    #explorePane {
+    	position: relative;
+    	display: flex;
+
+    	#descriptionPane {
+            padding: 2px 2px 2px 2px;
+	        border-right: 1px solid black;
+
+	        .short {
+	        	background-color: #000000;
+	         	color: #ffffff;
+	        }
+
+	        .long {
+  		   		@include scrollable;
+	        }
+    	}
+
+    	#infoPane {
+    	    width: 500px;
+    		display: flex;
+    		flex-direction: column;
+
+	    	#actionPane {
+	    	    @include scrollable;
+	    	    padding: 2px 2px 2px 2px;
+	    	}
+
+	    	#inventoryPane {
+	    	    @include scrollable;
+	    	    padding: 2px 2px 2px 2px;
+	    	}
+	    }
+    }
+
+    #consolePane {
+        postition: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+	    #messages {
+	        @include scrollable;
+	        position: relative;
+	        background-color: #222222;
+	        flex: 1 0 0;
+            height: 300px;
+
+	        .message {
+	            color: $default_foreground;
+	            background-color: $default_background;
+	            font-family: $default_font;
+	            white-space: pre-wrap;
+	            letter-spacing: 1px;
+	            line-height: 12px;
+	        }
+
+	    }
+
+	    #commandPane {
+	    	flex: 0 0 auto;
+
+	    	#commandBox {
+	    	    width: 99%;
+	    	}
+	    }
+
+    }
+
+}

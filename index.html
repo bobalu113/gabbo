@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>gabbo demo</title>
+<link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
+<link href="stylesheets/print.css" media="print" rel="stylesheet" type="text/css"/>
+<script src="file:///D:/work/websockify/include/base64.js"></script>
+<script src="file:///D:/work/websockify/include/util.js"></script>
+<script src="file:///D:/work/websockify/include/websock.js"></script>
+<script src="file:///D:/work/websockify/include/webutil.js"></script>
+<script src="file:///D:/work/websockify/include/keysym.js"></script>
+<script src="file:///D:/work/websockify/include/VT100.js"></script>
+<script src="file:///D:/work/websockify/include/wstelnet.js"></script>
+<script src="gabbo.js" type="text/javascript"></script>
+<script type="text/javascript">
+function connected() {
+  //alert("Connected!");
+}
+
+function disconnected() {
+  //alert("Disconnected!");
+}
+
+window.onload = function() {
+  telnet = Telnet(newMessage, connected, disconnected);
+}
+
+function connect() {
+  telnet.connect("localhost", 2010, false);
+}
+
+function handleKey(e) {
+  if (e.keyCode == 13) {
+    var str = e.target.value + "\n";
+    var buf = new Array(str.length);
+    for (var i=0, strLen=str.length; i<strLen; i++) {
+      buf[i] = str.charCodeAt(i);
+    }
+    telnet.send(buf);
+    e.target.value = "";
+    return false;
+  }
+  return true;
+}
+</script>
+</head>
+
+<body class="gmf" onLoad="connect();">
+<div id="container">
+  <div id="explorePane">
+  	<span id="descriptionPane">
+  	  <div class="short">Devo's Bar</div>
+  	  <div class="long">Welcome to Devo's Bar, located just above downtown Eternal City.  This is a place where you can come and relax with your friends, and enjoy a few drinks while you're at it...  However, Devo's is a purely dry establishment, so if you're looking to get drunk, look elsewhere.  Next to the bar is a large, friendly-looking sign.</div>
+  	</span>
+  	<span id="infoPane">
+  	  <div id="actionPane">
+  	  N NE E SE S SW W NW D U
+  	  </div>
+  	  <div id="inventoryPane">
+  	    <ol>
+  	      <li>an apple</li>
+  	      <li>an orange</li>
+  	      <li>an orange</li>
+  	      <li>an orange</li>
+  	      <li>an orange</li>
+  	      <li>a bag</li>
+  	    </ol>
+  	  </div>
+  	</span>
+  </div>
+  <div id="consolePane">
+    <div id="messagePane">
+      <div id = "messages">
+      	<div class="message">12345678901234567890123456789012345678901234567890123456789012345678901234567890</div>
+      </div>
+    </div>
+  	<table id="commandPane" cellspacing="0">
+  	  <tr><td id="promptPane">&gt;</td>
+  	  <td style="width: 100%"><input id="commandBox" tabindex="0" type="text" onkeydown="return handleKey(event);"/></td></tr>
+  	</table>
+  </div>
+</div>
+
+<div id="debugPane"></div>
+
+</body>
+</html>

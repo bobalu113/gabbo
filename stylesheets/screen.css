@@ -1,0 +1,165 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 5, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../home/root/.gem/ruby/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 9, ../sass/screen.scss */
+html {
+  min-height: 100%;
+  height: 100%;
+}
+
+/* line 14, ../sass/screen.scss */
+body.gmf {
+  color: #000000;
+  background-color: #ffffff;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+/* line 21, ../sass/screen.scss */
+body.gmf #container {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: #ffffff;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+/* line 30, ../sass/screen.scss */
+body.gmf #explorePane {
+  position: relative;
+  display: flex;
+}
+/* line 34, ../sass/screen.scss */
+body.gmf #explorePane #descriptionPane {
+  padding: 2px 2px 2px 2px;
+  border-right: 1px solid black;
+}
+/* line 38, ../sass/screen.scss */
+body.gmf #explorePane #descriptionPane .short {
+  background-color: #000000;
+  color: #ffffff;
+}
+/* line 43, ../sass/screen.scss */
+body.gmf #explorePane #descriptionPane .long {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+/* line 48, ../sass/screen.scss */
+body.gmf #explorePane #infoPane {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+/* line 53, ../sass/screen.scss */
+body.gmf #explorePane #infoPane #actionPane {
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 2px 2px 2px 2px;
+}
+/* line 58, ../sass/screen.scss */
+body.gmf #explorePane #infoPane #inventoryPane {
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 2px 2px 2px 2px;
+}
+/* line 65, ../sass/screen.scss */
+body.gmf #consolePane {
+  postition: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+/* line 71, ../sass/screen.scss */
+body.gmf #consolePane #messagePane {
+  overflow-x: auto;
+  overflow-y: auto;
+  position: relative;
+  background-color: #222222;
+  flex: 1 0 0;
+  vertical-align: bottom;
+}
+/* line 78, ../sass/screen.scss */
+body.gmf #consolePane #messagePane .message {
+  color: #F6F3F2;
+  background-color: #222222;
+  font-family: "Lucida Console", Monaco, fixed, monospace;
+  white-space: pre-wrap;
+  letter-spacing: 1px;
+  line-height: 12px;
+}
+/* line 89, ../sass/screen.scss */
+body.gmf #consolePane #commandPane {
+  flex: 0 0 auto;
+}
+/* line 92, ../sass/screen.scss */
+body.gmf #consolePane #commandPane #commandBox {
+  width: 99%;
+}
