@@ -1,0 +1,127 @@
+./configure --prefix /cygdrive/d/work/gabbo --enable-use-alists --disable-use-deprecated --with-portno=2010
+
+./ldmud.exe --debug-file ../mudlib/Debug.log --mudlib ../mudlib
+
+
+
+throw:
+({
+   "opts",
+   ([ longopts ]),
+   "something to tell how natural language parser should operate",
+   ({ arg validation, ... })
+})
+
+cwd.sword
+
+parse("", "")
+parse("sword", "here")
+parse("me", "here.sword")
+parse("sword", "me")
+parse("me.sword.hilt", "me.sword")
+parse("sign", "me.sword.hilt")
+parse("", )
+
+"here" -> l -> "here"
+"here" -> l sword -> "here.sword"
+l me -> "me" (inventory)
+"me" -> l sword -> "me.sword"
+
+
+
+// possibly add priority
+l sword
+  ({ obj/sword#1, "sword", 0 }),
+l here.sword
+  ({ obj/sword#1, "sword", 0 }),
+l sword.hilt
+  ({ obj/sword#2, "sword", "hilt" }),
+l sword.hilt.gem
+  ({ obj/sword#3, "sword", "hilt.gem" }),
+l "sword.hilt.brown gem"
+  ({ obj/sword#3, "sword", "hilt.brown gem" }),
+l "sword 2.hilt.brown gem"
+  ({ obj/sword#3, "sword 2", "hilt.brown gem" }),
+l "sword 2.hilt.brown gem 2"
+  ({ obj/sword#3, "sword 2", "hilt.brown gem 2" }),
+l
+  ({ obj/workroom, "here", 0 })
+l sign
+  ({ obj/workroom, "here", "sign" })
+
+// TODO write lib function to return the index of id matched
+
+
+//
+({ "here", "ei" })
+({ "sword", "ei" })
+({ "sword", "ei" })
+
+
+
+cc return f(); } int g(string *t) { return referencep(t); } mixed f() { string *s = ({ "a" }); return g(&s);
+
+
+
+
+expand("(boots,gloves)", "me")
+expand1("(boots,gloves)", "me")
+single("(boots,gloves)", "me")
+
+
+expand("boots.laces", "me", ([ ]))
+  expand1("boots.laces", "me", ([ ]))
+  single("boots", "me", ([ ]))
+    expand1("me", "", ([ ]))
+      single("me", "", ([ ]))
+
+single("laces", "me.boots", ([ "me.boots" : ({ prev }) ]))
+
+(here,me).boots> l laces,gloves
+(here,me).boots.laces,(here,me).gloves>
+
+(here,me).boots> l (laces,gloves)
+(here,me).boots.(laces,gloves)>
+
+(here,me).boots> l laces,toe
+(here,me).boots.(laces,toe)>
+(here,me).boots.laces,(here,me).boots.toe>
+
+(here,me).boots> l (laces,toe)
+(here,me).boots.(laces,toe)>
+
+(here,me).boots> l (laces.aglet,toe)
+(here,me).boots.(laces.aglet,toe)>
+
+(here,me).boots> l laces.aglet,toe
+(here,me).boots.laces.aglet,(here,me).boots.toe)>
+
+(here,me).boots> l (laces,toe).aglet
+(here,me).boots.(laces,toe).aglet>
+
+(here,me).boots> l (laces,toe)
+(here,me).boots.(laces,toe)> l aglet
+(here,me).boots.(laces,toe).aglet>
+
+(here,me).boots> l (laces.aglet,toe)
+(here,me).boots.(laces.aglet,toe)> l dust,dirt
+(here,me).boots.(laces.aglet,toe)>
+
+
+(here,me).boots.((laces,toe),other)>
+(here,me).boots.(laces,toe),(here,me).boots.other>
+
+
+get -l "stuff and stuff" bag.big thing from small bag
+get apple orange from small bag
+
+
+   -1   0   1
+ 1 [ ]-[ ]-[ ]
+    |   |   |
+ 0 [>]-[*] [x]
+    |   |   |
+-1 [ ] [ ]-[ ]
+    |   |   |
+-2 [@]-[ ]-[<]
+
