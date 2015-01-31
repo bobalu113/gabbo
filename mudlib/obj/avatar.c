@@ -5,7 +5,7 @@
  * @alias Avatar
  */
 
-inherit LivingCode;
+inherit OrganismCode;
 
 inherit NameMixin;
 inherit VisibleMixin;
@@ -198,7 +198,7 @@ nomask int is_avatar() {
  * @return a zero-width mapping of capabilities
  */
 public mapping query_capabilities() {
-  return     LivingCode::query_capabilities()
+  return   OrganismCode::query_capabilities()
             + NameMixin::query_capabilities()
          + VisibleMixin::query_capabilities()
            + ShellMixin::query_capabilities()

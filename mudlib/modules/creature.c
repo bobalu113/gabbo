@@ -1,16 +1,16 @@
 /**
- * A base object for non-player characters.
- * 
+ * A base module for non-player organisms.
+ *
  * @author devo@eotl
  * @alias CreatureCode
  */
 
-inherit LivingCode;
+inherit OrganismCode;
 
 /**
  * Returns true to designate that this object is a non-player character.
- * 
- * @return 1 
+ *
+ * @return 1
  */
 nomask int is_creature() {
   return 1;
@@ -21,5 +21,5 @@ nomask int is_creature() {
  * @return a zero-width mapping of capabilities
  */
 public mapping query_capabilities() {
-  return LivingCode::query_capabilities();
+  return OrganismCode::query_capabilities();
 }

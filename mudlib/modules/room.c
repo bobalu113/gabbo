@@ -1,5 +1,5 @@
 /**
- * A base object for rooms.
+ * A base module for objects representing units of space.
  *
  * @author devo@eotl
  * @alias RoomCode
@@ -14,7 +14,6 @@
 // TODO object spawning
 
 inherit PropertyMixin;
-inherit IdMixin;
 inherit DetailMixin;
 inherit VisibleMixin;
 
@@ -351,11 +350,8 @@ int set_teleport_msgin(string fmt) {
  */
 public void create() {
   setup_property();
-  setup_id();
   setup_detail();
   setup_visible();
-  set_primary_id("here");
-  add_secondary_id("here");
   exits = m_allocate(0, 5);
   messages = m_allocate(0, 1);
 }
@@ -376,7 +372,6 @@ nomask public int is_room() {
  */
 public mapping query_capabilities() {
   return PropertyMixin::query_capabilities()
-             + IdMixin::query_capabilities()
          + DetailMixin::query_capabilities()
         + VisibleMixin::query_capabilities();
 }

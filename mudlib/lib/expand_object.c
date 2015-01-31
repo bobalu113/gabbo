@@ -388,7 +388,9 @@ private mixed *expand_term(string term, mixed *prev, object who,
           if (flags & MATCH_BLUEPRINTS) {
             matches += ({ ob });
           }
-          matches += clones(ob, ((flags & STALE_CLONES) ? 2 : 0));
+          if (!(flags & IGNORE_CLONES)) {
+            matches += clones(ob, ((flags & STALE_CLONES) ? 2 : 0));
+          }
         }
       }
       logger->trace("context = %O, matches = %O\n", context, matches);

@@ -1,10 +1,11 @@
 /**
- * A base object for inanimate objects.
- * 
+ * A base module for stuff made from dead or inorganic matter.
+ *
  * @author devo@eotl
  * @alias ThingCode
  */
 
+inherit StuffCode;
 inherit IdMixin;
 
 /**
@@ -25,8 +26,8 @@ int id(string str) {
 
 /**
  * Returns true to designate that this object represents a thing in the game.
- * 
- * @return 1 
+ *
+ * @return 1
  */
 nomask public int is_thing() {
   return 1;
@@ -34,9 +35,10 @@ nomask public int is_thing() {
 
 /**
  * Return a zero-width mapping of the capabilities this program provides.
- * 
+ *
  * @return a zero-width mapping of capabilities
  */
 public mapping query_capabilities() {
-  return IdMixin::query_capabilities();
+  return StuffCode::query_capabilities()
+         + IdMixin::query_capabilities();
 }
