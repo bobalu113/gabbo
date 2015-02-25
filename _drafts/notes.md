@@ -42,13 +42,25 @@ What you're investing in isn't really software, it's participation in a new kind
 
 I would prefer it if any implementation whose subclasses are all open source also got to use it for free.
 
+Flavor: software
+Description: A game about software.
+Starting classes:
+
+Class: Soldier
+Start Location: The Barracks
+Attracts: Players who are here to do their duty and follow (or give) orders. Different paths could be an officer path for architecture and enlisted paths for generalists and specialists.
+
+Class: Student
+Start Location: The Dormitory
+Attracts: Players new to software, or veterans looking to expand their skill set. Would-be managers might choose this path and eventually become professors.
+
+Class: Tourist
+Start Location: The Hostel
+Attracts: Contractors, or players who like to switch projects a lot. This path doesn't really lead anywhere but it does earn experience faster.
+
+Class: Homeless
+Start Location: The Bus
+Attracts: Players that got big dreams and don't mind a challenge. This path could lead anywhere, but it would probably be best suited for would-be entrepreneurs.
 
 
-
-A solider class that starts in the barracks; might appeal to devs who are there to follow orders.
-
-A student class that starts in the dormitory; might appeal to devs seeking to learn new things.
-
-A tourist class that starts in a hostel; for contractors or devs who switch teams a lot.
-
-A homeless class that starts by stepping off a bus; for those who got big dreams and don't mind a challenge.
+The first time WSI hired me I was a student. The second time they hired me I was a tourist. The third time they hired me I was homeless. And since then they've turned me into a soldier.
