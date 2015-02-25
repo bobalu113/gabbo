@@ -60,7 +60,7 @@ Attracts: Contractors, or players who like to switch projects a lot. This path d
 
 Class: Homeless
 Start Location: The Bus
-Attracts: Players that got big dreams and don't mind a challenge. This path could lead anywhere, but it would probably be best suited for would-be entrepreneurs.
+Attracts: Players that got big dreams and don't mind a challenge. This path could lead anywhere, but it would probably be best suited for creative thinkers or would-be entrepreneurs.
 
 
 The first time WSI hired me I was a student. The second time they hired me I was a tourist. The third time they hired me I was homeless. And since then they've turned me into a soldier.
