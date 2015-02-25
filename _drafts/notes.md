@@ -14,10 +14,10 @@ I'll talk a little bit more about the choice to build a MUD in the next post, as
 
 -----
 
-Before going on, I want to talk a little bit more about the decision to build a MUD. One of the questions I get from people is, are people really going to play a text-based game? Again, I see the MUD's roots in text as an asset, not a liability.
+In this post, I want to talk a little bit more about the decision to build a MUD. One of the questions I get from people is, "Are people really going to play a text-based game?" The first thing I should make clear is it's not that I don't think we should and will introduce rich content to the game. A web client is already underway, in fact. I just think that text is where we should start. Being able to start development with the game driver already built, or use EotL as a testbed are some great perks, but that's only what they are. Regardless of those things, the game I'm building is a text-based game. Let's examine why.
 
-First, rich content takes time to create. Sentences can be written in more or less real time. [Ninety-three percent of all tweets are text-based](http://www.quicksprout.com/2014/03/05/what-type-of-content-gets-shared-the-most-on-twitter/), and it's not because people like reading them more. [Tweets with images receive 18% more clicks, 89% more favorites, and 150% more retweets than those without](https://blog.bufferapp.com/the-power-of-twitters-new-expanded-images-and-how-to-make-the-most-of-it).
 
+Rich content takes time to create. Sentences can be written in more or less real time. [Ninety-three percent of all tweets are text-based](http://www.quicksprout.com/2014/03/05/what-type-of-content-gets-shared-the-most-on-twitter/), and it's not because people like reading them more. [Tweets with images and videos receive 35% and 28% more retweets than those without, respectively](https://blog.twitter.com/2014/what-fuels-a-tweets-engagement).
 
 
 Think about what text is. All English text is comprised of twenty-six letters, two cases, and some various punctuation. That's it. Now think about what a picture or a movie is.
@@ -29,7 +29,7 @@ Also, words are going to be there whether we want them to or not
 [When Coca-Cola recently offered the option to its corporate employees to drop voicemail in lieu of text messaging, 94% of them chose texts](https://www.mobilecommons.com/blog/2015/01/coca-cola-replaces-corporate-voicemail-text-messaging/).
 
 
-
+-----
 
 A few legal speed bumps. First, I won't build anything that EotL isn't allowed to use for free. I'll go to academia if I can't find that deal in the marketplace.
 
@@ -41,6 +41,8 @@ What you're investing in isn't really software, it's participation in a new kind
 
 
 I would prefer it if any implementation whose subclasses are all open source also got to use it for free.
+
+-----
 
 Flavor: software
 Description: A game about software.
@@ -61,6 +63,5 @@ Attracts: Contractors, or players who like to switch projects a lot. This path d
 Class: Homeless
 Start Location: The Bus
 Attracts: Players that got big dreams and don't mind a challenge. This path could lead anywhere, but it would probably be best suited for creative thinkers or would-be entrepreneurs.
-
 
 The first time WSI hired me I was a student. The second time they hired me I was a tourist. The third time they hired me I was homeless. And since then they've turned me into a soldier.
