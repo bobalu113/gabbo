@@ -17,6 +17,8 @@ I'll talk a little bit more about the choice to build a MUD in the next post, as
 In this post, I want to talk a little bit more about the decision to build a MUD. One of the questions I get from people is, "Are people really going to play a text-based game?" The first thing I should make clear is it's not that I don't think we should and will introduce rich content to the game. A web client is already underway, in fact. I just think that text is where we should start. Being able to start development with the game driver already built, or use EotL as a testbed are some great perks, but that's only what they are. Regardless of those things, the game I'm building is a text-based game. Let's examine why.
 
 
+
+
 Rich content takes time to create. Sentences can be written in more or less real time. [Ninety-three percent of all tweets are text-based](http://www.quicksprout.com/2014/03/05/what-type-of-content-gets-shared-the-most-on-twitter/), and it's not because people like reading them more. [Tweets with images and videos receive 35% and 28% more retweets than those without, respectively](https://blog.twitter.com/2014/what-fuels-a-tweets-engagement).
 
 
@@ -24,6 +26,17 @@ Think about what text is. All English text is comprised of twenty-six letters, t
 
 
 Also, words are going to be there whether we want them to or not
+
+Social games require communication to work, and text is still the most versatile and accessible communication medium. Most tweets are text. Text messaging is replacing voicemail.
+
+Gamification requires that you maintain a virtual model of some real world condition. A text-only model can be more responsive to changes, and incorporate complexity more easily. Immersive? Model audio "you hear footsteps". 
+
+Books - internal voice. Screenplay - blueprint.
+
+Portability? Renderability? Small footprint? Blind people? Lots of verbs/nouns. Easier to debug if everything has a text representation. Flexible.
+
+
+This game isn't designed to have any ending, so it needs to be built to last. Computers aren't infallible. Hardware can fail, economies might crash, we could be hacked. Text is resilient. Example needed.
 
 
 [When Coca-Cola recently offered the option to its corporate employees to drop voicemail in lieu of text messaging, 94% of them chose texts](https://www.mobilecommons.com/blog/2015/01/coca-cola-replaces-corporate-voicemail-text-messaging/).
