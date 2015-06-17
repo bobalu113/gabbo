@@ -6,13 +6,13 @@
 <title>gabbo demo</title>
 <link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
 <link href="stylesheets/print.css" media="print" rel="stylesheet" type="text/css"/>
-<script src="file:///D:/work/websockify/include/base64.js"></script>
-<script src="file:///D:/work/websockify/include/util.js"></script>
-<script src="file:///D:/work/websockify/include/websock.js"></script>
-<script src="file:///D:/work/websockify/include/webutil.js"></script>
-<script src="file:///D:/work/websockify/include/keysym.js"></script>
-<script src="file:///D:/work/websockify/include/VT100.js"></script>
-<script src="file:///D:/work/websockify/include/wstelnet.js"></script>
+<script src="/websockify/base64.js"></script>
+<script src="/websockify/util.js"></script>
+<script src="/websockify/websock.js"></script>
+<script src="/websockify/webutil.js"></script>
+<script src="/websockify/keysym.js"></script>
+<script src="/websockify/VT100.js"></script>
+<script src="/websockify/wstelnet.js"></script>
 <script src="gabbo.js" type="text/javascript"></script>
 <script type="text/javascript">
 function connected() {
@@ -28,7 +28,7 @@ window.onload = function() {
 }
 
 function connect() {
-  telnet.connect("localhost", 2010, false);
+  telnet.connect("localhost", 2011, false);
 }
 
 function handleKey(e) {
