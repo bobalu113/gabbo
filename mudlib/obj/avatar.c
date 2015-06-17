@@ -5,6 +5,8 @@
  * @alias Avatar
  */
 
+#include <sys/functionlist.h>
+
 inherit OrganismCode;
 
 inherit NameMixin;
@@ -59,7 +61,7 @@ public int query_screen_length() {
 /* initialization */
 
 public void create() {
-  LivingCode::create();
+  OrganismCode::create();
 }
 
 /**
@@ -205,3 +207,68 @@ public mapping query_capabilities() {
     + CommandGiverMixin::query_capabilities()
           + MobileMixin::query_capabilities();
 }
+
+#ifdef STATEOB
+
+private void save_state() {
+  object logger = LoggerFactory->get_logger(THISO);
+  mapping out = ([ ]);
+  mixed *vars = variable_list(THISO,
+                              RETURN_FUNCTION_NAME
+                            | RETURN_FUNCTION_FLAGS
+                            | RETURN_VARIABLE_VALUE);
+  for (int i = 0, int j = sizeof(vars); i < j; i += 3) {
+    string name = vars[i];
+    int type = vars[i + 1];
+    int value = vars[i + 2];
+    string flavor = get_flavor(variable_exists(name, THISO, NAME_HIDDEN))
+    if (type & TYPE_MOD_NOSAVE) {
+      continue;
+    }
+    if (!out[flavor]) {
+      out[flavor] = ([ ]);
+    }
+    out[flavor][name] = value;
+  }
+  foreach (string flavor, mapping vals : out) {
+    object state_obj;
+    string err;
+    string state_prg = sprintf(StateObjDir "/avatar/%s-%d.c",
+                               flavor, program_time());
+    if (!file_exists(state_prg)) {
+      write_state_program(state_prg, vals);
+    }
+    if (err = catch(state_obj = clone_object(state_prg))) {
+      logger->error("Couldn't clone state object: %s, %s", state_prg, err);
+      continue;
+    }
+    foreach (string var, mixed val : vals) {
+      state_obj->set_variable(var, val);
+    }
+    string savefile = sprintf("/state/player/%s/%s.val",
+                              query_username(), flavor);
+    if (!state_obj->save_state(savefile)) {
+      logger->error("Couldn't save state: %s", savefile);
+    }
+    destruct(state_obj);
+  }
+  return;
+}
+
+private void restore_state() {
+  mapping in = ([ ]);
+  string *ancestors = inherit_list();
+  for (int i = sizeof(ancestors) - 1; i >= 0; i--) {
+    string flavor = get_flavor(ancestors[i]);
+    if (!in[flavor]) {
+      in[flavor] = ([ ]);
+    }
+    string savefile = sprintf("/state/player/%s/%s.val",
+                              query_username(), flavor);
+    in[flavor] += restore_value(read_file(savefile));
+  }
+  string *flavors = m_indices(in);
+
+}
+
+#endif
