@@ -59,7 +59,7 @@ public int query_screen_length() {
 /* initialization */
 
 public void create() {
-  LivingCode::create();
+  OrganismCode::create();
 }
 
 /**
