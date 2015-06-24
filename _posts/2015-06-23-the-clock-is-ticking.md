@@ -5,7 +5,7 @@ layout: blog
 ---
 
 I left my day job last month and I realized I haven't posted about it yet. My focus hasn't shifted much since my last post; what I'm mainly working on now is securing funding. However I've got a clock ticking now, and if I have to start a new job somewhere I will have a lot less time to work on the project. That said, the increase in urgency has narrowed my focus quite a bit. I have a couple specific avenues of funding to tell you about as well as some potential engineering updates in the near future. Hopefully this post will give you a better idea of how exactly I'm managing my time.
-
+<!-- more -->
 Last week I spoke to my brother about marketing the platform. His background is in hardware, but he's been successfully able to build is own business and market his products so his feedback was invaluable. The TLDR is that, without a working prototype, getting some kind of lump sum investment is unlikely without a really good idea. And while I don't believe my ideas aren't good enough, they aren't flushed out enough and fixing that would take some indeterminate amount of time. I've only got so much runway before I have to find some source of income.
 
 The alternate route is to get someone to pay me to work on the project under their umbrella. I have a couple possible leads, one is to resurrect my idea of a game about software development built on the platform, the other to use the platform to model Samsung SmartThings devices in a hotel or college dormitory environment.
