@@ -32,3 +32,7 @@ tourist:
 homeless:
   earn
 
+
+disk: non-rivalrous good; some club goods (excludable) and some public goods (non-excludable)
+memory: rivalrous good; when loaded from club disk, private good in memory; when loaded from public disk, common good in memory
+cpu: when running program in private memory, ; when running program in common memory,

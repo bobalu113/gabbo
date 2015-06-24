@@ -1,6 +1,6 @@
 /**
  * A login object to handle incoming connections.
- * 
+ *
  * @author devo@eotl
  * @alias LoginObject
  */
@@ -18,7 +18,7 @@ private functions private variables inherit FileLib;
 int logon();
 static void select_user(string user, int tries);
 static void select_password(string password, int tries, string user);
-static void confirm_password(string cpassword, int tries, string user, 
+static void confirm_password(string cpassword, int tries, string user,
                               string password);
 public void restart_timeout();
 static void timeout();
@@ -29,10 +29,11 @@ protected int save_passwd(string user, mapping data, int overwrite);
 
 /**
  * Invoked by the master object when a new connection is established.
- * 
+ *
  * @return 1 for success, 0 for failure
  */
 int logon() {
+  object logger = LoggerFactory->getLogger(THISO);
   if (caller_stack_depth() > 0) {
     return 0;
   }
@@ -40,8 +41,10 @@ int logon() {
   string welcome = read_file(WELCOME_FILE);
   if (welcome) {
     printf(welcome);
+  } else {
+    logger->warn("unable to read welcome file");
   }
-  input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, "Enter username: ", 
+  input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, "Enter username: ",
     0);
   restart_timeout();
   return 1;
@@ -49,8 +52,8 @@ int logon() {
 
 /**
  * Read input from user for username.
- * 
- * @param user  the inputted username 
+ *
+ * @param user  the inputted username
  * @param tries the number of tries used
  */
 static void select_user(string user, int tries) {
@@ -58,7 +61,7 @@ static void select_user(string user, int tries) {
     if (tries >= MAX_TRIES) {
         abort();
     } else {
-      input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, 
+      input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG,
         "Enter username: ", tries + 1);
       restart_timeout();
     }
@@ -66,7 +69,7 @@ static void select_user(string user, int tries) {
     string prompt = "Enter password: ";
     if (!user_exists(user)) {
       prompt = "New user. Choose a password: ";
-    } 
+    }
     input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG,
       prompt, 0, user);
     restart_timeout();
@@ -75,8 +78,8 @@ static void select_user(string user, int tries) {
 
 /**
  * Read input from user for password.
- * 
- * @param password  the inputted password 
+ *
+ * @param password  the inputted password
  * @param tries     the number of tries used
  * @param user      the selected username
  */
@@ -89,7 +92,7 @@ static void select_password(string password, int tries, string user) {
       string prompt = "Enter password: ";
       if (!user_exists(user)) {
         prompt = "Choose a password: ";
-      } 
+      }
       input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG,
         prompt, tries + 1, user);
       restart_timeout();
@@ -115,18 +118,18 @@ static void select_password(string password, int tries, string user) {
         |INPUT_IGNORE_BANG, "Confirm password: ", tries, user, password);
       restart_timeout();
     }
-  }  
+  }
 }
 
 /**
  * Read the password again from new users for confirmation.
- * 
+ *
  * @param cpassword the confirmed password
  * @param tries     the number of tries used
  * @param user      the selected username
  * @param password  the selected password
  */
-static void confirm_password(string cpassword, int tries, string user, 
+static void confirm_password(string cpassword, int tries, string user,
                               string password) {
   printf("\n");
   if (cpassword == password) {
@@ -136,7 +139,7 @@ static void confirm_password(string cpassword, int tries, string user,
         spawn_avatar(user);
       } else {
         printf("Username %s already taken, try again. ");
-        input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, 
+        input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG,
           "Enter username: ", 0);
         restart_timeout();
       }
@@ -149,7 +152,7 @@ static void confirm_password(string cpassword, int tries, string user,
       abort();
     } else {
       printf("Passwords do not match, try again. ");
-      input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG, 
+      input_to("select_password", INPUT_NOECHO|INPUT_PROMPT|INPUT_IGNORE_BANG,
         "Choose a password: ", tries + 1, user);
       restart_timeout();
     }
@@ -183,9 +186,9 @@ static void abort() {
 }
 
 /**
- * Spawn a new avatar object, move to starting location, and transfer 
+ * Spawn a new avatar object, move to starting location, and transfer
  * interactivity from login object to new avatar.
- * 
+ *
  * @param user the username of the new avatar
  */
 protected void spawn_avatar(string user) {
@@ -209,13 +212,13 @@ protected void spawn_avatar(string user) {
     (avatar_name = object_name(avatar)),
     (avatar->setup(user) && (
       destruct(avatar),
-      throw(sprintf("%s reported setup failure for user %s\n", 
+      throw(sprintf("%s reported setup failure for user %s\n",
         avatar_name, user))
     ));
     publish
   );
   if (err) {
-    printf("Caught error setting up avatar for user %s: %s\n", user, err); 
+    printf("Caught error setting up avatar for user %s: %s\n", user, err);
     destruct(THISO);
     return;
   }
@@ -223,8 +226,8 @@ protected void spawn_avatar(string user) {
   object location;
   err = catch (location = load_object(data["location"]); publish);
   if (err) {
-    printf("Caught error loading starting location for user %s: %s\n", user, 
-      err); 
+    printf("Caught error loading starting location for user %s: %s\n", user,
+      err);
   } else {
     err = catch (
       move_object(avatar, location);
@@ -233,9 +236,9 @@ protected void spawn_avatar(string user) {
     if (err) {
       // TODO  give friendly error
       logger->info("Caught error moving %O to starting location %O for user "
-        "%s: %s\n", avatar, location, user, err); 
+        "%s: %s\n", avatar, location, user, err);
       printf("Caught error moving %O to starting location %O for user "
-        "%s: %s\n", avatar, location, user, err); 
+        "%s: %s\n", avatar, location, user, err);
     }
   }
 
@@ -276,7 +279,7 @@ protected void new_user(string user, string password) {
 
 /**
  * Save user data to password file.
- * 
+ *
  * @param  user      the username of the file
  * @param  data      the password data
  * @param  overwrite 1 to force overwrite of existing file, 0 otherwise
