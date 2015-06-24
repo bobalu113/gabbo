@@ -37,7 +37,10 @@ int logon() {
     return 0;
   }
   printf(CLEAR_SCREEN);
-  printf(read_file(WELCOME_FILE));
+  string welcome = read_file(WELCOME_FILE);
+  if (welcome) {
+    printf(welcome);
+  }
   input_to("select_user", INPUT_PROMPT|INPUT_IGNORE_BANG, "Enter username: ", 
     0);
   restart_timeout();
