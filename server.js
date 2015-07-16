@@ -5,9 +5,11 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
-var index = fs.readFileSync('d:\\work\\gb\\index.html');
 http.createServer(function (req, res) {
-    var path = 'd:\\work\\gb\\' + url.parse(req.url).pathname;
+    var path = '/home/bobby/work/gabbo-client/' + url.parse(req.url).pathname;
+    if (path.endsWith('/')) {
+        path += 'index.html';
+    }
     if (fs.existsSync(path)) {
         var content = fs.readFileSync(path);
         var contentType = 'text/plain';
@@ -23,4 +25,4 @@ http.createServer(function (req, res) {
     } else {
         res.writeHead(404);
     }
-}).listen(80);
+}).listen(2080);
