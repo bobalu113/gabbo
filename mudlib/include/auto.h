@@ -19,9 +19,7 @@
 #define ModulesDir           "/modules"
 #define ObjDir               "/obj"
 #define BinDir               "/bin"
-#define PublicDir            "/public"
-#define PrivateDir           "/private"
-#define SharedDir            "/shared"
+#define ZoneDir              "/zone"
 #define StateDir             "/state"
 #define EtcDir               "/etc"
 
@@ -61,8 +59,8 @@
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
 
-#define CommonRoom           SharedDir "/common"
-#define HomeDir              PrivateDir "/home"
+#define CommonRoom           ZoneDir "/common"
+#define HomeDir              ZoneDir "/home"
 #define Workroom(u)          (HomeDir + "/" + u + "/workroom")
 
 #define THISO                this_object()
