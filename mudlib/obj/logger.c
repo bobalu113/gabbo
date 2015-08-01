@@ -32,7 +32,6 @@ void log(string priority, string message, varargs string *args);
 private void do_output(string msg);
 private mixed *find_caller();
 private string parse_program(string dbg_program);
-private object *expand_objects(string ospec);
 
 /**
  * Get the logger's category.
@@ -340,7 +339,7 @@ void log(string priority, string msg_fmt, varargs string *args) {
     return;
   }
 
-  string msg = apply(#'sprintf, ({ msg_fmt }) + args);
+  string msg = apply(#'sprintf, ({ msg_fmt }) + args); //'
   mixed *caller = find_caller();
   if (!is_muted(parse_program(caller[TRACE_PROGRAM]), caller[TRACE_LOC])) {
     msg = funcall(formatter, category, priority, msg, caller);
@@ -366,7 +365,7 @@ private void do_output(string msg) {
         publish
       );
       //if (err) { continue; }
-      consoles = ({ ({ THISP, "", 0 }) });
+      //consoles = ({ ({ THISP, "", 0 }) });
       foreach (mixed *ob : consoles) {
         catch (tell_object(ob[OB_TARGET], msg + "\n"));
       }

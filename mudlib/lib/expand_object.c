@@ -326,16 +326,21 @@ private mixed *expand_term(string term, mixed *prev, object who,
   case "living":
     return filter(prev, (: living($1[OB_TARGET]) :));
   case "me":
-    if (!strlen(context)) {
+    if (!who) {
+      return ({ });
+    } else if (!strlen(context)) {
       return ({ ({ who, "me ", 0 }) });
     } else {
       return filter(prev, (: $1[OB_TARGET] == $2 :), who);
     }
   case "here":
-    if (!strlen(context)) {
-      return ({ ({ ENV(who), "here", 0 }) });
+    object env = ENV(who);
+    if (!env) {
+      return ({ });
+    } else if (!strlen(context)) {
+      return ({ ({ env, "here", 0 }) });
     } else {
-      return filter(prev, (: $1[OB_TARGET] == $2 :), ENV(who));
+      return filter(prev, (: $1[OB_TARGET] == $2 :), env);
     }
   case "i":
     if (!strlen(context)) {
@@ -348,7 +353,12 @@ private mixed *expand_term(string term, mixed *prev, object who,
     }
   case "e":
     if (!strlen(context)) {
-      return ({ ({ ENV(who), "e", 0 }) });
+      object env = ENV(who);
+      if (!env) {
+        return ({ });
+      } else {
+        return ({ ({ env, "e", 0 }) });
+      }
     } else {
       prev = map(prev, (: { object e = environment($1[OB_TARGET]);
                             return (objectp(e) ? ({ e, "e", 0 }) : 0);
@@ -371,24 +381,48 @@ private mixed *expand_term(string term, mixed *prev, object who,
       if (exact_match) {
         matches += ({ exact_match });
       } else {
+        // some syntatic sugar
+        string clone = 0;
+        int clones = 0;
+        int no_blueprint = 0;
+        string *parts = explode(term, "/");
+        int pos = strstr(parts[<1], "#");
+        if (pos != -1) {
+          // if the name includes a clone number, trim it and save it
+          clone = parts[<1][pos..];
+          parts[<1]= parts[<1][0..(pos - 1)];
+        }
+        // if the clone number is "*", throw it away and implicitly unset
+        // IGNORE_CLONES and MATCH_BLUEPRINTS
+        if (clone == "#*") {
+          clone = 0;
+          clones = 1;
+          no_blueprint = 1;
+        }
+        term = implode(parts, "/");
         // look for matching program names and get their clones
         mixed *files = expand_pattern(term, who);
+        if (!sizeof(files)) {
+          files = expand_pattern(term + ".c", who);
+        }
         logger->trace("files = %O\n", files);
         foreach (mixed *f : files) {
           string file = f[0];
           if (!is_loadable(file)) {
             continue;
           }
-          object ob;
-          string ret = catch (ob = load_object(file));
-          if (ret || !ob) {
-            logger->debug("Caught error loading %s: %s", file, ret);
+          if (clone) {
+            // remove the .c and add the clone number
+            file = file[0..<3] + clone;
+          }
+          object ob = FINDO(file);
+          if (!ob) {
             continue;
           }
-          if (flags & MATCH_BLUEPRINTS) {
+          if ((flags & MATCH_BLUEPRINTS) && !no_blueprint) {
             matches += ({ ob });
           }
-          if (!(flags & IGNORE_CLONES)) {
+          if (!(flags & IGNORE_CLONES) || clones) {
             matches += clones(ob, ((flags & STALE_CLONES) ? 2 : 0));
           }
         }
@@ -416,18 +450,24 @@ private mixed *expand_term(string term, mixed *prev, object who,
  * @return    a new target object with id/detail id expanded
  */
 private mixed *expand_id(mixed *in, string id) {
-  LoggerFactory->get_logger(THISO)->trace("expand_id, id= %O, in = %O", id, in);
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->trace("expand_id, id= %O, in = %O", id, in);
   if (in[OB_DETAIL]) {
     if (in[OB_TARGET]->query_detail(id, in[OB_DETAIL])) {
       return ({ in[OB_TARGET], in[OB_ID], resolve_spec(id, in[OB_DETAIL]) });
     }
   } else {
-    object ob = present(id, in[OB_TARGET]);
-    if (ob) {
-      return ({ ob, id, 0 });
+
+    if ((in[OB_ID] != id) && in[OB_TARGET]->id(id)) {
+      return ({ in[OB_TARGET], id, 0 });
     } else {
-      if (in[OB_TARGET]->query_detail(id)) {
-        return ({ in[OB_TARGET], in[OB_ID], id });
+      object ob = present(id, in[OB_TARGET]);
+      if (ob) {
+        return ({ ob, id, 0 });
+      } else {
+        if (in[OB_TARGET]->query_detail(id)) {
+          return ({ in[OB_TARGET], in[OB_ID], id });
+        }
       }
     }
   }

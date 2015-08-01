@@ -52,7 +52,7 @@ string basename(string filename) {
  */
 string dirname(string filename) {
   // TODO finalize how paths get munged
-  if (filename[<1] == '/') {
+  if (sizeof(filename) && filename[<1] == '/') {
     filename = filename[0..<2];
   }
   if (!strlen(filename)) { return 0; }

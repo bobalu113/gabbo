@@ -128,7 +128,8 @@ protected void setup_command_giver() {
     BinDir "/follow",
     BinDir "/trace",
     BinDir "/logger",
-    BinDir "/qvars"
+    BinDir "/qvars",
+    BinDir "/which"
   });
 
   foreach (string command : command_files) {

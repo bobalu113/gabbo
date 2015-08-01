@@ -21,6 +21,7 @@ int do_command(string arg) {
     notify_fail(sprintf("Usage: %s target dest\n", query_verb()));
     return 0;
   }
+  arg = implode(args[0], " ");
 
   string error = "destination unknown";
   object dest = expand_destination(args[0][1], THISP, DEFAULT_CONTEXT, 0,
@@ -45,7 +46,7 @@ int do_command(string arg) {
     if (is_capable(target, CAP_MOBILE)) {
       if (target->teleport(dest, flags)) {
         count++;
-      } 
+      }
     } else {
       if (move_object(target, dest)) {
          count++;
@@ -53,7 +54,7 @@ int do_command(string arg) {
     }
   }
 
-  printf("%s: %s: %d object%s teleported\n", 
+  printf("%s: %s: %d object%s teleported\n",
          query_verb(), arg, count, (count == 1 ? "" : "s"));
   return 1;
 }

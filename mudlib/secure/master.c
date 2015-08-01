@@ -1,6 +1,6 @@
 /**
  * The master object.
- * 
+ *
  * @author devo@eotl
  * @alias MasterObject
  */
@@ -73,7 +73,7 @@ void inaugurate_master(int arg) {
   // FUTURE add support for local auto includes
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),
-    ({ #'?, 
+    ({ #'?,
        ({ #'==, 'current_file, "/include/auto.h" }),
        "",
        "#include <auto.h>\n"
@@ -97,23 +97,23 @@ void inaugurate_master(int arg) {
     ({ #'return, "Huh?\n" })
   ));
 
-  set_driver_hook(H_MOVE_OBJECT0, unbound_lambda( 
+  set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
     ({'item, 'dest }),
     ({ #'?,
-       ({ #',, 
+       ({ #',,
           ({ #'=, 'origin, ({ #'environment, 'item }) }),
           0
        }),
        0, // no op
        ({ #'?,
           // check prevent_leave
-          ({ #'&&, 
-             'origin, 
-             ({ #'call_other, 
-                'origin, 
-                "prevent_leave", 
-                'item, 
-                'dest 
+          ({ #'&&,
+             'origin,
+             ({ #'call_other,
+                'origin,
+                "prevent_leave",
+                'item,
+                'dest
              }),
           }),
           1, // fail prevent_leave
@@ -122,9 +122,9 @@ void inaugurate_master(int arg) {
           ({ #'!, 'dest }),
           1,
           // check prevent_move
-          ({ #'call_other, 
-             'item, 
-             "prevent_move", 
+          ({ #'call_other,
+             'item,
+             "prevent_move",
              'dest
           }),
           1,
@@ -133,10 +133,10 @@ void inaugurate_master(int arg) {
           ({ #'!, 'dest }),
           1,
           // check prevent_enter
-          ({ #'call_other, 
-             'dest, 
-             "prevent_enter", 
-             'item 
+          ({ #'call_other,
+             'dest,
+             "prevent_enter",
+             'item
           }),
           1, // fail prevent_enter
           ({ #'!, 'item }),
@@ -150,14 +150,14 @@ void inaugurate_master(int arg) {
        ({ #',, ({ #'efun::set_environment, 'item, 'dest }), 0 }),
        0, // no op
        // signal leave
-       ({ #'&&, 
+       ({ #'&&,
           'origin,
-          ({ #'call_other, 
-             'origin, 
-             "leave_signal", 
-             'item, 
+          ({ #'call_other,
+             'origin,
+             "leave_signal",
+             'item,
              'dest
-          }), 
+          }),
           0
        }),
        0, // no op
@@ -166,13 +166,13 @@ void inaugurate_master(int arg) {
        ({ #'!, 'dest }),
        0,
        // signal move
-       ({ #',, 
-          ({ #'call_other, 
-            'item, 
-            "move_signal", 
+       ({ #',,
+          ({ #'call_other,
+            'item,
+            "move_signal",
             'origin
-          }), 
-          0 
+          }),
+          0
        }),
        0, // no op
        ({ #'!, 'item }),
@@ -180,13 +180,13 @@ void inaugurate_master(int arg) {
        ({ #'!, 'dest }),
        0,
        // signal enter
-       ({ #',, 
-          ({ #'call_other, 
-             'dest, 
-             "enter_signal", 
-             'origin 
-          }), 
-          0 
+       ({ #',,
+          ({ #'call_other,
+             'dest,
+             "enter_signal",
+             'origin
+          }),
+          0
        }),
        0, // no op
        ({ #'!, 'item }),
@@ -197,52 +197,52 @@ void inaugurate_master(int arg) {
        ({ #'==, ({ #'environment, 'item }), 'dest }),
        ({ #',,
           // dest->init(item)
-          ({ #'?, 
-             ({ #'living, 'item }), 
+          ({ #'?,
+             ({ #'living, 'item }),
              ({ #',,
                 ({ #'efun::set_this_player, 'item }),
                 ({ #'call_other, 'dest, "init" }),
-                ({ #'?, 
-                   ({ #'!=, ({ #'environment, 'item }), 'dest }), 
+                ({ #'?,
+                   ({ #'!=, ({ #'environment, 'item }), 'dest }),
                    ({ #'return })
                 })
-             }) 
+             })
           }),
           // item->init(inv(dest))
           ({ #'=, 'others, ({ #'all_inventory, 'dest }) }),
           ({ #'=, ({ #'[, 'others, ({ #'member, 'others, 'item }) }), 0 }),
-          ({ #'filter, 
-             'others, 
-             ({ #'bind_lambda, unbound_lambda( 
+          ({ #'filter,
+             'others,
+             ({ #'bind_lambda, unbound_lambda(
                 ({ 'ob, 'item }),
-                ({ #'?, 
-                   ({ #'living, 'ob }), 
-                   ({ #',, 
-                      ({ #'efun::set_this_player, 'ob }), 
-                      ({ #'call_other, 'item, "init" }) 
-                   }) 
+                ({ #'?,
+                   ({ #'living, 'ob }),
+                   ({ #',,
+                      ({ #'efun::set_this_player, 'ob }),
+                      ({ #'call_other, 'item, "init" })
+                   })
                 })
              ) }),
             'item
           }),
           // inv(dest)->init(item)
-          ({ #'?, 
-             ({ #'living, 'item }), 
+          ({ #'?,
+             ({ #'living, 'item }),
              ({ #',,
                 ({ #'efun::set_this_player, 'item }),
                 ({ #'filter_objects, 'others, "init" }),
-             }) 
+             })
           }),
           // item->init(dest)
-          ({ #'?, 
-             ({ #'living, 'dest }), 
+          ({ #'?,
+             ({ #'living, 'dest }),
              ({ #',,
                 ({ #'efun::set_this_player, 'dest }),
                 ({ #'call_other, 'item, "init" }),
-             }) 
+             })
           })
        })
-    }) 
+    })
   ) );
 
   set_driver_hook(H_CREATE_OB, unbound_lambda(({ 'obj }),
@@ -261,7 +261,7 @@ void inaugurate_master(int arg) {
   ));
   set_driver_hook(H_CLEAN_UP, unbound_lambda(
     ({ 'ref, 'obj }),
-    ({ #'call_other, 'obj, "clean_up" })
+    ({ #'call_other, 'obj, "clean_up" }) // '
   ));
 }
 
@@ -359,7 +359,7 @@ varargs void notify_shutdown(string crash_reason) {
 
 // TODO rewrite these to use new Logger API (maybe)
 
-private string format_stacktrace(string curobj, int line, int caught, 
+private string format_stacktrace(string curobj, int line, int caught,
                                  mixed *debug_info);
 
 void dangling_lfun_closure() {
@@ -367,16 +367,16 @@ void dangling_lfun_closure() {
 }
 
 void log_error(string file, string err, int warn) {
-  string msg = sprintf("[%s] %s:%s", (warn ? "WARNING" : "ERROR"), file, 
+  string msg = sprintf("[%s] %s:%s", (warn ? "WARNING" : "ERROR"), file,
     err);
   write_file("/log/compile.log", msg);
   write(msg);
 }
 
-mixed heart_beat_error(object culprit, string err, string prg, string curobj, 
+mixed heart_beat_error(object culprit, string err, string prg, string curobj,
                        int line, int caught) {
-  string msg = sprintf("%s,%d %-5s %s %s - %s", 
-    strftime("%Y-%m-%d %H:%M:%S"), utime()[1], "ERROR", to_string(culprit), 
+  string msg = sprintf("%s,%d %-5s %s %s - %s",
+    strftime("%Y-%m-%d %H:%M:%S"), utime()[1], "ERROR", to_string(culprit),
     prg, err);
 
   write_file("/log/heartbeat.log", msg);
@@ -384,15 +384,15 @@ mixed heart_beat_error(object culprit, string err, string prg, string curobj,
   return 0;
 }
 
-void runtime_error(string err, string prg, string curobj, int line, 
+void runtime_error(string err, string prg, string curobj, int line,
                    mixed culprit, int caught) {
-  string msg = sprintf("%s,%d %-5s %s %s - %s%s", 
-    strftime("%Y-%m-%d %H:%M:%S"), 
-    utime()[1], 
-    "ERROR", 
-    to_string(culprit), 
-    to_string(prg), 
-    err, 
+  string msg = sprintf("%s,%d %-5s %s %s - %s%s",
+    strftime("%Y-%m-%d %H:%M:%S"),
+    utime()[1],
+    "ERROR",
+    to_string(culprit),
+    to_string(prg),
+    err,
     format_stacktrace(curobj, line, caught, debug_info(7, 1))
   );
 
@@ -400,14 +400,14 @@ void runtime_error(string err, string prg, string curobj, int line,
   write(msg);
 }
 
-void runtime_warning(string err, string curobj, string prg, int line, 
+void runtime_warning(string err, string curobj, string prg, int line,
                      int inside_catch) {
-  string msg = sprintf("%s,%d %-5s %s - %s%s", 
-    strftime("%Y-%m-%d %H:%M:%S"), 
-    utime()[1], 
-    "WARN", 
-    to_string(prg), 
-    err, 
+  string msg = sprintf("%s,%d %-5s %s - %s%s",
+    strftime("%Y-%m-%d %H:%M:%S"),
+    utime()[1],
+    "WARN",
+    to_string(prg),
+    err,
     format_stacktrace(curobj, line, inside_catch, debug_info(7, 1))
   );
 
@@ -415,7 +415,7 @@ void runtime_warning(string err, string curobj, string prg, int line,
   //write(msg);
 }
 
-private string format_stacktrace(string curobj, int line, int caught, 
+private string format_stacktrace(string curobj, int line, int caught,
                                  mixed *debug_info) {
   string result = "";
 
@@ -426,8 +426,8 @@ private string format_stacktrace(string curobj, int line, int caught,
   if (sizeof(debug_info) > 1) {
     mixed *stack = debug_info[1..];
     for (int i = sizeof(stack) - 1; i >= 0; i--) {
-      result += sprintf("%10s %s->%s(%s:%d)\n", "at", stack[i][TRACE_OBJECT], 
-        to_string(stack[i][TRACE_NAME]), stack[i][TRACE_PROGRAM], 
+      result += sprintf("%10s %s->%s(%s:%d)\n", "at", stack[i][TRACE_OBJECT],
+        to_string(stack[i][TRACE_NAME]), stack[i][TRACE_PROGRAM],
         stack[i][TRACE_LOC]);
     }
   }
@@ -460,7 +460,7 @@ int privilege_violation(string op, mixed who, mixed arg, mixed arg2) {
       break;
 
     default:
-      return 1;      
+      return 1;
   }
 
   return 1;
@@ -528,6 +528,20 @@ int valid_seteuid(object obj, string neweuid) {
 
 mixed valid_read(string path, string euid, string fun, object caller) {
   // FUTURE implement security
+  // if caller is command
+  //   check THISP's command policy, levels:
+  //     grant command my access always
+  //     grant command my access if unforced
+  //     grant command my access never (default)
+  // else if caller is avatar
+  //   check access file of user's home dir
+  //   .access file:
+  //     Pattern .
+  //
+  //   TODO add chroot type thing to narrow access
+  //   TODO add group access and membership support
+  // else
+  //   check dirname of objectname for access file
   return 1;
 }
 
@@ -559,7 +573,7 @@ int retrieve_ed_setup(object who) {
 
 string get_ed_buffer_save_file_name(string file) {
   // FUTURE implement ed buffer save file
-  return "/ed_buffer_save_file"; 
+  return "/ed_buffer_save_file";
 }
 
 /****************************************************************************/
