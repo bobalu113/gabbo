@@ -28,7 +28,8 @@ int do_command(string arg) {
   int reconfig = member(opts, 'g');
 
   arg = implode(args[0], " ");
-  mixed *targets = expand_objects(arg, THISP, DEFAULT_CONTEXT);
+  mixed *targets = expand_objects(arg, THISP, DEFAULT_CONTEXT,
+                                  MATCH_BLUEPRINTS|STALE_CLONES);
   string out = "";
   foreach (mixed *t : targets) {
     object target = t[OB_TARGET];

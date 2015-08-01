@@ -55,7 +55,10 @@ varargs mixed *expand_objects(mixed ospecs, object who,
                               string root_context, int flags) {
   object logger = LoggerFactory->get_logger(THISO);
   logger->trace("expand_objects(%O)", ospecs);
-  string current_context = who->query_context() || "";
+  string current_context = "";
+  if (who) {
+    current_context = who->query_context() || "";
+  }
   mixed *result = ({ });
   mapping ancestors = ([ ]);
   string *new_context = ({ });

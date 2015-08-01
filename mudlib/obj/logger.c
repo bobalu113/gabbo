@@ -364,8 +364,7 @@ private void do_output(string msg) {
         consoles = expand_objects(target[1], THISP, "", STALE_CLONES);
         publish
       );
-      //if (err) { continue; }
-      //consoles = ({ ({ THISP, "", 0 }) });
+      if (err) { continue; }
       foreach (mixed *ob : consoles) {
         catch (tell_object(ob[OB_TARGET], msg + "\n"));
       }
