@@ -11,7 +11,7 @@ int is_read_allowed(string path, string euid, string fun, object caller) {
   } else if (caller->is_command()) {
     object cmd_giver = THISP;
     if (cmd_giver->check_command_access(caller, 1)) {
-      return check_read(path, geteuid(cmd_giver));
+      return check_access(path, geteuid(cmd_giver), 1);
     }
   }
 
@@ -24,7 +24,7 @@ int is_write_allowed(string path, string euid, string fun, object caller) {
   } else if (caller->is_command()) {
     object cmd_giver = THISP;
     if (cmd_giver->check_command_access(caller, 0)) {
-      return check_read(path, geteuid(cmd_giver));
+      return check_access(path, geteuid(cmd_giver));
     }
   }
 
@@ -56,12 +56,16 @@ int check_access(string path, string euid, int read) {
     }
   }
 
-  return check_domain(domain, caller_user, caller_domain, read);
+  // check domain config
+  return check_domain_access(domain, caller_user, caller_domain, read);
 }
 
-int check_domain(string domain, string caller_user, caller_domain, int read) {
+int check_domain_access(string domain, string caller_user,
+                        string caller_domain, int read) {
+  // TODO cache config files after parsing
+  // TODO needs better error handing
+  // TODO the config file syntax sucks
   string op = (read ? "Read" : "Write");
-  // TODO needs better error handing and made more generic
   string domain_file = get_domain_file(domain);
   string *order;
   mapping user_allow = ([ ]);
@@ -120,4 +124,8 @@ int check_domain(string domain, string caller_user, caller_domain, int read) {
   }
 
   return 0;
+}
+
+string get_domain_file(string domain) {
+
 }

@@ -33,7 +33,7 @@
 #define GetoptsLib           LibDir "/getopts"
 #define ObjectExpansionLib   LibDir "/expand_object"
 #define FormatStringsLib     LibDir "/format_strings"
-
+#define JSONLib              LibDir "/json"
 #define RoomCode             ModulesDir "/room"
 #define CartesianRoomCode    ModulesDir "/room_cartesian"
 #define SphericalRoomCode    ModulesDir "/room_spherical"
@@ -58,6 +58,7 @@
 #define LoggerFactory        ObjDir "/logger_factory"
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
+#define GitHubServer         ObjDir "/github_server"
 
 #define CommonRoom           ZoneDir "/common"
 #define HomeDir              ZoneDir "/home"

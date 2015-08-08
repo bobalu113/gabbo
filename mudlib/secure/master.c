@@ -527,21 +527,10 @@ int valid_seteuid(object obj, string neweuid) {
 }
 
 mixed valid_read(string path, string euid, string fun, object caller) {
-  // FUTURE implement security
-  // if caller is command
-  //   check THISP's command policy, levels:
-  //     grant command my access always
-  //     grant command my access if unforced
-  //     grant command my access never (default)
-  // else if caller is avatar
-  //   check access file of user's home dir
-  //   .access file:
-  //     Pattern .
-  //
-  //   TODO add chroot type thing to narrow access
-  //   TODO add group access and membership support
-  // else
-  //   check dirname of objectname for access file
+  // every object has a zone, every zone belongs to a domain
+  // get_wiz_name returns domain, except avatars which is "username@domain"
+  // uid is domain, euid is "username@domain"
+  // TODO add group support
   return 1;
 }
 

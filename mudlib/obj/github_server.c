@@ -2,6 +2,8 @@
 #include <sys/tls.h>
 #include <sys/config.h>
 
+private variables private functions inherit JSONLib;
+
 // TODO better error recovery
 
 //#define HOST ({ 74, 125, 227, 199 })
@@ -22,16 +24,21 @@ void open_callback(int *data, int size);
 void send_string(string str);
 void flush_buffer();
 void send_callback(int *data, int size);
+string get_new_ticket();
+void handle_response(string msg);
 
-int *ticket, sending;
+int *erq_ticket, sending;
 int in_size;
 string incoming, in_md5;
-mixed *queue;
+mixed *queue, *last_ticket;
+mapping callbacks;
 
 void create() {
   queue = ({ });
   sending = 0;
-  string incoming = 0;
+  incoming = 0;
+  last_ticket = ({ 0, 0, 0 });
+  callbacks = ([ ]);
 }
 
 void open() {
@@ -48,7 +55,7 @@ void open_callback(int *data, int size) {
   if (size >= 2) {
     switch (data[0]) {
       case ERQ_OK:
-        ticket = data[1..];
+        erq_ticket = data[1..];
         logger->debug("open succeeded");
         // TODO sanity check queue
         flush_buffer();
@@ -65,14 +72,21 @@ void open_callback(int *data, int size) {
           in_md5 = to_string(data[(SIZE_WIDTH + 1)..
                                   (SIZE_WIDTH + MD5_WIDTH)]);
           incoming += to_string(data[(SIZE_WIDTH + MD5_WIDTH + 1)..]);
-          // TODO log a warning if extra data comes in
-          if (strlen(incoming) >= in_size) {
-            string md5 = hash(TLS_HASH_MD5, incoming);
-            if (in_md5 != md5) {
-              logger->info("checksums differ: %O %O", in_md5, md5);
-            } else {
-              logger->info("got message: %O", incoming);
-            }
+        } else {
+          incoming += to_string(data[1..]);
+        }
+
+        // TODO log a warning if extra data comes in
+        if (strlen(incoming) >= in_size) {
+          string md5 = hash(TLS_HASH_MD5, incoming);
+          if (in_md5 != md5) {
+            logger->info("checksums differ: %O %O", in_md5, md5);
+          } else {
+            logger->info("got message: %O", incoming);
+            string msg = incoming;
+            // ensure incoming gets reset even if response handler evals out
+            incoming = 0;
+            handle_response(msg);
           }
         }
         break;
@@ -99,8 +113,8 @@ void flush_buffer() {
     return;
   }
 
-  if (!ticket) {
-    logger->info("unable to flush buffer, no ticket");
+  if (!erq_ticket) {
+    logger->info("unable to flush buffer, no erq_ticket");
     return;
   }
 
@@ -123,9 +137,9 @@ void flush_buffer() {
                (out[OUT_SIZE] & 0xFF)
             });
     data += to_array(out[OUT_MD5])[0..(MD5_WIDTH - 1)];
-    sending = ERQ_MAX_SEND - sizeof(ticket) - SIZE_WIDTH - MD5_WIDTH;
+    sending = ERQ_MAX_SEND - sizeof(erq_ticket) - SIZE_WIDTH - MD5_WIDTH;
   } else {
-    sending = ERQ_MAX_SEND - sizeof(ticket);
+    sending = ERQ_MAX_SEND - sizeof(erq_ticket);
   }
 
   int len = strlen(out[OUT_BUFFER]);
@@ -133,7 +147,7 @@ void flush_buffer() {
     sending = len - cursor;
   }
   data += to_array(out[OUT_BUFFER][(cursor + 1)..(cursor + sending)]);
-  send_erq(ERQ_SEND, ticket + data, #'send_callback); //'
+  send_erq(ERQ_SEND, erq_ticket + data, #'send_callback); //'
   return;
 }
 
@@ -174,4 +188,35 @@ void send_callback(int *data, int size) {
     queue = queue[1..];
   }
   flush_buffer();
+}
+
+void get_pull_requests(closure callback) {
+  string ticket = get_new_ticket();
+  mapping req = ([
+    "ticket" : ticket,
+    "path"   : "/pulls"
+  ]);
+  callbacks[ticket] = callback;
+  if (!erq_ticket) {
+    open();
+  }
+  send_string(json_encode(req));
+}
+
+string get_new_ticket() {
+  int *utime = utime();
+  if ((utime[0] != last_ticket[0]) || (utime[1] != last_ticket[1])) {
+    last_ticket = utime + ({ 0 });
+  } else {
+    last_ticket[2]++;
+  }
+  return sprintf("%d.%d.%d", last_ticket[0], last_ticket[1], last_ticket[2]);
+}
+
+void handle_response(string msg) {
+  mixed resp = json_decode(msg);
+  string ticket = resp["ticket"];
+  closure callback = callbacks[ticket];
+  m_delete(callbacks, ticket);
+  funcall(callback, resp["body"]);
 }
