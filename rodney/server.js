@@ -52,7 +52,6 @@ var server = net.createServer(function(socket) {
                         console.error(e);
                     }).on('end', function() {
                         var pullRequests = Buffer.concat(data);
-                        pullRequests = new Buffer("bogleg");
                         var header = new Buffer(SIZE_WIDTH + MD5_WIDTH);
                         var size = pullRequests.length;
                         var checksum = md5(pullRequests.toString(ENCODING));
@@ -85,4 +84,5 @@ var server = net.createServer(function(socket) {
 
 });
 
-server.listen(80, '127.0.0.1');
+//server.listen(80, '127.0.0.1');
+server.listen(2080, '66.220.23.27');
