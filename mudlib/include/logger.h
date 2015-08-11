@@ -1,17 +1,38 @@
 #ifndef _LOGGER_H
 #define _LOGGER_H
 
+#ifdef EOTL
+#define Logger             AcmeObjDir "logger"
+#else
 #define Logger             ObjDir "/logger"
+#endif
 
+#ifdef EOTL
+#define FACTORY_CATEGORY   ".secure.acme.logger_factory"
+#define LOGGER_CATEGORY    ".obj.acme.logger"
+#else
 #define FACTORY_CATEGORY   ".obj.logger_factory"
 #define LOGGER_CATEGORY    ".obj.logger"
+#endif
+
+#ifdef EOTL
+#define FACTORY_LOGGER_UID  "adm"
+#define LOGGER_LOGGER_UID   "core"
+#else
+#define FACTORY_LOGGER_UID  "gabbo.obj"
+#define LOGGER_LOGGER_UID   "gabbo.obj"
+#endif
 
 #define LOGGER_STALE_TIME  300
 #define FACTORY_RESET_TIME 300
 #define STANDING_REF_COUNT 3
 
 #define PROP_PREFIX        "logger"
+#ifdef EOTL
+#define PROP_FILE          ".logger.properties"
+#else
 #define PROP_FILE          "etc/logger.properties"
+#endif
 
 #define ALLOWED_PROPS      ({ "output", "format", "level" })
 
@@ -32,7 +53,12 @@
                               LVL_FATAL  : 1, \
                               LVL_OFF    : 0 ])
 
+#ifdef EOTL
+#define OUT_ACMESPEC       'a'
+#define OUT_BWSPEC         'b'
+#else
 #define OUT_CONSOLE        'c'
+#endif
 #define OUT_FILE           'f'
 
 #define DEFAULT_FORMAT     "%d{%Y-%m-%d %H:%M:%S},%r %p %l - %m"
@@ -74,7 +100,7 @@
      })                                                          \
   })                                                             \
 }) })
-#define FMT_DATE      ({ "%F %T", "%s", ({                       \
+#define FMT_DATE      ({ "%Y-%m-%d %T", "%s", ({                 \
   ({ #'||, ({ #'strftime, 'arg, ({ #'time }) }), "" })           \
 }) })
 #define FMT_LOCATION  ({ 0, "%s", ({                             \
@@ -116,5 +142,10 @@
   'p' : FMT_PRIORITY,     \
   'r' : FMT_MILLIS        \
 ])
+
+#ifdef EOTL
+#define AcmeOpieImpl       OpieDir "/i/acme"
+#define BWOpieImpl         OpieDir "/i/bw"
+#endif
 
 #endif  // _LOGGER_H

@@ -5,11 +5,19 @@
  *
  * @alias Logger
  */
+#ifdef EOTL
+#include <acme.h>
+#include AcmeLoggerInc
+#undef caller
+#else
 #include <logger.h>
 #include <expand_object.h>
+#endif
 #include <sys/debug_info.h>
 
+#ifndef EOTL
 private variables private functions inherit ObjectExpansionLib;
+#endif
 
 default private variables;
 
@@ -26,6 +34,7 @@ mapping muted;
 
 default public functions;
 
+private int check_access();
 int is_enabled(string priority);
 int is_muted(string program, int line);
 void log(string priority, string message, varargs string *args);
@@ -47,6 +56,9 @@ string query_category() {
  * @return     1 for success, 0 for failure
  */
 int set_category(string str) {
+  if (!check_access()) {
+    return 0;
+  }
   category = str;
   return 1;
 }
@@ -70,6 +82,9 @@ mixed *query_output() {
  * @return     1 for success, 0 for failure
  */
 int set_output(mixed *arr) {
+  if (!check_access()) {
+    return 0;
+  }
   output = arr;
   return 1;
 }
@@ -99,6 +114,9 @@ closure query_formatter() {
  * @return    1 for success, 0 for failure
  */
 int set_formatter(closure cl) {
+  if (!check_access()) {
+    return 0;
+  }
   formatter = cl;
   return 1;
 }
@@ -117,6 +135,9 @@ string query_level() {
  * @return     1 for success, 0 for failure
  */
 int set_level(string str) {
+  if (!check_access()) {
+    return 0;
+  }
   level = str;
   return 1;
 }
@@ -193,7 +214,9 @@ int is_trace_enabled() {
  * @return         1 if muted, otherwise 0
  */
 varargs int mute(string program, int line) {
-  // TODO needs security
+  if (!check_access()) {
+    return 0;
+  }
   if (program[0] == '/') {
     program = program[1..];
   }
@@ -220,6 +243,9 @@ varargs int mute(string program, int line) {
  * @return         1 if muted, otherwise 0
  */
 varargs int unmute(string program, int line) {
+  if (!check_access()) {
+    return 0;
+  }
   if (program[0] == '/') {
     program = program[1..];
   }
@@ -264,7 +290,17 @@ int is_muted(string program, int line) {
  * @return the muted mapping
  */
 mapping query_muted() {
-  return muted;
+  return deep_copy(muted);
+}
+
+/**
+ * Test whether or not access is granted to modify the state of this logger.
+ *
+ * @return 1 to allow access, 0 to deny
+ */
+private int check_access() {
+  object ob = previous_object();
+  return (ob && (geteuid(ob) == getuid(THISO)));
 }
 
 /**
@@ -338,6 +374,7 @@ void log(string priority, string msg_fmt, varargs string *args) {
   if (!is_enabled(priority)) {
     return;
   }
+  seteuid(getuid());
 
   string msg = apply(#'sprintf, ({ msg_fmt }) + args); //'
   mixed *caller = find_caller();
@@ -358,6 +395,23 @@ private void do_output(string msg) {
   logging = 1;
   foreach (mixed *target : output) {
     switch (target[0]) {
+#ifdef EOTL
+      case OUT_ACMESPEC:
+      case OUT_BWSPEC:
+      object *consoles;
+      string opie_impl = (target[0] == OUT_ACMESPEC
+                          ? AcmeOpieImpl
+                          : BWOpieImpl);
+      string err = catch (
+        consoles = opie_impl->evaluate_object_spec(target[1]);
+        publish
+      );
+      if (err) { continue; }
+      foreach (object ob : consoles) {
+        catch (tell_object(ob, msg + "\n"));
+      }
+      break;
+#else
       case OUT_CONSOLE:
       mixed *consoles;
       string err = catch (
@@ -369,7 +423,7 @@ private void do_output(string msg) {
         catch (tell_object(ob[OB_TARGET], msg + "\n"));
       }
       break;
-
+#endif
       case OUT_FILE:
       write_file(target[1], msg + "\n");
       break;
@@ -422,5 +476,6 @@ private string parse_program(string dbg_program) {
 }
 
 void create() {
+  seteuid(0);
   muted = ([ ]);
 }

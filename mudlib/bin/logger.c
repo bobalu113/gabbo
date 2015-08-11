@@ -66,10 +66,12 @@ int do_command(string arg) {
       out += sprintf(
         "  Logger: %O\n"
         "Category: %s\n"
+        "     UID: %s\n"
         "   Level: %s\n"
         "   Muted: %-=*s\n",
         logger,
         logger->query_category(),
+        getuid(logger),
         logger->query_level(),
         THISP->query_screen_width() - 8,
         format_muted(logger->query_muted())

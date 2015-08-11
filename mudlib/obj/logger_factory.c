@@ -9,18 +9,30 @@
  * @alias LoggerFactory
  */
 #pragma no_clone
+#ifdef EOTL
+#include <acme.h>
+#include AcmeLoggerInc
+#else
 #include <logger.h>
+#endif
 #include <sys/debug_info.h>
 #include <sys/objectinfo.h>
 
+#ifdef EOTL
+#include AcmeFormatStringsInc
+#include AcmeFileInc
+private inherit AcmeFormatStrings;
+private inherit AcmeFile;
+#else
 private variables private functions inherit FileLib;
 private variables private functions inherit FormatStringsLib;
+#endif
 
 // FUTURE add color
 
 default private variables;
 
-/** ([ str category : obj logger ]) */
+/** ([ str category : ([ str euid : obj logger ]) ]) */
 mapping loggers;
 
 /** ([ obj logger : int ref_count ]) */
@@ -48,6 +60,7 @@ string normalize_category(mixed category);
 public object get_null_logger();
 public int release_logger(mixed category);
 int clean_up_loggers();
+void init_static_loggers();
 
 /**
  * Retrieve a logger instance for the given category from the pool, or create
@@ -82,7 +95,11 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   }
 
   // check our cache
-  object logger = loggers[category];
+  string euid = geteuid(rel);
+  object logger = 0;
+  if (member(loggers, category)) {
+    logger = loggers[category][euid];
+  }
   if (!reconfig && logger) {
     return logger;
   }
@@ -108,9 +125,15 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   }
 
   // configure our logger
+  string factory_euid = geteuid();
+  seteuid(euid);
   if (!logger) {
     logger = clone_object(Logger);
-    loggers[category] = logger;
+    export_uid(logger);
+    if (!member(loggers, category)) {
+      loggers[category] =  ([ ]);
+    }
+    loggers[category][euid] = logger;
     if (!member(local_ref_counts, logger)) {
       local_ref_counts[logger] = 0;
     }
@@ -120,6 +143,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   logger->set_output(config["output"]);
   logger->set_formatter(formatter);
   logger->set_level(config["level"]);
+  seteuid(factory_euid);
   return logger;
 }
 
@@ -144,7 +168,15 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
 mapping read_config(string category, string dir) {
   mapping result = ([ ]);
   while (dir = dirname(dir)) {
+#ifdef EOTL
+    if (!strlen(dir)) {
+      break;
+    }
+    dir = dir[0..<2];
     mapping props = read_properties(dir + "/" + PROP_FILE);
+#else
+    mapping props = read_properties(dir + "/" + PROP_FILE);
+#endif
     if (props) {
       foreach (string prop : ALLOWED_PROPS) {
         string val = read_prop_value(props, prop, dir, category);
@@ -315,21 +347,27 @@ public object get_null_logger() {
  *
  * @param  category an object or string representing the category; if an
  *                  object is specfied, it's program_name(E) will be used.
+ * @param  euid     the euid of the logger to release
  * @return          1 if a logger was released, 0 if no logger was found
  */
-public int release_logger(mixed category) {
+public int release_logger(mixed category, string euid) {
   category = normalize_category(category);
-  object logger = loggers[category];
-  if (logger) {
-    m_delete(loggers, category);
-    local_ref_counts[logger]--;
-    int ref_count = (int) object_info(logger, OINFO_BASIC, OIB_REF);
-    int local_ref_count = local_ref_counts[logger];
-    if ((ref_count - local_ref_count) <= STANDING_REF_COUNT) {
-      m_delete(local_ref_counts, logger);
-      destruct(logger);
+  if (member(loggers, category)) {
+    object logger = loggers[category][euid];
+    if (logger) {
+      m_delete(loggers[category], euid);
+      local_ref_counts[logger]--;
+      int ref_count = (int) object_info(logger, OINFO_BASIC, OIB_REF);
+      int local_ref_count = local_ref_counts[logger];
+      if ((ref_count - local_ref_count) <= STANDING_REF_COUNT) {
+        m_delete(local_ref_counts, logger);
+        destruct(logger);
+      }
+      if (!sizeof(loggers[category])) {
+        m_delete(loggers, category);
+      }
+      return 1;
     }
-    return 1;
   }
   return 0;
 }
@@ -344,15 +382,56 @@ public int release_logger(mixed category) {
  */
 int clean_up_loggers() {
   int result = 0;
-  foreach (string category, object logger : loggers) {
-    if (!logger) { continue; }
+  foreach (string category, mapping euids : loggers) {
+    foreach (string euid, object logger : euids) {
+      if (!logger) { continue; }
 
-    int ref_time = (int) object_info(logger, OINFO_BASIC, OIB_TIME_OF_REF);
-    if ((time() - ref_time) >= LOGGER_STALE_TIME) {
-      result += release_logger(category);
+      int ref_time = (int) object_info(logger, OINFO_BASIC, OIB_TIME_OF_REF);
+      if ((time() - ref_time) >= LOGGER_STALE_TIME) {
+        result += release_logger(category, euid);
+      }
     }
   }
   return result;
+}
+
+
+/**
+ * To keep things from getting really confusing, we have two statically
+ * configured loggers, one for the factory itself to use, and one for all
+ * loggers to use.
+ */
+void init_static_loggers() {
+  string euid = geteuid();
+
+  seteuid(FACTORY_LOGGER_UID);
+  factory_logger = clone_object(Logger);
+  export_uid(factory_logger);
+  factory_logger->set_category(normalize_category(THISO));
+  factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
+  factory_logger->set_formatter(
+    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
+                 ({ 'category, 'priority, 'message, 'caller }))
+  );
+  factory_logger->set_level(LVL_WARN);
+
+  seteuid(LOGGER_LOGGER_UID);
+  logger_logger = clone_object(Logger);
+  export_uid(logger_logger);
+  logger_logger->set_category(normalize_category(THISO));
+#ifdef EOTL
+  logger_logger->set_output(parse_output_prop("a:me"));
+#else
+  logger_logger->set_output(parse_output_prop("c:me"));
+#endif
+  logger_logger->set_formatter(
+    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
+                 ({ 'category, 'priority, 'message, 'caller }))
+  );
+  logger_logger->set_level(LVL_WARN);
+
+  seteuid(euid);
+  return;
 }
 
 /**
@@ -366,23 +445,7 @@ public int create() {
   formatters = ([ ]);
   local_ref_counts = ([ ]);
 
-  factory_logger = clone_object(Logger);
-  factory_logger->set_category(normalize_category(THISO));
-  factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
-  factory_logger->set_formatter(
-    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
-                 ({ 'category, 'priority, 'message, 'caller }))
-  );
-  factory_logger->set_level(LVL_WARN);
-
-  logger_logger = clone_object(Logger);
-  logger_logger->set_category(normalize_category(THISO));
-  logger_logger->set_output(parse_output_prop("c:me"));
-  logger_logger->set_formatter(
-    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
-                 ({ 'category, 'priority, 'message, 'caller }))
-  );
-  logger_logger->set_level(LVL_WARN);
+  init_static_loggers();
 
   return FACTORY_RESET_TIME;
 }
