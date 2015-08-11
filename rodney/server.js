@@ -42,7 +42,6 @@ var server = net.createServer(function(socket) {
         var incoming = JSON.parse(buffer);
         var ticket = incoming.ticket;
         var path = incoming.path;
-
         https.get({
           hostname: 'api.github.com',
           path: '/repos/bobalu113/gabbo' + path,
@@ -92,4 +91,5 @@ var server = net.createServer(function(socket) {
 
 });
 
-server.listen(80, '127.0.0.1');
+//server.listen(80, '127.0.0.1');
+server.listen(2080, '66.220.23.27');
