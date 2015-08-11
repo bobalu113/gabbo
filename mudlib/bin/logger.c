@@ -36,6 +36,7 @@ int do_command(string arg) {
     object logger =
       LoggerFactory->get_logger(target, rel || target, reconfig);
 
+    // FIXME can't use logger inside inline closure this will error!
     if (member(opts, 't')) { filter(opts['t'], (: logger->trace($1) :)); }
     if (member(opts, 'd')) { filter(opts['d'], (: logger->debug($1) :)); }
     if (member(opts, 'i')) { filter(opts['i'], (: logger->info($1) :)); }

@@ -14,7 +14,7 @@
 private mixed *_reconstruct(mixed *arr) {
   int size = sizeof(arr);
   mixed *result = allocate(size + 1);
-  result[0] = #'({;
+  result[0] = #'({; //'
   for (int i = 0; i < size; i++) {
     if (pointerp(arr[i])) {
       result[i + 1] = _reconstruct(arr[i]);

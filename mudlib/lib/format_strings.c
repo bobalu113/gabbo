@@ -18,6 +18,48 @@ private variables private functions inherit ArgsLib;
 private variables private functions inherit StringsLib;
 private variables private functions inherit ClosureLib;
 
+/**
+ * Compile a format string into a formatter closure with the given format
+ * specifiers and args. Format strings may contain tokens of the format "%c"
+ * where 'c' is some alphabetic character. They may also take arguments in
+ * the format of "%c{arg}". For every format specifier found, the returned
+ * closure will run the closure found for the character in infomap (the
+ * character is the key) and replace the format specifier with the result of
+ * the evaluated closure. Closures may reference the optional arg value with
+ * the symbol 'arg. They may also reference any arguments passed to the
+ * closure at runtime with the symbols defined in the args parameter. (Values
+ * for these arguments must be supplied by the caller at runtime!) References
+ * to the closure arguments in infomap must be double quoted even though
+ * they are single quoted in the args parameter.
+ *
+ * Invoking the result of this function will return the format string with
+ * all constituent format specifiers replaced by the result of their closure
+ * calls. Example:
+ *
+ * closure formatter =
+ *   parse_format_string(
+ *     "name: %N",        // format string
+ *     ([ 'N' : ({ 0,     // default value for 'arg
+ *                 "%s",  // sprintf() format string of result
+ *                 ({     // array of closures to call
+ *                        // results will be passed as args to sprintf()
+ *                    ({ #'call_other, ''who, "query_name" })
+ *                 })
+ *              })
+ *     ]),
+ *     ({ 'who })         // formatter will take one arg named 'who
+ *   );
+ * // this should write "devo"
+ * write(funcall(formatter, FINDP("devo")));
+ *
+ * @param  format  the format string to parse
+ * @param  infomap a map of format specifiers to the info array of how to
+ *                 replace the specifier
+ * @param  args    optional args that will be passed to the formatter
+ *                 (single quoted)
+ * @return         a formatter closure that takes specified args and will
+ *                 produce formatted strings according to infomap
+ */
 closure parse_format(string format, mapping infomap, symbol *args) {
   object logger = LoggerFactory->get_logger(THISO);
   string output_fmt = "";
