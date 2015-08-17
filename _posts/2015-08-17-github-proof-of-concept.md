@@ -1,0 +1,20 @@
+---
+published: true
+category: blog
+layout: blog
+---
+So instead of finishing the access object work I started, I ended up coding a proof of concept for GitHub integration. Specifically, I wanted to write a mudlib command that would display pull requests for a project using the TCP socket support of the ERQ.
+<!-- more -->
+There's basically three pieces to this thing. First, the command object makes a request to the GitHubServer object, which has access to the ERQ, asking for pull request info. The GitHubServer then opens a TCP socket to Rodney, and passes along the request for Github pull requests. Rodney is a Node.js application, which translates the MUD-originated request into a GitHub API request, and actually makes the https call to GitHub to get the data.
+
+There are some translations and transformations that happen along the way. The request sent to Rodney is a JSON string that it deserializes upon reception, so I needed to borrow a LPC JSON lib from Lost Souls MUD. It did have a small bug in it when parsing single zeroes as numbers, but it an easy fix. The structure of the JSON includes a translation id; the request-response to and from Rodney is asynchronous (as is everything done with the ERQ), so I wanted something I could validate on when the response comes back to MUD, as well as enabling multiple concurrent requests later on.
+
+I'm going to need to come up with a whole protocol for the rest of the request to Rodney. I thought about just letting the GitHubServer specify its own API URLs and making Rodney just a dumb agent, but I decided against that for a couple reasons. First, if I want to encapsulate several API requests into a single transaction on the MUD side, it's a lot easier if I do that in the Node.js code than LPC. Also I can allow Rodney trim the GitHub responses down to just the essentials, and cut down on the traffic that needs to travel via ERQ.
+
+As far as the guts of the thing go, writing for the ERQ requires some machinery to do buffering and such, since there's a limit to how much data can be sent in a single request/response (and it's pretty small). Basically the traffic sent to Rodney starts out with 4 bytes denoting the size of the following packet, then 32 byes for an md5 checksum, and then the packet itself, which may be broken up into several transmissions. When all the bytes are received (according to size), the checksum is verified and Rodney processes the request. The same pattern happens for traffic going back to the MUD. I took inspiration from the intermud3 daemon, but I like my implementation better.
+
+So why am I doing all this? Well, I was going to need to integrate with github eventually, I just moved the proof-of-concept up the priority list a bit. Basically, we've been having some discussions about doing proper peer review for code that goes live on EotL, and I thought using the tools available on GitHub might be a good solution. I still need to poll wizards as to whether they would even use it were I to finish it, plus convince Duncan and Zippo to let us put our code on GitHub and figure out how permissions and all that stuff would work. It's not going to be an easy sell, but I figured the first step is demonstrating what is possible.
+
+What might be the best idea is to come up with some kind of system where people could set up their own repos, and the game was a stitching together or different repos belonging to different people. Then they could decide what license their code should be published under for themselves, and let them work out their own permissions for reading/writing the repo. The alternative to that is keeping one repo for the entire game but then if we wanted to make anything private we'd need to collect dues to pay for a private github repo, which isn't something we've ever done before.
+
+I guess I'm a little skeptical that anything will come of this code on EotL in the present time, but it should at least demonstrate what's possible and spur some worthwhile discussion.
