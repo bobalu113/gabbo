@@ -1,6 +1,5 @@
 var net = require('net');
 var md5 = require('md5');
-var https = require('https');
 var url = require('url');
 var request = require('request');
 require('longjohn');
@@ -40,20 +39,34 @@ var server = net.createServer(function(socket) {
         );
       } else {
         console.info("Got message: size " + buffer.length);
+        var valid = 1;
+        var incoming;
 
-        var incoming = JSON.parse(buffer);
-        var transactionId = incoming.transactionId;
-        var query = incoming.query;
-        var send = function(data) {
-          sendResponse(socket, transactionId, data);
-        };
+        try {
+          incoming = JSON.parse(buffer);
+        } catch(err) {
+          console.error("Illegal request: JSON parse failed");
+          valid = 0;
+        }
+        if (valid && !("transactionId" in incoming)) {
+          console.error("Illegal request: missing transactionId");
+          valid = 0;
+        }
 
-        if (query == "github.pullRequests") {
-          getPullRequests(send, console.error);
-        } else if (query.substring(0, 19) == "github.pullRequest.") {
-          getPullRequest(send, console.error, query.substring(19));
-        } else {
-          throw new Error("Unsupported operation: " + query);
+        if (valid) {
+          var transactionId = incoming.transactionId;
+          var query = incoming.query;
+          var send = function(data) {
+            sendResponse(socket, transactionId, data);
+          };
+
+          if (query == "github.pullRequests") {
+            getPullRequests(send, console.error);
+          } else if (query.substring(0, 19) == "github.pullRequest.") {
+            getPullRequest(send, console.error, query.substring(19));
+          } else {
+            console.warn("Unsupported operation: " + query);
+          }
         }
 
         buffer = null;
@@ -72,26 +85,6 @@ server.listen(2080, '127.0.0.1');
 
 function apiUrl(path) {
   return "https://api.github.com" + path;
-}
-
-function apiRequest2(onFulfilled, onRejected, target, marshall) {
-  var options = url.parse(target);
-  options.headers = {'User-agent': 'Rodney for Gabbo'};
-  https.get(options, function(res) {
-    console.log("PR req status code: " + res.statusCode);
-    var data = [];
-    res.on('data', function(d) {
-      data.push(d);
-    }).on('error', function(e) {
-      onRejected(e);
-    }).on('end', function() {
-      if (res.statusCode == 200) {
-        onFulfilled(marshall(Buffer.concat(data)));
-      }
-    });
-  }).on('error', function(e) {
-    onRejected(e);
-  });
 }
 
 function apiRequest(onFulfilled, onRejected, target, marshall) {
@@ -166,10 +159,10 @@ function marshallPullRequests(buffer) {
            "state": x.state,
            "title": x.title,
             "body": x.body,
-      "created_at": Date.parse(x.created_at) / 1000,
-      "updated_at": Date.parse(x.updated_at) / 1000,
-       "closed_at": Date.parse(x.closed_at) / 1000,
-       "merged_at": Date.parse(x.merged_at) / 1000,
+      "created_at": marshallTimestamp(x.created_at),
+      "updated_at": marshallTimestamp(x.updated_at),
+       "closed_at": marshallTimestamp(x.closed_at),
+       "merged_at": marshallTimestamp(x.merged_at),
             "user": x.user.login,
     }
   });
@@ -183,10 +176,10 @@ function marshallPullRequest(buffer) {
             "state": data.state,
             "title": data.title,
              "body": data.body,
-       "created_at": Date.parse(data.created_at) / 1000,
-       "updated_at": Date.parse(data.updated_at) / 1000,
-        "closed_at": Date.parse(data.closed_at) / 1000,
-        "merged_at": Date.parse(data.merged_at) / 1000,
+       "created_at": marshallTimestamp(data.created_at),
+       "updated_at": marshallTimestamp(data.updated_at),
+        "closed_at": marshallTimestamp(data.closed_at),
+        "merged_at": marshallTimestamp(data.merged_at),
              "user": data.user.login,
            "merged": data.merged,
         "mergeable": data.mergeable,
@@ -214,8 +207,8 @@ function marshallComments(buffer) {
     return {
             "user": x.user.login,
             "body": x.body,
-      "created_at": Date.parse(x.created_at) / 1000,
-      "updated_at": Date.parse(x.updated_at) / 1000,
+      "created_at": marshallTimestamp(x.created_at),
+      "updated_at": marshallTimestamp(x.updated_at),
     }
   });
   return out;
@@ -227,8 +220,8 @@ function marshallCommits(buffer) {
     return {
             "user": x.user.login,
             "body": x.body,
-      "created_at": Date.parse(x.created_at) / 1000,
-      "updated_at": Date.parse(x.updated_at) / 1000,
+      "created_at": marshallTimestamp(x.created_at),
+      "updated_at": marshallTimestamp(x.updated_at),
     }
   });
   return out;
@@ -247,6 +240,10 @@ function marshallFiles(buffer) {
     i = j + 1;
   }
   return files;
+}
+
+function marshallTimestamp(timestamp) {
+  return Date.parse(timestamp) / 1000;
 }
 
 function sendResponse(socket, transactionId, data) {
