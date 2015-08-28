@@ -67,7 +67,7 @@ int do_pullreq(mixed *args) {
           req["number"],
           crop_string(req["title"], 35),
           req["user"],
-          req["created_at"]
+          strftime("%Y-%m-%d %T", req["created_at"])
         );
       }
       tell_object($2, out);
@@ -80,7 +80,43 @@ int do_pullreq(mixed *args) {
         printf("Invalid pull request number: %s\n", arg);
       } else {
         GitHubServer->get_pull_request(number, (:
-          string out = sprintf("%O\n", $1);
+          int i;
+          mapping req = $1;
+          string files = "";
+          i = 0;
+          foreach (string file : req["files"]) {
+            files += sprintf("%2d) %s\n", ++i, file);
+          }
+          string comments = "";
+          i = 0;
+          foreach (mapping comment : req["comments"]) {
+            comments += sprintf("%2d) %s [%s]\n    %s\n\n",
+                                ++i,
+                                comment["user"],
+                                strftime("%Y-%m-%d %T",
+                                         comment["updated_at"]),
+                                implode(explode(comment["body"], "\n"),
+                                        "\n    "));
+          }
+          string out = sprintf(
+            "Title: %s\n"
+            "Description:\n"
+            "%-=76s\n\n"
+            " Number: %-30d  Commits: %d\n"
+            " Status: %-30s Addtions: %d\n"
+            "   User: %-30sDeletions: %d\n"
+            "Created: %-30s   Closed: %s\n"
+            "\nFiles:\n"
+            "%s"
+            "\nComments:\n"
+            "%s",
+            req["title"], req["body"], req["number"], req["commits"],
+            req["state"], req["additions"], req["user"], req["deletions"],
+            strftime("%Y-%m-%d %T", req["created_at"]),
+            (req["closed_at"] ?
+             strftime("%Y-%m-%d %T", req["closed_at"]) :
+             "N/A"
+            ), files, comments);
           tell_object($2, out);
         :), THISP);
       }
