@@ -1,6 +1,8 @@
 var net = require('net');
 var md5 = require('md5');
 var https = require('https');
+var url = require('url');
+var request = require('request');
 require('longjohn');
 
 var SIZE_WIDTH = 4;
@@ -68,12 +70,14 @@ var server = net.createServer(function(socket) {
 server.listen(2080, '127.0.0.1');
 //server.listen(2080, '66.220.23.27');
 
-function apiRequest(onFulfilled, onRejected, path, marshall) {
-  https.get({
-    hostname: 'api.github.com',
-    path: path,
-    headers: {'User-agent': 'Rodney for Gabbo'}
-  }, function(res) {
+function apiUrl(path) {
+  return "https://api.github.com" + path;
+}
+
+function apiRequest2(onFulfilled, onRejected, target, marshall) {
+  var options = url.parse(target);
+  options.headers = {'User-agent': 'Rodney for Gabbo'};
+  https.get(options, function(res) {
     console.log("PR req status code: " + res.statusCode);
     var data = [];
     res.on('data', function(d) {
@@ -90,22 +94,52 @@ function apiRequest(onFulfilled, onRejected, path, marshall) {
   });
 }
 
+function apiRequest(onFulfilled, onRejected, target, marshall) {
+  var options = {
+    url: url.parse(target),
+    headers: {'User-agent': 'Rodney for Gabbo'},
+  };
+  request(options, function(error, res, body) {
+    if (error) {
+      onRejected(error);
+    } else {
+      console.log("apiRequest status code: " + res.statusCode);
+      if (res.statusCode == 200) {
+        onFulfilled(marshall(body));
+      }
+    }
+  });
+}
+
 function getPullRequests(onFulfilled, onRejected) {
   apiRequest(onFulfilled,
              onRejected,
-             '/repos/bobalu113/gabbo/pulls',
+             apiUrl('/repos/bobalu113/gabbo/pulls'),
              marshallPullRequests);
 }
 
 function getPullRequest(onFulfilled, onRejected, number) {
+  var diffRequest = function(data) {
+    var diffUrl = data.diff_url;
+    var diffFulfilled = function(diffData) {
+      delete data.diff_url;
+      data.files = diffData;
+      onFulfilled(data);
+    };
+    apiRequest(diffFulfilled,
+               onRejected,
+               diffUrl,
+               marshallFiles);
+  }
   var commentsRequest = function(data) {
     var commentsFulfilled = function(commentsData) {
       data.comments = commentsData;
-      onFulfilled(data);
+      diffRequest(data);
     };
     apiRequest(commentsFulfilled,
                onRejected,
-               '/repos/bobalu113/gabbo/issues/' + number + '/comments',
+               apiUrl('/repos/bobalu113/gabbo/issues/' + number +
+                      '/comments'),
                marshallComments);
   }
   var issueRequest = function(data) {
@@ -115,12 +149,12 @@ function getPullRequest(onFulfilled, onRejected, number) {
     };
     apiRequest(issueFulfilled,
                onRejected,
-               '/repos/bobalu113/gabbo/issues/' + number,
+               apiUrl('/repos/bobalu113/gabbo/issues/' + number),
                marshallIssue);
   }
   apiRequest(issueRequest,
              onRejected,
-             '/repos/bobalu113/gabbo/pulls/' + number,
+             apiUrl('/repos/bobalu113/gabbo/pulls/' + number),
              marshallPullRequest);
 }
 
@@ -132,10 +166,10 @@ function marshallPullRequests(buffer) {
            "state": x.state,
            "title": x.title,
             "body": x.body,
-      "created_at": x.created_at,
-      "updated_at": x.updated_at,
-       "closed_at": x.closed_at,
-       "merged_at": x.merged_at,
+      "created_at": Date.parse(x.created_at) / 1000,
+      "updated_at": Date.parse(x.updated_at) / 1000,
+       "closed_at": Date.parse(x.closed_at) / 1000,
+       "merged_at": Date.parse(x.merged_at) / 1000,
             "user": x.user.login,
     }
   });
@@ -149,10 +183,10 @@ function marshallPullRequest(buffer) {
             "state": data.state,
             "title": data.title,
              "body": data.body,
-       "created_at": data.created_at,
-       "updated_at": data.updated_at,
-        "closed_at": data.closed_at,
-        "merged_at": data.merged_at,
+       "created_at": Date.parse(data.created_at) / 1000,
+       "updated_at": Date.parse(data.updated_at) / 1000,
+        "closed_at": Date.parse(data.closed_at) / 1000,
+        "merged_at": Date.parse(data.merged_at) / 1000,
              "user": data.user.login,
            "merged": data.merged,
         "mergeable": data.mergeable,
@@ -160,7 +194,8 @@ function marshallPullRequest(buffer) {
           "commits": data.commits,
         "additions": data.additions,
         "deletions": data.deletions,
-    "changed_files": data.changed_files
+    "changed_files": data.changed_files,
+         "diff_url": data.diff_url,
   };
   return out;
 }
@@ -179,11 +214,39 @@ function marshallComments(buffer) {
     return {
             "user": x.user.login,
             "body": x.body,
-      "created_at": x.created_at,
-      "updated_at": x.updated_at,
+      "created_at": Date.parse(x.created_at) / 1000,
+      "updated_at": Date.parse(x.updated_at) / 1000,
     }
   });
   return out;
+}
+
+function marshallCommits(buffer) {
+  var data = JSON.parse(buffer);
+  var out = data.map(function(x) {
+    return {
+            "user": x.user.login,
+            "body": x.body,
+      "created_at": Date.parse(x.created_at) / 1000,
+      "updated_at": Date.parse(x.updated_at) / 1000,
+    }
+  });
+  return out;
+}
+
+function marshallFiles(buffer) {
+  var files = [ ];
+  var i = 0;
+  while (i < buffer.length) {
+    var j = buffer.indexOf("\n", i);
+    if (j == -1) { j = buffer.length; }
+    var line = buffer.substring(i, j);
+    if (line.substring(0, 6) == "+++ b/") {
+      files.push(line.substr(6));
+    }
+    i = j + 1;
+  }
+  return files;
 }
 
 function sendResponse(socket, transactionId, data) {
@@ -201,6 +264,6 @@ function sendResponse(socket, transactionId, data) {
   header[2] = (size & 0xFFFF) / 0x100;
   header[3] = (size & 0xFF);
   header.write(checksum, SIZE_WIDTH, MD5_WIDTH, ENCODING);
-  console.log("Got pull requests: size " + size);
+  console.log("Sending response: size " + size);
   socket.write(Buffer.concat([header, body]), ENCODING);
 }
