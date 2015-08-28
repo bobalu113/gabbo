@@ -1,6 +1,7 @@
 inherit CommandCode;
 
 private variables private functions inherit ArgsLib;
+private variables private functions inherit StringsLib;
 private variables private functions inherit GetoptsLib;
 
 int do_help(string command);
@@ -31,10 +32,11 @@ int do_help(string command) {
         "NAME\n"
         "    %s pullreq - display and manipulate pull requests\n"
         "SYNOPSIS\n"
-        "    %s pullreq [-lh]\n"
+        "    %s pullreq [-lh] <id>\n"
         "DESCRIPTION\n"
+        "    Display pull request information for request number <id>.\n"
         "    Options are as follows:\n"
-        "      -l : list all pull requests\n"
+        "      -l : list all open pull requests\n"
         "      -h : this help screen\n",
         query_verb(), query_verb()
       );
@@ -55,10 +57,37 @@ int do_help(string command) {
 int do_pullreq(mixed *args) {
   if (member(args[1], 'l')) {
     GitHubServer->get_pull_requests((:
-      printf("Pull requests:\n%O\n", $1);
-    :));
+      string out = sprintf(
+        "Listing %s pull requests. Total: %d\n\n",
+        "open", sizeof($1)
+      );
+      foreach (mapping req : $1) {
+        out += sprintf(
+          "%4d %s [%s %s]\n",
+          req["number"],
+          crop_string(req["title"], 35),
+          req["user"],
+          req["created_at"]
+        );
+      }
+      tell_object($2, out);
+    :), THISP);
     return 1;
+  } else if (sizeof(args[0])) {
+    foreach (string arg : args[0]) {
+      int number = to_int(arg);
+      if (!number) {
+        printf("Invalid pull request number: %s\n", arg);
+      } else {
+        GitHubServer->get_pull_request(number, (:
+          string out = sprintf("%O\n", $1);
+          tell_object($2, out);
+        :), THISP);
+      }
+      return 1;
+    }
   } else {
     return do_help("pullreq");
   }
 }
+

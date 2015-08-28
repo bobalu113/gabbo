@@ -6,9 +6,9 @@ private variables private functions inherit JSONLib;
 
 // TODO better error recovery
 
-//#define HOST ({ 74, 125, 227, 199 })
+//#define HOST ({ 66, 220, 23, 27 })
 #define HOST ({ 127, 0, 0, 1 })
-#define PORT 80
+#define PORT 2080
 
 #define OUT_SIZE      0
 #define OUT_MD5       1
@@ -24,20 +24,21 @@ void open_callback(int *data, int size);
 void send_string(string str);
 void flush_buffer();
 void send_callback(int *data, int size);
-string get_new_ticket();
-void handle_response(string msg);
+private string get_transaction_id();
+private void handle_response(string msg);
+private void api_request(string query, closure callback, mixed *args);
 
 int *erq_ticket, sending;
 int in_size;
-string incoming, in_md5;
-mixed *queue, *last_ticket;
+string incoming, in_md5, erq_ticket_str;
+mixed *queue, *last_transaction_id;
 mapping callbacks;
 
 void create() {
   queue = ({ });
   sending = 0;
   incoming = 0;
-  last_ticket = ({ 0, 0, 0 });
+  last_transaction_id = ({ 0, 0, 0 });
   callbacks = ([ ]);
 }
 
@@ -50,13 +51,14 @@ void open() {
 
 void open_callback(int *data, int size) {
   object logger = LoggerFactory->get_logger(THISO);
-  logger->debug("got open callback: %d, %O", size, data);
+  logger->trace("got open callback: %d, %O", size, data);
 
   if (size >= 2) {
     switch (data[0]) {
       case ERQ_OK:
         erq_ticket = data[1..];
-        logger->debug("open succeeded");
+        erq_ticket_str = to_string(erq_ticket);
+        logger->debug("open succeeded, got ticket: %O", erq_ticket_str);
         // TODO sanity check queue
         flush_buffer();
         break;
@@ -78,11 +80,12 @@ void open_callback(int *data, int size) {
 
         // TODO log a warning if extra data comes in
         if (strlen(incoming) >= in_size) {
+          logger->debug("got message: %O", incoming);
           string md5 = hash(TLS_HASH_MD5, incoming);
           if (in_md5 != md5) {
-            logger->info("checksums differ: %O %O", in_md5, md5);
+            logger->info("msg checksums differ: %O %O",
+                         in_md5, md5, incoming);
           } else {
-            logger->info("got message: %O", incoming);
             string msg = incoming;
             // ensure incoming gets reset even if response handler evals out
             incoming = 0;
@@ -147,13 +150,14 @@ void flush_buffer() {
     sending = len - cursor;
   }
   data += to_array(out[OUT_BUFFER][(cursor + 1)..(cursor + sending)]);
+  logger->trace("sending ticket: %O, data: %O", erq_ticket_str, data);
   send_erq(ERQ_SEND, erq_ticket + data, #'send_callback); //'
   return;
 }
 
 void send_callback(int *data, int size) {
   object logger = LoggerFactory->get_logger(THISO);
-  logger->debug("got send callback: %d, %O", size, data);
+  logger->trace("got send callback: %d, %O", size, data);
   if (!sizeof(queue)) {
     logger->info("queue vanished while awaiting response");
     return;
@@ -166,14 +170,16 @@ void send_callback(int *data, int size) {
       break;
     case ERQ_E_WOULDBLOCK:
       sending = 0; // resend
+      logger->debug("got E_WOULDBLOCK, resending data");
       call_out("flush_buffer", 1);
       return;
     case ERQ_E_INCOMPLETE:
       out[OUT_CURSOR] += data[1];
       break;
     case ERQ_E_TICKET:
-      // retry with a new socket
       out[OUT_CURSOR] = -1;
+      logger->debug("ticket invalid: %O, reset cursor and opening new socket",
+                    erq_ticket_str);
       open();
       return;
     case ERQ_E_PIPE:
@@ -184,39 +190,52 @@ void send_callback(int *data, int size) {
   }
   sending = 0;
   if (out[OUT_CURSOR] >= (out[OUT_SIZE] - 1)) {
-    logger->info("finished sending %d length bytes", out[OUT_SIZE]);
+    logger->debug("finished sending message, length: %d", out[OUT_SIZE]);
     queue = queue[1..];
   }
   flush_buffer();
 }
 
-void get_pull_requests(closure callback) {
-  string ticket = get_new_ticket();
+void get_pull_requests(closure callback, varargs mixed *args) {
+  api_request("github.pullRequests", callback, args);
+}
+
+void get_pull_request(int number, closure callback, varargs mixed *args) {
+  api_request("github.pullRequest." + number, callback, args);
+}
+
+private void api_request(string query, closure callback, mixed *args) {
+  string transaction_id = get_transaction_id();
   mapping req = ([
-    "ticket" : ticket,
-    "path"   : "/pulls"
+    "transactionId" : transaction_id,
+    "query"   : query,
   ]);
-  callbacks[ticket] = callback;
+  callbacks[transaction_id] = ({ callback, args });
   if (!erq_ticket) {
     open();
   }
   send_string(json_encode(req));
 }
 
-string get_new_ticket() {
+private string get_transaction_id() {
   int *utime = utime();
-  if ((utime[0] != last_ticket[0]) || (utime[1] != last_ticket[1])) {
-    last_ticket = utime + ({ 0 });
+  if ((utime[0] != last_transaction_id[0])
+      || (utime[1] != last_transaction_id[1])) {
+    last_transaction_id = utime + ({ 0 });
   } else {
-    last_ticket[2]++;
+    last_transaction_id[2]++;
   }
-  return sprintf("%d.%d.%d", last_ticket[0], last_ticket[1], last_ticket[2]);
+  return sprintf("%d.%d.%d",
+                 last_transaction_id[0],
+                 last_transaction_id[1],
+                 last_transaction_id[2]
+                );
 }
 
-void handle_response(string msg) {
+private void handle_response(string msg) {
   mixed resp = json_decode(msg);
-  string ticket = resp["ticket"];
-  closure callback = callbacks[ticket];
-  m_delete(callbacks, ticket);
-  funcall(callback, resp["body"]);
+  string transaction_id = resp["transactionId"];
+  mixed *callback = callbacks[transaction_id];
+  m_delete(callbacks, transaction_id);
+  apply(callback[0], resp["body"], callback[1]);
 }
