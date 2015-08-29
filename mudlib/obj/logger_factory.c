@@ -122,6 +122,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   if (!formatter) {
     formatter = parse_format(config["format"], LOGGER_MESSAGE,
                              ({ 'category, 'priority, 'message, 'caller }));
+    formatters[config["format"]] = formatter;
   }
 
   // configure our logger
