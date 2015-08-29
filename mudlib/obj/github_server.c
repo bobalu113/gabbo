@@ -1,13 +1,23 @@
+#define EOTL
 #include <sys/erq.h>
 #include <sys/tls.h>
 #include <sys/config.h>
 
+#ifdef EOTL
+#include <acme.h>
+#define LoggerFactory AcmeLoggerFactory
+#endif
+
+#ifdef EOTL
+private variables private functions inherit "json";
+#else
 private variables private functions inherit JSONLib;
+#endif
 
 // TODO better error recovery
 
-//#define HOST ({ 66, 220, 23, 27 })
-#define HOST ({ 127, 0, 0, 1 })
+#define HOST ({ 66, 220, 23, 27 })
+//#define HOST ({ 127, 0, 0, 1 })
 #define PORT 2080
 
 #define OUT_SIZE      0
@@ -40,6 +50,9 @@ void create() {
   incoming = 0;
   last_transaction_id = ({ 0, 0, 0 });
   callbacks = ([ ]);
+#ifdef EOTL
+  seteuid(getuid());
+#endif
 }
 
 void open() {
@@ -81,7 +94,11 @@ void open_callback(int *data, int size) {
         // TODO log a warning if extra data comes in
         if (strlen(incoming) >= in_size) {
           logger->debug("got message: %O", incoming);
+#ifdef EOTL
+          string md5 = md5(incoming);
+#else
           string md5 = hash(TLS_HASH_MD5, incoming);
+#endif
           if (in_md5 != md5) {
             logger->info("msg checksums differ: %O %O",
                          in_md5, md5, incoming);
@@ -105,7 +122,11 @@ void open_callback(int *data, int size) {
 
 void send_string(string str) {
   // TODO add overflow check
+#ifdef EOTL
+  queue += ({ ({ strlen(str), md5(str), str, -1, 0 }) });
+#else
   queue += ({ ({ strlen(str), hash(TLS_HASH_MD5, str), str, -1, 0 }) });
+#endif
   flush_buffer();
 }
 
