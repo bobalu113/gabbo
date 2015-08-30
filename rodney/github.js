@@ -3,7 +3,7 @@ var gitcore = require('./gitcore.js');
 exports.query = query;
 
 function apiUrl(path) {
-  return "https://api.github.com/repos/bobalu113/gabbo" + path;
+  return "https://api.github.com/repos/bobalu113/eotl-mudlib" + path;
 }
 
 function query(query, onFulfilled, onRejected) {
