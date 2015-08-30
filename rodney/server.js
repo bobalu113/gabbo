@@ -1,6 +1,5 @@
 var net = require('net');
 var md5 = require('md5');
-var request = require('request');
 require('longjohn');
 
 var github = require('./github.js');
