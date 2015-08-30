@@ -8,6 +8,8 @@ var SIZE_WIDTH = 4;
 var MD5_WIDTH = 32;
 var ENCODING = 'utf8'
 
+var apiCache;
+
 var server = net.createServer(function(socket) {
   var buffer = null;
   var cursor = -1;
@@ -56,15 +58,43 @@ var server = net.createServer(function(socket) {
         if (valid) {
           var transactionId = incoming.transactionId;
           var query = incoming.query;
+          console.info("Got query: " + query +
+                        ", transactionId: " + transactionId);
           var send = function(data) {
             sendResponse(socket, transactionId, data);
+            apiCache = null;
           };
 
+          var get = null;
           if (query == "github.pullRequests") {
-            getPullRequests(send, console.error);
+            get = function() { getPullRequests(send, console.error) };
           } else if (query.substring(0, 19) == "github.pullRequest.") {
-            getPullRequest(send, console.error, query.substring(19));
-          } else {
+            var pos = query.indexOf(".", 19);
+            if (pos < 0) {
+              var number = query.substring(19);
+              get = function() {
+                getPullRequest(send, console.error, number);
+              };
+            } else {
+              var number = query.substring(19, pos);
+              var pos2 = query.indexOf(".", pos + 1);
+              if (pos2 >= 0) {
+                var op = query.substring(pos + 1, pos2)
+                if (op == "diff") {
+                  var file = query.substring(pos2 + 1);
+                  get = function() {
+                    getDiffRequest(send, console.error, number, file);
+                  }
+                }
+              }
+            }
+          }
+
+          if (get) {
+            apiCache = { };
+            get();
+          }
+          else {
             console.warn("Unsupported operation: " + query);
           }
         }
@@ -88,20 +118,26 @@ function apiUrl(path) {
 }
 
 function apiRequest(onFulfilled, onRejected, target, marshall) {
-  var options = {
-    url: url.parse(target),
-    headers: {'User-agent': 'Rodney for Gabbo'},
-  };
-  request(options, function(error, res, body) {
-    if (error) {
-      onRejected(error);
-    } else {
-      console.log("apiRequest status code: " + res.statusCode);
-      if (res.statusCode == 200) {
-        onFulfilled(marshall(body));
+  if (target in apiCache) {
+    onFulfilled(marshall(apiCache[target]));
+  } else {
+    var options = {
+      url: url.parse(target),
+      headers: {'User-agent': 'Rodney for Gabbo'},
+    };
+    request(options, function(error, res, body) {
+      if (error) {
+        onRejected(error);
+      } else {
+        console.log("apiRequest status code: " + res.statusCode +
+                    ", target: " + target);
+        if (res.statusCode == 200) {
+          apiCache[target] = body;
+          onFulfilled(marshall(body));
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 function getPullRequests(onFulfilled, onRejected) {
@@ -112,14 +148,14 @@ function getPullRequests(onFulfilled, onRejected) {
 }
 
 function getPullRequest(onFulfilled, onRejected, number) {
-  var diffRequest = function(data) {
+  var filesRequest = function(data) {
     var diffUrl = data.diff_url;
-    var diffFulfilled = function(diffData) {
+    var filesFulfilled = function(filesData) {
       delete data.diff_url;
-      data.files = diffData;
+      data.files = filesData;
       onFulfilled(data);
     };
-    apiRequest(diffFulfilled,
+    apiRequest(filesFulfilled,
                onRejected,
                diffUrl,
                marshallFiles);
@@ -127,7 +163,7 @@ function getPullRequest(onFulfilled, onRejected, number) {
   var commentsRequest = function(data) {
     var commentsFulfilled = function(commentsData) {
       data.comments = commentsData;
-      diffRequest(data);
+      filesRequest(data);
     };
     apiRequest(commentsFulfilled,
                onRejected,
@@ -146,6 +182,69 @@ function getPullRequest(onFulfilled, onRejected, number) {
                marshallIssue);
   }
   apiRequest(issueRequest,
+             onRejected,
+             apiUrl('/repos/bobalu113/gabbo/pulls/' + number),
+             marshallPullRequest);
+}
+
+function getDiffRequest(onFulfilled, onRejected, number, file) {
+  var reviewCommentsRequest = function(data) {
+    var reviewCommentsFulfilled = function(reviewCommentsData) {
+      data.comments = reviewCommentsData;
+      onFulfilled(data);
+    }
+    var marshallReviewCommentsWrapper = function(buffer) {
+      return marshallReviewComments(buffer, data.path);
+    }
+    apiRequest(reviewCommentsFulfilled,
+               onRejected,
+               apiUrl('/repos/bobalu113/gabbo/pulls/' + number +
+                      '/comments'),
+               marshallReviewCommentsWrapper);
+  }
+  var diffRequest = function(data) {
+    var diffUrl = data.diff_url;
+    delete data.diff_url;
+    var diffFulfilled = function(diffData) {
+      delete data.diff_url;
+      for (var attr in diffData) { data[attr] = diffData[attr]; }
+      reviewCommentsRequest(data);
+    };
+    var marshallDiffWrapper = function(buffer) {
+      return marshallDiff(buffer, data.path);
+    }
+    apiRequest(diffFulfilled,
+               onRejected,
+               diffUrl,
+               marshallDiffWrapper);
+  }
+  var filesRequest = function(data) {
+    var diffUrl = data.diff_url;
+    var filesFulfilled = function(filesData) {
+      var fileIndex = -1;
+      var tmp = parseInt(file, 10);
+      if (file == tmp) {
+        if ((tmp >= 0) && (tmp < filesData.length)) {
+          file = filesData[tmp];
+          fileIndex = tmp;
+        }
+      } else {
+        fileIndex = filesData.indexOf(file);
+      }
+      if (fileIndex < 0) {
+        onRejected(new Error("invalid file for diff"));
+      } else {
+        data.path = file;
+        data.file = fileIndex;
+        diffRequest(data);
+      }
+    };
+    apiRequest(filesFulfilled,
+               onRejected,
+               diffUrl,
+               marshallFiles);
+  }
+  apiRequest(filesRequest,
              onRejected,
              apiUrl('/repos/bobalu113/gabbo/pulls/' + number),
              marshallPullRequest);
@@ -240,6 +339,53 @@ function marshallFiles(buffer) {
     i = j + 1;
   }
   return files;
+}
+
+function marshallDiff(buffer, path) {
+  var out = { };
+  var i = 0;
+  var lines = null;
+  while (i < buffer.length) {
+    var j = buffer.indexOf("\n", i);
+    if (j == -1) { j = buffer.length; }
+    var line = buffer.substring(i, j);
+    if (lines) {
+      var token = "diff --git ";
+      if (line.substring(0, token.length) == token) {
+        break;
+      } else {
+        lines.push(line);
+      }
+    } else {
+      var token = "diff --git a/" + path + " b/" + path;
+      if (line.substring(0, token.length) == token) {
+        lines = [ line ];
+      }
+    }
+    i = j + 1;
+  }
+  out.diff = lines;
+  return out;
+}
+
+function marshallReviewComments(buffer, path) {
+  var data = JSON.parse(buffer);
+  var out = { };
+  data.forEach(function(comment) {
+    if (comment.path == path) {
+      var pos = comment.position;
+      if (!(pos in out)) {
+        out[pos] = [ ];
+      }
+      out[pos].push({
+              "user": comment.user.login,
+              "body": comment.body,
+        "created_at": marshallTimestamp(comment.created_at),
+        "updated_at": marshallTimestamp(comment.updated_at),
+      });
+    }
+  });
+  return out;
 }
 
 function marshallTimestamp(timestamp) {
