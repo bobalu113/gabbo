@@ -288,8 +288,8 @@ private mixed json_decode_parse_array(mixed array parse) {
 }
 
 private varargs mixed json_decode_parse_string(mixed array parse, int initiator_checked) {
-    int from, to, esc_state, esc_active;
-    string out;
+    int esc_state;
+    string out = "";
     if(!initiator_checked) {
         int ch = parse[JSON_DECODE_PARSE_TEXT][parse[JSON_DECODE_PARSE_POS]];
         if(!ch)
@@ -298,83 +298,77 @@ private varargs mixed json_decode_parse_string(mixed array parse, int initiator_
             json_decode_parse_error(parse, "Unexpected character", ch);
     }
     json_decode_parse_next_char(parse);
-    from = parse[JSON_DECODE_PARSE_POS];
-    to = -1;
     esc_state = 0;
-    esc_active = 0;
-    while(to == -1) {
-        switch(parse[JSON_DECODE_PARSE_TEXT][parse[JSON_DECODE_PARSE_POS]]) {
-        case 0          :
+    while(1) {
+        int char = parse[JSON_DECODE_PARSE_TEXT][parse[JSON_DECODE_PARSE_POS]];
+        if (!char) {
             json_decode_parse_error(parse, "Unexpected end of data");
-        case '\\'       :
-            esc_state = !esc_state;
-            break;
-        case '"'        :
-            if(esc_state) {
-                esc_state = 0;
-                esc_active++;
-            } else {
-                to = parse[JSON_DECODE_PARSE_POS] - 1;
-            }
-            break;
-        default         :
-            if(esc_state) {
-                esc_state = 0;
-                esc_active++;
-            }
-            break;
-        }
-        json_decode_parse_next_char(parse);
-    }
-    out = parse[JSON_DECODE_PARSE_TEXT][from .. to];
-    if(esc_active) {
-        if(member(out, '"') != -1)
-            out = replace_string(out, "\\\"", "\"");
-        if(strstr(out, "\\b") != -1)
-            out = replace_string(out, "\\b", "\b");
+        } else if (esc_state) {
+            switch(char) {
+            case '\\'       :
+                out += "\\";
+                break;
+            case '"'        :
+                out += "\"";
+                break;
+            case 'b'        :
+                out += "\b";
+                break;
+            case 'f'        :
 #ifdef MUDOS
-        if(strstr(out, "\\f") != -1)
-            out = replace_string(out, "\\f", "\x0c");
+                out += "\x0c";
 #else // MUDOS
-        if(strstr(out, "\\f") != -1)
-            out = replace_string(out, "\\f", "\f");
+                out += "\f";
 #endif // MUDOS
-        if(strstr(out, "\\n") != -1)
-            out = replace_string(out, "\\n", "\n");
-        if(strstr(out, "\\r") != -1)
-            out = replace_string(out, "\\r", "\r");
-        if(strstr(out, "\\t") != -1)
-            out = replace_string(out, "\\t", "\t");
-        if(strstr(out, "\\u") != -1) {
-            string array parts = explode(out, "\\u");
-            int entries = sizeof(parts) * 2 - 1;
-            string array proc = allocate(entries);
-            int i, j;
-            proc[0] = parts[0];
-            for(i = 1, j = sizeof(parts); i < j; i++) {
-                string part = parts[i];
+                break;
+            case 'n'        :
+                out += "\n";
+                break;
+            case 'r'        :
+                out += "\r";
+                break;
+            case 't'        :
+                out += "\t";
+                break;
+            case 'u'        :
+                string hex = parse[JSON_DECODE_PARSE_TEXT]
+                                  [parse[JSON_DECODE_PARSE_POS] + 1..
+                                   parse[JSON_DECODE_PARSE_POS] + 5];
                 int array nybbles = allocate(4);
                 int array bytes = allocate(2);
                 for(int k = 0; k < 4; k++)
-                    if((nybbles[k] = json_decode_hexdigit(part[k])) == -1)
-                        json_decode_parse_error(parse, "Invalid hex digit", part[k]);
+                    if((nybbles[k] = json_decode_hexdigit(hex[k])) == -1)
+                        json_decode_parse_error(parse, "Invalid hex digit", hex[k]);
                 bytes[0] = (nybbles[0] << 4) | nybbles[1];
                 bytes[1] = (nybbles[2] << 4) | nybbles[3];
                 if(member(bytes, 0) != -1)
                     bytes -= ({ 0 });
 #ifdef MUDOS
-                proc[i * 2 - 1] = sprintf("%@c", bytes);
+                out = sprintf("%s%@c", out, bytes);
 #else // MUDOS
-                proc[i * 2 - 1] = to_string(bytes);
+                out += to_string(bytes);
 #endif // MUDOS
-                proc[i * 2] = part[4..];
+                json_decode_parse_next_chars(parse, 4);
+                break;
+            default:
+                out = sprintf("%s%c", out, char);
+                break;
             }
-            out = implode(proc, "");
+            esc_state = 0;
+        } else {
+            switch(char) {
+            case '\\'       :
+                esc_state = 1;
+                break;
+            case '"'        :
+                json_decode_parse_next_char(parse);
+                return out;
+            default:
+                out = sprintf("%s%c", out, char);
+                break;
+            }
         }
-        if(member(out, '/') != -1)
-            out = replace_string(out, "\\/", "/");
-        if(member(out, '\\') != -1)
-            out = replace_string(out, "\\\\", "\\");
+        json_decode_parse_next_char(parse);
     }
     return out;
 }
@@ -400,7 +394,7 @@ private mixed json_decode_parse_number(mixed array parse) {
         json_decode_parse_next_char(parse);
         ch = parse[JSON_DECODE_PARSE_TEXT][parse[JSON_DECODE_PARSE_POS]];
         if(ch) {
-            if(ch == ',') {
+            if((ch == ',') || (ch == '}')) {
                 return 0;
             } else if(ch != '.') {
                 json_decode_parse_error(parse, "Unexpected character", ch);
