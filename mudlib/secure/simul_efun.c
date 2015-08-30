@@ -9,7 +9,13 @@
 mapping players;
 
 object find_player(string username) {
-  return players[username];
+  //return players[username];
+  object *u = filter(users(), (: $1->query_username() == $2 :), username);
+  if (sizeof(u)) {
+    return u[0];
+  } else {
+    return 0;
+  }
 }
 
 int move_resolved(mixed item, mixed dest) {

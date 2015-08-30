@@ -1,4 +1,3 @@
-#define EOTL
 #include <sys/erq.h>
 #include <sys/tls.h>
 #include <sys/config.h>
@@ -16,8 +15,8 @@ private variables private functions inherit JSONLib;
 
 // TODO better error recovery
 
-#define HOST ({ 66, 220, 23, 27 })
-//#define HOST ({ 127, 0, 0, 1 })
+//#define HOST ({ 66, 220, 23, 27 })
+#define HOST ({ 127, 0, 0, 1 })
 #define PORT 2080
 
 #define OUT_SIZE      0
@@ -118,6 +117,7 @@ void open_callback(int *data, int size) {
         break;
     }
   }
+  return;
 }
 
 void send_string(string str) {
@@ -128,6 +128,7 @@ void send_string(string str) {
   queue += ({ ({ strlen(str), hash(TLS_HASH_MD5, str), str, -1, 0 }) });
 #endif
   flush_buffer();
+  return;
 }
 
 void flush_buffer() {
@@ -215,14 +216,25 @@ void send_callback(int *data, int size) {
     queue = queue[1..];
   }
   flush_buffer();
+  return;
 }
 
 void get_pull_requests(closure callback, varargs mixed *args) {
   api_request("github.pullRequests", callback, args);
+  return;
 }
 
 void get_pull_request(int number, closure callback, varargs mixed *args) {
   api_request("github.pullRequest." + number, callback, args);
+  return;
+}
+
+void get_pull_request_diff(int number, mixed file, closure callback,
+                           varargs mixed *args) {
+
+  api_request(sprintf("github.pullRequest.%d.diff." + file, number),
+              callback, args);
+  return;
 }
 
 private void api_request(string query, closure callback, mixed *args) {
@@ -236,6 +248,7 @@ private void api_request(string query, closure callback, mixed *args) {
     open();
   }
   send_string(json_encode(req));
+  return;
 }
 
 private string get_transaction_id() {
@@ -259,4 +272,5 @@ private void handle_response(string msg) {
   mixed *callback = callbacks[transaction_id];
   m_delete(callbacks, transaction_id);
   apply(callback[0], resp["body"], callback[1]);
+  return;
 }
