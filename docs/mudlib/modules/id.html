@@ -69,7 +69,7 @@
 <hr>
 <br>
 <div class="block">Support for objects which can be identified on the command line.</div>
-<!-- 
+<!--
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
 </dd></dl>
@@ -99,54 +99,60 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/id.html#id()">id</a></strong>(string&nbsp;str)</code>
+<div class="block">This function is here to support the present() efun.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_capabilities()">query_capabilities</a></strong>()</code>
 <div class="block">Return the capabilities this mixin provides.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_ids()">query_ids</a></strong>()</code>
 <div class="block">Return a list of all the ids of the object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_primary_id()">query_primary_id</a></strong>()</code>
 <div class="block">Returns the primary id of the object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#query_secondary_ids()">query_secondary_ids</a></strong>()</code>
 <div class="block">Return the secondary ids of the object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#remove_secondary_id()">remove_secondary_id</a></strong>(string&nbsp;str)</code>
 <div class="block">Remove a secondary id from the object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#set_primary_id()">set_primary_id</a></strong>(string&nbsp;str)</code>
 <div class="block">Set the primary id of the object.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#set_secondary_ids()">set_secondary_ids</a></strong>(string *str)</code>
 <div class="block">Set all secondary ids of the object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#setup_id()">setup_id</a></strong>()</code>
 <div class="block">Initialize IdMixin.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/id.html#test_id()">test_id</a></strong>(string&nbsp;str)</code>
 <div class="block">Test whether a string matches one of the ids applied to this object.</div>
@@ -308,6 +314,22 @@ any secondary ids which have been applied to the object.</div>
 mixin's private variables are initialized in the parent implementation.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="id()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>id</h4>
+<pre>public&nbsp;int&nbsp;id(string&nbsp;str)</pre>
+<div class="block">This function is here to support the present() efun.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the id to test </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the string is a valid id, 0 if not </dd>
 </dl>
 </li>
 </ul>

@@ -63,7 +63,7 @@
 <hr>
 <br>
 <div class="block">A module for objects to execute user commands.</div>
-<!-- 
+<!--
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
 </dd></dl>
@@ -93,42 +93,49 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../modules/command_giver.html#check_command_access()">check_command_access</a></strong>(object&nbsp;cmd_ob,&nbsp;int&nbsp;read)</code>
+<div class="block">Test whether a given command object should be allowed this command giver's
+read/write access.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#do_command()">do_command</a></strong>(string&nbsp;arg)</code>
 <div class="block">Main command router.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;object&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#load_command()">load_command</a></strong>(string&nbsp;command)</code>
 <div class="block">Load a command object (and log errors).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_capabilities()">query_capabilities</a></strong>()</code>
 <div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command()">query_command</a></strong>(string&nbsp;verb)</code>
 <div class="block">Return the command for a given verb.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_command_flag()">query_command_flag</a></strong>(string&nbsp;verb)</code>
 <div class="block">Return the action flags for a given verb.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#query_verbs()">query_verbs</a></strong>()</code>
 <div class="block">Return the mapping of all configured command verbs.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../modules/command_giver.html#setup_command_giver()">setup_command_giver</a></strong>()</code>
 <div class="block">Initialize CommandGiverMixin.</div>
@@ -229,6 +236,24 @@ value is an action flag (see add_action(E)).</div>
 <dd><code>verb</code> - the verb which will execute the command </dd>
 <dd><code>flag</code> - optional action flag (see add_action(E)) </dd>
 <dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="check_command_access()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>check_command_access</h4>
+<pre>public&nbsp;int&nbsp;check_command_access(object&nbsp;cmd_ob,&nbsp;int&nbsp;read)</pre>
+<div class="block">Test whether a given command object should be allowed this command giver's
+read/write access.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>cmd_ob</code> - the command object being executed </dd>
+<dd><code>read</code> - non-zero if only read access is being granted </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero if access should be granted </dd>
 </dl>
 </li>
 </ul>

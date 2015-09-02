@@ -82,7 +82,7 @@ throughout the filesystem. When new loggers are created, they are added to
 a pool so that they may be reused again in a later execution without the
 overhead of re-configuration. The factory is responsible for cleaning up
 logger objects which are no longer in use.</div>
-<!-- 
+<!--
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
 </dd></dl>
@@ -133,7 +133,7 @@ structured than a string.</div>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../obj/logger_factory.html#release_logger()">release_logger</a></strong>(mixed&nbsp;category)</code>
+<td class="colLast"><code><strong><a href="../obj/logger_factory.html#release_logger()">release_logger</a></strong>(mixed&nbsp;category,&nbsp;string&nbsp;euid)</code>
 <div class="block">Releases a logger object from the logger pool, thereby removing any
 references to it held by the factory.</div>
 </td>
@@ -223,7 +223,7 @@ path, for console output or file output, respectively.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>release_logger</h4>
-<pre>public&nbsp;int&nbsp;release_logger(mixed&nbsp;category)</pre>
+<pre>public&nbsp;int&nbsp;release_logger(mixed&nbsp;category,&nbsp;string&nbsp;euid)</pre>
 <div class="block">Releases a logger object from the logger pool, thereby removing any
 references to it held by the factory. If there are no other references,
 the logger will also be destructed.</div>
@@ -231,6 +231,7 @@ the logger will also be destructed.</div>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>category</code> - an object or string representing the category; if an object is specfied, it's program_name(E) will be used. </dd>
+<dd><code>euid</code> - the euid of the logger to release </dd>
 <dt><span class="strong">Returns:</span></dt><dd>1 if a logger was released, 0 if no logger was found </dd>
 </dl>
 </li>

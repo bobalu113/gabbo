@@ -67,21 +67,15 @@ mixins.</div>
 </tr>
 <tbody>
 <tr class="">
-<td class="colFirst"><a href="../modules/creature.html" title="program in /modules">CreatureCode </a></td>
+<td class="colFirst"><a href="../modules/id.html" title="program in /modules">IdMixin </a></td>
 <td class="colLast">
-<div class="block">A base object for non-player characters.</div>
+<div class="block">Support for objects which can be identified on the command line.</div>
 </td>
 </tr>
 <tr class="">
 <td class="colFirst"><a href="../modules/mobile.html" title="program in /modules">MobileMixin </a></td>
 <td class="colLast">
 <div class="block">Support for objects which can move on their own.</div>
-</td>
-</tr>
-<tr class="">
-<td class="colFirst"><a href="../modules/living.html" title="program in /modules">LivingCode </a></td>
-<td class="colLast">
-<div class="block">A base object for living things, e.g.</div>
 </td>
 </tr>
 <tr class="">
@@ -99,13 +93,19 @@ mixins.</div>
 <tr class="">
 <td class="colFirst"><a href="../modules/thing.html" title="program in /modules">ThingCode </a></td>
 <td class="colLast">
-<div class="block">A base object for inanimate objects.</div>
+<div class="block">A base module for stuff made from dead or inorganic matter.</div>
 </td>
 </tr>
 <tr class="">
-<td class="colFirst"><a href="../modules/id.html" title="program in /modules">IdMixin </a></td>
+<td class="colFirst"><a href="../modules/organism.html" title="program in /modules">OrganismCode </a></td>
 <td class="colLast">
-<div class="block">Support for objects which can be identified on the command line.</div>
+<div class="block">A base module for stuff made from living (or undead), organic matter.</div>
+</td>
+</tr>
+<tr class="">
+<td class="colFirst"><a href="../modules/stuff.html" title="program in /modules">StuffCode </a></td>
+<td class="colLast">
+<div class="block">A base module for objects composed of matter (as opposed to space).</div>
 </td>
 </tr>
 <tr class="">
@@ -117,15 +117,15 @@ of that part of the object.</div>
 </td>
 </tr>
 <tr class="">
-<td class="colFirst"><a href="../modules/lock.html" title="program in /modules">LockMixin </a></td>
-<td class="colLast">
-<div class="block">Support for things which can be locked, like doors and containers.</div>
-</td>
-</tr>
-<tr class="">
 <td class="colFirst"><a href="../modules/vehicle.html" title="program in /modules">VehicleCode </a></td>
 <td class="colLast">
 <div class="block">A base object for vehicles.</div>
+</td>
+</tr>
+<tr class="">
+<td class="colFirst"><a href="../modules/property.html" title="program in /modules">PropertyMixin </a></td>
+<td class="colLast">
+<div class="block">A mixin for setting generic properties on an object.</div>
 </td>
 </tr>
 <tr class="">
@@ -135,9 +135,15 @@ of that part of the object.</div>
 </td>
 </tr>
 <tr class="">
-<td class="colFirst"><a href="../modules/property.html" title="program in /modules">PropertyMixin </a></td>
+<td class="colFirst"><a href="../modules/creature.html" title="program in /modules">CreatureCode </a></td>
 <td class="colLast">
-<div class="block">A mixin for setting generic properties on an object.</div>
+<div class="block">A base module for non-player organisms.</div>
+</td>
+</tr>
+<tr class="">
+<td class="colFirst"><a href="../modules/lock.html" title="program in /modules">LockMixin </a></td>
+<td class="colLast">
+<div class="block">Support for things which can be locked, like doors and containers.</div>
 </td>
 </tr>
 <tr class="">
@@ -173,7 +179,7 @@ of that part of the object.</div>
 <tr class="">
 <td class="colFirst"><a href="../modules/room.html" title="program in /modules">RoomCode </a></td>
 <td class="colLast">
-<div class="block">A base object for rooms.</div>
+<div class="block">A base module for objects representing units of space.</div>
 </td>
 </tr>
 </tbody>
