@@ -64,7 +64,7 @@ int do_help(string command) {
 
 int do_pullreq(mixed *args) {
   if (member(args[1], 'l')) {
-    CodeHostServer->get_pull_requests(#'print_request_list, THISP); //'
+    CodeHostController->get_pull_requests(#'print_request_list, THISP); //'
     return 1;
   } else if (!sizeof(args[0])) {
     return do_help("pullreq");
@@ -78,14 +78,14 @@ int do_pullreq(mixed *args) {
 
       if (member(args[1], 'r')) {
         int file = to_int(args[1]['r']);
-        CodeHostServer->get_pull_request_review(id,
+        CodeHostController->get_pull_request_review(id,
                                                 (file
                                                   ? file - 1
                                                   : args[1]['r']),
                                                 #'print_request_review,
                                                 THISP); //'
       } else {
-        CodeHostServer->get_pull_request(id, #'print_request, THISP); //'
+        CodeHostController->get_pull_request(id, #'print_request, THISP); //'
       }
       return 1;
     }

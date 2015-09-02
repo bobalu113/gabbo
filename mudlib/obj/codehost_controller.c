@@ -1,10 +1,10 @@
 /**
- * The CodeHostServer. This server provides clients access to services
- * provided by the game's code host, whether it's GitHub, GitLab, or
- * BitBucket. Currently the only service supported is read-only access to
- * pull requests.
+ * The CodeHostController. This object provides clients access to services
+ * rendered by the game's code host, one of GitHub, GitLab, or BitBucket.
+ * Currently the only service supported is read-only access to pull requests.
+ * It's a Rodney client, so many of the operations will be asynchronous.
  *
- * @alias CodeHostServer
+ * @alias CodeHostController
  */
 #pragma no_clone
 
@@ -17,7 +17,7 @@ inherit RodneyClientLib;
 #endif
 
 /**
- * Initialize server.
+ * Initialize controller.
  */
 void create() {
   RodneyClientLib::create();

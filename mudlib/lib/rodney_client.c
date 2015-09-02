@@ -39,9 +39,9 @@ private variables private functions inherit JSONLib;
 #define SIZE_WIDTH    4
 #define MD5_WIDTH    32
 
-void open();
+protected void open();
 void open_callback(int *data, int size);
-void send(string str);
+protected void send(string str);
 void flush_queue();
 void send_callback(int *data, int size);
 private string get_transaction_id();
@@ -71,7 +71,7 @@ void create() {
 /**
  * Asynchronously open a new connection to Rodney.
  */
-void open() {
+protected void open() {
   send_erq(ERQ_OPEN_TCP,
            HOST + ({ PORT / 0x100, PORT & 0xFF }),
            #'open_callback); // '
@@ -161,7 +161,7 @@ void open_callback(int *data, int size) {
  * @param query the query to send, which should usually be in the form of
  *              serialized JSON and include a transaction id
  */
-void send(string query) {
+protected void send(string query) {
   // TODO add overflow check
 #ifdef EOTL
   queue += ({ ({ strlen(query), md5(query), query, -1, 0 }) });

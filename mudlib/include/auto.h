@@ -60,7 +60,7 @@
 #define LoggerFactory        ObjDir "/logger_factory"
 #define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
-#define CodeHostServer       ObjDir "/codehost_server"
+#define CodeHostController   ObjDir "/codehost_controller"
 
 #define CommonRoom           ZoneDir "/common"
 #define HomeDir              ZoneDir "/home"
