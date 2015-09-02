@@ -1,26 +1,28 @@
 /**
- * The GitHub adapter for issue tracking and pull requests.
- * @module github
+ * The BitBucket adapter for issue tracking and pull requests.
+ *
+ * @module bitbucket
  * @requires  module:gitcore
  */
 
 var Gitcore = require('./gitcore.js');
-var gitcore = Gitcore(null, null);
+var gitcore = Gitcore('bobalu', 'Not2easy');
 
 exports.query = query;
 
 /**
- * Return the GitHub API url for the specified path.
+ * Return the BitBucket API url for the specified path.
  *
  * @param  {string} path the path of the API request
  * @return {string}      the full URL for API request
  */
 function apiUrl(path) {
-  return "https://api.github.com/repos/eotl/eotl-mudlib" + path;
+  return "https://bitbucket.org/api/2.0/repositories/bobalu/eotl-mudlib" +
+         path;
 }
 
 /**
- * Query the GitHub API.
+ * Query the BitBucket API.
  *
  * @param  {string}   query        the BitBucket query string
  * @param  {function} onFulfilled  query result will be passed to this
@@ -64,14 +66,14 @@ function getRunQuery(query, onFulfilled, onRejected) {
 
   if (query == "pullRequests") {
     runQuery = function() {
-      getPullRequests(onFulfilled, onRejected)
+      getPullRequests(onFulfilled, onRejected);
     };
   } else if (query.substring(0, 12) == "pullRequest.") {
     var pos = query.indexOf(".", 12);
     if (pos < 0) {
       var id = query.substring(12);
       runQuery = function() {
-        getPullRequest(onFulfilled, onRejected, id)
+        getPullRequest(onFulfilled, onRejected, id);
       };
     } else {
       var id = query.substring(12, pos);
@@ -100,7 +102,7 @@ function getRunQuery(query, onFulfilled, onRejected) {
 function getPullRequests(onFulfilled, onRejected) {
   gitcore.apiRequest(onFulfilled,
                      onRejected,
-                     apiUrl('/pulls'),
+                     apiUrl('/pullrequests'),
                      marshallPullRequests);
 }
 
@@ -113,15 +115,13 @@ function getPullRequests(onFulfilled, onRejected) {
  */
 function getPullRequest(onFulfilled, onRejected, id) {
   var filesRequest = function(data) {
-    var diffUrl = data.diff_url;
     var filesFulfilled = function(filesData) {
-      delete data.diff_url;
       data.files = filesData;
       onFulfilled(data);
     };
     gitcore.apiRequest(filesFulfilled,
                        onRejected,
-                       diffUrl,
+                       apiUrl('/pullrequests/' + id + '/diff'),
                        marshallFiles);
   }
   var commentsRequest = function(data) {
@@ -131,12 +131,12 @@ function getPullRequest(onFulfilled, onRejected, id) {
     };
     gitcore.apiRequest(commentsFulfilled,
                        onRejected,
-                       apiUrl('/issues/' + id + '/comments'),
+                       apiUrl('/pullrequests/' + id + '/comments'),
                        marshallComments);
   }
   gitcore.apiRequest(commentsRequest,
                      onRejected,
-                     apiUrl('/pulls/' + id),
+                     apiUrl('/pullrequests/' + id),
                      marshallPullRequest);
 }
 
@@ -221,16 +221,17 @@ function getPullReqReview(onFulfilled, onRejected, id, file) {
  */
 function marshallPullRequests(buffer) {
   var data = JSON.parse(buffer);
-  var out = data.map(function(x) {
+  var out = data.values.map(function(x) {
     return {
-              "id": x.number,
-           "state": x.state,
+              "id": x.id,
+           "state": x.state.toLowerCase(),
            "title": x.title,
-     "description": x.body,
-      "created_at": marshallTimestamp(x.created_at),
-      "updated_at": marshallTimestamp(x.updated_at),
-       "closed_at": marshallTimestamp(x.closed_at),
-          "author": x.user.login,
+     "description": x.description,
+      "created_at": marshallTimestamp(x.created_on),
+      "updated_at": marshallTimestamp(x.updated_on),
+// TODO get this from the merge commit
+//              "closed_at": marshallTimestamp(x.closed_at),
+          "author": x.author.username,
     }
   });
   return out;
@@ -247,21 +248,22 @@ function marshallPullRequests(buffer) {
 function marshallPullRequest(buffer) {
   var data = JSON.parse(buffer);
   var out = {
-               "id": data.number,
-            "state": data.state,
+            "state": data.state.toLowerCase(),
             "title": data.title,
-      "description": data.body,
-       "created_at": marshallTimestamp(data.created_at),
-       "updated_at": marshallTimestamp(data.updated_at),
-        "closed_at": marshallTimestamp(data.closed_at),
-        "merged_at": marshallTimestamp(data.merged_at),
-           "author": data.user.login,
-           "merged": data.merged,
-          "commits": data.commits,
-        "additions": data.additions,
-        "deletions": data.deletions,
-    "changed_files": data.changed_files,
-         "diff_url": data.diff_url,
+      "description": data.description,
+       "created_at": marshallTimestamp(data.created_on),
+       "updated_at": marshallTimestamp(data.updated_on),
+// TODO get this from merge commit
+//        "closed_at": marshallTimestamp(data.closed_at),
+           "author": data.author.username,
+           "merged": (data.merge_commit != null),
+    "source_commit": data.source.commit.hash,
+// TODO Get this stuff from source commit
+//          "commits": data.commits,
+// TODO get this from unified diff
+//        "additions": data.additions,
+//        "deletions": data.deletions,
+//    "changed_files": data.changed_files,
   };
   return out;
 }
@@ -276,12 +278,13 @@ function marshallPullRequest(buffer) {
  */
 function marshallComments(buffer) {
   var data = JSON.parse(buffer);
+  data = data.filter(function(x) { inline in x });
   var out = data.map(function(x) {
     return {
-            "user": x.user.login,
-            "body": x.body,
-      "created_at": marshallTimestamp(x.created_at),
-      "updated_at": marshallTimestamp(x.updated_at),
+            "user": x.user.username,
+            "body": x.content.raw,
+      "created_at": marshallTimestamp(x.created_on),
+      "updated_at": marshallTimestamp(x.updated_on),
     }
   });
   return out;
@@ -379,6 +382,6 @@ function marshallReviewComments(buffer, path) {
  * @return {number}           the unixtime of that timestamp
  */
 function marshallTimestamp(timestamp) {
-  return Date.parse(timestamp) / 1000;
+  return Math.floor(Date.parse(timestamp) / 1000);
 }
 
