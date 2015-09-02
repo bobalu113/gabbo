@@ -130,7 +130,7 @@ protected void setup_command_giver() {
     BinDir "/logger",
     BinDir "/qvars",
     BinDir "/which",
-    BinDir "/ghi"
+    BinDir "/chi"
   });
 
   foreach (string command : command_files) {

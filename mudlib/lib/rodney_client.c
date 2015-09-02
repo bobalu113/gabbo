@@ -1,3 +1,14 @@
+/**
+ * A library for objects to use which wish to communicate with the game's
+ * external request portal, Rodney. All communication with Rodney is
+ * asynchronous, and state will be maintained across request and responses
+ * with the global variables in this lib. It you wish to share the same
+ * TCP connection across different inheriting objects, you may inherit this
+ * library virtually. This library also includes functions that are applied
+ * externally by the ERQ, so they must not be inherited privately.
+ *
+ * @alias RodneyClientLib
+ */
 #include <sys/erq.h>
 #include <sys/tls.h>
 #include <sys/config.h>
@@ -30,19 +41,22 @@ private variables private functions inherit JSONLib;
 
 void open();
 void open_callback(int *data, int size);
-void send_string(string str);
-void flush_buffer();
+void send(string str);
+void flush_queue();
 void send_callback(int *data, int size);
 private string get_transaction_id();
 private void handle_response(string msg);
-private void api_request(string query, closure callback, mixed *args);
+protected void rodney_query(string query, closure callback, mixed *args);
 
-int *erq_ticket, sending;
-int in_size;
-string incoming, in_md5, erq_ticket_str;
-mixed *queue, *last_transaction_id;
-mapping callbacks;
+private int *erq_ticket, sending;
+private int in_size;
+private string incoming, in_md5, erq_ticket_str;
+private mixed *queue, *last_transaction_id;
+private mapping callbacks;
 
+/**
+ * Initialize state variables for processing messages and sending queries.
+ */
 void create() {
   queue = ({ });
   sending = 0;
@@ -54,6 +68,9 @@ void create() {
 #endif
 }
 
+/**
+ * Asynchronously open a new connection to Rodney.
+ */
 void open() {
   send_erq(ERQ_OPEN_TCP,
            HOST + ({ PORT / 0x100, PORT & 0xFF }),
@@ -61,10 +78,27 @@ void open() {
   return;
 }
 
+/**
+ * Called open a successful open(), or when new messages are received from
+ * the server. On opens, it will attempt to flush the queue. On new messages,
+ * the response will be deserialized and dispatched to the proper transaction
+ * callback.
+ *
+ * @param data incoming data
+ * @param size length of incoming packet
+ */
 void open_callback(int *data, int size) {
+  // only the ERQ should be calling us
+  if (previous_object()) {
+    return;
+  }
+
   object logger = LoggerFactory->get_logger(THISO);
   logger->trace("got open callback: %d, %O", size, data);
 
+  if (sizeof(data) != size) {
+    logger->error("packet failed size check: %d/%d", sizeof(data), size);
+  }
   if (size >= 2) {
     switch (data[0]) {
       case ERQ_OK:
@@ -72,7 +106,7 @@ void open_callback(int *data, int size) {
         erq_ticket_str = to_string(erq_ticket);
         logger->debug("open succeeded, got ticket: %O", erq_ticket_str);
         // TODO sanity check queue
-        flush_buffer();
+        flush_queue();
         break;
       case ERQ_STDOUT:
         // read size and checksum and create a new buffer
@@ -120,20 +154,34 @@ void open_callback(int *data, int size) {
   return;
 }
 
-void send_string(string str) {
+/**
+ * Asynchronously send a new query to Rodney. This will automatically attempt
+ * to flush the request queue.
+ *
+ * @param query the query to send, which should usually be in the form of
+ *              serialized JSON and include a transaction id
+ */
+void send(string query) {
   // TODO add overflow check
 #ifdef EOTL
-  queue += ({ ({ strlen(str), md5(str), str, -1, 0 }) });
+  queue += ({ ({ strlen(query), md5(query), query, -1, 0 }) });
 #else
-  queue += ({ ({ strlen(str), hash(TLS_HASH_MD5, str), str, -1, 0 }) });
+  queue += ({ ({ strlen(query), hash(TLS_HASH_MD5, query), query, -1, 0 }) });
 #endif
-  flush_buffer();
+  flush_queue();
   return;
 }
 
-void flush_buffer() {
+/**
+ * Attempt to flush the queue. Only one request will be sent at a time,
+ * the send callback must be invoked before the next message will be sent.
+ * This function will set the value of the <code>sending</code> variable to
+ * the length of the message currently being sent, but the cursor won't move
+ * until the callback is invoked.
+ */
+void flush_queue() {
   object logger = LoggerFactory->get_logger(THISO);
-  if (find_call_out("flush_buffer") != -1) {
+  if (find_call_out("flush_queue") != -1) {
     logger->debug("unable to flush buffer, flush call_out pending");
     return;
   }
@@ -177,9 +225,24 @@ void flush_buffer() {
   return;
 }
 
+/**
+ * Called open a successful send(). Upon success, it will attempt to the
+ * flush the next message in the queue.
+ *
+ * @param data incoming data
+ * @param size length of incoming packet
+ */
 void send_callback(int *data, int size) {
+  // only the ERQ should be calling us
+  if (previous_object()) {
+    return;
+  }
+
   object logger = LoggerFactory->get_logger(THISO);
   logger->trace("got send callback: %d, %O", size, data);
+  if (sizeof(data) != size) {
+    logger->error("packet failed size check: %d/%d", sizeof(data), size);
+  }
   if (!sizeof(queue)) {
     logger->info("queue vanished while awaiting response");
     return;
@@ -193,7 +256,7 @@ void send_callback(int *data, int size) {
     case ERQ_E_WOULDBLOCK:
       sending = 0; // resend
       logger->debug("got E_WOULDBLOCK, resending data");
-      call_out("flush_buffer", 1);
+      call_out("flush_queue", 1);
       return;
     case ERQ_E_INCOMPLETE:
       out[OUT_CURSOR] += data[1];
@@ -215,42 +278,38 @@ void send_callback(int *data, int size) {
     logger->debug("finished sending message, length: %d", out[OUT_SIZE]);
     queue = queue[1..];
   }
-  flush_buffer();
+  flush_queue();
   return;
 }
 
-void get_pull_requests(closure callback, varargs mixed *args) {
-  api_request("github.pullRequests", callback, args);
-  return;
-}
-
-void get_pull_request(int number, closure callback, varargs mixed *args) {
-  api_request("github.pullRequest." + number, callback, args);
-  return;
-}
-
-void get_pull_request_diff(int number, mixed file, closure callback,
-                           varargs mixed *args) {
-
-  api_request(sprintf("github.pullRequest.%d.diff." + file, number),
-              callback, args);
-  return;
-}
-
-private void api_request(string query, closure callback, mixed *args) {
+/**
+ * Send Rodney at query. This will initiate a single transaction that may
+ * span several request and response loops. When the entire transaction is
+ * complete, the reponse will be passed to the provided callback.
+ *
+ * @param query    the query to send
+ * @param callback callback closure to pass response
+ * @param args     optional extra args to the callback
+ */
+protected void rodney_query(string query, closure callback, mixed *args) {
   string transaction_id = get_transaction_id();
   mapping req = ([
     "transactionId" : transaction_id,
-    "query"   : query,
+            "query" : query,
   ]);
   callbacks[transaction_id] = ({ callback, args });
   if (!erq_ticket) {
     open();
   }
-  send_string(json_encode(req));
+  send(json_encode(req));
   return;
 }
 
+/**
+ * Get a new unique transaction id.
+ *
+ * @return the transaction id
+ */
 private string get_transaction_id() {
   int *utime = utime();
   if ((utime[0] != last_transaction_id[0])
@@ -266,6 +325,14 @@ private string get_transaction_id() {
                 );
 }
 
+/**
+ * Handle reponse when a transaction has completed in its entirety. This
+ * will execute the callback that was provided when the transaction was
+ * created.
+ *
+ * @param msg the message received, which should be a serialized JSON object
+ *            including a transaction id
+ */
 private void handle_response(string msg) {
   mixed resp = json_decode(msg);
   string transaction_id = resp["transactionId"];

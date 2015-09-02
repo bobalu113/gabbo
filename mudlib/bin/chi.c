@@ -6,21 +6,23 @@ private variables private functions inherit ArgsLib;
 private variables private functions inherit StringsLib;
 private variables private functions inherit GetoptsLib;
 
+#define USER_MAP ([ "bobalu113" : "Devo" ])
+
 int do_help(string command);
 int do_pullreq(mixed *args);
 void print_request_list(mapping *reqList, object who);
 void print_request(mapping req, object who);
-void print_request_diff(mapping req, object who);
+void print_request_review(mapping req, object who);
 
 int do_command(string arg) {
   // TODO add confirmation
   mixed *args = explode_args(arg);
-  string cmd = args[0];
+  string cmd = sizeof(args) ? args[0] : "help";
   switch (cmd) {
     case "help":
       return do_help(sizeof(args) > 1 ? args[1] : 0);
     case "pullreq":
-      args = getopts(args[1..], "hld:");
+      args = getopts(args[1..], "hlr:");
       return do_pullreq(args);
     default:
       printf("%s: %s: invalid command\n", query_verb(), cmd);
@@ -37,11 +39,12 @@ int do_help(string command) {
         "NAME\n"
         "    %s pullreq - display and manipulate pull requests\n"
         "SYNOPSIS\n"
-        "    %s pullreq [-lh] <id>\n"
+        "    %s pullreq [-lh] [-r <file>] <id>\n"
         "DESCRIPTION\n"
         "    Display pull request information for request number <id>.\n"
         "    Options are as follows:\n"
         "      -l : list all open pull requests\n"
+        "      -r : show code review for <file>\n"
         "      -h : this help screen\n",
         query_verb(), query_verb()
       );
@@ -61,42 +64,46 @@ int do_help(string command) {
 
 int do_pullreq(mixed *args) {
   if (member(args[1], 'l')) {
-    GitHubServer->get_pull_requests(#'print_request_list, THISP); //'
+    CodeHostServer->get_pull_requests(#'print_request_list, THISP); //'
     return 1;
   } else if (!sizeof(args[0])) {
     return do_help("pullreq");
   } else {
     foreach (string arg : args[0]) {
-      int number = to_int(arg);
-      if (!number) {
-        printf("Invalid pull request number: %s\n", arg);
+      int id = to_int(arg);
+      if (!id) {
+        printf("Invalid pull request id: %s\n", arg);
         return 1;
       }
 
-      if (member(args[1], 'd')) {
-        int file = to_int(args[1]['d']);
-        GitHubServer->get_pull_request_diff(number,
-                                            (file ? file - 1 : args[1]['d']),
-                                            #'print_request_diff, THISP); //'
+      if (member(args[1], 'r')) {
+        int file = to_int(args[1]['r']);
+        CodeHostServer->get_pull_request_review(id,
+                                                (file
+                                                  ? file - 1
+                                                  : args[1]['r']),
+                                                #'print_request_review,
+                                                THISP); //'
       } else {
-        GitHubServer->get_pull_request(number, #'print_request, THISP); //'
+        CodeHostServer->get_pull_request(id, #'print_request, THISP); //'
       }
       return 1;
     }
   }
+  return 1;
 }
 
 void print_request_list(mapping *reqList, object who) {
   string out = sprintf(
-    "Listing %s pull requests. Total: %d\n\n",
+    "\nListing %s pull requests. Total: %d\n",
     "open", sizeof(reqList)
   );
   foreach (mapping req : reqList) {
     out += sprintf(
       "%4d %s [%s %s]\n",
-      req["number"],
-      crop_string(req["title"], 35),
-      req["user"],
+      req["id"],
+      crop_string(req["title"], 40),
+      req["author"],
       strftime("%Y-%m-%d %T", req["created_at"])
     );
   }
@@ -122,20 +129,23 @@ void print_request(mapping req, object who) {
                         implode(explode(comment["body"], "\n"),
                                 "\n    "));
   }
+  string author = (member(USER_MAP, req["author"])
+                   ? USER_MAP[req["author"]]
+                   : req["author"]);
   string out = sprintf(
-    "Title: %s\n"
+    "\nTitle: %s\n"
     "Description:\n"
     "%-=76s\n\n"
-    " Number: %-30d  Commits: %d\n"
+    "     Id: %-30d  Commits: %d\n"
     " Status: %-30s Addtions: %d\n"
-    "   User: %-30sDeletions: %d\n"
+    " Author: %-30sDeletions: %d\n"
     "Created: %-30s   Closed: %s\n"
     "\nFiles:\n"
     "%s"
     "\nComments:\n"
     "%s",
-    req["title"], req["body"], req["number"], req["commits"],
-    req["state"], req["additions"], req["user"], req["deletions"],
+    req["title"], req["description"], req["id"], req["commits"],
+    req["state"], req["additions"], author, req["deletions"],
     strftime("%Y-%m-%d %T", req["created_at"]),
     (req["closed_at"] ?
      strftime("%Y-%m-%d %T", req["closed_at"]) :
@@ -145,9 +155,9 @@ void print_request(mapping req, object who) {
   return;
 }
 
-void print_request_diff(mapping req, object who) {
+void print_request_review(mapping req, object who) {
   string out = sprintf(
-    "Title: %s\nFile: %2d) %s\n",
+    "\nTitle: %s\nFile: %2d) %s\n",
     req["title"], req["file"] + 1, req["path"]
   );
   for (int i = 0, int j = sizeof(req["diff"]); i < j; i++) {
@@ -163,12 +173,12 @@ void print_request_diff(mapping req, object who) {
                                 comment["user"],
                                 strftime("%Y-%m-%d %T",
                                          comment["updated_at"]));
-        out += sprintf("%s%s%-=*s%s\n",
-                       BOLD_YELLOW,
+        out += BOLD_YELLOW +
+               sprintf("%s%-=*s\n",
                        prefix,
                        76 - strlen(prefix),
-                       comment["body"],
-                       NORM);
+                       comment["body"]) +
+               NORM;
       }
     } else {
       if (line[0] == '+') {
@@ -183,4 +193,5 @@ void print_request_diff(mapping req, object who) {
     }
   }
   tell_object(who, out);
+  return;
 }
