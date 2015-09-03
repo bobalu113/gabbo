@@ -116,7 +116,8 @@ function getPullRequests(onFulfilled, onRejected) {
 function getPullRequest(onFulfilled, onRejected, id) {
   var filesRequest = function(data) {
     var filesFulfilled = function(filesData) {
-      data.files = filesData;
+      for (var attr in filesData) { data[attr] = filesData[attr]; }
+      data["changed_files"] = data.files.length;
       onFulfilled(data);
     };
     gitcore.apiRequest(filesFulfilled,
@@ -134,7 +135,17 @@ function getPullRequest(onFulfilled, onRejected, id) {
                        apiUrl('/pullrequests/' + id + '/comments'),
                        marshallComments);
   }
-  gitcore.apiRequest(commentsRequest,
+  var commitsRequest = function(data) {
+    var commitsFulfilled = function(commitsData) {
+      data.commits = commitsData.length;
+      commentsRequest(data);
+    };
+    gitcore.apiRequest(commitsFulfilled,
+                       onRejected,
+                       apiUrl('/pullrequests/' + id + '/commits'),
+                       marshallCommits);
+  }
+  gitcore.apiRequest(commitsRequest,
                      onRejected,
                      apiUrl('/pullrequests/' + id),
                      marshallPullRequest);
@@ -153,7 +164,32 @@ function getPullRequest(onFulfilled, onRejected, id) {
 function getPullReqReview(onFulfilled, onRejected, id, file) {
   var reviewCommentsRequest = function(data) {
     var reviewCommentsFulfilled = function(reviewCommentsData) {
-      data.comments = reviewCommentsData;
+      var comments = { };
+      reviewCommentsData.forEach(function(x) {
+        var from = x.from;
+        var to = x.to;
+        delete x.from;
+        delete x.to;
+        var pos;
+        if (from && (from in data.from_positions)) {
+          pos = data.from_positions[from];
+        } else if (to && (to in data.to_positions)) {
+          pos = data.to_positions[to];
+        }
+
+        if (pos != undefined) {
+          pos -= 3;
+          if (!(pos in comments)) {
+            comments[pos] = [ ];
+          }
+          comments[pos].push(x);
+        } else {
+          log.warn("Unable to translate review comment position");
+        }
+      });
+      data.comments = comments;
+      delete data.from_positions;
+      delete data.to_positions;
       onFulfilled(data);
     }
     var marshallReviewCommentsWrapper = function(buffer) {
@@ -161,14 +197,11 @@ function getPullReqReview(onFulfilled, onRejected, id, file) {
     }
     gitcore.apiRequest(reviewCommentsFulfilled,
                        onRejected,
-                       apiUrl('/pulls/' + id + '/comments'),
+                       apiUrl('/pullrequests/' + id + '/comments'),
                        marshallReviewCommentsWrapper);
   }
   var diffRequest = function(data) {
-    var diffUrl = data.diff_url;
-    delete data.diff_url;
     var diffFulfilled = function(diffData) {
-      delete data.diff_url;
       for (var attr in diffData) { data[attr] = diffData[attr]; }
       reviewCommentsRequest(data);
     };
@@ -177,21 +210,20 @@ function getPullReqReview(onFulfilled, onRejected, id, file) {
     }
     gitcore.apiRequest(diffFulfilled,
                        onRejected,
-                       diffUrl,
+                       apiUrl('/pullrequests/' + id + '/diff'),
                        marshallDiffWrapper);
   }
   var filesRequest = function(data) {
-    var diffUrl = data.diff_url;
     var filesFulfilled = function(filesData) {
       var fileIndex = -1;
       var tmp = parseInt(file, 10);
       if (file == tmp) {
-        if ((tmp >= 0) && (tmp < filesData.length)) {
-          file = filesData[tmp];
+        if ((tmp >= 0) && (tmp < filesData.files.length)) {
+          file = filesData.files[tmp];
           fileIndex = tmp;
         }
       } else {
-        fileIndex = filesData.indexOf(file);
+        fileIndex = filesData.files.indexOf(file);
       }
       if (fileIndex < 0) {
         onRejected(new Error("invalid file for diff"));
@@ -203,12 +235,12 @@ function getPullReqReview(onFulfilled, onRejected, id, file) {
     };
     gitcore.apiRequest(filesFulfilled,
                        onRejected,
-                       diffUrl,
+                       apiUrl('/pullrequests/' + id + '/diff'),
                        marshallFiles);
   }
   gitcore.apiRequest(filesRequest,
                      onRejected,
-                     apiUrl('/pulls/' + id),
+                     apiUrl('/pullrequests/' + id),
                      marshallPullRequest);
 }
 
@@ -229,8 +261,9 @@ function marshallPullRequests(buffer) {
      "description": x.description,
       "created_at": marshallTimestamp(x.created_on),
       "updated_at": marshallTimestamp(x.updated_on),
-// TODO get this from the merge commit
-//              "closed_at": marshallTimestamp(x.closed_at),
+       "closed_at": ((x.merge_commit != null)
+                     ? marshallTimestamp(x.merge_commit.date)
+                     : null),
           "author": x.author.username,
     }
   });
@@ -248,23 +281,39 @@ function marshallPullRequests(buffer) {
 function marshallPullRequest(buffer) {
   var data = JSON.parse(buffer);
   var out = {
+               "id": data.id,
             "state": data.state.toLowerCase(),
             "title": data.title,
       "description": data.description,
        "created_at": marshallTimestamp(data.created_on),
        "updated_at": marshallTimestamp(data.updated_on),
-// TODO get this from merge commit
-//        "closed_at": marshallTimestamp(data.closed_at),
+     "merge_commit": data.merge_commit,
+        "closed_at": ((data.merge_commit != null)
+                      ? marshallTimestamp(data.merge_commit.date)
+                      : null),
            "author": data.author.username,
            "merged": (data.merge_commit != null),
-    "source_commit": data.source.commit.hash,
-// TODO Get this stuff from source commit
-//          "commits": data.commits,
-// TODO get this from unified diff
-//        "additions": data.additions,
-//        "deletions": data.deletions,
-//    "changed_files": data.changed_files,
   };
+  return out;
+}
+
+/**
+ * Marshall the result of the pull request commits API call into standard
+ * structure.
+ *
+ * @param  {object} buffer the result of the API call
+ * @return {array}         an array of objects containing information about
+ *                         each commit
+ */
+function marshallCommits(buffer) {
+  var data = JSON.parse(buffer);
+  var out = data.values.map(function(x) {
+    return {
+            "user": x.author.user.username,
+         "message": x.message,
+       "timestamp": marshallTimestamp(x.date),
+    }
+  });
   return out;
 }
 
@@ -278,11 +327,11 @@ function marshallPullRequest(buffer) {
  */
 function marshallComments(buffer) {
   var data = JSON.parse(buffer);
-  data = data.filter(function(x) { inline in x });
+  data = data.values.filter(function(x) { return !("inline" in x) });
   var out = data.map(function(x) {
     return {
             "user": x.user.username,
-            "body": x.content.raw,
+         "message": x.content.raw,
       "created_at": marshallTimestamp(x.created_on),
       "updated_at": marshallTimestamp(x.updated_on),
     }
@@ -298,18 +347,34 @@ function marshallComments(buffer) {
  * @return {array}         an array of filenames affected by the pull request
  */
 function marshallFiles(buffer) {
+  var additions = 0;
+  var deletions = 0;
   var files = [ ];
   var i = 0;
   while (i < buffer.length) {
     var j = buffer.indexOf("\n", i);
     if (j == -1) { j = buffer.length; }
     var line = buffer.substring(i, j);
-    if (line.substring(0, 6) == "+++ b/") {
-      files.push(line.substr(6));
+    var tag = line.substring(0, 1);
+    var leading = line.substring(0, 6);
+    if (tag == "+") {
+      if (leading == "+++ b/") {
+        files.push(line.substr(6));
+      } else {
+        additions++;
+      }
+    } else if(tag == "-") {
+      if (leading != "--- a/") {
+        deletions++;
+      }
     }
     i = j + 1;
   }
-  return files;
+  return {
+        "files": files,
+    "additions": additions,
+    "deletions": deletions,
+  };
 }
 
 /**
@@ -323,6 +388,10 @@ function marshallDiff(buffer, path) {
   var out = { };
   var i = 0;
   var lines = null;
+  var from_positions = { };
+  var to_positions = { };
+  var from_pos = -1;
+  var to_pos = -1
   while (i < buffer.length) {
     var j = buffer.indexOf("\n", i);
     if (j == -1) { j = buffer.length; }
@@ -333,6 +402,21 @@ function marshallDiff(buffer, path) {
         break;
       } else {
         lines.push(line);
+        if (line.substring(0, 2) == '@@') {
+          var matches = line.match(/^@@ \-(\d+),\d+ \+(\d+),\d+ @@/);
+          if (matches) {
+            from_pos = parseInt(matches[1], 10);
+            to_pos = parseInt(matches[2], 10);
+            from_positions[from_pos++] = lines.legnth;
+            to_positions[to_pos++] = lines.length;
+          } else {
+            console.warn("malformed diff block header, file " + path +
+                         ", line " + lines.length);
+          }
+        } else {
+          from_positions[from_pos++] = lines.length;
+          to_positions[to_pos++] = lines.length;
+        }
       }
     } else {
       var token = "diff --git a/" + path + " b/" + path;
@@ -342,7 +426,11 @@ function marshallDiff(buffer, path) {
     }
     i = j + 1;
   }
-  out.diff = lines;
+  out = {
+              "diff": lines,
+    "from_positions": from_positions,
+      "to_positions": to_positions,
+  };
   return out;
 }
 
@@ -357,19 +445,17 @@ function marshallDiff(buffer, path) {
  */
 function marshallReviewComments(buffer, path) {
   var data = JSON.parse(buffer);
-  var out = { };
-  data.forEach(function(comment) {
-    if (comment.path == path) {
-      var pos = comment.position;
-      if (!(pos in out)) {
-        out[pos] = [ ];
-      }
-      out[pos].push({
-              "user": comment.user.login,
-              "body": comment.body,
-        "created_at": marshallTimestamp(comment.created_at),
-        "updated_at": marshallTimestamp(comment.updated_at),
-      });
+  data = data.values.filter(function(x) {
+    return ("inline" in x) && (x.inline.path == path);
+  });
+  var out = data.map(function(x) {
+    return {
+            "user": x.user.username,
+         "message": x.content.raw,
+      "created_at": marshallTimestamp(x.created_on),
+      "updated_at": marshallTimestamp(x.updated_on),
+            "from": x.inline.from,
+              "to": x.inline.to,
     }
   });
   return out;

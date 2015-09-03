@@ -168,7 +168,6 @@ function getPullReqReview(onFulfilled, onRejected, id, file) {
     var diffUrl = data.diff_url;
     delete data.diff_url;
     var diffFulfilled = function(diffData) {
-      delete data.diff_url;
       for (var attr in diffData) { data[attr] = diffData[attr]; }
       reviewCommentsRequest(data);
     };
@@ -279,7 +278,7 @@ function marshallComments(buffer) {
   var out = data.map(function(x) {
     return {
             "user": x.user.login,
-            "body": x.body,
+         "message": x.body,
       "created_at": marshallTimestamp(x.created_at),
       "updated_at": marshallTimestamp(x.updated_at),
     }
@@ -363,7 +362,7 @@ function marshallReviewComments(buffer, path) {
       }
       out[pos].push({
               "user": comment.user.login,
-              "body": comment.body,
+           "message": comment.body,
         "created_at": marshallTimestamp(comment.created_at),
         "updated_at": marshallTimestamp(comment.updated_at),
       });
