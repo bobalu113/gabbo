@@ -6,13 +6,15 @@ private variables private functions inherit ArgsLib;
 private variables private functions inherit StringsLib;
 private variables private functions inherit GetoptsLib;
 
-#define USER_MAP ([ "bobalu113" : "Devo" ])
+#define USER_MAP ([ "bobalu113" : "Devo", \
+                    "bobalu" : "Devo" ])
 
 int do_help(string command);
 int do_pullreq(mixed *args);
 void print_request_list(mapping *reqList, object who);
 void print_request(mapping req, object who);
 void print_request_review(mapping req, object who);
+string get_user(string username);
 
 int do_command(string arg) {
   // TODO add confirmation
@@ -103,7 +105,7 @@ void print_request_list(mapping *reqList, object who) {
       "%4d %s [%s %s]\n",
       req["id"],
       crop_string(req["title"], 40),
-      req["author"],
+      get_user(req["author"]),
       strftime("%Y-%m-%d %T", req["created_at"])
     );
   }
@@ -123,15 +125,12 @@ void print_request(mapping req, object who) {
   foreach (mapping comment : req["comments"]) {
     comments += sprintf("%2d) %s [%s]\n    %s\n\n",
                         ++i,
-                        comment["user"],
+                        get_user(comment["user"]),
                         strftime("%Y-%m-%d %T",
                                  comment["updated_at"]),
-                        implode(explode(comment["body"], "\n"),
+                        implode(explode(comment["message"], "\n"),
                                 "\n    "));
   }
-  string author = (member(USER_MAP, req["author"])
-                   ? USER_MAP[req["author"]]
-                   : req["author"]);
   string out = sprintf(
     "\nTitle: %s\n"
     "Description:\n"
@@ -145,8 +144,8 @@ void print_request(mapping req, object who) {
     "\nComments:\n"
     "%s",
     req["title"], req["description"], req["id"], req["commits"],
-    req["state"], req["additions"], author, req["deletions"],
-    strftime("%Y-%m-%d %T", req["created_at"]),
+    req["state"], req["additions"], get_user(req["author"]),
+    req["deletions"], strftime("%Y-%m-%d %T", req["created_at"]),
     (req["closed_at"] ?
      strftime("%Y-%m-%d %T", req["closed_at"]) :
      "N/A"
@@ -177,7 +176,7 @@ void print_request_review(mapping req, object who) {
                sprintf("%s%-=*s\n",
                        prefix,
                        76 - strlen(prefix),
-                       comment["body"]) +
+                       comment["message"]) +
                NORM;
       }
     } else {
@@ -194,4 +193,10 @@ void print_request_review(mapping req, object who) {
   }
   tell_object(who, out);
   return;
+}
+
+string get_user(string username) {
+  return (member(USER_MAP, username)
+                 ? USER_MAP[username]
+                 : username);
 }
