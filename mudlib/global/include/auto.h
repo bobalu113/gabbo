@@ -12,16 +12,14 @@
 #define LEGACY_SUPPORT
 #endif
 
-#define MasterObject         __MASTER_OBJECT__
-#define SimulEfunObject      "/secure/simul_efun"
-
 #define LibDir               "/lib"
-#define ModulesDir           "/modules"
-#define ObjDir               "/obj"
-#define BinDir               "/bin"
 #define ZoneDir              "/zone"
-#define StateDir             "/state"
-#define EtcDir               "/etc"
+#define FlavorsDir           "/flavors"
+#define GlobalDir            "/global"
+#define SecureDir            "/secure"
+
+#define MasterObject         __MASTER_OBJECT__
+#define SimulEfunObject      SecureDir "/simul_efun"
 
 #define UserLib              LibDir "/user"
 #define FileLib              LibDir "/file"
@@ -36,31 +34,8 @@
 #define JSONLib              LibDir "/json"
 #define RodneyClientLib      LibDir "/rodney_client"
 
-#define RoomCode             ModulesDir "/room"
-#define CartesianRoomCode    ModulesDir "/room_cartesian"
-#define SphericalRoomCode    ModulesDir "/room_spherical"
-#define StuffCode            ModulesDir "/stuff"
-#define ThingCode            ModulesDir "/thing"
-#define OrganismCode         ModulesDir "/organism"
-#define CreatureCode         ModulesDir "/creature"
-#define ContainerCode        ModulesDir "/container"
-#define CommandCode          ModulesDir "/command"
-#define VehicleCode          ModulesDir "/vehicle"
-
-#define IdMixin              ModulesDir "/id"
-#define NameMixin            ModulesDir "/name"
-#define DetailMixin          ModulesDir "/detail"
-#define VisibleMixin         ModulesDir "/visible"
-#define PropertyMixin        ModulesDir "/property"
-#define ShellMixin           ModulesDir "/shell"
-#define CommandGiverMixin    ModulesDir "/command_giver"
-#define LockMixin            ModulesDir "/lock"
-#define MobileMixin          ModulesDir "/mobile"
-
-#define LoggerFactory        ObjDir "/logger_factory"
-#define LoginObject          ObjDir "/auth/login"
-#define Avatar               ObjDir "/avatar"
-#define CodeHostController   ObjDir "/codehost_controller"
+#define FileTracker          GlobalDir "/file_tracker"
+#define DomainTracker        GlobalDir "/domain_tracker"
 
 #define CommonRoom           ZoneDir "/common"
 #define HomeDir              ZoneDir "/home"

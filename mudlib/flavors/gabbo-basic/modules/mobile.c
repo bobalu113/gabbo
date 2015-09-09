@@ -355,6 +355,15 @@ int exit(string verb, string dir, int flags) {
     }
     return 0;
   }
+  int escaping = THISO->has_attackers();
+  if (is_capable(THISO, CAP_COMBAT)) {
+    if (escaping && THISO->prevent_escape(verb, dir)) {
+      if (!(flags & SUPPRESS_ERRORS)) {
+        tell_player(THISP, "You are prevented from escaping combat!\n");
+      }
+      return 0;
+    }
+  }
   move_object(THISO, dest);
   if (ENV(THISO) != dest) {
     if (!(flags & SUPPRESS_ERRORS)) {
@@ -366,6 +375,13 @@ int exit(string verb, string dir, int flags) {
   string here_zone = get_zone(here);
   string dest_zone = get_zone(dest);
   string backdir = GRID_DIRS[dir];
+
+  // escaping combat
+  if (is_capable(THISO, CAP_COMBAT)) {
+    if (escaping) {
+      THISO->escape_signal(verb, dir);
+    }
+  }
 
   // echo move message
   if (!(flags & MUFFLED_MOVE) && !(exit_flags & EXIT_MUFFLED)) {

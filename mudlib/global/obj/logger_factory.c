@@ -160,6 +160,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
  *    "level"  : str level
  * ])
  * </code>
+ * FUTURE better to use a struct than a mapping here
  *
  * @param  category the category to match configuration properties against
  * @param  dir      the starting directory from which to search for

@@ -11,9 +11,9 @@
 default private variables;
 
 /**
- * ([ verb : command_file; flag ])
+ * ([ verb : ({ ({ command_file, flag }), ... }) ])
  */
-mapping verbs;
+mapping verbs;   // TODO command_file needs to be an array
 
 /**
  * To keep track if a command object has been reloaded since init.

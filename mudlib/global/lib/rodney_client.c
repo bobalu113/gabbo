@@ -26,8 +26,8 @@ private variables private functions inherit JSONLib;
 
 // TODO better error recovery
 
-//#define HOST ({ 66, 220, 23, 27 })
-#define HOST ({ 127, 0, 0, 1 })
+#define HOST ({ 66, 220, 23, 27 })
+//#define HOST ({ 127, 0, 0, 1 })
 #define PORT 2080
 
 #define OUT_SIZE      0

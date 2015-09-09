@@ -20,9 +20,11 @@ inherit RodneyClientLib;
  * Initialize controller.
  */
 void create() {
-  RodneyClientLib::create();
 #ifdef EOTL
+  "rodney_client"::create();
   seteuid(getuid());
+#else
+  RodneyClientLib::create();
 #endif
 }
 

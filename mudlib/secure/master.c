@@ -531,12 +531,22 @@ mixed valid_read(string path, string euid, string fun, object caller) {
   // get_wiz_name returns domain, except avatars which is "username@domain"
   // uid is domain, euid is "username@domain"
   // TODO add group support
-  return 1;
+  mixed result = 1;
+
+  return result;
 }
 
 mixed valid_write(string path, string euid, string fun, object caller) {
   // FUTURE implement security
-  return 1;
+  mixed result = 1;
+
+  if (stringp(result)) {
+    FileTracker->write_signal(result, fun);
+  } else if(result) {
+    FileTracker->write_signal(path, fun);
+  }
+
+  return result;
 }
 
 
