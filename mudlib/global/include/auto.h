@@ -1,5 +1,5 @@
-#ifndef _AUTO_H
-#define _AUTO_H
+#ifndef _GLOBAL_AUTO_H
+#define _GLOBAL_AUTO_H
 
 #pragma combine_strings
 #pragma strong_types
@@ -8,34 +8,41 @@
 #pragma range_check
 #pragma warn_deprecated
 
-#if __VERSION_MAJOR__ <= 3 && __VERSION_MINOR__ <= 2
-#define LEGACY_SUPPORT
-#endif
-
-#define LibDir               "/lib"
+#define SecureDir            "/secure"
 #define ZoneDir              "/zone"
 #define FlavorsDir           "/flavors"
 #define GlobalDir            "/global"
-#define SecureDir            "/secure"
+
+#define _BinDir              "/bin"
+#define _LibDir              "/lib"
+#define _IncludeDir          "/include"
+#define _ObjDir              "/obj"
+
+#define GlobalBinDir         GlobalDir _BinDir
+#define GlobalLibDir         GlobalDir _LibDir
+#define GlobalIncludeDir     GlobalDir _IncludeDir
+#define GlobalObjDir         GlobalDir _ObjDir
 
 #define MasterObject         __MASTER_OBJECT__
 #define SimulEfunObject      SecureDir "/simul_efun"
 
-#define UserLib              LibDir "/user"
-#define FileLib              LibDir "/file"
-#define ObjectLib            LibDir "/object"
-#define ArrayLib             LibDir "/array"
-#define StringsLib           LibDir "/strings"
-#define ClosureLib           LibDir "/closure"
-#define ArgsLib              LibDir "/args"
-#define GetoptsLib           LibDir "/getopts"
-#define ObjectExpansionLib   LibDir "/expand_object"
-#define FormatStringsLib     LibDir "/format_strings"
-#define JSONLib              LibDir "/json"
-#define RodneyClientLib      LibDir "/rodney_client"
+#define UserLib              GlobalLibDir "/user"
+#define FileLib              GlobalLibDir "/file"
+#define ObjectLib            GlobalLibDir "/object"
+#define ArrayLib             GlobalLibDir "/array"
+#define StringsLib           GlobalLibDir "/strings"
+#define ClosureLib           GlobalLibDir "/closure"
+#define ArgsLib              GlobalLibDir "/args"
+#define GetoptsLib           GlobalLibDir "/getopts"
+#define ObjectExpansionLib   GlobalLibDir "/expand_object"
+#define FormatStringsLib     GlobalLibDir "/format_strings"
+#define JSONLib              GlobalLibDir "/json"
+#define RodneyClientLib      GlobalLibDir "/rodney_client"
 
-#define FileTracker          GlobalDir "/file_tracker"
-#define DomainTracker        GlobalDir "/domain_tracker"
+#define LoggerFactory        GlobalObjDir "/logger_factory"
+#define LoginObject          GlobalObjDir "/auth/login"
+#define FileTracker          GlobalObjDir "/file_tracker"
+#define DomainTracker        GlobalObjDir "/domain_tracker"
 
 #define CommonRoom           ZoneDir "/common"
 #define HomeDir              ZoneDir "/home"
@@ -55,4 +62,4 @@
 #define MAXINT               0xf0000000
 #define MININT               0xf0000001
 
-#endif  // _AUTO_H
+#endif  // _GLOBAL_AUTO_H

@@ -22,8 +22,6 @@
 #define LockMixin            ModulesDir "/lock"
 #define MobileMixin          ModulesDir "/mobile"
 
-#define LoggerFactory        ObjDir "/logger_factory"
-#define LoginObject          ObjDir "/auth/login"
 #define Avatar               ObjDir "/avatar"
 #define CodeHostController   ObjDir "/codehost_controller"
 

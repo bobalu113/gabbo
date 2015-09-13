@@ -7,11 +7,7 @@
 #include <sys/xml.h>
 #include <domain.h>
 
-struct DomainConfig {
-  string id, parent, domain_id;
-  string root;
-  closure allow_read, allow_write;
-};
+private functions private variables inherit FileLib;
 
 // ([ str domain_id : DomainConfig domain ])
 mapping domains;
@@ -54,6 +50,8 @@ void create() {
  * @param func write method (see valid_write())
  */
 void reconfig_signal(string file, string func) {
+  object logger = LoggerFactory->get_logger(THISO);
+
   if (file_exists(file)) {
     struct DomainConfig config = parse_config(file);
     if (!config) {
@@ -102,7 +100,7 @@ private struct DomainConfig parse_config(string domain_file) {
         logger->warn("unable to parse parent config %O", parent_file);
         return 0;
       }
-      update_config(parent_config);
+      update_domain(parent_config);
     }
   }
   if (parent_config) {
@@ -110,15 +108,15 @@ private struct DomainConfig parse_config(string domain_file) {
   }
 
   mixed *xml = xml_parse(read_file(domain_file));
-  if (config[XML_TAG_NAME] != "domain") {
+  if (xml[XML_TAG_NAME] != "domain") {
     logger->info("invalid domain.xml: root tag must be <domain>");
     return 0;
   }
-  if (!member(config[XML_TAG_ATTRIBUTES], "id")) {
+  if (!member(xml[XML_TAG_ATTRIBUTES], "id")) {
     logger->info("invalid domain.xml: root domain tag missing id attribute");
     return 0;
   }
-  config->id = config[XML_TAG_ATTRIBUTES]["id"];
+  config->id = xml[XML_TAG_ATTRIBUTES]["id"];
   if (parent_config) {
     config->domain_id = parent_config->domain_id + "." + config->id;
   } else {
@@ -133,8 +131,8 @@ private struct DomainConfig parse_config(string domain_file) {
   mixed *write_checker = deep_copy(read_checker);
 
   // parse config directives
-  if (pointerp(config[XML_TAG_CONTENTS])) {
-    foreach (mixed *tag : config[XML_TAG_CONTENTS]) {
+  if (pointerp(xml[XML_TAG_CONTENTS])) {
+    foreach (mixed *tag : xml[XML_TAG_CONTENTS]) {
       parse_directive(tag, config, &read_checker, &write_checker);
     }
   }
@@ -143,11 +141,11 @@ private struct DomainConfig parse_config(string domain_file) {
   read_checker += ({ ({ #'return, 'result }) });
   write_checker += ({ ({ #'return, 'result }) });
   config->allow_read = lambda(
-    ({ 'path, 'user, 'groups, 'domain, 'program })), //'
+    ({ 'path, 'user, 'groups, 'domain, 'flavor, 'program }),
     read_checker
   );
   config->allow_write = lambda(
-    ({ 'path, 'user, 'groups, 'domain, 'program })), //'
+    ({ 'path, 'user, 'groups, 'domain, 'flavor, 'program }),
     write_checker
   );
 
@@ -234,7 +232,7 @@ private void parse_configure_access(mixed *tag, mixed *read_checker,
   if (pointerp(tag[XML_TAG_CONTENTS])) {
     // configure the target objects this operation applies to
     foreach (mixed *op : tag[XML_TAG_CONTENTS]) {
-      mapping users, groups, domains, programs;
+      mapping users, groups, domains, flavors, programs;
       if (member(op[XML_TAG_ATTRIBUTES], "users")) {
         users = mkmapping(filter(explode(
                   op[XML_TAG_ATTRIBUTES]["users"], ","
@@ -250,6 +248,11 @@ private void parse_configure_access(mixed *tag, mixed *read_checker,
                   op[XML_TAG_ATTRIBUTES]["domains"], ","
                 ), #'trim)); //'
       }
+      if (member(op[XML_TAG_ATTRIBUTES], "flavors")) {
+        domains = mkmapping(filter(explode(
+                  op[XML_TAG_ATTRIBUTES]["flavors"], ","
+                ), #'trim)); //'
+      }
       if (member(op[XML_TAG_ATTRIBUTES], "programs")) {
         programs = mkmapping(filter(explode(
                   op[XML_TAG_ATTRIBUTES]["programs"], ","
@@ -259,6 +262,7 @@ private void parse_configure_access(mixed *tag, mixed *read_checker,
       // figure out what operation/permission we're configuring
       mixed *checker;
       int perm = -1;
+      // new ops for load/clone/dest ?
       switch (op[XML_TAG_NAME]) {
       case "allowRead":
         read_checker += ({ 0 });
@@ -297,6 +301,9 @@ private void parse_configure_access(mixed *tag, mixed *read_checker,
         }
         if (domains) {
           cond += ({ ({ #'member, domains, 'domain }) });
+        }
+        if (flavors) {
+          cond += ({ ({ #'member, flavors, 'flavor }) });
         }
         if (programs) {
           cond += ({ ({ #'member, programs, 'program }) });
@@ -345,11 +352,12 @@ private string get_domain_root(string domain_file) {
  * @return        1 if confguration was successfully updated, otherwise 0
  */
 private int update_domain(struct DomainConfig config) {
+  object logger = LoggerFactory->get_logger(THISO);
   // make sure incoming domain doesn't cause a id collision
   if (member(domains, config->domain_id)) {
     if (domains[config->domain_id]->root != config->root) {
-      log->info("new domain config at root %O conflicts with domain root %O",
-               config->root, domains[config->domain_id]->root);
+      logger->info("new domain config at root %O conflicts with domain root "
+                   "%O", config->root, domains[config->domain_id]->root);
       return 0;
     }
   }
@@ -384,6 +392,7 @@ private int update_domain(struct DomainConfig config) {
  * @return        1 if domain was successfully deleted, otherwise 0
  */
 private int delete_domain(struct DomainConfig config) {
+  object logger = LoggerFactory->get_logger(THISO);
   // make sure deleting subdomain won't cause sibling domain collision
   if (member(children, config->domain_id)) {
     string parent = "";
@@ -393,8 +402,8 @@ private int delete_domain(struct DomainConfig config) {
     foreach (string child_id : children[config->domain_id]) {
       string id = domains[child_id]->id;
       if (member(domains, parent + id)) {
-        log->info("deleting config %O would cause sibling id collision",
-                  config->domain_id);
+        logger->info("deleting config %O would cause sibling id collision",
+                     config->domain_id);
         return 0;
       }
     }
@@ -436,6 +445,7 @@ private int delete_domain(struct DomainConfig config) {
  * @return      the domain id of the file, or 0 if no domain could be found
  */
 string query_domain_id(string path) {
+  object logger = LoggerFactory->get_logger(THISO);
   do {
     if (member(domain_roots, path)) {
       return domain_roots[path]->domain_id;
@@ -480,4 +490,55 @@ mapping query_children(string domain_id) {
     return ([ ]);
   }
   return copy(children[domain_id]);
+}
+
+
+/**
+ * Resolve a sysinclude (<file> style include) for files in a domain. First
+ * the domain's include/ directory will be tried, if no matching file was
+ * found, the global include directory will be searched. The ".." directory
+ * in the include path will back up not just one directory but one entire
+ * domain, even if that domain spans multiple levels of the directory tree.
+ * The parent domain's "include/" directory will be searched for the file
+ * path instead.
+ *
+ * @param  file the file (possibly relative) being included
+ * @param  p    the compilation unit performing the include
+ * @return      the resolved include file
+ */
+string resolve_sysinclude(string file, string p) {
+  struct DomainConfig domain = query_domain(query_domain_id(p));
+
+  string path = file;
+  if (file[0] != '/') {
+    path = domain->root + _IncludeDir "/" + file;
+  }
+  string *parts = explode(path, "/");
+  parts -= ({ ".", "" });
+  for (int i = 0; i < sizeof(parts); i++) {
+    if (parts[i] == "..") {
+      string id = query_domain_id("/" + implode(parts[0..(i - 1)], "/"));
+      struct DomainConfig dc = query_domain(id);
+      struct DomainConfig parent;
+      if (dc->parent) {
+        parent = query_domain(dc->parent);
+      }
+      if (parent) {
+        parts = explode(parent->root, "/")[1..];
+        i = sizeof(parts);
+        parts += ({ _IncludeDir[0..<2] }) + parts[(i + 1)..];
+      } else {
+        i = 0;
+        parts = ({ _IncludeDir[0..<2] }) + parts[(i + 1)..];
+      }
+    }
+  }
+  path = "/" + implode(parts, "/");
+  if (!file_exists(path)) {
+    path = file;
+    if (file[0] != '/') {
+      path = GlobalIncludeDir "/" + file;
+    }
+  }
+  return path;
 }

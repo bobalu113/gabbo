@@ -9,14 +9,14 @@
  * @alias LoggerFactory
  */
 #pragma no_clone
+#include <sys/debug_info.h>
+#include <sys/objectinfo.h>
 #ifdef EOTL
 #include <acme.h>
 #include AcmeLoggerInc
 #else
 #include <logger.h>
 #endif
-#include <sys/debug_info.h>
-#include <sys/objectinfo.h>
 
 #ifdef EOTL
 #include AcmeFormatStringsInc

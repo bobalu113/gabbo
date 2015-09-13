@@ -120,6 +120,7 @@ varargs string expand_path(string pattern, object who) {
         path = path[0..<2];
         break;
       case "."   : /* skip */
+      case ""    :
         break;
       default    :
         path += ({ part });
@@ -128,15 +129,7 @@ varargs string expand_path(string pattern, object who) {
   }
 
   // put it all back together
-  if (!sizeof(path)) {
-    pattern =  "/";
-  } else {
-    pattern = implode(path, "/");
-    if (!strlen(pattern)) {
-      pattern = "/";
-    }
-  }
-
+  pattern = "/" + implode(path, "/");
   return pattern;
 }
 

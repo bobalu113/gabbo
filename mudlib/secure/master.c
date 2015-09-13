@@ -18,9 +18,9 @@
 ** (read: they must be specified with full path).
 */
 
-#include "/include/auto.h"
-#include "/include/sys/driver_hook.h"
-#include "/include/sys/debug_info.h"
+#include "/global/include/auto.h"
+#include "/global/include/sys/driver_hook.h"
+#include "/global/include/sys/debug_info.h"
 
 //===========================================================================
 //  Initialisation
@@ -66,15 +66,17 @@ void inaugurate_master(int arg) {
     set_extra_wizinfo(0, 5);
   }
 
-  // return dirs with trailing backslash
-  // FUTURE add support for local include dirs
-  set_driver_hook(H_INCLUDE_DIRS, ({ "/include/" }));
-
   // FUTURE add support for local auto includes
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),
     ({ #'?,
-       ({ #'==, 'current_file, "/include/auto.h" }),
+       ({ #'&&,
+          'current_file,
+          ({ #'==,
+             ({ #'[<.., 'current_file, 7 }), //'
+             "/auto.h"
+          })
+       }),
        "",
        "#include <auto.h>\n"
     })
@@ -280,11 +282,11 @@ void flag(string arg) {
 }
 
 string *epilog(int eflag) {
-  return ({ });
+  return ({ FileLib, FileTracker, DomainTracker });
 }
 
 void preload(string file) {
-  catch (load_object(file));
+  catch (load_object(file); publish);
 }
 
 string get_simul_efun() {
@@ -322,7 +324,41 @@ object compile_object(string filename) {
 }
 
 mixed include_file(string file, string compiled_file, int sys_include) {
-  return 0;
+  closure expand = (:
+    string file = $1;
+    string rel = $2;
+    string result;
+    if (file[0] == '/') {
+      result = file;
+    } else {
+      result = rel + "/" + file;
+    }
+    string *parts = explode(result, "/");
+    string *path = ({ });
+    foreach (string part : parts) {
+      switch (part) {
+      case ".": break;
+      case "..": path = path[0..<2]; break;
+      case "": break;
+      default: path += ({ part });
+      }
+    }
+    result = "/" + implode(path, "/");
+    return result;
+  :);
+
+  string result;
+  if (sys_include) {
+    if (FINDO(DomainTracker)) {
+      result = DomainTracker->resolve_sysinclude(file, compiled_file);
+    } else {
+      result = funcall(expand, file, GlobalIncludeDir);
+    }
+  } else {
+    result = funcall(expand, file,
+                     implode(explode(compiled_file, "/")[0..<2], "/"));
+  }
+  return result;
 }
 
 mixed inherit_file(string file, string compiled_file) {
@@ -541,9 +577,11 @@ mixed valid_write(string path, string euid, string fun, object caller) {
   mixed result = 1;
 
   if (stringp(result)) {
-    FileTracker->write_signal(result, fun);
+    call_out(#'efun::call_other, 0, //'
+             FileTracker, "write_signal", result, fun);
   } else if(result) {
-    FileTracker->write_signal(path, fun);
+    call_out(#'efun::call_other, 0, //'
+             FileTracker, "write_signal", path, fun);
   }
 
   return result;
