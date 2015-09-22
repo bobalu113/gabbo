@@ -6,7 +6,7 @@ String.prototype.endsWith = function(suffix) {
 };
 
 http.createServer(function (req, res) {
-    var path = '/home/bobby/work/gabbo-client/' + url.parse(req.url).pathname;
+    var path = 'd:/work/gabbo-client/' + url.parse(req.url).pathname;
     if (path.endsWith('/')) {
         path += 'index.html';
     }

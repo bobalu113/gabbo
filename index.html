@@ -1,11 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html lang="en">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-<title>gabbo demo</title>
-<link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css"/>
-<link href="stylesheets/print.css" media="print" rel="stylesheet" type="text/css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>untitled gamification platform</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="stylesheets/screen.css" media="screen, projection" type="text/css"/>
+<link rel="stylesheet" href="stylesheets/print.css" media="print" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="/websockify/base64.js"></script>
 <script src="/websockify/util.js"></script>
 <script src="/websockify/websock.js"></script>
@@ -47,40 +52,53 @@ function handleKey(e) {
 </script>
 </head>
 
-<body class="gmf" onLoad="connect();">
-<div id="container">
-  <div id="explorePane">
-  	<span id="descriptionPane">
+<body class="mud" onLoad="connect();">
+<div id="container" class="container-fluid">
+  <span id="explorePane" class="col-sm-8">
+  	<div id="descriptionPane">
   	  <div class="short">Devo's Bar</div>
   	  <div class="long">Welcome to Devo's Bar, located just above downtown Eternal City.  This is a place where you can come and relax with your friends, and enjoy a few drinks while you're at it...  However, Devo's is a purely dry establishment, so if you're looking to get drunk, look elsewhere.  Next to the bar is a large, friendly-looking sign.</div>
-  	</span>
-  	<span id="infoPane">
-  	  <div id="actionPane">
-  	  N NE E SE S SW W NW D U
-  	  </div>
-  	  <div id="inventoryPane">
-  	    <ol>
-  	      <li>an apple</li>
-  	      <li>an orange</li>
-  	      <li>an orange</li>
-  	      <li>an orange</li>
-  	      <li>an orange</li>
-  	      <li>a bag</li>
-  	    </ol>
-  	  </div>
-  	</span>
-  </div>
-  <div id="consolePane">
-    <div id="messagePane">
-      <div id = "messages">
-      	<div class="message">12345678901234567890123456789012345678901234567890123456789012345678901234567890</div>
+  	</div>
+    <div id="consolePane">
+      <div id="messagePane">
+        <div id = "messages">
+          <div class="message">12345678901234567890123456789012345678901234567890123456789012345678901234567890</div>
+        </div>
       </div>
+      <table id="commandPane" cellspacing="0">
+        <tr><td id="promptPane">&gt;</td>
+        <td style="width: 100%"><input id="commandBox" tabindex="0" type="text" onkeydown="return handleKey(event);"/></td></tr>
+      </table>
     </div>
-  	<table id="commandPane" cellspacing="0">
-  	  <tr><td id="promptPane">&gt;</td>
-  	  <td style="width: 100%"><input id="commandBox" tabindex="0" type="text" onkeydown="return handleKey(event);"/></td></tr>
-  	</table>
-  </div>
+  </span>
+	<span id="infoPane" class="col-sm-4">
+	  <div id="actionPane" class="well well-lg">
+      <div id="compass">
+        <span id="north">N</span>
+        <span id="northeast">NE</span>
+        <span id="east">E</span>
+        <span id="southeast">SE</span>
+        <span id="south">S</span>
+        <span id="southwest">SW</span>
+        <span id="west">W</span>
+        <span id="northwest">NW</span>
+        <span id="down">D</span>
+        <span id="up">U</span>
+      </div>
+      <div id="locomotion" class="btn-group btn-group-md">
+        <button id="crawl" class="btn btn-default">crawl</button>
+        <button id="walk" class="btn btn-default">walk</button>
+        <button id="run" class="btn btn-default">run</button>
+      </div>
+	  </div>
+	  <div id="inventoryPane">
+	    <ol>
+	      <li>an apple</li>
+	      <li>an orange</li>
+	      <li>a bag</li>
+	    </ol>
+	  </div>
+	</span>
 </div>
 
 <div id="debugPane"></div>

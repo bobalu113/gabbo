@@ -11,7 +11,7 @@ html {
 	height: 100%;
 }
 
-body.gmf {
+body.mud {
 	color: #000000;
 	background-color: #ffffff;
 	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
@@ -23,13 +23,12 @@ body.gmf {
     	background-color: #ffffff;
     	border: 1px solid black;
     	display: flex;
-    	flex-direction: column;
     	height: 100%;
     }
 
     #explorePane {
     	position: relative;
-    	display: flex;
+    	display: block;
 
     	#descriptionPane {
             padding: 2px 2px 2px 2px;
@@ -45,55 +44,64 @@ body.gmf {
 	        }
     	}
 
-    	#infoPane {
-    	    width: 500px;
-    		display: flex;
-    		flex-direction: column;
+        #consolePane {
+            postition: relative;
+            height: 100%;
 
-	    	#actionPane {
-	    	    @include scrollable;
-	    	    padding: 2px 2px 2px 2px;
-	    	}
+            #messages {
+                @include scrollable;
+                position: relative;
+                background-color: #222222;
+                flex: 1 0 0;
+                height: 300px;
 
-	    	#inventoryPane {
-	    	    @include scrollable;
-	    	    padding: 2px 2px 2px 2px;
-	    	}
-	    }
+                .message {
+                    color: $default_foreground;
+                    background-color: $default_background;
+                    font-family: $default_font;
+                    white-space: pre-wrap;
+                    letter-spacing: 1px;
+                    line-height: 12px;
+                }
+
+            }
+
+            #commandPane {
+                flex: 0 0 auto;
+
+                #commandBox {
+                    width: 99%;
+                }
+            }
+
+        }
+
     }
 
-    #consolePane {
-        postition: relative;
-        height: 100%;
+    #infoPane {
         display: flex;
         flex-direction: column;
 
-	    #messages {
-	        @include scrollable;
-	        position: relative;
-	        background-color: #222222;
-	        flex: 1 0 0;
-            height: 300px;
+        #actionPane {
+            @include scrollable;
+            padding: 2px 2px 2px 2px;
 
-	        .message {
-	            color: $default_foreground;
-	            background-color: $default_background;
-	            font-family: $default_font;
-	            white-space: pre-wrap;
-	            letter-spacing: 1px;
-	            line-height: 12px;
-	        }
+            #compass li {
+                display: inline;
+                padding: 10px 5px 10px 5px;
+                border: 2px;
+                margin: 2px;
+            }
 
-	    }
+            #locomotion li {
+                display: inline;
+            }
+        }
 
-	    #commandPane {
-	    	flex: 0 0 auto;
-
-	    	#commandBox {
-	    	    width: 99%;
-	    	}
-	    }
-
+        #inventoryPane {
+            @include scrollable;
+            padding: 2px 2px 2px 2px;
+        }
     }
 
 }
