@@ -86,7 +86,41 @@ body.mud {
             @include scrollable;
             padding: 2px 2px 2px 2px;
 
-            #compass li {
+            .compassGradientStop0 {
+                stop-color: #002739;
+                stop-opacity: 1;
+            }
+            
+            .compassGradientStop1 {
+                stop-color: #5080a0;
+                stop-opacity: 1;
+            }
+            
+            #compass {
+                #north {
+                  fill: url(#compassNorth);
+                  fill-opacity: 1;
+                  stroke: #000000;
+                  stroke-width: 1;
+                  stroke-miterlimit: 4;
+                  stroke-dasharray: none;
+                  stroke-opacity: 1;
+                }
+
+                #compassBubble {
+                    fill: url(#compassBubble);
+                    fill-rule: evenodd;
+                    stroke: #000000;
+                    stroke-width: 1;
+                    stroke-linecap: butt; 
+                    stroke-linejoin: miter;
+                    stroke-opacity: 1;
+                    fill-opacity: 1;
+                }
+            }
+
+
+            #xcompass li {
                 display: inline;
                 padding: 10px 5px 10px 5px;
                 border: 2px;

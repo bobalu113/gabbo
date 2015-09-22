@@ -73,7 +73,59 @@ function handleKey(e) {
   </span>
 	<span id="infoPane" class="col-sm-4">
 	  <div id="actionPane" class="well well-lg">
-      <div id="compass">
+      <svg xmlns="http://www.w3.org/2000/svg" 
+           xmlns:xlink="http://www.w3.org/1999/xlink" 
+           version="1.1">
+        <defs>
+          <linearGradient id="compassGradient">
+            <stop class="compassGradientStop0"
+                  offset="0" />
+            <stop class="compassGradientStop1"
+                  offset="1"/>
+          </linearGradient>
+          <linearGradient xlink:href="#compassGradient"
+                          id="compassNorth"
+                          x1="160"
+                          y1="837.36218"
+                          x2="140"
+                          y2="837.36218"
+                          gradientUnits="userSpaceOnUse" />
+          <radialGradient xlink:href="#compassGradient"
+                          id="compassBubble"
+                          cx="150"
+                          cy="902.36218"
+                          fx="150"
+                          fy="902.36218"
+                          r="39.999996"
+                          gradientTransform="matrix(0.62500025,2.4313328e-6,-2.4313221e-6,0.62499749,56.252148,338.38765)"
+                          gradientUnits="userSpaceOnUse" />
+        </defs>
+        <g id="layer1" transform="translate(1.0506611e-7,-852.36078)">
+        <g id="compass" transform="translate(-50.000126,49.999184)">
+          <path id="north" 
+                d="M 150.00391,803.5625 131.125,856.64453 c 12.55804,-4.87816 26.20983,-4.69609 37.74805,-0.0234 z" />
+          <path id="northeast"
+                d="m 80.138672,832.5 24.171878,50.84766 c 5.03517,-12.06526 14.63892,-21.64866 26.71484,-26.65821 z" />
+          <path id="east"
+                d="m 219.86719,832.5 -50.85352,24.17383 c 12.06674,5.03566 21.651,14.64099 26.66016,26.71875 z" />
+          <path id="southeast"
+                d="m 195.71484,883.48242 c 4.87939,12.55804 4.69908,26.20883 0.0273,37.74805 l 53.0625,-18.86914 z" />
+          <path id="south"
+                d="m 104.25781,883.49412 -53.056638,18.86719 53.082028,18.875 c -4.877437,-12.55628 -4.696254,-26.20505 -0.0254,-37.74219 z" />
+          <path id="southwest"
+                d="m 104.32811,921.33787 -24.189448,50.88672 50.851558,-24.17188 c -12.06673,-5.03432 -21.65164,-14.63819 -26.66211,-26.71484 z" />
+          <path id="west"
+                d="m 195.69335,921.36717 c -5.03439,12.06894 -14.63988,21.65548 -26.71875,26.66601 l 50.89258,24.19141 z" />
+          <path id="northwest"
+                d="m 168.8828,948.07615 c -12.55816,4.88099 -26.20824,4.70125 -37.74804,0.0293 l 18.86914,53.05665 z" />
+          <circle id="compassBubble"
+                      r="39.603962"
+                      cy="902.36218"
+                      cx="150" />
+        </g>
+        </g>
+      </svg>
+      <div id="xcompass">
         <span id="north">N</span>
         <span id="northeast">NE</span>
         <span id="east">E</span>

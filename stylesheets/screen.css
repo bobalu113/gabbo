@@ -2,7 +2,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 5, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,45 +24,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../home/Robert Schaetzle/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../home/bobal_000/.gem/ruby/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -154,17 +154,48 @@ body.mud #infoPane #actionPane {
   padding: 2px 2px 2px 2px;
 }
 /* line 89, ../sass/screen.scss */
-body.mud #infoPane #actionPane #compass li {
+body.mud #infoPane #actionPane .compassGradientStop0 {
+  stop-color: #002739;
+  stop-opacity: 1;
+}
+/* line 94, ../sass/screen.scss */
+body.mud #infoPane #actionPane .compassGradientStop1 {
+  stop-color: #5080a0;
+  stop-opacity: 1;
+}
+/* line 100, ../sass/screen.scss */
+body.mud #infoPane #actionPane #compass #north {
+  fill: url(#compassNorth);
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-width: 1;
+  stroke-miterlimit: 4;
+  stroke-dasharray: none;
+  stroke-opacity: 1;
+}
+/* line 110, ../sass/screen.scss */
+body.mud #infoPane #actionPane #compass #compassBubble {
+  fill: url(#compassBubble);
+  fill-rule: evenodd;
+  stroke: #000000;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-opacity: 1;
+  fill-opacity: 1;
+}
+/* line 123, ../sass/screen.scss */
+body.mud #infoPane #actionPane #xcompass li {
   display: inline;
   padding: 10px 5px 10px 5px;
   border: 2px;
   margin: 2px;
 }
-/* line 96, ../sass/screen.scss */
+/* line 130, ../sass/screen.scss */
 body.mud #infoPane #actionPane #locomotion li {
   display: inline;
 }
-/* line 101, ../sass/screen.scss */
+/* line 135, ../sass/screen.scss */
 body.mud #infoPane #inventoryPane {
   overflow-x: auto;
   overflow-y: auto;

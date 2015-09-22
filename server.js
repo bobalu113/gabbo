@@ -6,7 +6,7 @@ String.prototype.endsWith = function(suffix) {
 };
 
 http.createServer(function (req, res) {
-    var path = 'd:/work/gabbo-client/' + url.parse(req.url).pathname;
+    var path = 'C:/work/gabbo-client' + url.parse(req.url).pathname;
     if (path.endsWith('/')) {
         path += 'index.html';
     }
@@ -19,6 +19,8 @@ http.createServer(function (req, res) {
             contentType = 'text/css';
         } else if (path.endsWith(".js")) {
             contentType = 'text/javascript';
+        } else if (path.endsWith(".svg")) {
+            contentType = 'image/svg+xml';
         }
         res.writeHead(200, {'Content-Type': contentType});
         res.end(content);
