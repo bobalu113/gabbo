@@ -282,7 +282,7 @@ void flag(string arg) {
 }
 
 string *epilog(int eflag) {
-  return ({ FileLib, FileTracker, DomainTracker });
+  return ({ FileTracker, DomainTracker });
 }
 
 void preload(string file) {

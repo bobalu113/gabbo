@@ -1,8 +1,8 @@
 /**
- * The access objet.
+ * The access service objet.
  *
  * @author devo@eotl
- * @alias AccessObject
+ * @alias AccessService
  */
 
 int is_read_allowed(string path, string euid, string fun, object caller) {
