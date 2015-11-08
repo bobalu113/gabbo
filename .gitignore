@@ -10,6 +10,7 @@
 /mudlib.stock/
 /share/
 /test/
+/mudlib/**/state/
 /CHANGELOG
 /COPYRIGHT
 /CREDITS

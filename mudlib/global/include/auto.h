@@ -40,7 +40,7 @@
 #define RodneyClientLib      GlobalLibDir "/rodney_client"
 
 #define LoggerFactory        GlobalObjDir "/logger_factory"
-#define LoginObject          GlobalObjDir "/auth/login"
+#define LoginObject          GlobalObjDir "/login"
 #define FileTracker          GlobalObjDir "/file_tracker"
 #define DomainTracker        GlobalObjDir "/domain_tracker"
 
