@@ -6,6 +6,7 @@
  */
 
 #include <sys/files.h>
+#include <sys/inherit_list.h>
 
 private int valid_environment(object arg);
 private object find_room(object arg);
@@ -107,13 +108,13 @@ string get_display(object ob) {
 /**
  * Is the object diegetic? Diegetic objects are the people, places, and
  * things that comprise the game world. Non-diegetic objects would be things
- * like commands, daemons, or libraries.
+ * like command objects, service objects, or libraries.
  *
  * @param  ob the object to test
  * @return    1 if the object is diegetic, otherwise 0
  */
 int is_diegetic(object ob) {
-  return ob->is_living() || ob->is_room() || ob-> is_thing();
+  return ob->is_stuff() || ob->is_room();
 }
 
 /**
@@ -128,4 +129,24 @@ string objective(object what) {
     case "female": return "she";
   }
   return "it";
+}
+
+/**
+ * Call a function in the blueprint objects of all inherited modules and
+ * mixins.
+ *
+ * @param  func the function to call
+ * @param  args extra arguments to pass to function
+ * @return      an array of the result of each call in breadth first order
+ */
+mixed *call_modules(string func, varargs mixed *args) {
+  string *modules = inherit_list(THISO, INHLIST_FLAT);
+  modules = filter(modules, (: strstr($1, _ModulesDir "/") != -1 :));
+  mixed *result = map(modules, (:
+    mixed rv;
+    catch (rv = apply(#'call_other, $1, $2); publish); //'
+    return rv;
+  :), args);
+  result -= ({ 0 });
+  return result;
 }

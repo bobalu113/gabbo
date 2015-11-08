@@ -5,6 +5,8 @@
 
 #include <capabilities.h>
 
+#define ShellBinDir        BinDir "/shell"
+
 // TODO environment variables
 // TODO prompt
 // TODO aliases
@@ -147,4 +149,46 @@ protected void setup_shell() {
  */
 public mapping query_capabilities() {
   return ([ CAP_SHELL ]);
+}
+
+/**
+ * Return the CommandCode commands that will be made available to
+ * implementors of this mixin. This will be invoked by objects implementing
+ * CommandGiverMixin for each inherited blueprint.
+ *
+ * @return an array of paths to CommandCode objects
+ */
+public string *query_command_imports(object command_giver) {
+  // TODO make this configurable
+  return ({
+    ShellBinDir "/call",
+    ShellBinDir "/cc",
+    ShellBinDir "/chdir",
+    ShellBinDir "/chi"
+    ShellBinDir "/clone",
+    ShellBinDir "/cp",
+    ShellBinDir "/dest",
+    ShellBinDir "/dirs",
+    ShellBinDir "/ed",
+    ShellBinDir "/grep",
+    ShellBinDir "/load",
+    ShellBinDir "/logger",
+    ShellBinDir "/ls",
+    ShellBinDir "/man",
+    ShellBinDir "/mkdir",
+    ShellBinDir "/more",
+    ShellBinDir "/mv",
+    ShellBinDir "/pushd",
+    ShellBinDir "/popd",
+    ShellBinDir "/pwd",
+    ShellBinDir "/qvars",
+    ShellBinDir "/reload",
+    ShellBinDir "/rm",
+    ShellBinDir "/rmdir",
+    ShellBinDir "/tail",
+    ShellBinDir "/touch",
+    ShellBinDir "/trace",
+    ShellBinDir "/trans",
+    ShellBinDir "/which"
+ });
 }

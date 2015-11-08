@@ -352,7 +352,7 @@ private mixed *expand_term(string term, mixed *prev, object who,
       prev = map(prev, (: map(all_inventory($1[OB_TARGET]),
                               (: ({ $1, "i", 0 }) :))
                        :));
-      return flatten_array1(prev);
+      return flatten_array(prev);
     }
   case "e":
     if (!strlen(context)) {

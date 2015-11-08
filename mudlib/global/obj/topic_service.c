@@ -9,3 +9,4 @@
 mapping static_topics;
 
 public mapping get_topic(string topic_id);
+

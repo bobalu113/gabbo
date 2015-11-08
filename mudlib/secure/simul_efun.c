@@ -24,3 +24,7 @@ int move_resolved(mixed item, mixed dest) {
   if (!objectp(dest)) { dest = find_object(dest); }
   return (item && dest && (environment(item) == dest));
 }
+
+nomask void write(mixed msg) {
+  raise_error("write is disabled() except for privileged objects");
+}
