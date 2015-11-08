@@ -146,7 +146,7 @@ varargs mixed *unique_array(mixed *list, int keep_last) {
  * @param  list the array to flatten
  * @return      the flattened array
  */
-mixed flatten_array1(mixed *list) {
+mixed flatten_array(mixed *list) {
   if (!pointerp(list)) {
     return ({ });
   }
@@ -171,14 +171,14 @@ mixed flatten_array1(mixed *list) {
  * @param  list the array to flatten
  * @return      the flattened array
  */
-mixed flatten_array(mixed *list) {
+mixed deep_flatten_array(mixed *list) {
   if (!pointerp(list)) {
     return ({ list });
   }
 
   mixed *newlist = ({ });
   for (int i = 0, int j = sizeof(list); i < j; i++) {
-    newlist += flatten_array(list[i]);
+    newlist += deep_flatten_array(list[i]);
   }
   return newlist;
 }

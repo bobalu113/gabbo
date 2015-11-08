@@ -8,6 +8,9 @@
 #include <capabilities.h>
 #include <command_giver.h>
 
+private variables private functions inherit ObjectLib;
+private variables private functions inherit ArrayLib;
+
 default private variables;
 
 /**
@@ -126,6 +129,23 @@ int check_command_access(object cmd_ob, int read) {
 void setup_command_giver() {
   verbs = ([ ]);
   commands = ([ ]);
+
+  mixed *module_commands = call_inherited("query_command_exports", THISO);
+  command_files = flatten_array(module_commands);
+
+  foreach (string command : command_files) {
+    object cmd_ob = load_command(command);
+    if (!cmd_ob) {
+      continue;
+    }
+    mixed *actions = cmd_ob->query_actions();
+    foreach (mixed *action : actions) {
+      string verb = action[0];
+      int flag = action[1];
+      add_command(command, verb, flag);
+    }
+  }
+
 }
 
 /**
