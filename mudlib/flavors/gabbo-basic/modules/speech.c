@@ -7,8 +7,52 @@
 
 #define SpeechBinDir       BinDir "/speech"
 
-void speak() {
+mapping spoken_languages;
+
+struct MessageResult {
+  object *received, *rejected;
+  mapping msgdata;
+};
+
+struct MessageResult say(string msg, mapping msgdata) {
+  {
+    language: english,
+    senses: sound,
+    volume: NN vu
+  }
   // tell_object(map)
+}
+
+object *shout(string msg, mapping msgdata) {
+  // none, room, room+1, room+2, zone, zone+1, zone+2, domain, domain+1, domain+2, ...
+}
+
+object *whisper(mixed target, string msg, mapping msgdata) {
+  // target is string topic or object *who
+}
+
+mapping query_spoken_languages() {
+  return spoken_languages;
+}
+
+void set_spoken_languages(mapping language) {
+  spoken_languages = language;
+}
+
+void add_spoken_language(string language) {
+  spoken_languages += ([ language ]);
+}
+
+void remove_spoken_language(string language) {
+  spoken_languages -= ([ language ]);
+}
+
+int is_language_spoken(string language) {
+  return member(spoken_languages, language);
+}
+
+protected void setup_speech() {
+  spoken_languages = ([ "default" ]);
 }
 
 /**

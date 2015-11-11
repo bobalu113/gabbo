@@ -9,11 +9,16 @@
 
 inherit OrganismCode;
 
-inherit NameMixin;
-inherit VisibleMixin;
-inherit ShellMixin;
-inherit CommandGiverMixin;
 inherit MobileMixin;
+inherit CarrierMixin;
+inherit VisibleMixin;
+inherit NameMixin;
+inherit SoulMixin;
+inherit LiteracyMixin;
+inherit SpeechMixin;
+inherit ShellMixin;
+inherit SensorMixin;
+inherit CommandGiverMixin;
 
 /* usernames */
 

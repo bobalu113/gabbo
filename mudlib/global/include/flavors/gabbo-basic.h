@@ -16,6 +16,7 @@
 #define CommandGiverMixin    ModulesDir "/command_giver"
 #define DetailMixin          ModulesDir "/detail"
 #define IdMixin              ModulesDir "/id"
+#define LiteracyMixin        ModulesDir "/literacy"
 #define LockMixin            ModulesDir "/lock"
 #define MobileMixin          ModulesDir "/mobile"
 #define NameMixin            ModulesDir "/name"

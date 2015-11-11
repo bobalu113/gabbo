@@ -26,5 +26,17 @@ int move_resolved(mixed item, mixed dest) {
 }
 
 nomask void write(mixed msg) {
-  raise_error("write is disabled() except for privileged objects");
+  raise_error("write() efun is deprecated, use MessageLib");
+}
+
+nomask void tell_room(mixed ob, mixed msg, object *exclude) {
+  raise_error("tell_room() efun is deprecated, use MessageLib");
+}
+
+nomask void say(mixed msg, object *exclude) {
+  raise_error("say() efun is deprecated, use MessageLib");
+}
+
+nomask void tell_object(mixed ob, mixed msg) {
+  raise_error("tell_object() efun is deprecated, use MessageLib");
 }
