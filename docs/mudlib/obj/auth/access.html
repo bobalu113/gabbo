@@ -9,7 +9,7 @@
 </a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
 </a>
 <ul class="navList" title="Navigation">
-<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
 </ul>
 </div>
 <div class="subNav">
@@ -63,7 +63,7 @@
 <hr>
 <br>
 <div class="block">The access objet.</div>
-<!-- 
+<!--
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="../...html#toString()"><code>->toString()</code></a>
 </dd></dl>
@@ -74,12 +74,154 @@
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/access.html#check_access()">check_access</a></strong>(string&nbsp;path,&nbsp;string&nbsp;euid,&nbsp;int&nbsp;read)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/access.html#check_domain_access()">check_domain_access</a></strong>(string&nbsp;domain,&nbsp;string&nbsp;caller_user,&nbsp;string&nbsp;caller_domain,&nbsp;int&nbsp;read)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/access.html#get_domain_file()">get_domain_file</a></strong>(string&nbsp;domain)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/access.html#is_read_allowed()">is_read_allowed</a></strong>(string&nbsp;path,&nbsp;string&nbsp;euid,&nbsp;string&nbsp;fun,&nbsp;object&nbsp;caller)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../obj/auth/access.html#is_write_allowed()">is_write_allowed</a></strong>(string&nbsp;path,&nbsp;string&nbsp;euid,&nbsp;string&nbsp;fun,&nbsp;object&nbsp;caller)</code>
+<div class="block"></div>
+</td>
+</tr>
+</table>
+
+</li>
+</ul>
 </li>
 </ul>
 </div>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="is_read_allowed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>is_read_allowed</h4>
+<pre>public&nbsp;int&nbsp;is_read_allowed(string&nbsp;path,&nbsp;string&nbsp;euid,&nbsp;string&nbsp;fun,&nbsp;object&nbsp;caller)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>path</code> - </dd>
+<dd><code>euid</code> - </dd>
+<dd><code>fun</code> - </dd>
+<dd><code>caller</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="is_write_allowed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>is_write_allowed</h4>
+<pre>public&nbsp;int&nbsp;is_write_allowed(string&nbsp;path,&nbsp;string&nbsp;euid,&nbsp;string&nbsp;fun,&nbsp;object&nbsp;caller)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>path</code> - </dd>
+<dd><code>euid</code> - </dd>
+<dd><code>fun</code> - </dd>
+<dd><code>caller</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="check_access()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>check_access</h4>
+<pre>public&nbsp;int&nbsp;check_access(string&nbsp;path,&nbsp;string&nbsp;euid,&nbsp;int&nbsp;read)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>path</code> - </dd>
+<dd><code>euid</code> - </dd>
+<dd><code>read</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="check_domain_access()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>check_domain_access</h4>
+<pre>public&nbsp;int&nbsp;check_domain_access(string&nbsp;domain,&nbsp;string&nbsp;caller_user,&nbsp;string&nbsp;caller_domain,&nbsp;int&nbsp;read)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>domain</code> - </dd>
+<dd><code>caller_user</code> - </dd>
+<dd><code>caller_domain</code> - </dd>
+<dd><code>read</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="get_domain_file()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get_domain_file</h4>
+<pre>public&nbsp;string&nbsp;get_domain_file(string&nbsp;domain)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>domain</code> - </dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -91,7 +233,7 @@
 </a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
 </a>
 <ul class="navList" title="Navigation">
-<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
 </ul>
 </div>
 <div class="subNav">

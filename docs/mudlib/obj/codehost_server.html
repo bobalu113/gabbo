@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="topNav"><a name="navbar_top">
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../index.html?/obj/codehost_server.html" target="_top">Frames</a></li>
+<li><a href="../../obj/codehost_server.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">/obj/codehost_server</div>
+<h2 title="Program CodeHostServer " class="title">Program CodeHostServer </h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li class="last"><a href="../lib/rodney_client.html" title="">RodneyClientLib </a>
+<ul class="tree"><li class="last"><a href="../lib/json.html" title="">JSONLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></dd>
+</dl>
+<hr>
+<br>
+<div class="block">The CodeHostServer. This server provides clients access to services
+provided by the game's code host, whether it's GitHub, GitLab, or
+BitBucket. Currently the only service supported is read-only access to
+pull requests.</div>
+<!--
+<dl><dt><span class="strong">See Also:</span></dt><dd>
+<a href="...html#toString()"><code>->toString()</code></a>
+</dd></dl>
+-->
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/codehost_server.html#create()">create</a></strong>()</code>
+<div class="block">Initialize server.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/codehost_server.html#get_pull_request()">get_pull_request</a></strong>(int&nbsp;id,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
+<div class="block">Asynchronously get a pull request from Rodney.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/codehost_server.html#get_pull_request_review()">get_pull_request_review</a></strong>(int&nbsp;id,&nbsp;mixed&nbsp;file,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
+<div class="block">Asynchronously get a pull request from Rodney.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../obj/codehost_server.html#get_pull_requests()">get_pull_requests</a></strong>(closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
+<div class="block">Asynchronously get a list of pull requests from Rodney.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/lib/rodney_client">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../lib/rodney_client.html" title="program /lib/rodney_client">RodneyClientLib </a></h3>
+<code><a href="../lib/rodney_client.html#create()">create</a>, <a href="../lib/rodney_client.html#flush_queue()">flush_queue</a>, <a href="../lib/rodney_client.html#open()">open</a>, <a href="../lib/rodney_client.html#open_callback()">open_callback</a>, <a href="../lib/rodney_client.html#rodney_query()">rodney_query</a>, <a href="../lib/rodney_client.html#send()">send</a>, <a href="../lib/rodney_client.html#send_callback()">send_callback</a></code></li>
+
+</ul>
+
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Initialize server.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="get_pull_requests()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get_pull_requests</h4>
+<pre>public&nbsp;void&nbsp;get_pull_requests(closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
+<div class="block">Asynchronously get a list of pull requests from Rodney. When the pull
+request data is received, it will be passed to the provided callback.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>callback</code> - callback closure to pass response </dd>
+<dd><code>args</code> - optional extra args to the callback </dd>
+</dl>
+</li>
+</ul>
+<a name="get_pull_request()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get_pull_request</h4>
+<pre>public&nbsp;void&nbsp;get_pull_request(int&nbsp;id,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
+<div class="block">Asynchronously get a pull request from Rodney. When the pullrequest data
+is received, it will be passed to the provided callback.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>id</code> - numerical id of the pull request to get </dd>
+<dd><code>callback</code> - callback closure to pass response </dd>
+<dd><code>args</code> - optional extra args to the callback </dd>
+</dl>
+</li>
+</ul>
+<a name="get_pull_request_review()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get_pull_request_review</h4>
+<pre>public&nbsp;void&nbsp;get_pull_request_review(int&nbsp;id,&nbsp;mixed&nbsp;file,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
+<div class="block">Asynchronously get a pull request from Rodney. When the pullrequest data
+is received, it will be passed to the provided callback.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>id</code> - numerical id of the pull request to get </dd>
+<dd><code>file</code> - either the path of the file to review, or the numerical index of that file in the file list </dd>
+<dd><code>callback</code> - callback closure to pass response </dd>
+<dd><code>args</code> - optional extra args to the callback </dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ======== END OF CLASS DATA ======== -->
+<div class="bottomNav"><a name="navbar_bottom">
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../index.html?/obj/codehost_server.html" target="_top">Frames</a></li>
+<li><a href="../../obj/codehost_server.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+</body>
+</html>

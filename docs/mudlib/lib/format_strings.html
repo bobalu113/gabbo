@@ -9,7 +9,7 @@
 </a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
 </a>
 <ul class="navList" title="Navigation">
-<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
 </ul>
 </div>
 <div class="subNav">
@@ -75,7 +75,7 @@
 <hr>
 <br>
 <div class="block">Utility library for parsing format strings into runnable lambda closures.</div>
-<!-- 
+<!--
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
 </dd></dl>
@@ -101,7 +101,8 @@
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../lib/format_strings.html#parse_format()">parse_format</a></strong>(string&nbsp;format,&nbsp;mapping&nbsp;infomap,&nbsp;symbol *args)</code>
-<div class="block"></div>
+<div class="block">Compile a format string into a formatter closure with the given format
+specifiers and args.</div>
 </td>
 </tr>
 </table>
@@ -127,13 +128,43 @@
 <li class="blockList">
 <h4>parse_format</h4>
 <pre>public&nbsp;closure&nbsp;parse_format(string&nbsp;format,&nbsp;mapping&nbsp;infomap,&nbsp;symbol *args)</pre>
-<div class="block"></div>
+<div class="block">Compile a format string into a formatter closure with the given format
+specifiers and args. Format strings may contain tokens of the format "%c"
+where 'c' is some alphabetic character. They may also take arguments in
+the format of "%c{arg}". For every format specifier found, the returned
+closure will run the closure found for the character in infomap (the
+character is the key) and replace the format specifier with the result of
+the evaluated closure. Closures may reference the optional arg value with
+the symbol 'arg. They may also reference any arguments passed to the
+closure at runtime with the symbols defined in the args parameter. (Values
+for these arguments must be supplied by the caller at runtime!) References
+to the closure arguments in infomap must be double quoted even though
+they are single quoted in the args parameter.
+Invoking the result of this function will return the format string with
+all constituent format specifiers replaced by the result of their closure
+calls. Example:
+closure formatter =
+parse_format_string(
+"name: %N",        // format string
+([ 'N' : ({ 0,     // default value for 'arg
+"%s",  // sprintf() format string of result
+({     // array of closures to call
+// results will be passed as args to sprintf()
+({ #'call_other, ''who, "query_name" })
+})
+})
+]),
+({ 'who })         // formatter will take one arg named 'who
+);
+// this should write "devo"
+write(funcall(formatter, FINDP("devo")));</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>format</code> - </dd>
-<dd><code>infomap</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>format</code> - the format string to parse </dd>
+<dd><code>infomap</code> - a map of format specifiers to the info array of how to replace the specifier </dd>
+<dd><code>args</code> - optional args that will be passed to the formatter (single quoted) </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a formatter closure that takes specified args and will produce formatted strings according to infomap </dd>
 </dl>
 </li>
 </ul>
@@ -152,7 +183,7 @@
 </a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
 </a>
 <ul class="navList" title="Navigation">
-<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
 </ul>
 </div>
 <div class="subNav">
