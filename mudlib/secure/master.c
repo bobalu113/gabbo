@@ -282,10 +282,11 @@ void flag(string arg) {
 }
 
 string *epilog(int eflag) {
-  return ({ FileTracker, DomainTracker });
+  return ({ LoggerFactory, FileTracker, DomainTracker });
 }
 
 void preload(string file) {
+  debug_message("Preloading " + file + "\n");
   catch (load_object(file); publish);
 }
 

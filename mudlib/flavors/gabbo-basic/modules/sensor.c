@@ -9,10 +9,10 @@
 
 #define SensorBinDir        BinDir "/seensor"
 
-inherit RenderMessageLib;
+inherit MessageLib;
 
-void catch_msg(mapping msg, object ob) {
-  // efun::write(str) ?
+void recv_message(string msg, mapping msgdata, object ob) {
+  
 }
 
 /**

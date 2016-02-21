@@ -15,10 +15,25 @@ struct MessageResult {
 };
 
 struct MessageResult say(string msg, mapping msgdata) {
+  if (member(msgdata, MSGDATA_TOPIC)) {
+    // TODO log warning
+  }
+  msgdata[MSGDATA_TOPIC] = TopicService->get_environment_topic(ENV(THISO));
+
+  if (!member(msgdata, MSGDATA_LANGUAGE)) {
+    // TODO add default language preference
+  }
+  if (!member(msgdata, MSGDATA_LANGUAGE)) {
+    // TODO error
+  }
+
+
+  msgdata[]
   {
-    language: english,
-    senses: sound,
-    volume: NN vu
+    language: string english,
+    senses: int sound bitvector,
+    volume: float NN vu
+    topic: string rooms.zone.blah.foo.fart, stuff.zone.some.container, stuff.zone.some.carrier
   }
   // tell_object(map)
 }

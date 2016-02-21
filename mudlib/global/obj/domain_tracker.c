@@ -37,6 +37,17 @@ mapping query_children(string domain_id);
   Initialize global variables and start listening to domain.xml changes.
  */
 void create() {
+  // couple sanity checks
+  if (!FINDO(LoggerFactory)) {
+    destruct(THISO);
+    raise_error("LoggerFactory must be preloaded for DomainTracker to "
+                  "function properly\n");
+  } 
+  if (!FINDO(FileTracker)) {
+    destruct(THISO);
+    raise_error("FileTracker must be preloaded for DomainTracker to "
+                  "function properly\n");
+  } 
   FileTracker->subscribe("/etc/\\.domain\\.xml$", #'reconfig_signal); //'
   domains = ([ ]);
   children = ([ ]);
@@ -507,6 +518,9 @@ mapping query_children(string domain_id) {
  * @return      the resolved include file
  */
 string resolve_sysinclude(string file, string p) {
+  if (p[<15..<1] == " (auto include)") {
+    p = p[0..<16];
+  }
   struct DomainConfig domain = query_domain(query_domain_id(p));
 
   string path = file;

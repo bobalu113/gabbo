@@ -21,7 +21,7 @@
 #define _ObjDir              "/obj"
 #define _StateDir            "/state"
 
-#define GlobalBinDir         GlobalDir _BinDir
+#define GlobalEtcDir         GlobalDir _EtcDir
 #define GlobalIncludeDir     GlobalDir _IncludeDir
 #define GlobalLibDir         GlobalDir _LibDir
 #define GlobalObjDir         GlobalDir _ObjDir

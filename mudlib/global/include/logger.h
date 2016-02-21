@@ -4,23 +4,23 @@
 #ifdef EOTL
 #define Logger             AcmeObjDir "logger"
 #else
-#define Logger             ObjDir "/logger"
+#define Logger             GlobalObjDir "/logger"
 #endif
 
 #ifdef EOTL
 #define FACTORY_CATEGORY   ".secure.acme.logger_factory"
 #define LOGGER_CATEGORY    ".obj.acme.logger"
 #else
-#define FACTORY_CATEGORY   ".obj.logger_factory"
-#define LOGGER_CATEGORY    ".obj.logger"
+#define FACTORY_CATEGORY   ".global.obj.logger_factory"
+#define LOGGER_CATEGORY    ".global.obj.logger"
 #endif
 
 #ifdef EOTL
 #define FACTORY_LOGGER_UID  "adm"
 #define LOGGER_LOGGER_UID   "core"
 #else
-#define FACTORY_LOGGER_UID  "gabbo.obj"
-#define LOGGER_LOGGER_UID   "gabbo.obj"
+#define FACTORY_LOGGER_UID  "gabbo"
+#define LOGGER_LOGGER_UID   "gabbo"
 #endif
 
 #define LOGGER_STALE_TIME  300
