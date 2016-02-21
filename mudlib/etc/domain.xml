@@ -1,0 +1,10 @@
+<domain id="gabbo">
+  <configureAccess startsWith="">
+    <allowWrite users="bobalu,devo" groups="security"/>
+    <denyWrite groups="shitheads"/>
+  </configureAccess>
+  <configureAccess startsWith="/secure">
+    <denyRead groups="all"/>
+    <allowRead users="bobalu,devo"/>
+  </configureAccess>
+</domain>
