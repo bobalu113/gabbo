@@ -91,19 +91,20 @@ varargs string expand_path(string pattern, object who) {
       string name = who->query_username();
       if (pattern == "~") {
         // TODO add support for ~+ and ~-
+        // TODO move homedir expansion to ShellMixin and UserTracker
         if (name) {
-          pattern = HomeDir + "/" + name;
+          pattern = UserDir + "/" + name;
         } else {
-          pattern = HomeDir;
+          pattern = UserDir;
         }
       } else if (pattern[1] == '/') {
         if (name) {
-          pattern = sprintf("%s/%s%s", HomeDir, name, pattern[1..]);
+          pattern = sprintf("%s/%s%s", UserDir, name, pattern[1..]);
         } else {
-          pattern = HomeDir + pattern[1..];
+          pattern = UserDir + pattern[1..];
         }
       } else {
-        pattern = HomeDir + "/" + pattern[1..];
+        pattern = UserDir + "/" + pattern[1..];
       }
       break;
     default:

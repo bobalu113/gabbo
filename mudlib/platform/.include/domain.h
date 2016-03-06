@@ -1,7 +1,7 @@
 #ifndef _DOMAIN_H
 #define _DOMAIN_H
 
-#define DOMAIN_FILE       "etc/domain.xml"
+#define DOMAIN_FILE       ".etc/domain.xml"
 
 struct DomainConfig {
   string id, parent, domain_id;

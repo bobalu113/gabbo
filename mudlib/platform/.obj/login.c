@@ -8,7 +8,7 @@
 #include <user.h>
 #include <sys/input_to.h>
 
-#define WELCOME_FILE GlobalEtcDir "/issue"
+#define WELCOME_FILE PlatformEtcDir "/issue"
 #define TIMEOUT 10
 #define MAX_TRIES 3
 

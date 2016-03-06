@@ -551,7 +551,7 @@ string resolve_sysinclude(string file, string p) {
   if (!file_exists(path)) {
     path = file;
     if (file[0] != '/') {
-      path = GlobalIncludeDir "/" + file;
+      path = PlatformIncludeDir "/" + file;
     }
   }
   return path;

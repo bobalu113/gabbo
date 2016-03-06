@@ -18,9 +18,9 @@
 ** (read: they must be specified with full path).
 */
 
-#include "/global/include/auto.h"
-#include "/global/include/sys/driver_hook.h"
-#include "/global/include/sys/debug_info.h"
+#include "/platform/.include/auto.h"
+#include "/platform/.include/sys/driver_hook.h"
+#include "/platform/.include/sys/debug_info.h"
 
 //===========================================================================
 //  Initialisation
@@ -353,7 +353,7 @@ mixed include_file(string file, string compiled_file, int sys_include) {
     if (FINDO(DomainTracker)) {
       result = DomainTracker->resolve_sysinclude(file, compiled_file);
     } else {
-      result = funcall(expand, file, GlobalIncludeDir);
+      result = funcall(expand, file, PlatformIncludeDir);
     }
   } else {
     result = funcall(expand, file,
@@ -406,7 +406,7 @@ void dangling_lfun_closure() {
 void log_error(string file, string err, int warn) {
   string msg = sprintf("[%s] %s:%s", (warn ? "WARNING" : "ERROR"), file,
     err);
-  write_file("/log/compile.log", msg);
+  write_file("/.log/compile.log", msg);
   write(msg);
 }
 
@@ -416,7 +416,7 @@ mixed heart_beat_error(object culprit, string err, string prg, string curobj,
     strftime("%Y-%m-%d %H:%M:%S"), utime()[1], "ERROR", to_string(culprit),
     prg, err);
 
-  write_file("/log/heartbeat.log", msg);
+  write_file("/.log/heartbeat.log", msg);
   write(msg);
   return 0;
 }
@@ -433,7 +433,7 @@ void runtime_error(string err, string prg, string curobj, int line,
     format_stacktrace(curobj, line, caught, debug_info(7, 1))
   );
 
-  write_file("/log/runtime.log", msg);
+  write_file("/.log/runtime.log", msg);
   write(msg);
 }
 
@@ -448,7 +448,7 @@ void runtime_warning(string err, string curobj, string prg, int line,
     format_stacktrace(curobj, line, inside_catch, debug_info(7, 1))
   );
 
-  write_file("/log/runtime.log", msg);
+  write_file("/.log/runtime.log", msg);
   //write(msg);
 }
 

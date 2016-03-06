@@ -4,15 +4,15 @@
 #ifdef EOTL
 #define Logger             AcmeObjDir "logger"
 #else
-#define Logger             GlobalObjDir "/logger"
+#define Logger             PlatformObjDir "/logger"
 #endif
 
 #ifdef EOTL
 #define FACTORY_CATEGORY   ".secure.acme.logger_factory"
 #define LOGGER_CATEGORY    ".obj.acme.logger"
 #else
-#define FACTORY_CATEGORY   ".global.obj.logger_factory"
-#define LOGGER_CATEGORY    ".global.obj.logger"
+#define FACTORY_CATEGORY   ".platform..obj.logger_factory"
+#define LOGGER_CATEGORY    ".platform..obj.logger"
 #endif
 
 #ifdef EOTL
@@ -31,7 +31,7 @@
 #ifdef EOTL
 #define PROP_FILE          ".logger.properties"
 #else
-#define PROP_FILE          "etc/logger.properties"
+#define PROP_FILE          ".etc/logger.properties"
 #endif
 
 #define ALLOWED_PROPS      ({ "output", "format", "level" })
