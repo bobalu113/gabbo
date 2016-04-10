@@ -44,6 +44,7 @@
 #define MessageRenderingLib  PlatformLibDir "/render_message"
 #define ObjectExpansionLib   PlatformLibDir "/expand_object"
 #define ObjectLib            PlatformLibDir "/object"
+#define RenderLib            PlatformLibDir "/render"
 #define RodneyClientLib      PlatformLibDir "/rodney_client"
 #define StringsLib           PlatformLibDir "/strings"
 #define UserLib              PlatformLibDir "/user"
@@ -62,7 +63,10 @@
 #define LoggerFactory        PlatformObjDir "/logger_factory"
 #define LoginObject          PlatformObjDir "/login"
 #define PostalService        PlatformObjDir "/postal_service"
-#define TopicService         PlatformObjDir "/topic_service"
+#define TopicTracker         PlatformObjDir "/topic_tracker"
+
+#define PlatformRenderDir    PlatformObjDir "/render"
+#define LoginRenderer        PlatformRenderDir "/login"
 
 #define MasterObject         __MASTER_OBJECT__
 #define SimulEfunObject      SecureDir "/simul_efun"

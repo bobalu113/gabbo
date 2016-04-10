@@ -11,7 +11,9 @@
 private variables private functions inherit ConnectionLib;
 private variables private functions inherit ObjectLib;
 
-#define AvatarBinDir        PlatformBinDir "/avatar"
+#define DEFAULT_SCREEN_WIDTH   80
+#define DEFAULT_SCREEN_LENGTH  25
+#define AvatarBinDir           PlatformBinDir "/avatar"
 
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
 mapping CMD_IMPORTS_VAR = ([ 
@@ -26,7 +28,15 @@ mapping CMD_IMPORTS_VAR = ([
  * @return the user's screen width
  */
 public int query_screen_width() {
-  return 80;
+  struct ConnectionConfig config = 
+    ConnectionTracker->query_config(
+      ConnectionTracker->query_connection_id(THISO)
+    );
+  int result = config->terminal_width;
+  if (result <= 0) {
+    result = DEFAULT_SCREEN_WIDTH;
+  }
+  return result;
 }
 
 /**
@@ -34,7 +44,15 @@ public int query_screen_width() {
  * @return the user's screen length
  */
 public int query_screen_length() {
-  return 25;
+  struct ConnectionConfig config = 
+    ConnectionTracker->query_config(
+      ConnectionTracker->query_connection_id(THISO)
+    );
+  int result = config->terminal_width;
+  if (result <= 0) {
+    result = DEFAULT_SCREEN_LENGTH;
+  }
+  return result;
 }
 
 /**
@@ -100,4 +118,9 @@ nomask int is_avatar() {
  * implementation.
  */
 void setup_avatar() {
+  if (interactive(THISO)) {
+    ConnectionTracker->telnet_get_terminal(THISO);
+    ConnectionTracker->telnet_get_NAWS(THISO);
+    ConnectionTracker->telnet_get_ttyloc(THISO);
+  }
 }

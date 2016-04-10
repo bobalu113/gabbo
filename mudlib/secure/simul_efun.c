@@ -51,18 +51,22 @@ varargs int send_binary_message(object who, mixed message, int flags) {
   return result;
 }
 
-nomask void write(mixed msg) {
+nomask void write(varargs mixed *args) {
   raise_error("write() efun is deprecated, use MessageLib");
 }
 
-nomask void tell_room(mixed ob, mixed msg, object *exclude) {
+nomask void tell_room(varargs mixed *args) {
   raise_error("tell_room() efun is deprecated, use MessageLib");
 }
 
-nomask void say(mixed msg, object *exclude) {
+nomask void say(varargs mixed *args) {
   raise_error("say() efun is deprecated, use MessageLib");
 }
 
-nomask void tell_object(mixed ob, mixed msg) {
+nomask void tell_object(varargs mixed *args) {
   raise_error("tell_object() efun is deprecated, use MessageLib");
+}
+
+nomask void printf(varargs mixed *args) {
+  raise_error("printf() efun is deprecated, use MessageLib");
 }

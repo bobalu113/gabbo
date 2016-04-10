@@ -4,7 +4,6 @@
  * @author devo@eotl
  * @alias LoginObject
  */
-#include <ansi.h>
 #include <sys/input_to.h>
 
 inherit CommandGiverMixin;
@@ -21,10 +20,15 @@ private variables private functions inherit ObjectLib;
 #define TERMINAL_MAX_TRIES     30
 #define TIMEOUT_SECS           (10 * 60)
 #define DEFAULT_TERMINAL_TYPE  "vt100"
+#define CLEAR_SCREEN           1
 #define InsecureWarning        "Warning: You are on an insecure connection. " \
                                "Act accordingly.\n"
+#define DefaultTermWarning     "Unable to detect terminal type. " \
+                               "Using default.\n"
+#define TimeoutMessage         "Timeout exceeded, disconnecting...\n"
 
 int logon();
+void suppress_prompt();
 varargs void get_terminal_type(closure callback, int retry);
 static void welcome(string terminal, int is_default);
 static void timeout();
@@ -43,10 +47,16 @@ int logon() {
   }
   ConnectionTracker->new_connection(THISO);
   ConnectionTracker->telnet_get_terminal(THISO);
-  input_to("dummy");
+  input_to("suppress_prompt"); // suppress prompt until welcome screen is shown
   get_terminal_type(#'welcome); //'
   set_heart_beat(1);
   return 1;
+}
+
+void suppress_prompt() {
+  remove_input_to(THISO);
+  input_to("suppress_prompt");
+  return;
 }
 
 /**
@@ -76,29 +86,32 @@ varargs void get_terminal_type(closure callback, int retry) {
  * @param terminal 
  * @param is_default  [description]
  */
-static void welcome(string terminal, int is_default) {
+static void welcome(string terminal, mixed is_default) {
   object logger = LoggerFactory->getLogger(THISO);
-  int secure = 0;
-  string welcome = CLEAR_SCREEN;
-  if (is_default) {
-    welcome += "Unable to detect terminal type. Using default.\n";
+
+  if (is_default && !stringp(is_default)) {
+    is_default = DefaultTermWarning;
   }
-  welcome += read_file(WELCOME_FILE);
+  string insecure = 0;
   if (query_ip_number(THISO) != LOCALHOST) {
-    welcome += InsecureWarning;
-  } else {
-    secure = 1;
+    insecure = InsecureWarning;
   }
-  if (welcome) {
-    system_msg(THISO, 
-               WELCOME_TOPIC, 
-               ([ "message" : welcome,
-                  "insecure" : !secure,
-                  "defaultTermType" : is_default
-               ]));
-  } else {
+  string welcome = read_file(WELCOME_FILE);
+  if (!welcome) {
     logger->warn("unable to read welcome file");
   }
+
+  // display welcome screen
+  system_msg(THISO, 
+             WELCOME_TOPIC, 
+             ([ "welcome" : welcome,
+                "insecure" : insecure,
+                "defaultTerm" : is_default,
+                "clearScreen" : CLEAR_SCREEN
+             ]));
+
+
+  // restore prompt
   remove_input_to(THISO);
   restore_prompt();
   send_prompt(THISO);
@@ -111,8 +124,7 @@ static void welcome(string terminal, int is_default) {
 static void timeout() {
   system_msg(THISO,
              WELCOME_TOPIC, 
-             ([ "message" : "Timeout exceeded, disconnecting...\n",
-                "abort" : 1 ]));
+             ([ "abort" : TimeoutMessage ]));
   abort();
 }
 

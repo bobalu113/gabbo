@@ -23,18 +23,19 @@ int prevent_message(string topic, mapping msgdata, object sender) {
 }
 
 struct Message render_message(string topic, mapping msgdata, object sender) {
+  object logger = LoggerFactory->get_logger(THISO);
   struct Message result = (<Message>);
   result->topic = topic;
   result->data = msgdata;
+  string term = 0;
   if (is_capable(THISO, CAP_AVATAR)) {
-    switch (THISO->query_terminal_type()) {
-      case "gabbo":
-        result->message = json_encode((["topic": topic, "data": msgdata ]));
-        break;
-      default:
-        result->message = msgdata["message"];
-        break;
-    }
+    term = THISO->query_terminal_type();
+  }
+  object renderer = TopicTracker->get_renderer(topic, term);
+  if (renderer) {
+    result->message = (renderer->render(term, topic, msgdata, sender));
+  } else {
+    logger->warn("No renderer found for topic %O, term %O", topic, term);
   }
   return result;
 }

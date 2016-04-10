@@ -30,7 +30,7 @@ struct ConnectionConfig query_config(string id);
 string increment_connection_id();
 
 #ifdef NEGOTIATION_LOG
-void telnet_neg_log (string s) {
+void telnet_neg_log(string s) {
   object logger = LoggerFactory->get_logger(THISO);
   logger->debug("%O:%O:%s:%s:%s\n",
     previous_object(), 
