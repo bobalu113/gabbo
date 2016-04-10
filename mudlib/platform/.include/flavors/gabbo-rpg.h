@@ -4,4 +4,4 @@
 #define Flavor "gabbo-rpg"
 #include <flavor_config.h>
 
-#define CombatMixin          ModulesDir "/combat"
+#define CombatMixin          ModuleDir "/combat"

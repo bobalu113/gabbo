@@ -12,6 +12,8 @@
 private variables private functions inherit ObjectLib;
 private variables private functions inherit FormatStringsLib;
 
+mapping CAPABILITIES_VAR = ([ CAP_MOBILE ]);
+
 default private variables;
 
 string exit_msgout_fmt,     exit_msgin_fmt,
@@ -518,15 +520,6 @@ void setup_mobile() {
   set_zone_msgin(DEFAULT_ZONE_MSGIN);
   set_teleport_msgout(DEFAULT_TELEPORT_MSGOUT);
   set_teleport_msgin(DEFAULT_TELEPORT_MSGIN);
-}
-
-/**
- * Return the capabilities this mixin provides.
- *
- * @return the 'mobile' capability
- */
-public mapping query_capabilities() {
-  return ([ CAP_MOBILE ]);
 }
 
 /**

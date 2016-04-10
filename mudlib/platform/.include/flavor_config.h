@@ -4,5 +4,5 @@
 #define EtcDir               FlavorRoot _EtcDir
 #define IncludeDir           FlavorRoot _IncludeDir
 #define LibDir               FlavorRoot _LibDir
-#define ModulesDir           FlavorRoot _ModulesDir
+#define ModuleDir            FlavorRoot _ModuleDir
 #define ObjDir               FlavorRoot _ObjDir

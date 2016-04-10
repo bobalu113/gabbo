@@ -5,11 +5,14 @@
  * @alias CommandGiverMixin
  */
 
+#include <sys/functionlist.h>
 #include <capabilities.h>
 #include <command_giver.h>
 
 private variables private functions inherit ObjectLib;
 private variables private functions inherit ArrayLib;
+
+mapping CAPABILITIES_VAR = ([ CAP_COMMAND_GIVER ]);
 
 default private variables;
 
@@ -121,17 +124,39 @@ int check_command_access(object cmd_ob, int read) {
   return 0;
 }
 
+
+/**
+ * Add actions for all a player's currently configured commands.
+ */
+protected void restore_actions() {
+  object oldp = THISP;
+  enable_commands();
+  foreach (string verb, string command, int flag : query_verbs()) {
+    add_action("do_command", verb, flag);
+  }
+  set_this_player(oldp);
+}
+
 /**
  * Initialize CommandGiverMixin. If this function is overloaded, be advised
  * that the mixin's private variables are initialized in the parent
  * implementation.
  */
 void setup_command_giver() {
+  mapping command_files = ([ ]);
+  mixed *vars = variable_list(THISO, RETURN_FUNCTION_NAME
+                                     | RETURN_VARIABLE_VALUE);
+  int i = 0;
+  while ((i = member(vars, CMD_IMPORTS_VAR_STR, i)) != -1) {
+    mixed val = vars[++i];
+    if (mappingp(val)) {
+      command_files += val;
+    }
+    i++;
+  }
+
   verbs = ([ ]);
   commands = ([ ]);
-
-  mixed *module_commands = call_inherited("query_command_exports", THISO);
-  command_files = flatten_array(module_commands);
 
   foreach (string command : command_files) {
     object cmd_ob = load_command(command);
@@ -146,6 +171,7 @@ void setup_command_giver() {
     }
   }
 
+  return;
 }
 
 /**
@@ -174,13 +200,4 @@ static int do_command(string arg) {
   }
 
   return cmd_ob->do_command(arg);
-}
-
-/**
- * Return a zero-width mapping of the capabilities this program provides.
- *
- * @return a zero-width mapping of capabilities
- */
-public mapping query_capabilities() {
-  return ([ CAP_COMMAND_GIVER ]);
 }

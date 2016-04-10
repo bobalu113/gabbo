@@ -66,6 +66,17 @@ void inaugurate_master(int arg) {
     set_extra_wizinfo(0, 5);
   }
 
+  set_driver_hook(H_TELNET_NEG, unbound_lambda(
+    ({ 'action, 'option, 'opts }),
+    ({ #'call_other, 
+       ConnectionTracker, 
+       "telnet_negotiation",
+       'action,
+       'option,
+       'opts 
+    })
+  )); //'
+
   // FUTURE add support for local auto includes
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),

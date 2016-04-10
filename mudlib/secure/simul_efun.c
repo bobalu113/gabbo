@@ -5,6 +5,9 @@
  * @alias SimulEfunObject
  */
 
+#include <sys/functionlist.h>
+#include <capabilities.h>
+
 // ([ username : active_avatar ])
 mapping players;
 
@@ -23,6 +26,29 @@ int move_resolved(mixed item, mixed dest) {
   if (!objectp(item)) { item = find_object(item); }
   if (!objectp(dest)) { dest = find_object(dest); }
   return (item && dest && (environment(item) == dest));
+}
+
+mapping query_capabilities(object ob) {
+  mapping result = ([ ]);
+  mixed *vars = variable_list(ob, RETURN_FUNCTION_NAME
+                                  | RETURN_VARIABLE_VALUE);
+  int i = 0;
+  while ((i = member(vars, CAPABILITIES_VAR_STR, i)) != -1) {
+    mixed val = vars[++i];
+    if (mappingp(val)) {
+      result += val;
+    }
+    i++;
+  }
+  return result;
+}
+
+varargs int send_binary_message(object who, mixed message, int flags) {
+  object old = previous_object();
+  set_this_object(who);
+  int result = binary_message(message, flags);
+  set_this_object(old);
+  return result;
 }
 
 nomask void write(mixed msg) {

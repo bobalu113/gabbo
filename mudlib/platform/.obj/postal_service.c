@@ -1,12 +1,32 @@
+/**
+ * The postal service object. It is responsible for sending messages back and
+ * forth between objects.
+ *
+ * @author devo@eotl
+ * @alias PostalService
+ */
 
+#include <message.h>
+#include <capabilities.h>
 
-struct MessageResult send_message(object target, string msg, mapping msgdata, object sender){
-  if (!is_capable(who, CAP_SENSOR)) {
+private variables private functions inherit MessageLib;
+private variables private functions inherit ObjectLib;
+
+struct Message send_message(object target, string topic, mapping msgdata, 
+                            object sender) {
+  if (!is_capable(target, CAP_SENSOR)) {
     return 0;
   }
-  struct MessageResult result = who->recv_message(msg, msgdata, sender);
-  if (1) {
-    efun::tell_object(msg);
+  if (sender && (sender != previous_object())) {
+    raise_error("not allowed to spoof\n");
+    return 0;
   }
-  return result;
+  if (target->prevent_message(topic, msgdata, sender)) {
+    return 0;
+  }
+
+  struct Message msg = target->render_message(topic, msgdata, sender);
+  efun::tell_object(target, msg->message);
+  target->message_signal(msg);
+  return msg;
 }

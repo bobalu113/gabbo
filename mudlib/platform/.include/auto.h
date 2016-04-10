@@ -5,8 +5,13 @@
 #pragma strong_types
 #pragma save_types
 #pragma verbose_errors
-#pragma range_check
+#pragma local_scopes
+#pragma sloppy
+#pragma no_range_check
 #pragma warn_deprecated
+#pragma warn_empty_casts
+#pragma warn_missing_return
+#pragma warn_function_inconsistent
 
 #define FlavorDir            "/flavor"
 #define PlatformDir          "/platform"
@@ -17,21 +22,25 @@
 #define _EtcDir              "/.etc"
 #define _IncludeDir          "/.include"
 #define _LibDir              "/.lib"
-#define _ModulesDir          "/.modules"
+#define _ModuleDir           "/.module"
 #define _ObjDir              "/.obj"
 
+#define PlatformBinDir       PlatformDir _BinDir
 #define PlatformEtcDir       PlatformDir _EtcDir
 #define PlatformIncludeDir   PlatformDir _IncludeDir
 #define PlatformLibDir       PlatformDir _LibDir
+#define PlatformModuleDir    PlatformDir _ModuleDir
 #define PlatformObjDir       PlatformDir _ObjDir
 
 #define ArgsLib              PlatformLibDir "/args"
 #define ArrayLib             PlatformLibDir "/array"
 #define ClosureLib           PlatformLibDir "/closure"
+#define ConnectionLib        PlatformLibDir "/connection"
 #define FileLib              PlatformLibDir "/file"
 #define FormatStringsLib     PlatformLibDir "/format_strings"
 #define GetoptsLib           PlatformLibDir "/getopts"
 #define JSONLib              PlatformLibDir "/json"
+#define MessageLib           PlatformLibDir "/message"
 #define MessageRenderingLib  PlatformLibDir "/render_message"
 #define ObjectExpansionLib   PlatformLibDir "/expand_object"
 #define ObjectLib            PlatformLibDir "/object"
@@ -39,11 +48,20 @@
 #define StringsLib           PlatformLibDir "/strings"
 #define UserLib              PlatformLibDir "/user"
 
+#define AvatarMixin          PlatformModuleDir "/avatar"
+#define CommandCode          PlatformModuleDir "/command"
+#define CommandGiverMixin    PlatformModuleDir "/command_giver"
+#define PropertyMixin        PlatformModuleDir "/property"
+#define SensorMixin          PlatformModuleDir "/sensor"
+#define SoulMixin            PlatformModuleDir "/soul"
+
 #define AccessService        PlatformObjDir "/access_service"
+#define ConnectionTracker    PlatformObjDir "/connection_tracker"
 #define DomainTracker        PlatformObjDir "/domain_tracker"
 #define FileTracker          PlatformObjDir "/file_tracker"
 #define LoggerFactory        PlatformObjDir "/logger_factory"
 #define LoginObject          PlatformObjDir "/login"
+#define PostalService        PlatformObjDir "/postal_service"
 #define TopicService         PlatformObjDir "/topic_service"
 
 #define MasterObject         __MASTER_OBJECT__

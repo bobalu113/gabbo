@@ -45,24 +45,6 @@ protected int set_username(string str) {
   return 1;
 }
 
-/* telnet */
-
-/**
- * Returns the user's screen width. Currently hard-coded to 80 characters.
- * @return the user's screen width
- */
-public int query_screen_width() {
-  return 80;
-}
-
-/**
- * Returns the user's screen length. Currently hard-coded to 25 lines.
- * @return the user's screen length
- */
-public int query_screen_length() {
-  return 25;
-}
-
 /* initialization */
 
 public void create() {
@@ -82,6 +64,7 @@ public void setup(string username) {
   setup_shell();
   setup_command_giver();
   setup_mobile();
+  setup_avatar();
 
   set_username(username);
   set_primary_id(username);
@@ -153,52 +136,12 @@ protected void setup_command_giver() {
 }
 
 /**
- * Implementation of the modify_command hook. Every command executed by the
- * player will have a chance to be modified before being parsed by this
- * function.
- *
- * @param  cmd the command string being executed
- * @return     the new command string to execute
- */
-mixed modify_command(string cmd) {
-  // TODO add support for default exit verb setting
-  if (ENV(THISO)->query_exit(cmd)) {
-    return "walk " + cmd;
-  }
-  return 0;
-}
-
-/**
- * Add actions for all a player's currently configured commands.
- */
-private void initialize_actions() {
-  foreach (string verb, string command, int flag : query_verbs()) {
-    add_action("do_command", verb, flag);
-  }
-}
-
-/**
  * Invoked by the login object once the avatar object is interactive and
  * has been moved to its start location.
  */
 void enter_game() {
-  enable_commands();
-  initialize_actions();
-  set_prompt(lambda(0,
-    ({ #'+,
-      ({ #'call_other, THISO, "query_context" }),
-      "> "
-    })
-  ), THISO);
-}
-
-/**
- * Returns true to designate that this object represents a player character.
- *
- * @return 1
- */
-nomask int is_avatar() {
-  return 1;
+  restore_actions();
+  restore_prompt();
 }
 
 /**
@@ -208,6 +151,7 @@ nomask int is_avatar() {
  */
 public mapping query_capabilities() {
   return   OrganismCode::query_capabilities()
+          + AvatarMixin::query_capabilities()
             + NameMixin::query_capabilities()
          + VisibleMixin::query_capabilities()
            + ShellMixin::query_capabilities()

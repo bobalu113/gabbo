@@ -128,8 +128,8 @@ int set_formatter(closure cl) {
 string query_level() {
   return level;
 }
-
-/**
+  
+/*
  * Set the minimum log level.
  * @param  str the log level to set
  * @return     1 for success, 0 for failure
@@ -420,7 +420,7 @@ private void do_output(string msg) {
       );
       if (err) { continue; }
       foreach (mixed *ob : consoles) {
-        catch (tell_object(ob[OB_TARGET], msg + "\n"));
+        catch (efun::tell_object(ob[OB_TARGET], msg + "\n"));
       }
       break;
 #endif

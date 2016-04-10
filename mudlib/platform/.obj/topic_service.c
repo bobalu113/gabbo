@@ -1,5 +1,5 @@
 /**
- * The topic service objet.
+ * The topic service object.
  *
  * @author devo@eotl
  * @alias TopicService
