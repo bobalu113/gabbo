@@ -3,6 +3,7 @@
 /mudlib/user/
 /mudlib/Debug.log
 /mudlib/LP_SWAP.*
+/mudlib/.project
 *.stackdump
 /mudlib/mudlib.sublime-project
 /mudlib/mudlib.sublime-workspace

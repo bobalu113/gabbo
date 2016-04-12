@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<commands 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/bobalu113/gabbo/master/mudlib/platform/.etc/command.xsd">
+
+  <command primaryVerb="login" controller="../.bin/login">
+    <fieldList>
+      <field id="username" type="string" required="prompt">
+        <validate validator="not_empty"></validate>
+        <validate validator="max_length">
+          <param value="12"/>
+        </validate>
+        <validate validator="is_user"></validate>
+        <prompt maxRetry="3">Enter your name: </prompt>
+      </field>
+      <field id="password" type="string" required="prompt">
+        <validate validator="not_empty"></validate>
+        <validate validator="authenticated"></validate>
+        <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
+      </field>
+    </fieldList>
+    <syntax minArgs="0" maxArgs="1">
+      <argList>
+        <arg fieldRef="username"></arg>
+      </argList>
+    </syntax>
+  </command>
+
+  <command primaryVerb="register" controller="../.bin/register">
+    <fieldList>
+      <field id="username" type="string" required="prompt">
+        <validate validator="not_empty"></validate>
+        <validate validator="max_length">
+          <param value="12"/>
+        </validate>
+        <validate validator="is_user"></validate>
+        <prompt maxRetry="3">Enter your name: </prompt>
+      </field>
+      <field id="password" type="string" required="prompt">
+        <validate validator="not_empty"></validate>
+        <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
+      </field>
+      <field id="confirmPassword" type="string" required="prompt">
+        <validate validator="password_confirmed"></validate>
+        <prompt noecho="true" maxRetry="3">Confirm your password: </prompt>
+      </field>
+    </fieldList>
+    <syntax minArgs="0" maxArgs="1">
+      <argList>
+        <arg fieldRef="username"></arg>
+      </argList>
+    </syntax>
+  </command>
+
+  <command primaryVerb="guest" controller="../.bin/guest">
+    <syntax args="0"></syntax>
+  </command>
+
+  <command primaryVerb="quit" controller="../.bin/quit">
+    <syntax args="0"></syntax>
+  </command>
+
+</commands>

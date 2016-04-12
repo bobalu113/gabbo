@@ -1,90 +1,109 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-  <xsd:element name="command" type="command"/>
+  <xsd:element name="commands">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="command" type="command" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
 
   <xsd:complexType name="command">
     <xsd:sequence>
-      <xsd:element name="secondaryVerb">
+      <xsd:element name="secondaryVerb" maxOccurs="unbounded" minOccurs="0">
         <xsd:complexType>
           <xsd:attribute name="verb" type="xsd:string"></xsd:attribute>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="argList" type="argList"></xsd:element>
-      <xsd:element name="optSet" type="optSet"></xsd:element>
-      <xsd:element name="syntax" type="syntax"></xsd:element>
-      <xsd:element name="validate" type="validate"></xsd:element>
-      <xsd:element name="subcommand" type="command"></xsd:element>
+      <xsd:element name="fieldList" type="fieldList" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element name="argList" type="argList" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="optSet" type="optSet" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="syntax" type="syntax" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+      <xsd:element name="validate" type="validate" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="subcommand" type="command" maxOccurs="unbounded" minOccurs="0"></xsd:element>
     </xsd:sequence>
-    <xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
-    <xsd:attribute name="ref" type="xsd:IDREF"></xsd:attribute>
+    <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="primaryVerb" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="parser" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="controller" type="xsd:string"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="fieldList">
+    <xsd:sequence>
+      <xsd:element name="field" type="field" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+    </xsd:sequence>
   </xsd:complexType>
 
   <xsd:complexType name="argList">
     <xsd:sequence>
-      <xsd:element name="arg" type="arg"></xsd:element>
+      <xsd:element name="arg" type="arg" maxOccurs="unbounded" minOccurs="0"></xsd:element>
     </xsd:sequence>
-    <xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
-    <xsd:attribute name="ref" type="xsd:IDREF"></xsd:attribute>
-  </xsd:complexType>
-
-  <xsd:complexType name="arg">
-    <xsd:sequence>
-      <xsd:element name="validate" type="validate"></xsd:element>
-      <xsd:element name="prompt" type="prompt"></xsd:element>
-      <xsd:element name="validValues" type="validValues"></xsd:element>
-    </xsd:sequence>
-    <xsd:attribute name="field" type="xsd:string"></xsd:attribute>
-    <xsd:attribute name="type" type="type"></xsd:attribute>
-    <xsd:attribute name="required" type="required"></xsd:attribute>
+    <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:string"></xsd:attribute>
   </xsd:complexType>
 
   <xsd:complexType name="optSet">
     <xsd:sequence>
-      <xsd:element name="opt" type="opt"></xsd:element>
-      <xsd:element name="longopt" type="xsd:string"></xsd:element>
+      <xsd:element name="opt" type="opt" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="longopt" type="xsd:string" maxOccurs="unbounded" minOccurs="0"></xsd:element>
     </xsd:sequence>
-    <xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
-    <xsd:attribute name="ref" type="xsd:IDREF"></xsd:attribute>
+    <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:string"></xsd:attribute>
   </xsd:complexType>
 
-<xsd:complexType name="opt">
+  <xsd:complexType name="field">
     <xsd:sequence>
-      <xsd:element name="validate" type="validate"></xsd:element>
-      <xsd:element name="prompt" type="prompt"></xsd:element>
-      <xsd:element name="validValues" type="validValues"></xsd:element>
+      <xsd:element name="validate" type="validate" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="prompt" type="prompt" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element name="enum" type="enum" maxOccurs="1" minOccurs="0"></xsd:element>
     </xsd:sequence>
-    <xsd:attribute name="field" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="type" type="type"></xsd:attribute>
-    <xsd:attribute name="param">
-      <xsd:simpleType>
-        <xsd:restriction base="xsd:string">
-          <xsd:maxLength value="1"></xsd:maxLength>
-        </xsd:restriction>
-      </xsd:simpleType>
-    </xsd:attribute>
-</xsd:complexType>
+    <xsd:attribute name="required" type="required"></xsd:attribute>
+  </xsd:complexType>
 
-<xsd:complexType name="longopt">
-    <xsd:sequence>
-      <xsd:element name="validate" type="validate"></xsd:element>
-      <xsd:element name="prompt" type="prompt"></xsd:element>
-      <xsd:element name="validValues" type="validValues"></xsd:element>
-    </xsd:sequence>
-    <xsd:attribute name="field" type="xsd:string"></xsd:attribute>
-    <xsd:attribute name="type" type="type"></xsd:attribute>
-    <xsd:attribute name="param" type="xsd:string"></xsd:attribute>
-</xsd:complexType>
+  <xsd:complexType name="arg">
+    <xsd:complexContent>
+      <xsd:extension base="field">
+        <xsd:attribute name="fieldRef" type="xsd:string"></xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="opt">
+    <xsd:complexContent>
+      <xsd:extension base="field">
+        <xsd:attribute name="fieldRef" type="xsd:string"></xsd:attribute>
+        <xsd:attribute name="param">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:maxLength value="1"></xsd:maxLength>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="longopt">
+    <xsd:complexContent>
+      <xsd:extension base="field">
+        <xsd:attribute name="fieldRef" type="xsd:string"></xsd:attribute>
+        <xsd:attribute name="param" type="xsd:string"></xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
 
   <xsd:complexType name="syntax">
     <xsd:sequence>
-      <xsd:element name="validate" type="validate"></xsd:element>
-      <xsd:element name="argList" type="argList"></xsd:element>
-      <xsd:element name="optSet" type="optSet"></xsd:element>
-      <xsd:element name="opt" type="opt"></xsd:element>
-      <xsd:element name="longopt" type="longopt"></xsd:element>
-      <xsd:element name="subcommand" type="xsd:IDREF"></xsd:element>
+      <xsd:element name="validate" type="validate" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="argList" type="argList" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element name="optSet" type="optSet" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="opt" type="opt" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="longopt" type="longopt" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="subcommand" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
     </xsd:sequence>
     <xsd:attribute name="args">
       <xsd:simpleType>
@@ -113,16 +132,39 @@
 
   <xsd:complexType name="validate">
     <xsd:sequence>
-      <xsd:element name="param" type="xsd:string"></xsd:element>
+      <xsd:element name="param" maxOccurs="unbounded" minOccurs="0">
+        <xsd:complexType>
+          <xsd:attribute name="value" type="xsd:string"></xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
     </xsd:sequence>
     <xsd:attribute name="validator" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="fail" type="xsd:string"></xsd:attribute>
   </xsd:complexType>
- 
+
   <xsd:complexType name="prompt">
-    <xsd:attribute name="message" type="xsd:string"></xsd:attribute>
-    <xsd:attribute name="noecho" type="xsd:boolean"></xsd:attribute>
-    <xsd:attribute name="abort" type="xsd:boolean"></xsd:attribute>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+      <xsd:attribute name="noecho" type="xsd:boolean"></xsd:attribute>
+      <xsd:attribute name="showAbort" type="xsd:boolean"></xsd:attribute>
+      <xsd:attribute name="showEnum">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="false"></xsd:enumeration>
+            <xsd:enumeration value="short"></xsd:enumeration>
+            <xsd:enumeration value="long"></xsd:enumeration>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="maxRetry">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:int">
+            <xsd:minInclusive value="0"></xsd:minInclusive>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
 
   <xsd:simpleType name="type">
@@ -144,10 +186,10 @@
       <xsd:enumeration value="false"></xsd:enumeration>
     </xsd:restriction>
   </xsd:simpleType>
-  
-  <xsd:complexType name="validValues">
+
+  <xsd:complexType name="enum">
     <xsd:sequence>
-      <xsd:element name="value">
+      <xsd:element name="value" maxOccurs="unbounded" minOccurs="1">
         <xsd:complexType>
           <xsd:attribute name="value" type="xsd:string"></xsd:attribute>
           <xsd:attribute name="label" type="xsd:string"></xsd:attribute>
@@ -155,6 +197,8 @@
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="multi" type="xsd:boolean"></xsd:attribute>
     <xsd:attribute name="delim" type="xsd:string"></xsd:attribute>
   </xsd:complexType>
