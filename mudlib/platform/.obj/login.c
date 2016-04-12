@@ -15,7 +15,7 @@ private variables private functions inherit MessageLib;
 private variables private functions inherit ObjectLib;
 
 #define LOCALHOST              "127.0.0.1"
-#define WELCOME_FILE           _EtcDir "/issue"
+#define WELCOME_FILE           PlatformEtcDir "/issue"
 #define WELCOME_TOPIC          "system.login"
 #define TERMINAL_MAX_TRIES     30
 #define TIMEOUT_SECS           (10 * 60)

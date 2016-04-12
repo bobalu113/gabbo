@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:element name="command" type="command"/>
+
+  <xsd:complexType name="command">
+    <xsd:sequence>
+      <xsd:element name="secondaryVerb">
+        <xsd:complexType>
+          <xsd:attribute name="verb" type="xsd:string"></xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="argList" type="argList"></xsd:element>
+      <xsd:element name="optSet" type="optSet"></xsd:element>
+      <xsd:element name="syntax" type="syntax"></xsd:element>
+      <xsd:element name="validate" type="validate"></xsd:element>
+      <xsd:element name="subcommand" type="command"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:IDREF"></xsd:attribute>
+    <xsd:attribute name="primaryVerb" type="xsd:string"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="argList">
+    <xsd:sequence>
+      <xsd:element name="arg" type="arg"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:IDREF"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="arg">
+    <xsd:sequence>
+      <xsd:element name="validate" type="validate"></xsd:element>
+      <xsd:element name="prompt" type="prompt"></xsd:element>
+      <xsd:element name="validValues" type="validValues"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="field" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="type" type="type"></xsd:attribute>
+    <xsd:attribute name="required" type="required"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="optSet">
+    <xsd:sequence>
+      <xsd:element name="opt" type="opt"></xsd:element>
+      <xsd:element name="longopt" type="xsd:string"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:ID"></xsd:attribute>
+    <xsd:attribute name="ref" type="xsd:IDREF"></xsd:attribute>
+  </xsd:complexType>
+
+<xsd:complexType name="opt">
+    <xsd:sequence>
+      <xsd:element name="validate" type="validate"></xsd:element>
+      <xsd:element name="prompt" type="prompt"></xsd:element>
+      <xsd:element name="validValues" type="validValues"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="field" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="type" type="type"></xsd:attribute>
+    <xsd:attribute name="param">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:maxLength value="1"></xsd:maxLength>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+</xsd:complexType>
+
+<xsd:complexType name="longopt">
+    <xsd:sequence>
+      <xsd:element name="validate" type="validate"></xsd:element>
+      <xsd:element name="prompt" type="prompt"></xsd:element>
+      <xsd:element name="validValues" type="validValues"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="field" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="type" type="type"></xsd:attribute>
+    <xsd:attribute name="param" type="xsd:string"></xsd:attribute>
+</xsd:complexType>
+
+  <xsd:complexType name="syntax">
+    <xsd:sequence>
+      <xsd:element name="validate" type="validate"></xsd:element>
+      <xsd:element name="argList" type="argList"></xsd:element>
+      <xsd:element name="optSet" type="optSet"></xsd:element>
+      <xsd:element name="opt" type="opt"></xsd:element>
+      <xsd:element name="longopt" type="longopt"></xsd:element>
+      <xsd:element name="subcommand" type="xsd:IDREF"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="args">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:int">
+          <xsd:minInclusive value="0"></xsd:minInclusive>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="minArgs">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:int">
+          <xsd:minInclusive value="0"></xsd:minInclusive>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="maxArgs">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:int">
+          <xsd:minInclusive value="0"></xsd:minInclusive>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="format" type="format"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="validate">
+    <xsd:sequence>
+      <xsd:element name="param" type="xsd:string"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="validator" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="fail" type="xsd:string"></xsd:attribute>
+  </xsd:complexType>
+ 
+  <xsd:complexType name="prompt">
+    <xsd:attribute name="message" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="noecho" type="xsd:boolean"></xsd:attribute>
+    <xsd:attribute name="abort" type="xsd:boolean"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:simpleType name="type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="bool"></xsd:enumeration>
+      <xsd:enumeration value="int"></xsd:enumeration>
+      <xsd:enumeration value="float"></xsd:enumeration>
+      <xsd:enumeration value="string"></xsd:enumeration>
+      <xsd:enumeration value="enum"></xsd:enumeration>
+      <xsd:enumeration value="object"></xsd:enumeration>
+      <xsd:enumeration value="objects"></xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="required">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="true"></xsd:enumeration>
+      <xsd:enumeration value="prompt"></xsd:enumeration>
+      <xsd:enumeration value="false"></xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  
+  <xsd:complexType name="validValues">
+    <xsd:sequence>
+      <xsd:element name="value">
+        <xsd:complexType>
+          <xsd:attribute name="value" type="xsd:string"></xsd:attribute>
+          <xsd:attribute name="label" type="xsd:string"></xsd:attribute>
+          <xsd:attribute name="type" type="type"></xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="multi" type="xsd:boolean"></xsd:attribute>
+    <xsd:attribute name="delim" type="xsd:string"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:simpleType name="format">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="explode"></xsd:enumeration>
+      <xsd:enumeration value="sscanf"></xsd:enumeration>
+      <xsd:enumeration value="parse_command"></xsd:enumeration>
+      <xsd:enumeration value="regexp"></xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>
