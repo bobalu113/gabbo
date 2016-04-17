@@ -6,6 +6,7 @@
  */
 
 #include <sys/functionlist.h>
+#include <sys/xml.h>
 #include <capabilities.h>
 #include <command_giver.h>
 
@@ -28,76 +29,6 @@ mapping verbs;   // TODO command_file needs to be an array
 nosave mapping commands;
 
 default public functions;
-
-protected object load_command(string command);
-protected varargs int add_command(string command, string verb, int flag);
-static int do_command(string arg);
-
-/**
- * Return the mapping of all configured command verbs. Keys are the verbs,
- * the first value is the program name of the command object, the second
- * value is an action flag (see add_action(E)).
- *
- * @return the mapping of verbs to commands
- */
-mapping query_verbs() {
-  return verbs;
-}
-
-/**
- * Return the command for a given verb.
- *
- * @param  verb the verb which is being executed
- * @return      the program name of the command object used for that verb
- */
-string query_command(string verb) {
-  return verbs[verb, 0];
-}
-
-/**
- * Return the action flags for a given verb. (see add_action(E)).
- *
- * @param  verb the verb which is being executed
- * @return      the action flag for the given verb
- */
-int query_command_flag(string verb) {
-  return verbs[verb, 1];
-}
-
-/**
- * Load a command object (and log errors).
- *
- * @param  command the command to load
- * @return         the loaded command object, or 0 if could not be loaded
- */
-protected object load_command(string command) {
-  object cmd_ob;
-  string err = catch (cmd_ob = load_object(command); publish);
-  if (err) {
-    object logger = LoggerFactory->get_logger(THISO);
-    logger->error("Caught error loading command object %s: %s", command, err);
-    return 0;
-  }
-  return cmd_ob;
-}
-
-/**
- * Add a new command to the user's command map.
- *
- * @param  command the program name of the command object
- * @param  verb    the verb which will execute the command
- * @param  flag    optional action flag (see add_action(E))
- * @return         0 for failure, 1 for success
- */
-protected varargs int add_command(string command, string verb, int flag) {
-  object cmd_ob = load_command(command);
-  if (cmd_ob) {
-    commands += ([ cmd_ob ]);
-    verbs += ([ verb : command; flag ]);
-    return 1;
-  }
-  return 0;
-}
 
 /**
  * Test whether a given command object should be allowed this command giver's
@@ -124,17 +55,36 @@ int check_command_access(object cmd_ob, int read) {
   return 0;
 }
 
-
-/**
- * Add actions for all a player's currently configured commands.
- */
-protected void restore_actions() {
-  object oldp = THISP;
-  enable_commands();
-  foreach (string verb, string command, int flag : query_verbs()) {
-    add_action("do_command", verb, flag);
+mixed *load_commands() {
+  mixed *result = ({ });
+  mixed *vars = variable_list(THISO, RETURN_FUNCTION_NAME
+                                     | RETURN_VARIABLE_VALUE);
+  int i = 0;
+  while ((i = member(vars,  CMD_IMPORTS_VAR_STR, i)) != -1) {
+    mixed val = vars[++i];
+    if (stringp(val)) {
+      result += load_command_spec(val);
+    }
+    i++;
   }
-  set_this_player(oldp);
+  return result;
+}
+
+private mixed *parse_command_spec(string specfile) {
+  mixed *result = ({ });
+  mixed *xml = xml_parse(read_file(specfile));
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->debug("xml: %O\n", xml);
+
+  if (xml[XML_TAG_NAME] == "commands") {
+    for (mixed *el : xml[XML_TAG_CONTENTS]) {
+      if (el[XML_TAG_NAME] == "command") {
+        result += parse_command_xml(el);
+      }
+        
+    }
+  }
+  return result;
 }
 
 /**
@@ -143,6 +93,8 @@ protected void restore_actions() {
  * implementation.
  */
 void setup_command_giver() {
+  load_commands();
+/*
   mapping command_files = ([ ]);
   mixed *vars = variable_list(THISO, RETURN_FUNCTION_NAME
                                      | RETURN_VARIABLE_VALUE);
@@ -172,6 +124,7 @@ void setup_command_giver() {
   }
 
   return;
+*/
 }
 
 /**
@@ -182,7 +135,13 @@ void setup_command_giver() {
  * @return     the result of the command execution; 1 for success, 0 for
  *             failure.
  */
-static int do_command(string arg) {
+int do_command(string arg) {
+
+  int ret = random(2);
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->debug("%O,%O,%O,%O", ret, query_notify_fail(), efun::query_command(), arg);
+  return ret;
+/*  
   string verb = query_verb(1);
   if (!member(verbs, verb)) {
     object logger = LoggerFactory->get_logger();
@@ -200,4 +159,5 @@ static int do_command(string arg) {
   }
 
   return cmd_ob->do_command(arg);
+*/
 }

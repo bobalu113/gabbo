@@ -84,14 +84,14 @@ void inaugurate_master(int arg) {
        ({ #'&&,
           'current_file,
           ({ #'==,
-             ({ #'[<.., 'current_file, 7 }), //'
+             ({ #'[<.., 'current_file, 7 }),
              "/auto.h"
           })
        }),
        "",
        "#include <auto.h>\n"
     })
-  ));
+  )); //'
 
   // FUTURE implement uids
   set_driver_hook(H_LOAD_UIDS, unbound_lambda(
@@ -102,13 +102,12 @@ void inaugurate_master(int arg) {
   set_driver_hook(H_CLONE_UIDS, unbound_lambda(
     ({ 'blueprint, 'objectname }),
     ({ #'return, "root" })
-  ));
+  )); //'
 
-  // FUTURE allow customization
-  set_driver_hook(H_NOTIFY_FAIL, unbound_lambda(
-    ({ 'command, 'cmd_giver }),
-    ({ #'return, "Huh?\n" })
-  ));
+  set_driver_hook(H_COMMAND, unbound_lambda(
+    ({ 'command, 'command_giver }),
+    ({ #'call_other, 'command_giver, "do_command", 'command })
+  )); //'
 
   set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
     ({'item, 'dest }),
@@ -260,21 +259,22 @@ void inaugurate_master(int arg) {
 
   set_driver_hook(H_CREATE_OB, unbound_lambda(({ 'obj }),
     ({ #'call_other, 'obj, "create" })
-  ));
+  )); //'
   set_driver_hook(H_CREATE_CLONE, unbound_lambda(({ 'obj }),
     ({ #'call_other, 'obj, "create" })
-  ));
+  )); //'
   set_driver_hook(H_CREATE_SUPER, unbound_lambda(({ 'obj }),
     ({ #'call_other, 'obj, "create" })
-  ));
+  )); //'
 
   set_driver_hook(H_RESET, unbound_lambda(
     0,
     ({ #'call_other, ({ #'this_object }), "reset" })
   ));
+
   set_driver_hook(H_CLEAN_UP, unbound_lambda(
     ({ 'ref, 'obj }),
-    ({ #'call_other, 'obj, "clean_up" }) // '
+    ({ #'call_other, 'obj, "clean_up" })
   ));
 }
 

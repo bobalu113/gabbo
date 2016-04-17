@@ -16,12 +16,7 @@ private variables private functions inherit ObjectLib;
 #define AvatarBinDir           PlatformBinDir "/avatar"
 
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
-mapping CMD_IMPORTS_VAR = ([ 
-  AvatarBinDir "/login", 
-  AvatarBinDir "/register", 
-  AvatarBinDir "/guest", 
-  AvatarBinDir "/quit" 
-]);
+string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
 
 /**
  * Returns the user's screen width. Currently hard-coded to 80 characters.

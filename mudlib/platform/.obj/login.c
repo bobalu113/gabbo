@@ -35,6 +35,11 @@ static void timeout();
 static void abort();
 void heart_beat();
 
+void create() {
+  setup_avatar();
+  setup_sensor();
+}
+
 /**
  * Invoked by the master object when a new connection is established.
  *
@@ -115,6 +120,7 @@ static void welcome(string terminal, mixed is_default) {
   remove_input_to(THISO);
   restore_prompt();
   send_prompt(THISO);
+  setup_command_giver();
   return;
 }
 

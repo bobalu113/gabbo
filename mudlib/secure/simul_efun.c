@@ -63,7 +63,7 @@ nomask void say(varargs mixed *args) {
   raise_error("say() efun is deprecated, use MessageLib");
 }
 
-nomask void tell_object(varargs mixed *args) {
+void tell_object(varargs mixed *args) {
   raise_error("tell_object() efun is deprecated, use MessageLib");
 }
 
