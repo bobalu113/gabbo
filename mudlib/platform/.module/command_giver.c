@@ -6,29 +6,22 @@
  */
 
 #include <sys/functionlist.h>
-#include <sys/xml.h>
 #include <capabilities.h>
 #include <command_giver.h>
 
 private variables private functions inherit ObjectLib;
 private variables private functions inherit ArrayLib;
+private variables private functions inherit CommandSpecLib;
 
 mapping CAPABILITIES_VAR = ([ CAP_COMMAND_GIVER ]);
 
 default private variables;
 
-/**
- * ([ verb : ({ ({ command_file, flag }), ... }) ])
- */
-mapping verbs;   // TODO command_file needs to be an array
-
-/**
- * To keep track if a command object has been reloaded since init.
- * <code>([ command_object ])</code>
- */
-nosave mapping commands;
+nosave mixed *commands;
 
 default public functions;
+
+private mixed *load_command_spec(string specfile);
 
 /**
  * Test whether a given command object should be allowed this command giver's
@@ -70,21 +63,12 @@ mixed *load_commands() {
   return result;
 }
 
-private mixed *parse_command_spec(string specfile) {
+private mixed *load_command_spec(string specfile) {
   mixed *result = ({ });
   mixed *xml = xml_parse(read_file(specfile));
   object logger = LoggerFactory->get_logger(THISO);
-  logger->debug("xml: %O\n", xml);
 
-  if (xml[XML_TAG_NAME] == "commands") {
-    for (mixed *el : xml[XML_TAG_CONTENTS]) {
-      if (el[XML_TAG_NAME] == "command") {
-        result += parse_command_xml(el);
-      }
-        
-    }
-  }
-  return result;
+  return parse_commands_xml(specfile, xml);
 }
 
 /**
@@ -93,38 +77,9 @@ private mixed *parse_command_spec(string specfile) {
  * implementation.
  */
 void setup_command_giver() {
-  load_commands();
-/*
-  mapping command_files = ([ ]);
-  mixed *vars = variable_list(THISO, RETURN_FUNCTION_NAME
-                                     | RETURN_VARIABLE_VALUE);
-  int i = 0;
-  while ((i = member(vars, CMD_IMPORTS_VAR_STR, i)) != -1) {
-    mixed val = vars[++i];
-    if (mappingp(val)) {
-      command_files += val;
-    }
-    i++;
-  }
-
-  verbs = ([ ]);
-  commands = ([ ]);
-
-  foreach (string command : command_files) {
-    object cmd_ob = load_command(command);
-    if (!cmd_ob) {
-      continue;
-    }
-    mixed *actions = cmd_ob->query_actions();
-    foreach (mixed *action : actions) {
-      string verb = action[0];
-      int flag = action[1];
-      add_command(command, verb, flag);
-    }
-  }
-
-  return;
-*/
+  commands = load_commands();
+  object logger = LoggerFactory->get_logger(THISO);
+  logger->debug("commands: %O\n", commands);
 }
 
 /**

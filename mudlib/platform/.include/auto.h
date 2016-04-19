@@ -35,6 +35,7 @@
 #define ArgsLib              PlatformLibDir "/args"
 #define ArrayLib             PlatformLibDir "/array"
 #define ClosureLib           PlatformLibDir "/closure"
+#define CommandSpecLib       PlatformLibDir "/command_spec"
 #define ConnectionLib        PlatformLibDir "/connection"
 #define FileLib              PlatformLibDir "/file"
 #define FormatStringsLib     PlatformLibDir "/format_strings"
