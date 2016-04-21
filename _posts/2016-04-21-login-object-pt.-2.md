@@ -6,7 +6,7 @@ layout: blog
 
 This weekend I made a dent in command processing. The code I wrote is pretty boring, just marshalling an XML document into an LPC data structure, but some of the decisions that went into are kind of interesting.
 
-<!-- more-->
+<!-- more -->
 
 I decided a while ago that I would be writing my own command router, as opposed to using the one built into the driver. The whole add_action() and init() thing isn't super elegant; I'd like more accountability between command givers, command providers, and command controllers, to promote command modularity and uniformity, and to make more metadata available to players and developers about commands and their availability.
 
@@ -16,36 +16,36 @@ Other than the use of this global variable, commands aren't actually grouped by 
 
 Here's an example from avatar.xml, for the register command:
 
-<code><pre><command primaryVerb="register" controller="register">
-  <validate validator="passwords_match">
-    <fail>Passwords do not match.</fail>
-  </validate>
-  <fields>
-    <field id="username" type="string" required="prompt">
-      <validate validator="not_empty"></validate>
-      <validate validator="max_length">
-        <param value="12"/>
-      </validate>
-      <validate validator="available_username">
-        <fail>That username already exists.</fail>
-      </validate>
-      <prompt maxRetry="3">Enter your name: </prompt>
-    </field>
-    <field id="password" type="string" required="prompt">
-      <validate validator="not_empty"></validate>
-      <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
-    </field>
-    <field id="confirmPassword" type="string" required="prompt">
-      <validate validator="not_empty"></validate>
-      <prompt noecho="true" maxRetry="3">Confirm your password: </prompt>
-    </field>
-  </fields>
-  <syntax minArgs="0" maxArgs="1">
-    <args>
-      <arg fieldRef="username"></arg>
-    </args>
-  </syntax>
-</command></pre></code>
+<code><pre>&lt;command primaryVerb="register" controller="register"&gt;
+  &lt;validate validator="passwords_match"&gt;
+    &lt;fail&gt;Passwords do not match.&lt;/fail&gt;
+  &lt;/validate&gt;
+  &lt;fields&gt;
+    &lt;field id="username" type="string" required="prompt"&gt;
+      &lt;validate validator="not_empty"&gt;&lt;/validate&gt;
+      &lt;validate validator="max_length"&gt;
+        &lt;param value="12"/&gt;
+      &lt;/validate&gt;
+      &lt;validate validator="available_username"&gt;
+        &lt;fail&gt;That username already exists.&lt;/fail&gt;
+      &lt;/validate&gt;
+      &lt;prompt maxRetry="3"&gt;Enter your name: &lt;/prompt&gt;
+    &lt;/field&gt;
+    &lt;field id="password" type="string" required="prompt"&gt;
+      &lt;validate validator="not_empty"&gt;&lt;/validate&gt;
+      &lt;prompt noecho="true" maxRetry="3"&gt;Enter your password: &lt;/prompt&gt;
+    &lt;/field&gt;
+    &lt;field id="confirmPassword" type="string" required="prompt"&gt;
+      &lt;validate validator="not_empty"&gt;&lt;/validate&gt;
+      &lt;prompt noecho="true" maxRetry="3"&gt;Confirm your password: &lt;/prompt&gt;
+    &lt;/field&gt;
+  &lt;/fields&gt;
+  &lt;syntax minArgs="0" maxArgs="1"&gt;
+    &lt;args&gt;
+      &lt;arg fieldRef="username"&gt;&lt;/arg&gt;
+    &lt;/args&gt;
+  &lt;/syntax&gt;
+&lt;/command&gt;</pre></code>
 
 This sets up a new command for the verb "register". A verb is just the word the command starts with, a word being a string of characters followed by a space or the end of the string. Right now there's nothing to prevent you from adding multi-word verbs, though I might end limit them to a single word for usability reasons. The command controller will be loaded from "register.c" in the same directory as the command spec, and will be passed three fields: username, password, and confirmPassword. There's only a single possible syntax, taking an optional single string arg, mapped to username. If the arg isn't provided, the user will be prompted for a username. Note that the user will also be prompted for the password and confirmPassword, since it is not possible to pass those as command line arguments or options. This is for security reasons; also note the password prompts have the "noecho" attribute set to true, which specifies that the password input should not be echoed to the screen. In addition to the various field validations, there is a form-level validation which ensures that the two passwords match. All of the validators must be present in the controller code.
 
