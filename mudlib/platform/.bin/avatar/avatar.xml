@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/bobalu113/gabbo/master/mudlib/platform/.etc/command.xsd">
 
-  <command primaryVerb="login" controller="../.bin/login">
+  <command primaryVerb="login" controller="login">
     <fieldList>
       <field id="username" type="string" required="prompt">
         <validate validator="not_empty"></validate>
@@ -26,7 +26,7 @@
     </syntax>
   </command>
 
-  <command primaryVerb="register" controller="../.bin/register">
+  <command primaryVerb="register" controller="register">
     <fieldList>
       <field id="username" type="string" required="prompt">
         <validate validator="not_empty"></validate>
@@ -52,11 +52,11 @@
     </syntax>
   </command>
 
-  <command primaryVerb="guest" controller="../.bin/guest">
+  <command primaryVerb="guest" controller="guest">
     <syntax args="0"></syntax>
   </command>
 
-  <command primaryVerb="quit" controller="../.bin/quit">
+  <command primaryVerb="quit" controller="quit">
     <syntax args="0"></syntax>
   </command>
 
