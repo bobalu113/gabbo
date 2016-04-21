@@ -9,13 +9,18 @@
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
           <param value="12"/>
+          <fail>Maximum username length is 12 characters.</fail>
         </validate>
-        <validate validator="is_user"></validate>
+        <validate validator="is_user">
+          <fail>That username does not exist.</fail>
+        </validate>
         <prompt maxRetry="3">Enter your name: </prompt>
       </field>
       <field id="password" type="string" required="prompt">
         <validate validator="not_empty"></validate>
-        <validate validator="authenticated"></validate>
+        <validate validator="authenticated">
+          <fail>Wrong password.</fail>
+        </validate>
         <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
       </field>
     </fieldList>
@@ -27,13 +32,18 @@
   </command>
 
   <command primaryVerb="register" controller="register">
+    <validate validator="passwords_match">
+      <fail>Passwords do not match.</fail>
+    </validate>
     <fieldList>
       <field id="username" type="string" required="prompt">
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
           <param value="12"/>
         </validate>
-        <validate validator="is_user"></validate>
+        <validate validator="available_username">
+          <fail>That username already exists.</fail>
+        </validate>
         <prompt maxRetry="3">Enter your name: </prompt>
       </field>
       <field id="password" type="string" required="prompt">
@@ -41,7 +51,7 @@
         <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
       </field>
       <field id="confirmPassword" type="string" required="prompt">
-        <validate validator="password_confirmed"></validate>
+        <validate validator="not_empty"></validate>
         <prompt noecho="true" maxRetry="3">Confirm your password: </prompt>
       </field>
     </fieldList>
