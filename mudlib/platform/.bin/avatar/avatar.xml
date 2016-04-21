@@ -4,7 +4,7 @@
   xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/bobalu113/gabbo/master/mudlib/platform/.etc/command.xsd">
 
   <command primaryVerb="login" controller="login">
-    <fieldList>
+    <fields>
       <field id="username" type="string" required="prompt">
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
@@ -23,11 +23,11 @@
         </validate>
         <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
       </field>
-    </fieldList>
+    </fields>
     <syntax minArgs="0" maxArgs="1">
-      <argList>
+      <args>
         <arg fieldRef="username"></arg>
-      </argList>
+      </args>
     </syntax>
   </command>
 
@@ -35,7 +35,7 @@
     <validate validator="passwords_match">
       <fail>Passwords do not match.</fail>
     </validate>
-    <fieldList>
+    <fields>
       <field id="username" type="string" required="prompt">
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
@@ -54,11 +54,11 @@
         <validate validator="not_empty"></validate>
         <prompt noecho="true" maxRetry="3">Confirm your password: </prompt>
       </field>
-    </fieldList>
+    </fields>
     <syntax minArgs="0" maxArgs="1">
-      <argList>
+      <args>
         <arg fieldRef="username"></arg>
-      </argList>
+      </args>
     </syntax>
   </command>
 
