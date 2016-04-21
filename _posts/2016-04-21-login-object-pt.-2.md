@@ -25,7 +25,7 @@ Here's an example from avatar.xml, for the register command:
       &lt;validate validator="not_empty"&gt;&lt;/validate&gt;
       &lt;validate validator="max_length"&gt;
         &lt;param value="12"/&gt;
-          &lt;fail&gt;Maximum username length is 12 characters.&lt;/fail&gt;
+        &lt;fail&gt;Maximum username length is 12 characters.&lt;/fail&gt;
       &lt;/validate&gt;
       &lt;validate validator="available_username"&gt;
         &lt;fail&gt;That username already exists.&lt;/fail&gt;
