@@ -5,18 +5,8 @@
  * @alias CommandSpecLib
  */
 #include <sys/xml.h>
-
-#define TRUE_VALUE          "true"
-#define DEFAULT_ENUM_MULTI  0
-#define DEFAULT_REQUIRED    0
-#define DEFAULT_DELIM       ","
-#define DEFAULT_FORMAT      "explode"
-#define DEFAULT_OPT_MULTI   0
-#define DEFAULT_NO_ECHO     0
-#define DEFAULT_SHOW_ABORT  0
-#define DEFAULT_SHOW_ENUM   0
-#define DEFAULT_MAX_RETRY   0
-#define FIELD_ID            0
+#include <command_spec.h>
+#include <command.h>
 
 mixed *parse_commands_xml(string specfile, mixed *xml);
 varargs mixed *parse_command_xml(string specfile, mixed *xml, 
@@ -106,11 +96,11 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
   mapping field_map;
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
     switch (el[XML_TAG_NAME]) {
-      case "fieldList":
+      case "fields":
         field_map = ([ ]);
         fields = parse_fields_xml(specfile, el, field_map);
         break;
-      case "argList":
+      case "args":
         if (member(xml[XML_TAG_ATTRIBUTES], "id")) {
           arg_lists += ([
             xml[XML_TAG_ATTRIBUTES]["id"] :
@@ -118,7 +108,7 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
           ]);
         }         
         break;
-      case "optSet":
+      case "opts":
         if (member(xml[XML_TAG_ATTRIBUTES], "id")) {
           opt_sets += ([
             xml[XML_TAG_ATTRIBUTES]["id"] :
@@ -221,7 +211,7 @@ mixed *parse_args_xml(string specfile, mixed *xml, mapping field_map,
     if (arg_lists && member(arg_lists, ref)) {
       return arg_lists[ref];
     } else {
-      parse_error(specfile, "unknown argList reference " + ref);
+      parse_error(specfile, "unknown args reference " + ref);
     }
   } 
 
@@ -262,7 +252,7 @@ mixed *parse_opts_xml(string specfile, mixed *xml, mapping opt_sets,
     if (opt_sets && member(opt_sets, ref)) {
       return opt_sets[ref];
     } else {
-      parse_error(specfile, "unknown optSet reference " + ref);
+      parse_error(specfile, "unknown opts reference " + ref);
     }
   } 
 
@@ -438,8 +428,8 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
   int args = -1;
-  if (member(xml[XML_TAG_ATTRIBUTES], "args")) {
-    args = to_int(xml[XML_TAG_ATTRIBUTES]["args"]);
+  if (member(xml[XML_TAG_ATTRIBUTES], "explodeArgs")) {
+    args = to_int(xml[XML_TAG_ATTRIBUTES]["explodeArgs"]);
   } 
 
   int min_args = -1;
@@ -469,11 +459,11 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
   mixed *subcommands = ({ });
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
     switch (el[XML_TAG_NAME]) {
-      case "argList":
+      case "args":
         arglist = parse_args_xml(specfile, el, 
                                  field_map, arg_lists);
         break;
-      case "optSet":
+      case "opts":
         opts += parse_opts_xml(specfile, el, 
                                field_map, opt_sets);
         break;

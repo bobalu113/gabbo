@@ -8,6 +8,7 @@
 #include <sys/functionlist.h>
 #include <capabilities.h>
 #include <command_giver.h>
+#include <command.h>
 
 private variables private functions inherit ObjectLib;
 private variables private functions inherit ArrayLib;
@@ -91,28 +92,79 @@ void setup_command_giver() {
  *             failure.
  */
 int do_command(string arg) {
+  mapping fragments = ([ ]); // len to fragment 
+  mapping matched = ([ ]);  // verb to arg
+  int arglen = strlen(arg);
+  int result = 0;
+  foreach (mixed *command : commands) {
+    foreach (string verb : command[COMMAND_VERBS]) {
+      if (member(matched, verb)) {
+        if (matched[verb]) {
+          object controller = load_controller(command[COMMAND_CONTROLLER]);
+          if (controller) {
+            result = controller->do_command(command, verb, matched[verb]);
+          }
+          // TODO notify broken controller via result
+          if (result) {
+            break;
+          }
+        } else {
+          continue;
+        }
+      }
+      len = strlen(verb);
+      if (len > arglen) {
+        continue;
+      }
+      if (!member(fragments, len)) {
+        fragments[len] = arg[0..(len - 1)];
+      }
+      if ((fragments[len] == verb) {
+        if(len == arglen) {
+          matched[verb] = "";
+        } else if (arg[len] == ' ') {
+          // trim leading spaces
+          int i = len;
+          while (arg[i] == ' ') { 
+            i++;
+          }
+          // set the match
+          if (i < arglen) {
+            matched[verb] = arg[i..];
+          } else {
+            matched[verb] = "";
+          }
+        } else {
+          matched[verb] = 0;
+        }
+      } else {
+        matched[verb] = 0;
+      }
 
-  int ret = random(2);
-  object logger = LoggerFactory->get_logger(THISO);
-  logger->debug("%O,%O,%O,%O", ret, query_notify_fail(), efun::query_command(), arg);
-  return ret;
-/*  
-  string verb = query_verb(1);
-  if (!member(verbs, verb)) {
-    object logger = LoggerFactory->get_logger();
-    logger->warn("Trying to route command for unknown verb: %s", verb);
-    return 0;
-  }
-  string command = verbs[verb];
-  object cmd_ob = FINDO(command);
-  if (!cmd_ob || !member(commands, cmd_ob)) {
-    // FUTURE prompt user whether or not to re-init
-    cmd_ob = load_command(command);
-    if (cmd_ob) {
-      commands += ([ cmd_ob ]);
+      if (matched[verb]) {
+        object controller = load_controller(command[COMMAND_CONTROLLER]);
+        if (controller) {
+          result = controller->do_command(command, verb, matched[verb]);
+        }
+        if (result) {
+          break;
+        }
+      }
+    }
+    if (result) {
+      break;
     }
   }
+  
+  return result;
+}
 
-  return cmd_ob->do_command(arg);
-*/
+object load_controller(string controller) {
+  object result;
+  object logger = LoggerFactory->get_logger(THISO);
+  string err = catch(result = load_object(controller); publish);
+  if (err) {
+    logger->info("error loading controller %s: %s", controller, err);
+  }
+  return result;
 }
