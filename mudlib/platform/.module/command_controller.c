@@ -7,9 +7,21 @@
  * @alias CommandController
  */
 
-#define MAX_ARGS   26
+struct CommandState {
+  string verb;
+  mixed *command;
+  mixed *syntax;
+  mapping opts;
+  string *args;
+  mapping extra;
+  mapping model;
+  int field_retry;
+  int form_retry;
+}
 
-private closure sscanf_args, parse_command_args;
+#define DEFAULT_PROMPT "(%t) %m [%d]: "
+
+closure prompt_formatter;
 
 int do_command(mixed *command, string verb, string arg) {
   mapping opts, badopts;
@@ -17,345 +29,336 @@ int do_command(mixed *command, string verb, string arg) {
   arg = trim_right(arg, ' ');
   mixed *syntax = apply_syntax(command, arg, &opts, &badopts, &args);
   if (valid_syntax(syntax, opts, badopts, args)) {
-    return get_model(command, syntax, opts, args, #'do_execute); //'
+    mapping model = ([ ]);
+    struct CommandState state = 
+      (<CommandState> verb, command, syntax, opts, args, ([ ]), model, 0, 0);
+    return process_command(state, #'do_execute); //'
   } else {
-    // syntax fail
+    // fail usage
   }
 }
 
-int get_model(mixed *command, mixed *syntax, mapping opts, string *args, closure callback) {
-  mapping model = ([ ]);
-  // validate args
-  // validate opts
-  // gather extra fields
-  // validate extra fields
-  // syntax validation
-  // command validation
-  funcall(callback, model, verb);
-
-
-}
-
-mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts, 
-                    string *args) {
-  // TODO subcommands
-  mapping syntax_map = ([ ]);
-  foreach (mixed *syntax : command[COMMAND_SYNTAX]) {
-    int pos = 0;
-
-    // XXX cache these?
-    mapping valid_opts = mkmapping(map(command[COMMAND_OPTS], 
-                                       #'[, OPT_OPT),//'
-                                   command[COMMAND_OPTS]);
-    mapping valid_longopts = mkmapping(map(command[COMMAND_LONGOPTS], 
-                                           #'[, OPT_OPT),//'
-                                       command[COMMAND_LONGOPTS]);
-    opts = ([ ]);
-    badopts = ([ ]);
-    args = ({ });
-    parse_opts(arg, &pos, &opts, &badopts, valid_opts, valid_longopts)
-
-    pos = find_nonws(arg, pos);
-    string *args;
-    switch (syntax[SYNTAX_FORMAT]) {
-      case "sscanf":
-        args = parse_args_sscanf(arg, &pos, syntax[SYNTAX_PATTERN]);
-        break;
-      case "regexp":
-        args = parse_args_regexp(arg, &pos, syntax[SYNTAX_PATTERN]);
-        break;
-      case "parse_command":
-        args = parse_args_parse_command(arg, &pos, syntax[SYNTAX_PATTERN]);
-        break;
-      case "explode":
-      default:
-        args = parse_args_explode(arg, &pos, syntax[SYNTAX_EXPLODE_ARGS]);
-        break;
-    }
-
-    if (valid_syntax(syntax, opts, badopts, args)) {
-      return syntax;
-    } else {
-      m_add(syntax_map, syntax, opts, badopts, args);
-    }
+int process_command(struct CommandState state, closure callback) {
+  if (!process_args(state, callback)) {
+    return 0;
+  }
+  if (!process_opts(state, state->syntax[SYNTAX_OPTS], callback)) {
+    return 0;
+  }
+  if (!process_opts(state, state->syntax[SYNTAX_LONGOPTS], callback)) {
+    return 0;
+  }
+  if (!process_extra(state, callback)) {
+    return 0;
   }
 
-  syntax = get_matching_syntax(syntax_map, &opts, &badopts, &args);
-  if (!syntax) {
-    // no matching syntax, use first
-    syntax = command[COMMAND_SYNTAX][0];
-    opts = syntax_map[syntax, 0];
-    badopts = syntax_map[syntax, 1];
-    args = syntax_map[syntax, 2];
-  }
-  return syntax;
-}
-
-mixed *get_matching_syntax(mapping syntax_map, mapping opts, mapping badopts, 
-                           mixed *args) {
-  foreach (mixed *syntax, opts, badopts, args : syntax_map) {
-    if (valid_syntax(syntax, opts, badopts, args)) {
-      return syntax;
-    }
-  }
-
-  foreach (mixed *syntax, opts, badopts, args : syntax_map) {
-    if (valid_syntax(syntax, opts, ([ ]), args)) {
-      return syntax;
-    }
-  }
-}
-
-int valid_syntax(mixed *syntax, mapping opts, mapping badopts, mixed *args) {
-  int numargs = sizeof(args);
-  if (syntax[SYNTAX_ARGS] >= 0) {
-    if (numargs == syntax[SYNTAX_ARGS]) {
-      if (!sizeof(badopts)) {
-        return 1;
+  // do form validation
+  mixed *validations = state->syntax[SYNTAX_VALIDATION] 
+                       + state->command[COMMAND_VALIDATION];
+  foreach (mixed *validation : validations) {
+    closure validator = symbol_function(validation[VALIDATE_VALIDATOR]);
+    int result = apply(validator, model, validation[VALIDATE_PARAMS]);
+    if (!result) {
+      if (state->form_retry >= state->command[COMMAND_MAX_RETRY]) {
+        // TODO print fail message
+        return 0;
+      } else {
+        // TODO print fail message
+        state->form_retry += 1;
+        state->model = ([ ]);
+        process_command(state, callback);
+        return 0;
       }
     }
-  } else {
-    if (syntax[SYNTAX_MIN_ARGS] >= 0) {
-      if (syntax[SYNTAX_MIN_ARGS] <= numargs) {
-        if (syntax[SYNTAX_MAX_ARGS] >= 0) {
-          if (syntax[SYNTAX_MAX_ARGS] >= numargs) {
-            return (!sizeof(badopts));
-          }
+  }
+  return callback(state->model, state->verb);
+}
+
+int process_args(struct CommandState state, closure callback) {
+  int i = 0;
+  int numargs = sizeof(state->args);
+  foreach (mixed *field : state->syntax[SYNTAX_ARGS]) {
+    if (!member(model, field[FIELD_ID])) {
+      if (i < numargs) {
+        // we have the arg, process it
+        if (!process_field(state, field, &(state->args[i]), callback)) {
+          return 0;
+        }
+      } else {
+        // not enough args provided
+        if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
+            || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
+          // prompt user for value
+          state->args += ({ field[FIELD_DEFAULT] });
+          field_prompt(state, field, &(state->args[i]), callback);
+          return 0;
         } else {
-          return (!sizeof(badopts));
+          if (field[FIELD_REQUIRED]) {
+            // required field, fail usage
+            return 0;            
+          } else {
+            // not required, continue with default
+            state->args[i] = field[FIELD_DEFAULT];
+            if (!process_field(state, field, &(state->args[i]), callback)) {
+              return 0;
+            }
+          }
         }
       }
-    } else if (syntax[SYNTAX_MAX_ARGS] >= 0) {
-      if (syntax[SYNTAX_MAX_ARGS] >= numargs) {
-        return (!sizeof(badopts));
-      }
-    } else {
-      return (!sizeof(badopts));
     }
+    i++;
+  }
+  return 1;
+}
+
+int process_opts(struct CommandState state, mapping opts, closure callback) {
+  foreach (mixed opt, mixed *field : opts) {
+    if (!member(model, field[FIELD_ID])) {
+      mixed opt = field[OPT_OPT];
+      if (member(opts, opt)) {
+        // we have the opt, process it
+        if (!process_field(state, field, &(state->opts[opt]), callback)) {
+          return 0;
+        }
+      } else {
+        // opt not provided
+        if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
+            || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
+          // prompt user for value
+          m_add(state->opts, opt, field[FIELD_DEFAULT]);
+          field_prompt(state, field, &(state->opts[opt]), callback);
+          return 0;
+        } else {
+          if (field[FIELD_REQUIRED]) {
+            // required field, fail usage
+            return 0;            
+          } else {
+            // not required, continue with default
+            m_add(state->opts, opt, field[FIELD_DEFAULT]);
+            if (!process_field(state, field, &(state->opts[opt]), callback)) {
+              return 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  return 1;
+}
+
+int process_extra(struct CommandState state, closure callback) {
+  foreach (mixed *field : state->command[COMMAND_FIELDS]) {
+    string id = field[FIELD_ID];
+    if (!member(model, id)) {
+      if (member(state->extra, id)) {
+        // we have the field, process it
+        if (!process_field(state, field, &(state->extra[id]), callback)) {
+          return 0;
+        }
+      } else {
+        // field not provided
+        if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
+            || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
+          // prompt user for value
+          m_add(state->extra, extra, field[FIELD_DEFAULT]);
+          field_prompt(state, field, &(state->extra[extra]), callback);
+          return 0;
+        } else {
+          if (field[FIELD_REQUIRED]) {
+            // required field, fail usage
+            return 0;            
+          } else {
+            // not required, continue with default
+            m_add(state->opts, opt, field[FIELD_DEFAULT]);
+            if (!process_field(state, field, &(state->opts[opt]), callback)) {
+              return 0;
+            }
+          }
+        }
+        // opt not provided
+        switch (field[FIELD_REQUIRED]) {
+          case REQUIRED_TRUE:
+            // required field, fail usage
+            return 0;
+          case REQUIRED_PROMPT:
+            // prompt user for value
+            m_add(state->extra, id, field[FIELD_DEFAULT]);
+            field_prompt(state, field, &(state->extra[id]), callback);
+            return 0;
+          case REQUIRED_FALSE:
+          default:
+            // not required, continue with default
+            m_add(state->extra, id, field[FIELD_DEFAULT]);
+            if (!process_field(state, field, &(state->extra[id]), callback)) {
+              return 0;
+            }
+        }
+      }
+    }
+  }
+  return 1;
+}
+
+int process_field(struct CommandState state, mixed *field, string arg, closure callback) {
+  mixed val;
+  string fail;
+  switch (field[FIELD_TYPE]) {
+    case "bool":
+      fail = parse_boolean(arg, &val);
+      break;
+    case "int":
+      fail = parse_int(arg, &val);
+      break;
+    case "float":
+      fail = parse_float(arg, &val);
+      break;
+    case "enum":
+      fail = parse_enum(arg, &val, field[FIELD_ENUM]);
+      break;
+    case "object":
+      fail = parse_object(arg, &val);
+      break;
+    case "objects":
+      fail = parse_objects(arg, &val);
+      break;
+    case "string":
+    default:
+      val = arg;
+      break;
+  }
+  if (fail) {
+    if (state->field_retry >= field[FIELD_MAX_RETRY]) {
+      // TODO set fail message
+      return 0;
+    } else {
+      // TODO print fail message
+      state->field_retry += 1;
+      field_prompt(state, field, &arg, callback);
+      return 0;
+    }
+  } else {
+    // do field validation
+    foreach (mixed *validation : field[FIELD_VALIDATION]) {
+      closure validator = symbol_function(validation[VALIDATE_VALIDATOR]);
+      int result = apply(validator, val, validation[VALIDATE_PARAMS]);
+      if (!result) {
+        // validation failed
+        switch (field[FIELD_REQUIRED]) {
+
+        }
+        if (state->field_retry >= field[FIELD_MAX_RETRY]) {
+          // TODO print fail message
+          return 0;
+        } else {
+          // TODO print fail message
+          state->field_retry += 1;
+          field_prompt(state, field, &arg, callback);
+          return 0;
+        }
+      }
+    }
+    // validation passed, add to model
+    state->model[field[FIELD_ID]] = val;
+    // reset retries to 0 fo next field
+    state->field_retry = 0;
+    return 1;
+  }
+}
+
+void field_prompt(struct CommandState state, mixed *field, mixed val, closure callback) {
+  int flags = INPUT_PROMPT;
+  if (field[FIELD_PROMPT][PROMPT_NOECHO]) {
+    flags |= INPUT_NOECHO;
+  }
+
+  string prompt = funcall(
+    prompt_formatter, 
+    field[FIELD_PROMPT][PROMPT_MSG],
+    (field[FIELD_TYPE] == "enum" 
+      ? (field[FIELD_ENUM][ENUM_ID] 
+        ? field[FIELD_ENUM][ENUM_ID]
+        : "enum")
+      : field[FIELD_TYPE]),
+    val
+  );
+  input_to("field_input", flags, prompt, state, field, &val, callback);
+}
+
+void field_input(string arg, struct CommandState state, mixed *field, mixed val, closure callback) {
+  val = arg;
+  process_command(state, callback);
+}
+
+int parse_boolean(string arg, mixed val) {
+  switch (lower_case(arg)) {
+    case "y":
+    case "yes":
+    case "true":
+      val = 1;
+      return 0;
+    case "n":
+    case "no":
+    case "false":
+      val = 0;
+      return 0;
+    default:
+      return "Allowed values are: yes, no"; 
+  }
+}
+
+int parse_int(string arg, mixed val) {
+  if (sscanf("%d", arg, val)) {
+    return 0;
+  } else {
+    return "Please enter a number.";
+  }
+}
+
+int parse_float(string arg, mixed val) {
+  int i, f;
+  if (sscanf("%d.%d", arg, i, f)) {
+    if (f == 0) {
+      val = to_float(i);
+    } else if (f == 1) {
+      val = to_float(i) + 0.1;
+    } else {
+      val = to_float(i) + (to_float(f) / pow(10, ceil(log(f) / log(10))));
+    }
+    return 0;
+  } else {
+    return "Please enter a number.";
+  }
+}
+
+int parse_enum(string arg, mixed val, mixed *enum) {
+  mapping enum_map = mkmapping(enum);
+  if (enum[ENUM_MULTI]) {
+    val = ({ });
+    string *args = explode_unescaped(arg, enum[ENUM_DELIM]);
+    foreach (string arg : args) {
+      arg = unescape(arg);
+      if (!member(enum_map, arg)) {
+        return "Allowed values are: " 
+          + implode(enum[ENUM_VALUES], enum[ENUM_DELIM] + " ");
+      }
+      val += ({ arg });
+    }
+  } else {
+    if (!member(enum_map, arg)) {
+      return "Allowed values are: " 
+        + implode(enum[ENUM_VALUES], enum[ENUM_DELIM] + " ");
+    }
+    val = arg;
   }
   return 0;
 }
 
-void parse_opts(string arg, int pos, mapping opts, mapping badopts, 
-                mapping valid_opts, mapping valid_longopts) {
-  int done = 0;
-  int len = strlen(arg);
-  while (!done && (pos < len)) {
-    switch (arg[pos]) {
-      case ' ':
-      case '\t':
-        pos++;
-        break;
-      case '-':
-        pos++;
-        if (pos >= len) {
-          continue;
-        }
-        switch (arg[pos]) {
-          case '-':
-            pos++;
-            string opt;
-            string param;
-            parse_longopt(arg, &pos, &opt, &param, &badopts, valid_longopts);
-            if (opt) {
-              if (!member(opts, opt)) {
-                opts[opt] = ({ });
-              }
-              opts[opt] += ({ param });
-            } else {
-              // no more opts
-              done = 1;
-            } 
-            break;
-          case ' ':
-            pos++;
-            break;
-          default:
-            parse_opt(arg, &pos, &opts, &badopts, valid_opts);
-            break;
-        }
-        break;
-      default:
-        // found an arg
-        done = 1;
-        break;
-    }
-  }
+int parse_object(string arg, mixed val) {
+  val = expand_object(arg, THISP, 0);
 }
 
-void parse_longopt(string arg, int pos, string opt, string param, 
-                   mapping badopts, mapping valid_longopts) {
-  opt = "";
-  int len = strlen(arg);
-  while ((pos < len) && (arg[pos] != ' ')) {
-    opt = sprintf("%s%c", opt, arg[pos]);
-    pos++;
-  }
-
-  if (member(valid_longopts, opt)) {
-    if (valid_longopts[opt][OPT_PARAM]) {
-      pos = find_nonws(arg, pos);
-      if (pos < len) {
-        parse_param(arg, &pos, &param);
-      } else {
-        param = "";
-      }
-    }
-  } else {
-    badopts[opt] = 1;
-  }
-}
-
-void parse_opt(string arg, int pos, mapping opts, mapping badopts, 
-               mapping valid_opts) {
-  int len = strlen(arg);
-  while ((pos < len) && (arg[pos] != ' ')) {
-    int opt = arg[pos];
-    pos++;
-    if (member(valid_opts, opt)) {
-      string param;
-      if (valid_opts[opt][OPT_PARAM]) {
-        pos = find_nonws(arg, pos);
-        if (pos < len) {
-          parse_param(arg, &pos, &param);
-        }
-      }
-      if (!member(opts, opt)) {
-        opts[opt] = ({ });
-      }
-      opts[opt] += ({ param });
-      return;
-    } else {
-      badopts[opt] = 1;
-    }
-  }
-}
-
-string *parse_args_explode(string arg, int pos, int numargs) {
-  string *args = ({ });
-  if (numargs >= 0) {
-    // hard arg limit
-    while (sizeof(args) < numargs) {
-      pos = find_nonws(arg, pos);
-      if (sizeof(args) == (numargs - 1)) {
-        // last arg consume entire string
-        int end = match_quote(arg, pos);
-        if (end == strlen(arg)) {
-          // quoted string, unquote/unescape
-          string param = arg[pos..end];
-          param = unquote(param);
-          param = unescape(param);
-          args += ({ param });
-          pos = end + 1;
-        } else {
-          // unquoted, add verbatim
-          args += ({ args[pos..] });
-          pos = strlen(arg);
-        }
-      } else {
-        // normal arg, parse out
-        string param;
-        parse_param(arg, &pos, &param);
-        if (param) {
-          args += ({ param });
-        }
-      }
-    }
-  } else {
-    // no arg limit
-    args = explode_args(arg);
-    pos = strlen(args);
-  }
-  return args;
-}
-
-string *parse_args_sscanf(string arg, int pos, string pattern) {
-  if (!closurep(sscanf_args)) {
-    mixed *sscanf_fragment = allocate(MAX_ARGS);
-    mixed *eval_fragment = allocate(MAX_ARGS * 3);
-    for (int i = 0; i < MAX_ARGS; i++) {
-      sscanf_fragment[i] = quote("arg" + i);
-      int j = i * 3;
-      eval_fragment[j] = ({ i });
-      eval_fragment[j + 1] = quote("arg" + 1);
-      eval_fragment[j + 2] = #'break; //'
-    }
-    sscanf_args = lambda(({ 'arg, 'pattern }), 
-      ({ #',, 
-         ({ #'=, 
-            'matches, 
-            ({ #'sscanf, 'arg, 'pattern }) + sscanf_fragment 
-         }), 
-         ({ #'=, 'args, ({ #'allocate, 'matches }) }), 
-         ({ #'=, 'i, 0 }), 
-         ({ #'while, 
-            ({ #'<, 'i, 'matches }), 
-            'args, 
-            ({ #'=, 
-               ({ #'[, 'args, 'i }), 
-               ({ #'switch, 'i }) + eval_fragment
-            }), 
-            ({ #'+=, 'i, 1 }) 
-         }) 
-      })
-    )); //'
-  }
-  return funcall(sscanf_args, arg[pos..], pattern);
-}
-
-string *parse_args_regexp(string arg, int pos, string pattern) {
-  string *args = regmatch(arg, pattern, RE_MATCH_SUBS, pos);
-  return args[1..];
-}
-
-string *parse_args_parse_command(string arg, int pos, string pattern) {
-  if (!closurep(parse_command_args)) {
-    mixed *parse_command_fragment = allocate(MAX_ARGS);
-    mixed *eval_fragment = allocate(MAX_ARGS * 3);
-    for (int i = 0; i < MAX_ARGS; i++) {
-      parse_command_fragment[i] = quote("arg" + i);
-      int j = i * 3;
-      eval_fragment[j] = ({ i });
-      eval_fragment[j + 1] = 
-        ({ #'?, 
-           ({ #'==, quote("arg" + 1), UNMATCHED_ARG }), 
-           ({ #'=, 'i, MAX_ARGS }), 
-           ({ #'+=, 'args, quote("arg" + 1) })
-        });
-      eval_fragment[j + 2] = #'break; //'
-    }
-    parse_command_args = lambda(({ 'arg, 'obs, 'pattern }), 
-      ({ #',, 
-         ({ #'=, 
-            'matched, 
-            ({ #'parse_command, 'arg, 'obs, 'pattern }) + parse_command_fragment 
-         }), 
-         ({ #'?,
-            'matched,
-            ({ #',,
-               ({ #'=, 'args, '({ }) }), 
-               ({ #'=, 'i, 0 }), 
-               ({ #'while, 
-                  ({ #'<, 'i, MAX_ARGS }),
-                  'args, 
-                  ({ #'switch, 'i }) + eval_fragment, 
-                  ({ #'+=, 'i, 1 }) 
-               })
-            }),
-            '({ }),
-         })
-      })
-    )); //'
-  }
-  return funcall(parse_command_args, arg[pos..], ({ }), pattern);
-}
-
-void parse_param(string arg, int pos, string param) {
-  int end = match_quote(arg, pos);
-  param = arg[pos..end];
-  param = unquote(param);
-  param = unescape(param);
-  pos = end + 1;
+int parse_objects(string arg, mixed val) {
+  val = expand_objects(arg, THISP, 0);
 }
 
 int do_execute(mapping model, string verb) {
@@ -364,4 +367,14 @@ int do_execute(mapping model, string verb) {
 
 int execute(mapping model, string verb) {
   return 0;
+}
+
+void create() {
+  prompt_formatter = parse_format(DEFAULT_PROMPT, ([
+      'm' : ({ 0, "%s", ({ 'message }) }),
+      't' : ({ 0, "%s", ({ 'type }) }),
+      'd' : ({ 0, "%s", ({ 'default }) }),
+    ]),
+    ({ 'message, 'type, 'default })
+  ); 
 }

@@ -1,9 +1,11 @@
 #ifndef _COMMAND_SPEC_H
 #define _COMMAND_SPEC_H
 
-#define TRUE_VALUE          "true"
+#include <command.h>
+
 #define DEFAULT_ENUM_MULTI  0
-#define DEFAULT_REQUIRED    0
+#define DEFAULT_REQUIRED    FALSE_VALUE
+#define DEFAULT_PROMPT      PROMPT_VALIDATE
 #define DEFAULT_DELIM       ","
 #define DEFAULT_FORMAT      "explode"
 #define DEFAULT_OPT_MULTI   0

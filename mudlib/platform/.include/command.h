@@ -7,19 +7,23 @@
 #define COMMAND_FIELDS        3
 #define COMMAND_SYNTAX        4
 #define COMMAND_VALIDATION    5
+#define COMMAND_MAX_RETRY     6
 
 #define FIELD_ID              0
 #define FIELD_TYPE            1
 #define FIELD_REQUIRED        2
-#define FIELD_ENUM            3
-#define FIELD_PROMPT          4
-#define FIELD_VALIDATION      5
+#define FIELD_PROMPT_SETTING  3
+#define FIELD_MAX_RETRY       4
+#define FIELD_DEFAULT         5
+#define FIELD_ENUM            6
+#define FIELD_PROMPT          7
+#define FIELD_VALIDATION      8
 
 #define OPTS_OPTS             0
 #define OPTS_LONGOPTS         1
-#define OPT_OPT               6
-#define OPT_PARAM             7
-#define OPT_MULTI             8
+#define OPT_OPT               9
+#define OPT_PARAM             10
+#define OPT_MULTI             11
 
 #define ENUM_ID               0
 #define ENUM_MULTI            1
@@ -30,11 +34,8 @@
 #define ENUM_VALUE_LABEL      1
 #define ENUM_VALUE_TYPE       2
 
-#define PROMPT_NO_ECHO        0
-#define PROMPT_SHOW_ABORT     1
-#define PROMPT_SHOW_ENUM      2
-#define PROMPT_MAX_RETRY      3
-#define PROMPT_MSG            4
+#define PROMPT_NOECHO         0
+#define PROMPT_MSG            1
 
 #define VALIDATE_VALIDATOR    0
 #define VALIDATE_FAIL         1
@@ -50,5 +51,12 @@
 #define SYNTAX_LONGOPTS       7
 #define SYNTAX_VALIDATION     8
 #define SYNTAX_SUBCOMMANDS    9
+
+#define TRUE_VALUE            "true"
+#define FALSE_VALUE           "false"
+#define PROMPT_ALWAYS         "always"
+#define PROMPT_SYNTAX         "syntax"
+#define PROMPT_VALIDATE       "validate"
+#define PROMPT_NEVER          "never"
 
 #endif  // _COMMAND_H

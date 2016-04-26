@@ -97,6 +97,28 @@ varargs mixed *expand_objects(mixed ospecs, object who,
 }
 
 /**
+ * Singular version of expand_objects(). Will return either a single object or
+ * 0 if no matching object was found.
+
+ * @param  ospecs       an array of ospecs to expand
+ * @param  who          the context in which to perform the expansion
+ * @param  root_context an optional object ospec which will be used if no
+ *                      objects can be found for 'who'
+ * @param  flags        control flags
+ * @return              a single target object, see expand_objects(); or 0
+ *                      if no matching object was found
+ */
+varargs mixed *expand_object(mixed ospecs, object who,
+                             string root_context, int flags) {
+  mixed *result = expand_objects(ospecs, who, root_context, flags | LIMIT_ONE);
+  if (sizeof(result)) {
+    return result[0];
+  } else {
+    return 0;
+  }
+}
+
+/**
  * Process the individual ospecs from the list passed to expand_objects().
  * This function is processes grouped ospecs, splitting them up and sending
  * them off to expand_spec().

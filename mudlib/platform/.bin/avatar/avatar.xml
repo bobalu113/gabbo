@@ -3,9 +3,12 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/bobalu113/gabbo/master/mudlib/platform/.etc/command.xsd">
 
-  <command primaryVerb="login" controller="login">
+  <command primaryVerb="login" controller="login" maxRetry="3">
+    <validate validator="do_auth">
+      <fail>Wrong password.</fail>
+    </validate>
     <fields>
-      <field id="username" type="string" required="prompt">
+      <field id="username" type="string" required="true" prompt="always" maxRetry="3">
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
           <param value="12"/>
@@ -14,14 +17,11 @@
         <validate validator="is_user">
           <fail>That username does not exist.</fail>
         </validate>
-        <prompt maxRetry="3">Enter your name: </prompt>
+        <prompt>Enter your name</prompt>
       </field>
-      <field id="password" type="string" required="prompt">
+      <field id="password" type="string" required="true" prompt="always" maxRetry="3">
         <validate validator="not_empty"></validate>
-        <validate validator="authenticated">
-          <fail>Wrong password.</fail>
-        </validate>
-        <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
+        <prompt noecho="true">Enter your password</prompt>
       </field>
     </fields>
     <syntax minArgs="0" maxArgs="1">
@@ -31,28 +31,29 @@
     </syntax>
   </command>
 
-  <command primaryVerb="register" controller="register">
+  <command primaryVerb="register" controller="register" maxRetry="3">
     <validate validator="passwords_match">
       <fail>Passwords do not match.</fail>
     </validate>
     <fields>
-      <field id="username" type="string" required="prompt">
+      <field id="username" type="string" required="true" prompt="always" maxRetry="3">
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
           <param value="12"/>
         </validate>
-        <validate validator="available_username">
+        <validate validator="not_user">
           <fail>That username already exists.</fail>
         </validate>
-        <prompt maxRetry="3">Enter your name: </prompt>
+        <prompt>Enter your name</prompt>
       </field>
-      <field id="password" type="string" required="prompt">
-        <validate validator="not_empty"></validate>
-        <prompt noecho="true" maxRetry="3">Enter your password: </prompt>
+      <field id="password" type="string" required="true" prompt="always" maxRetry="3">
+        <validate validator="not_empty">
+          <fail>Empty passwords not allowed.</fail>
+        </validate>
+        <prompt noecho="true">Enter your password</prompt>
       </field>
-      <field id="confirmPassword" type="string" required="prompt">
-        <validate validator="not_empty"></validate>
-        <prompt noecho="true" maxRetry="3">Confirm your password: </prompt>
+      <field id="confirmPassword" type="string" required="true" prompt="always">
+        <prompt noecho="true">Confirm your password</prompt>
       </field>
     </fields>
     <syntax minArgs="0" maxArgs="1">
@@ -70,4 +71,11 @@
     <syntax args="0"></syntax>
   </command>
 
+  <command primaryVerb="abort" controller="abort">
+    <syntax maxArgs="1">
+      <args>
+        <arg id="verb" type="string" required="false"></arg>
+      </args>
+    </syntax>
+  </command>
 </commands>

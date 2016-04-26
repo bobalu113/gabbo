@@ -87,6 +87,11 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
     parse_error(specfile, "missing attribute primaryVerb");
   }
 
+  int max_retry = DEFAULT_MAX_RETRY;
+  if (member(xml[XML_TAG_ATTRIBUTES], "maxRetry")) {
+    max_retry = to_int(xml[XML_TAG_ATTRIBUTES]["maxRetry"]);
+  } 
+
   mixed *fields = ({ });
   mapping arg_lists = ([ ]);
   mapping opt_sets = ([ ]);
@@ -136,7 +141,7 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
     }
   }
 
-  return ({ id, controller, verbs, fields, syntax, validation });
+  return ({ id, controller, verbs, fields, syntax, validation, max_retry });
 }
 
 mixed *parse_fields_xml(string specfile, mixed *xml, mapping field_map) {
@@ -175,9 +180,24 @@ mixed *parse_field_xml(string specfile, mixed *xml) {
     parse_error(specfile, "missing attribute type");
   }
 
-  string required = DEFAULT_REQUIRED;
+  int required = 0;
   if (member(xml[XML_TAG_ATTRIBUTES], "required")) {
-    required = xml[XML_TAG_ATTRIBUTES]["required"];
+    required = parse_boolean(xml[XML_TAG_ATTRIBUTES]["required"]);
+  } 
+
+  string prompt_setting = DEFAULT_PROMPT;
+  if (member(xml[XML_TAG_ATTRIBUTES], "prompt")) {
+    prompt_setting = xml[XML_TAG_ATTRIBUTES]["prompt"];
+  } 
+
+  string default_val = 0;
+  if (member(xml[XML_TAG_ATTRIBUTES], "default")) {
+    default_val = xml[XML_TAG_ATTRIBUTES]["default"];
+  }
+
+  int max_retry = DEFAULT_MAX_RETRY;
+  if (member(xml[XML_TAG_ATTRIBUTES], "maxRetry")) {
+    max_retry = to_int(xml[XML_TAG_ATTRIBUTES]["maxRetry"]);
   } 
 
   mixed *enum, *prompt;
@@ -199,7 +219,8 @@ mixed *parse_field_xml(string specfile, mixed *xml) {
     }
   }
 
-  return ({ id, type, required, enum, prompt, validation });
+  return ({ id, type, required, prompt_setting, max_retry, default_val, enum, 
+            prompt, validation });
 }
 
 mixed *parse_args_xml(string specfile, mixed *xml, mapping field_map, 
@@ -372,24 +393,9 @@ mixed *parse_prompt_xml(string specfile, mixed *xml) {
     no_echo = parse_boolean(xml[XML_TAG_ATTRIBUTES]["noEcho"]);
   } 
 
-  int show_abort = DEFAULT_SHOW_ABORT;
-  if (member(xml[XML_TAG_ATTRIBUTES], "showAbort")) {
-    show_abort = parse_boolean(xml[XML_TAG_ATTRIBUTES]["showAbort"]);
-  } 
-
-  int show_enum = DEFAULT_SHOW_ENUM;
-  if (member(xml[XML_TAG_ATTRIBUTES], "showEnum")) {
-    show_enum = parse_boolean(xml[XML_TAG_ATTRIBUTES]["showEnum"]);
-  } 
-
-  int max_retry = DEFAULT_MAX_RETRY;
-  if (member(xml[XML_TAG_ATTRIBUTES], "maxRetry")) {
-    max_retry = to_int(xml[XML_TAG_ATTRIBUTES]["maxRetry"]);
-  } 
-
   string msg = xml[XML_TAG_CONTENTS];
 
-  return ({ no_echo, show_abort, show_enum, max_retry, msg });
+  return ({ no_echo, msg });
 }
 
 mixed *parse_validate_xml(string specfile, mixed *xml) {
@@ -427,9 +433,9 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
                         mapping subcommand_map) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
-  int args = -1;
+  int explode_args = -1;
   if (member(xml[XML_TAG_ATTRIBUTES], "explodeArgs")) {
-    args = to_int(xml[XML_TAG_ATTRIBUTES]["explodeArgs"]);
+    explode_args = to_int(xml[XML_TAG_ATTRIBUTES]["explodeArgs"]);
   } 
 
   int min_args = -1;
@@ -452,7 +458,7 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
     format = xml[XML_TAG_ATTRIBUTES]["format"];
   }
 
-  mixed *arglist = ({ });
+  mixed *args = ({ });
   mixed *opts = ({ });
   mixed *longopts = ({ });
   mixed *validation = ({ });
@@ -460,20 +466,16 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
     switch (el[XML_TAG_NAME]) {
       case "args":
-        arglist = parse_args_xml(specfile, el, 
-                                 field_map, arg_lists);
+        args = parse_args_xml(specfile, el, field_map, arg_lists);
         break;
       case "opts":
-        opts += parse_opts_xml(specfile, el, 
-                               field_map, opt_sets);
+        opts += parse_opts_xml(specfile, el, field_map, opt_sets);
         break;
       case "opt":
         opts += ({ parse_opt_xml(specfile, el, field_map) });
         break;
       case "longopt":
-        longopts += ({ 
-          parse_opt_xml(specfile, el, field_map) 
-        });
+        longopts += ({ parse_opt_xml(specfile, el, field_map) });
         break;
       case "validate":
         validation += ({ parse_validate_xml(specfile, el) });
@@ -489,8 +491,8 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
     }
   }
 
-  return ({ args, min_args, max_args, pattern, format, 
-            arglist, opts, longopts, validation, subcommands });
+  return ({ explode_args, min_args, max_args, pattern, format, 
+            args, opts, longopts, validation, subcommands });
 }
 
 int parse_boolean(string value) {
