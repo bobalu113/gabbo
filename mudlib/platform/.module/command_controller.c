@@ -160,8 +160,8 @@ int process_extra(struct CommandState state, closure callback) {
         if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
           // prompt user for value
-          m_add(state->extra, extra, field[FIELD_DEFAULT]);
-          field_prompt(state, field, &(state->extra[extra]), callback);
+          m_add(state->extra, id, field[FIELD_DEFAULT]);
+          field_prompt(state, field, &(state->extra[id]), callback);
           return 0;
         } else {
           if (field[FIELD_REQUIRED]) {
@@ -169,29 +169,11 @@ int process_extra(struct CommandState state, closure callback) {
             return 0;            
           } else {
             // not required, continue with default
-            m_add(state->opts, opt, field[FIELD_DEFAULT]);
-            if (!process_field(state, field, &(state->opts[opt]), callback)) {
-              return 0;
-            }
-          }
-        }
-        // opt not provided
-        switch (field[FIELD_REQUIRED]) {
-          case REQUIRED_TRUE:
-            // required field, fail usage
-            return 0;
-          case REQUIRED_PROMPT:
-            // prompt user for value
-            m_add(state->extra, id, field[FIELD_DEFAULT]);
-            field_prompt(state, field, &(state->extra[id]), callback);
-            return 0;
-          case REQUIRED_FALSE:
-          default:
-            // not required, continue with default
             m_add(state->extra, id, field[FIELD_DEFAULT]);
             if (!process_field(state, field, &(state->extra[id]), callback)) {
               return 0;
             }
+          }
         }
       }
     }
@@ -243,17 +225,19 @@ int process_field(struct CommandState state, mixed *field, string arg, closure c
       int result = apply(validator, val, validation[VALIDATE_PARAMS]);
       if (!result) {
         // validation failed
-        switch (field[FIELD_REQUIRED]) {
-
-        }
-        if (state->field_retry >= field[FIELD_MAX_RETRY]) {
-          // TODO print fail message
+        if ((field[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
+            || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
+          // prompt user for value
+          field_prompt(state, field, &(state->extra[id]), callback);
           return 0;
         } else {
-          // TODO print fail message
-          state->field_retry += 1;
-          field_prompt(state, field, &arg, callback);
-          return 0;
+          if (field[FIELD_REQUIRED]) {
+            // required field, fail
+            return 0;            
+          } else {
+            // field not required, fail anyway?
+            return 0; 
+          }
         }
       }
     }
