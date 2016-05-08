@@ -35,6 +35,7 @@
 #define ArgsLib              PlatformLibDir "/args"
 #define ArrayLib             PlatformLibDir "/array"
 #define ClosureLib           PlatformLibDir "/closure"
+#define CommandLib           PlatformLibDir "/command"
 #define CommandSpecLib       PlatformLibDir "/command_spec"
 #define ConnectionLib        PlatformLibDir "/connection"
 #define FileLib              PlatformLibDir "/file"
@@ -56,6 +57,8 @@
 #define PropertyMixin        PlatformModuleDir "/property"
 #define SensorMixin          PlatformModuleDir "/sensor"
 #define SoulMixin            PlatformModuleDir "/soul"
+
+#define CommandController    PlatformModuleDir "/command_controller"
 
 #define AccessService        PlatformObjDir "/access_service"
 #define ConnectionTracker    PlatformObjDir "/connection_tracker"
