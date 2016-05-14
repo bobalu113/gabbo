@@ -6,7 +6,8 @@
  */
 
 #include <ansi.h>
-
+#include <topic.h>
+ 
 private variables private functions inherit RenderLib;
 
 string render_welcome(string term, string topic, mapping msgdata, 
@@ -15,11 +16,14 @@ string render_default(string term, string topic, mapping msgdata,
                       object sender);
 
 string render(string term, string topic, mapping msgdata, object sender) {
-  if (member(msgdata, "welcome")) {
-    return render_welcome(term, topic, msgdata, sender);
-  } else {
-    return render_default(term, topic, msgdata, sender);
+  switch (topic) {
+    case TOPIC_WELCOME:
+      return render_welcome(term, topic, msgdata, sender);
+    case TOPIC_LOGIN:
+    default:
+      return render_default(term, topic, msgdata, sender);
   }
+  return "";
 }
 
 string render_welcome(string term, string topic, mapping msgdata, 

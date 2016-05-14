@@ -6,6 +6,15 @@
  *
  * @alias CommandController
  */
+#include <sys/strings.h>
+#include <sys/input_to.h>
+#include <command.h>
+
+private variables private functions inherit CommandLib;
+private variables private functions inherit ArgsLib;
+private variables private functions inherit StringsLib;
+private variables private functions inherit ObjectExpansionLib;
+private variables private functions inherit FormatStringsLib;
 
 struct CommandState {
   string verb;
@@ -17,25 +26,44 @@ struct CommandState {
   mapping model;
   int field_retry;
   int form_retry;
-}
+};
 
 #define DEFAULT_PROMPT "(%t) %m [%d]: "
+
+int do_command(mixed *command, string verb, string arg);
+int process_command(struct CommandState state, closure callback);
+int process_args(struct CommandState state, closure callback);
+int process_opts(struct CommandState state, mapping opts, closure callback);
+int process_extra(struct CommandState state, closure callback);
+int process_field(struct CommandState state, mixed *field, string arg, closure callback);
+void field_prompt(struct CommandState state, mixed *field, mixed val, closure callback);
+void field_input(string arg, struct CommandState state, mixed *field, mixed val, closure callback);
+string parse_boolean(string arg, mixed val);
+string parse_int(string arg, mixed val);
+string parse_float(string arg, mixed val);
+string parse_enum(string arg, mixed val, mixed *enum);
+string parse_object(string arg, mixed val);
+string parse_objects(string arg, mixed val);
+int do_execute(mapping model, string verb);
+int execute(mapping model, string verb);
 
 closure prompt_formatter;
 
 int do_command(mixed *command, string verb, string arg) {
   mapping opts, badopts;
   string *args;
-  arg = trim_right(arg, ' ');
+  arg = trim(arg, TRIM_RIGHT, ' ');
   mixed *syntax = apply_syntax(command, arg, &opts, &badopts, &args);
+
   if (valid_syntax(syntax, opts, badopts, args)) {
     mapping model = ([ ]);
     struct CommandState state = 
       (<CommandState> verb, command, syntax, opts, args, ([ ]), model, 0, 0);
     return process_command(state, #'do_execute); //'
-  } else {
-    // fail usage
-  }
+  } 
+
+  // fail syntax
+  return 0;
 }
 
 int process_command(struct CommandState state, closure callback) {
@@ -57,7 +85,7 @@ int process_command(struct CommandState state, closure callback) {
                        + state->command[COMMAND_VALIDATION];
   foreach (mixed *validation : validations) {
     closure validator = symbol_function(validation[VALIDATE_VALIDATOR]);
-    int result = apply(validator, model, validation[VALIDATE_PARAMS]);
+    int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
     if (!result) {
       if (state->form_retry >= state->command[COMMAND_MAX_RETRY]) {
         // TODO print fail message
@@ -71,14 +99,15 @@ int process_command(struct CommandState state, closure callback) {
       }
     }
   }
-  return callback(state->model, state->verb);
+
+  return funcall(callback, state->model, state->verb);
 }
 
 int process_args(struct CommandState state, closure callback) {
   int i = 0;
   int numargs = sizeof(state->args);
   foreach (mixed *field : state->syntax[SYNTAX_ARGS]) {
-    if (!member(model, field[FIELD_ID])) {
+    if (!member(state->model, field[FIELD_ID])) {
       if (i < numargs) {
         // we have the arg, process it
         if (!process_field(state, field, &(state->args[i]), callback)) {
@@ -113,8 +142,7 @@ int process_args(struct CommandState state, closure callback) {
 
 int process_opts(struct CommandState state, mapping opts, closure callback) {
   foreach (mixed opt, mixed *field : opts) {
-    if (!member(model, field[FIELD_ID])) {
-      mixed opt = field[OPT_OPT];
+    if (!member(state->model, field[FIELD_ID])) {
       if (member(opts, opt)) {
         // we have the opt, process it
         if (!process_field(state, field, &(state->opts[opt]), callback)) {
@@ -149,7 +177,7 @@ int process_opts(struct CommandState state, mapping opts, closure callback) {
 int process_extra(struct CommandState state, closure callback) {
   foreach (mixed *field : state->command[COMMAND_FIELDS]) {
     string id = field[FIELD_ID];
-    if (!member(model, id)) {
+    if (!member(state->model, id)) {
       if (member(state->extra, id)) {
         // we have the field, process it
         if (!process_field(state, field, &(state->extra[id]), callback)) {
@@ -184,6 +212,7 @@ int process_extra(struct CommandState state, closure callback) {
 int process_field(struct CommandState state, mixed *field, string arg, closure callback) {
   mixed val;
   string fail;
+  string id = field[FIELD_ID];
   switch (field[FIELD_TYPE]) {
     case "bool":
       fail = parse_boolean(arg, &val);
@@ -231,18 +260,12 @@ int process_field(struct CommandState state, mixed *field, string arg, closure c
           field_prompt(state, field, &(state->extra[id]), callback);
           return 0;
         } else {
-          if (field[FIELD_REQUIRED]) {
-            // required field, fail
-            return 0;            
-          } else {
-            // field not required, fail anyway?
-            return 0; 
-          }
+          // fail
         }
       }
     }
     // validation passed, add to model
-    state->model[field[FIELD_ID]] = val;
+    state->model[id] = val;
     // reset retries to 0 fo next field
     state->field_retry = 0;
     return 1;
@@ -273,7 +296,7 @@ void field_input(string arg, struct CommandState state, mixed *field, mixed val,
   process_command(state, callback);
 }
 
-int parse_boolean(string arg, mixed val) {
+string parse_boolean(string arg, mixed val) {
   switch (lower_case(arg)) {
     case "y":
     case "yes":
@@ -288,17 +311,19 @@ int parse_boolean(string arg, mixed val) {
     default:
       return "Allowed values are: yes, no"; 
   }
+  return 0;
 }
 
-int parse_int(string arg, mixed val) {
+string parse_int(string arg, mixed val) {
   if (sscanf("%d", arg, val)) {
     return 0;
   } else {
     return "Please enter a number.";
   }
+  return 0;
 }
 
-int parse_float(string arg, mixed val) {
+string parse_float(string arg, mixed val) {
   int i, f;
   if (sscanf("%d.%d", arg, i, f)) {
     if (f == 0) {
@@ -312,20 +337,21 @@ int parse_float(string arg, mixed val) {
   } else {
     return "Please enter a number.";
   }
+  return 0;
 }
 
-int parse_enum(string arg, mixed val, mixed *enum) {
+string parse_enum(string arg, mixed val, mixed *enum) {
   mapping enum_map = mkmapping(enum);
   if (enum[ENUM_MULTI]) {
     val = ({ });
     string *args = explode_unescaped(arg, enum[ENUM_DELIM]);
-    foreach (string arg : args) {
-      arg = unescape(arg);
-      if (!member(enum_map, arg)) {
+    foreach (string a : args) {
+      a = unescape(a);
+      if (!member(enum_map, a)) {
         return "Allowed values are: " 
           + implode(enum[ENUM_VALUES], enum[ENUM_DELIM] + " ");
       }
-      val += ({ arg });
+      val += ({ a });
     }
   } else {
     if (!member(enum_map, arg)) {
@@ -337,12 +363,14 @@ int parse_enum(string arg, mixed val, mixed *enum) {
   return 0;
 }
 
-int parse_object(string arg, mixed val) {
+string parse_object(string arg, mixed val) {
   val = expand_object(arg, THISP, 0);
+  return 0;
 }
 
-int parse_objects(string arg, mixed val) {
+string parse_objects(string arg, mixed val) {
   val = expand_objects(arg, THISP, 0);
+  return 0;
 }
 
 int do_execute(mapping model, string verb) {
@@ -355,9 +383,9 @@ int execute(mapping model, string verb) {
 
 void create() {
   prompt_formatter = parse_format(DEFAULT_PROMPT, ([
-      'm' : ({ 0, "%s", ({ 'message }) }),
-      't' : ({ 0, "%s", ({ 'type }) }),
-      'd' : ({ 0, "%s", ({ 'default }) }),
+      'm' : ({ 0, "%s", ({ ''message }) }),
+      't' : ({ 0, "%s", ({ ''type }) }),
+      'd' : ({ 0, "%s", ({ ''default }) }),
     ]),
     ({ 'message, 'type, 'default })
   ); 

@@ -12,8 +12,8 @@
 private variables private functions inherit MessageLib;
 private variables private functions inherit ObjectLib;
 
-struct Message send_message(object target, string topic, mapping msgdata, 
-                            object sender) {
+varargs struct Message send_message(object target, string topic, 
+                                    mapping msgdata, object sender) {
   if (!is_capable(target, CAP_SENSOR)) {
     return 0;
   }

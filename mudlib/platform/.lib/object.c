@@ -7,9 +7,7 @@
 
 #include <sys/files.h>
 #include <sys/inherit_list.h>
-
-private int valid_environment(object arg);
-private object find_room(object arg);
+#include <object.h>
 
 /**
  * Test whether an object is reachable from another object.
@@ -25,6 +23,76 @@ varargs int is_reachable(object ob, object who) {
   return (ob == who) || (ob == ENV(who)) || (ENV(ob) == who);
 }
 
+string get_create_uid(string objectname) {
+  if (objectp(DomainTracker)) {
+    return DomainTracker->query_domain_id(objectname);
+  } else {
+    return DEFAULT_DOMAIN; // XXX gaping security hole
+  }
+}
+
+string get_user(object ob) {
+  string euid = geteuid(ob);
+  string result;
+  int pos = member(euid, '@');
+  if (pos != -1) {
+    result = euid[0..(pos - 1)];
+  }
+  return result;
+}
+
+mixed *get_path_info(mixed ob) {
+  string oname, uid, user;
+  if (objectp(ob)) {
+    oname = object_name(ob);
+    uid = getuid(ob);
+    user = get_user(ob);
+  } else if (stringp(ob)) {
+    oname = ob;
+    uid = get_create_uid(ob);
+  }
+  if (oname[<2..<1] == ".c") {
+    oname = oname[0..<3];
+  }
+
+  string zone, category, file;
+  int clone;
+
+  string *parts = explode(oname, "/");
+  int len = sizeof(parts);
+  int i = 0;
+  do {
+    if (parts[i][0] == '.') {
+      if (i == 0) {
+        zone = "";
+        category = implode(parts[i..<2], ".");
+      } else {
+        zone = implode(parts[0..<(i - 1)], ".");
+        category = implode(parts[i..<2], ".")[1..];
+      }
+      break;
+    }
+  } while (++i < (len - 1));
+  if (!zone) {
+    zone = implode(parts[0..<2], ".");
+    category = "";
+  }
+
+  parts = explode(parts[<1], "#");
+  file = parts[0];
+  if (sizeof(parts) >= 2) {
+    file = parts[0];
+    clone = to_int(parts[<1]);
+  }
+
+  string domain = DEFAULT_DOMAIN; // XXX gaping security hole
+  if (objectp(DomainTracker)) {
+    domain = DomainTracker->query_domain_id(oname);
+  }
+
+  return ({ oname, uid, user, domain, zone, category, file, clone });
+}
+
 /**
  * Get the zone an object belongs to.
  *
@@ -32,7 +100,7 @@ varargs int is_reachable(object ob, object who) {
  * @return    the object's zone
  */
 string get_zone(object ob) {
-  return "zone";
+  return get_path_info(ob)[PATH_INFO_ZONE];
 }
 
 /**

@@ -8,6 +8,7 @@
 #include <domain.h>
 
 private functions private variables inherit FileLib;
+private functions private variables inherit DomainLib;
 
 // ([ str domain_id : DomainConfig domain ])
 mapping domains;
@@ -337,7 +338,7 @@ private void parse_configure_access(mixed *tag, mixed *read_checker,
  */
 private string get_parent_domain_file(string domain_file) {
   string dir = get_domain_root(domain_file);
-  while (dir = dirname(dir)) {
+  while (strlen(dir = dirname(dir))) {
     string file = dir + "/" DOMAIN_FILE;
     if (file_exists(file)) {
       return file;

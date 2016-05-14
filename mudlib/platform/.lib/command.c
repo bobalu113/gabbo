@@ -1,7 +1,34 @@
-#define MAX_ARGS   26
+/**
+ * A library of functions related to the supporting the command line.
+ *
+ * @alias CommandLib
+ */
+#include <sys/regexp.h>
+#include <command.h>
+
+#define UNMATCHED_ARG  "__UNMATCHED_PARSE_COMMAND_ARG"
+
+private variables private functions inherit StringsLib;
+private variables private functions inherit ArgsLib;
+
+mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts, 
+                    string *args);
+mixed *get_matching_syntax(mapping syntax_map, mapping opts, mapping badopts, 
+                           mixed *args);
+int valid_syntax(mixed *syntax, mapping opts, mapping badopts, mixed *args);
+void parse_opts(string arg, int pos, mapping opts, mapping badopts, 
+                mapping valid_opts, mapping valid_longopts);
+void parse_longopt(string arg, int pos, string opt, string param, 
+                   mapping badopts, mapping valid_longopts);
+void parse_opt(string arg, int pos, mapping opts, mapping badopts, 
+               mapping valid_opts);
+string *parse_args_explode(string arg, int pos, int numargs);
+string *parse_args_sscanf(string arg, int pos, string pattern);
+string *parse_args_regexp(string arg, int pos, string pattern);
+string *parse_args_parse_command(string arg, int pos, string pattern);
+void parse_param(string arg, int pos, string param);
 
 private closure sscanf_args, parse_command_args;
-
 
 mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts, 
                     string *args) {
@@ -11,19 +38,19 @@ mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts,
     int pos = 0;
 
     // XXX cache these?
-    mapping valid_opts = mkmapping(map(command[COMMAND_OPTS], 
+    LoggerFactory->get_logger(THISO)->info("%O", syntax);
+    mapping valid_opts = mkmapping(map(syntax[SYNTAX_OPTS], 
                                        #'[, OPT_OPT),//'
-                                   command[COMMAND_OPTS]);
-    mapping valid_longopts = mkmapping(map(command[COMMAND_LONGOPTS], 
+                                   syntax[SYNTAX_OPTS]);
+    mapping valid_longopts = mkmapping(map(syntax[SYNTAX_LONGOPTS], 
                                            #'[, OPT_OPT),//'
-                                       command[COMMAND_LONGOPTS]);
+                                       syntax[SYNTAX_LONGOPTS]);
     opts = ([ ]);
     badopts = ([ ]);
     args = ({ });
-    parse_opts(arg, &pos, &opts, &badopts, valid_opts, valid_longopts)
+    parse_opts(arg, &pos, &opts, &badopts, valid_opts, valid_longopts);
 
     pos = find_nonws(arg, pos);
-    string *args;
     switch (syntax[SYNTAX_FORMAT]) {
       case "sscanf":
         args = parse_args_sscanf(arg, &pos, syntax[SYNTAX_PATTERN]);
@@ -47,7 +74,7 @@ mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts,
     }
   }
 
-  syntax = get_matching_syntax(syntax_map, &opts, &badopts, &args);
+  mixed *syntax = get_matching_syntax(syntax_map, &opts, &badopts, &args);
   if (!syntax) {
     // no matching syntax, use first
     syntax = command[COMMAND_SYNTAX][0];
@@ -71,6 +98,8 @@ mixed *get_matching_syntax(mapping syntax_map, mapping opts, mapping badopts,
       return syntax;
     }
   }
+
+  return 0;
 }
 
 int valid_syntax(mixed *syntax, mapping opts, mapping badopts, mixed *args) {
@@ -232,7 +261,7 @@ string *parse_args_explode(string arg, int pos, int numargs) {
   } else {
     // no arg limit
     args = explode_args(arg);
-    pos = strlen(args);
+    pos = strlen(arg);
   }
   return args;
 }
@@ -266,7 +295,7 @@ string *parse_args_sscanf(string arg, int pos, string pattern) {
             ({ #'+=, 'i, 1 }) 
          }) 
       })
-    )); //'
+    ); //'
   }
   return funcall(sscanf_args, arg[pos..], pattern);
 }
@@ -278,22 +307,25 @@ string *parse_args_regexp(string arg, int pos, string pattern) {
 
 string *parse_args_parse_command(string arg, int pos, string pattern) {
   if (!closurep(parse_command_args)) {
+    mixed *unmatched_fragment = allocate(MAX_ARGS);
     mixed *parse_command_fragment = allocate(MAX_ARGS);
     mixed *eval_fragment = allocate(MAX_ARGS * 3);
     for (int i = 0; i < MAX_ARGS; i++) {
+      unmatched_fragment[i] = ({ #'=, quote("arg" + i), UNMATCHED_ARG }); //'
       parse_command_fragment[i] = quote("arg" + i);
       int j = i * 3;
       eval_fragment[j] = ({ i });
       eval_fragment[j + 1] = 
         ({ #'?, 
-           ({ #'==, quote("arg" + 1), UNMATCHED_ARG }), 
+           ({ #'==, quote("arg" + i), UNMATCHED_ARG }), 
            ({ #'=, 'i, MAX_ARGS }), 
-           ({ #'+=, 'args, quote("arg" + 1) })
+           ({ #'+=, 'args, quote("arg" + i) })
         });
       eval_fragment[j + 2] = #'break; //'
     }
     parse_command_args = lambda(({ 'arg, 'obs, 'pattern }), 
       ({ #',, 
+         ({ #', }) + unmatched_fragment,
          ({ #'=, 
             'matched, 
             ({ #'parse_command, 'arg, 'obs, 'pattern }) + parse_command_fragment 
@@ -313,7 +345,7 @@ string *parse_args_parse_command(string arg, int pos, string pattern) {
             '({ }),
          })
       })
-    )); //'
+    ); //'
   }
   return funcall(parse_command_args, arg[pos..], ({ }), pattern);
 }

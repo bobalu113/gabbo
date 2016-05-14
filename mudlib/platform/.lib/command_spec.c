@@ -393,7 +393,7 @@ mixed *parse_prompt_xml(string specfile, mixed *xml) {
     no_echo = parse_boolean(xml[XML_TAG_ATTRIBUTES]["noEcho"]);
   } 
 
-  string msg = xml[XML_TAG_CONTENTS];
+  string msg = xml[XML_TAG_CONTENTS][0]; // TODO parse message
 
   return ({ no_echo, msg });
 }
@@ -408,16 +408,15 @@ mixed *parse_validate_xml(string specfile, mixed *xml) {
     parse_error(specfile, "missing attribute validator");
   }
 
-  string fail;
-  if (member(xml[XML_TAG_ATTRIBUTES], "fail")) {
-    fail = xml[XML_TAG_ATTRIBUTES]["fail"];
-  } 
-
+  string fail = 0;
   string *params = ({ });
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
     switch (el[XML_TAG_NAME]) {
       case "param":
         params += ({ el[XML_TAG_ATTRIBUTES]["value"] });
+        break;
+      case "fail":
+        fail = el[XML_TAG_CONTENTS][0]; // TODO parse message
         break;
       default:
         parse_error(specfile, "unknown element " + el[XML_TAG_NAME]);

@@ -16,6 +16,7 @@
 #include AcmeLoggerInc
 #else
 #include <logger.h>
+#include <object.h>
 #endif
 
 #ifdef EOTL
@@ -25,6 +26,7 @@ private inherit AcmeFormatStrings;
 private inherit AcmeFile;
 #else
 private variables private functions inherit FileLib;
+private variables private functions inherit ObjectLib;
 private variables private functions inherit FormatStringsLib;
 #endif
 
@@ -32,7 +34,7 @@ private variables private functions inherit FormatStringsLib;
 
 default private variables;
 
-/** ([ str category : ([ str euid : obj logger ]) ]) */
+/** ([ str zone : ([ str euid : obj logger ]) ]) */
 mapping loggers;
 
 /** ([ obj logger : int ref_count ]) */
@@ -50,28 +52,27 @@ object logger_logger;
 
 default private functions;
 
-public varargs object get_logger(mixed category, object rel, int reconfig);
-mapping read_config(string category, string dir);
+public varargs object get_logger(mixed zone, object rel, int reconfig);
+mapping read_config(string zone, string dir);
 mapping read_properties(string prop_file);
 string read_prop_value(mapping props, string prop, string dir,
-                       string category);
+                       string zone);
 protected mixed *parse_output_prop(string val);
-string normalize_category(mixed category);
 public object get_null_logger();
-public int release_logger(mixed category);
+public int release_logger(mixed zone);
 int clean_up_loggers();
 void init_static_loggers();
 
 /**
- * Retrieve a logger instance for the given category from the pool, or create
- * a new one from configuration. A category is represented as a hierarchical
- * string of the form, "supercat.category.subcat.<...>". The category may
+ * Retrieve a logger instance for the given zone from the pool, or create
+ * a new one from configuration. A zone is represented as a hierarchical
+ * string of the form, "superzone.zone.subzone.<...>". The zone may
  * also be specified as a filesystem path, in which case the path
- * delimiters (forward slashes) will be converted to the category delimiter
+ * delimiters (forward slashes) will be converted to the zone delimiter
  * (periods).
  *
- * @param  category an object or string representing the category; if an
- *                  object is specfied, it's program_name(E) will be used.
+ * @param  zone     an object or string representing the zone; if an
+ *                  object is specfied, it's load_name(E) will be used.
  * @param  rel      optional object to use for resolving relative paths in
  *                  configuration files; if unspecified, previous_object()
  *                  will be used.
@@ -79,33 +80,34 @@ void init_static_loggers();
  *                  configuration
  * @return          a logger instance
  */
-public varargs object get_logger(mixed category, object rel, int reconfig) {
+public varargs object get_logger(mixed zone, object rel, int reconfig) {
   // normalize some input
-  category = normalize_category(category);
+  mixed *pathinfo = get_path_info(zone);
+  zone = pathinfo[PATH_INFO_ZONE];
   if (!rel) {
     rel = previous_object();
   }
 
   // check for special loggers
-  if (FACTORY_CATEGORY == category) {
+  if (pathinfo[PATH_INFO_ONAME] == LoggerFactory) {
     return factory_logger;
   }
-  if (LOGGER_CATEGORY == category) {
+  if (pathinfo[PATH_INFO_ONAME] == Logger) {
     return logger_logger;
   }
 
   // check our cache
   string euid = geteuid(rel);
   object logger = 0;
-  if (member(loggers, category)) {
-    logger = loggers[category][euid];
+  if (member(loggers, zone)) {
+    logger = loggers[zone][euid];
   }
   if (!reconfig && logger) {
     return logger;
   }
 
   // build our configuration
-  mapping config = read_config(category, load_name(rel));
+  mapping config = read_config(zone, load_name(rel));
   if (!member(config, "output")) {
     // no output
     return get_null_logger();
@@ -121,7 +123,7 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   closure formatter = formatters[config["format"]];
   if (!formatter) {
     formatter = parse_format(config["format"], LOGGER_MESSAGE,
-                             ({ 'category, 'priority, 'message, 'caller }));
+                             ({ 'zone, 'priority, 'message, 'caller }));
     formatters[config["format"]] = formatter;
   }
 
@@ -131,16 +133,16 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
   if (!logger) {
     logger = clone_object(Logger);
     export_uid(logger);
-    if (!member(loggers, category)) {
-      loggers[category] =  ([ ]);
+    if (!member(loggers, zone)) {
+      loggers[zone] =  ([ ]);
     }
-    loggers[category][euid] = logger;
+    loggers[zone][euid] = logger;
     if (!member(local_ref_counts, logger)) {
       local_ref_counts[logger] = 0;
     }
     local_ref_counts[logger]++;
   }
-  logger->set_category(category);
+  logger->set_zone(zone);
   logger->set_output(config["output"]);
   logger->set_formatter(formatter);
   logger->set_level(config["level"]);
@@ -149,10 +151,10 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
 }
 
 /**
- * Read in logger configuration for the specified category. Starting in the
+ * Read in logger configuration for the specified zone. Starting in the
  * specified directory, this function will look for the file
  * "etc/logger.properties", and inspect the file for any configuration
- * properties which apply to the specified category. The result is a mapping
+ * properties which apply to the specified zone. The result is a mapping
  * of the form:
  * <code>
  * ([ "output" : ({ ({ int type, string target }), ... }),
@@ -162,26 +164,22 @@ public varargs object get_logger(mixed category, object rel, int reconfig) {
  * </code>
  * FUTURE better to use a struct than a mapping here
  *
- * @param  category the category to match configuration properties against
+ * @param  zone     the zone to match configuration properties against
  * @param  dir      the starting directory from which to search for
  *                  properties files
  * @return          the configuration mapping
  */
-mapping read_config(string category, string dir) {
+mapping read_config(string zone, string dir) {
   mapping result = ([ ]);
   while (dir = dirname(dir)) {
 #ifdef EOTL
-    if (!strlen(dir)) {
-      break;
-    }
-    dir = dir[0..<2];
     mapping props = read_properties(dir + "/" + PROP_FILE);
 #else
     mapping props = read_properties(dir + "/" + PROP_FILE);
 #endif
     if (props) {
       foreach (string prop : ALLOWED_PROPS) {
-        string val = read_prop_value(props, prop, dir, category);
+        string val = read_prop_value(props, prop, dir, zone);
         if (val) {
           switch (prop) {
             case "output":
@@ -253,33 +251,31 @@ mapping read_properties(string prop_file) {
 
 /**
  * Look for a property in the property mapping by name which matches a
- * specific category, and return its value.
+ * specific zone, and return its value.
  *
  * @param  props    the property map
  * @param  prop     the name of the property to find
- * @param  path     categories in the property file will be resolved relative
- *                  to this path (delimited by periods or forward slashes)
- * @param  category the category which a property must match to be returned
+ * @param  path     zones in the property file will be resolved relative
+ *                  to this path (delimited by periods)
+ * @param  zone     the zone which a property must match to be returned
  * @return          the property value for the specified property name and
- *                  category, or 0 if no matching property could be found
+ *                  zone, or 0 if no matching property could be found
  */
-string read_prop_value(mapping props, string prop, string path,
-                       string category) {
-  path = implode(explode(path, "/"), ".");
-  if (category[0..(strlen(path)-1)] != path) {
+string read_prop_value(mapping props, string prop, string path, string zone) {
+  if (zone[0..(strlen(path) - 1)] != path) {
     return 0;
   }
-  string rel_category = category[strlen(path)..];
+  string rel_zone = zone[strlen(path)..];
   while (1) {
-    string prop_name = sprintf("%s%s.%s", PROP_PREFIX, rel_category, prop);
+    string prop_name = sprintf("%s%s.%s", PROP_PREFIX, rel_zone, prop);
     if (member(props, prop_name)) {
       return props[prop_name];
     }
-    int pos = rmember(rel_category, '.');
+    int pos = rmember(rel_zone, '.');
     if (pos < 0) {
       break;
     }
-    rel_category = rel_category[0..(pos-1)];
+    rel_zone = rel_zone[0..(pos - 1)];
   }
   return 0;
 }
@@ -311,23 +307,6 @@ protected mixed *parse_output_prop(string val) {
   return result;
 }
 
-/**
- * Derive the cannonical category name from object or filesystem path input.
- * @param  category an object, filesystem path, or category name
- * @return          the cannonical category
- */
-string normalize_category(mixed category) {
-  if (objectp(category)) {
-    category = program_name(category);
-  } else if (!stringp(category)) {
-    raise_error("Bad argument 1 to normalize_category()");
-  }
-  if (category[<2..<1] == ".c") {
-    category = category[0..<3];
-  }
-  category = regreplace(category, "/", ".", 1);
-  return category;
-}
 
 /**
  * Return a new no-op logger.
@@ -335,7 +314,7 @@ string normalize_category(mixed category) {
  */
 public object get_null_logger() {
   object logger = clone_object(Logger);
-  logger->set_category("");
+  logger->set_zone("");
   logger->set_output(({ }));
   logger->set_formatter("");
   logger->set_level(LVL_OFF);
@@ -347,17 +326,18 @@ public object get_null_logger() {
  * references to it held by the factory. If there are no other references,
  * the logger will also be destructed.
  *
- * @param  category an object or string representing the category; if an
- *                  object is specfied, it's program_name(E) will be used.
+ * @param  zone     an object or string representing the zone; if an
+ *                  object is specfied, it's load_name(E) will be used.
  * @param  euid     the euid of the logger to release
  * @return          1 if a logger was released, 0 if no logger was found
  */
-public int release_logger(mixed category, string euid) {
-  category = normalize_category(category);
-  if (member(loggers, category)) {
-    object logger = loggers[category][euid];
+public int release_logger(mixed zone, string euid) {
+  mixed *pathinfo = get_path_info(zone);
+  zone = pathinfo[PATH_INFO_ZONE];
+  if (member(loggers, zone)) {
+    object logger = loggers[zone][euid];
     if (logger) {
-      m_delete(loggers[category], euid);
+      m_delete(loggers[zone], euid);
       local_ref_counts[logger]--;
       int ref_count = (int) object_info(logger, OINFO_BASIC, OIB_REF);
       int local_ref_count = local_ref_counts[logger];
@@ -365,8 +345,8 @@ public int release_logger(mixed category, string euid) {
         m_delete(local_ref_counts, logger);
         destruct(logger);
       }
-      if (!sizeof(loggers[category])) {
-        m_delete(loggers, category);
+      if (!sizeof(loggers[zone])) {
+        m_delete(loggers, zone);
       }
       return 1;
     }
@@ -379,18 +359,18 @@ public int release_logger(mixed category, string euid) {
  * stale if it hasn't been referenced in 5 minutes, and is referenced by
  * nothing except the LoggerFactory.
  *
- * @return the number of logging categories released (may be more than the
- *         number loggers destructed if loggers are shared between categories)
+ * @return the number of logging zones released (may be more than the
+ *         number loggers destructed if loggers are shared between zones)
  */
 int clean_up_loggers() {
   int result = 0;
-  foreach (string category, mapping euids : loggers) {
+  foreach (string zone, mapping euids : loggers) {
     foreach (string euid, object logger : euids) {
       if (!logger) { continue; }
 
       int ref_time = (int) object_info(logger, OINFO_BASIC, OIB_TIME_OF_REF);
       if ((time() - ref_time) >= LOGGER_STALE_TIME) {
-        result += release_logger(category, euid);
+        result += release_logger(zone, euid);
       }
     }
   }
@@ -409,18 +389,18 @@ void init_static_loggers() {
   seteuid(FACTORY_LOGGER_UID);
   factory_logger = clone_object(Logger);
   export_uid(factory_logger);
-  factory_logger->set_category(normalize_category(THISO));
+  factory_logger->set_zone(get_zone(THISO));
   factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
   factory_logger->set_formatter(
     parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
-                 ({ 'category, 'priority, 'message, 'caller }))
+                 ({ 'zone, 'priority, 'message, 'caller }))
   );
   factory_logger->set_level(LVL_WARN);
 
   seteuid(LOGGER_LOGGER_UID);
   logger_logger = clone_object(Logger);
   export_uid(logger_logger);
-  logger_logger->set_category(normalize_category(THISO));
+  logger_logger->set_zone(get_zone(THISO));
 #ifdef EOTL
   logger_logger->set_output(parse_output_prop("a:me"));
 #else
@@ -428,7 +408,7 @@ void init_static_loggers() {
 #endif
   logger_logger->set_formatter(
     parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
-                 ({ 'category, 'priority, 'message, 'caller }))
+                 ({ 'zone, 'priority, 'message, 'caller }))
   );
   logger_logger->set_level(LVL_WARN);
 

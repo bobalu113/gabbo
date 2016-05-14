@@ -5,6 +5,7 @@
  * @alias LoginObject
  */
 #include <sys/input_to.h>
+#include <topic.h>
 
 inherit CommandGiverMixin;
 inherit SoulMixin;
@@ -16,8 +17,7 @@ private variables private functions inherit ObjectLib;
 
 #define LOCALHOST              "127.0.0.1"
 #define WELCOME_FILE           PlatformEtcDir "/issue"
-#define WELCOME_TOPIC          "system.login"
-#define TERMINAL_MAX_TRIES     30
+#define TERMINAL_MAX_TRIES     3
 #define TIMEOUT_SECS           (10 * 60)
 #define DEFAULT_TERMINAL_TYPE  "vt100"
 #define CLEAR_SCREEN           1
@@ -108,7 +108,7 @@ static void welcome(string terminal, mixed is_default) {
 
   // display welcome screen
   system_msg(THISO, 
-             WELCOME_TOPIC, 
+             TOPIC_WELCOME, 
              ([ "welcome" : welcome,
                 "insecure" : insecure,
                 "defaultTerm" : is_default,
@@ -129,8 +129,8 @@ static void welcome(string terminal, mixed is_default) {
  */
 static void timeout() {
   system_msg(THISO,
-             WELCOME_TOPIC, 
-             ([ "abort" : TimeoutMessage ]));
+             TOPIC_LOGIN, 
+             ([ "message" : TimeoutMessage ]));
   abort();
 }
 

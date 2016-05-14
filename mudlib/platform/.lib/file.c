@@ -51,33 +51,62 @@ string basename(string filename) {
  * @return          the name of the containing directory
  */
 string dirname(string filename) {
-  // TODO finalize how paths get munged
-  if (sizeof(filename) && filename[<1] == '/') {
-    filename = filename[0..<2];
+  if (!stringp(filename) && !strlen(filename)) {
+    return 0;
   }
-  if (!strlen(filename)) { return 0; }
+  if (filename[<1] == '/') {
+    return filename[0..<2];
+  }
   string *path = explode(filename, "/");
-
   return implode(path[0..<2], "/");
 }
 
 /**
+ * Munges a filename into a standard format. 
+ * 
+ * @param  filename the file (or dir) name to munge
+ * @return          the munged name
+ */
+string munge_filename(string filename) {
+  int *result = allocate(strlen(filename));
+  int slash = 0;  
+  int pos = 0;
+  for (int i = 0, int j = strlen(filename); i < j; i++) {
+    if (filename[i] == '/') {
+      if (!slash) {
+        result[pos++] = '/';
+        slash = 1;
+      }
+    } else {
+      result[pos++] = filename[i];
+      slash = 0;
+    }
+  }
+  return to_string(result);
+}
+
+/**
  * Returns the absolute filename of the possibly relative filename described
- * by pattern.  Relative paths will be resolved according to
- * who->query_pwd(), or dirname(object_name(who)) if 'who' does not define
- * query_pwd().  'who' defaults to this_object() if not specified.  Home
- * directories specified with '~' will also be resolved according to 'who'.
+ * by pattern.  Relative paths will be resolved according to rel if rel is a 
+ * string, otherwise rel->query_pwd(), or dirname(object_name(rel)) if 'rel' 
+ * has no shell.  'rel' defaults to this_object() if not specified.  Home
+ * directories specified with '~' will also be resolved according to 'rel'.
  *
  * @param  pattern path to be expanded
- * @param  who     optional object from which relative paths should be
+ * @param  rel     optional path, or object from which relative paths should be
  *                 resolved
  * @return         the absolute path
  */
-varargs string expand_path(string pattern, object who) {
-  if (!objectp(who)) {
-    who = THISO;
+varargs string expand_path(string pattern, mixed rel) {
+  string cwd;
+  if (stringp(rel)) {
+    cwd = dirname(rel);
+  } else {
+    if (!objectp(rel)) {
+      rel = THISO;
+    }
+    cwd = rel->query_cwd() || dirname(object_name(rel));
   }
-  string cwd = who->query_cwd() || dirname(object_name(who));
 
   if (!stringp(pattern) || !strlen(pattern)) {
     pattern = cwd;
@@ -88,23 +117,25 @@ varargs string expand_path(string pattern, object who) {
     case '/':   /* already absolute */
       break;
     case '~':   /* home dir */
-      string name = who->query_username();
-      if (pattern == "~") {
-        // TODO add support for ~+ and ~-
-        // TODO move homedir expansion to ShellMixin and UserTracker
-        if (name) {
-          pattern = UserDir + "/" + name;
+      if (objectp(rel)) {
+        string name = rel->query_username();
+        if (pattern == "~") {
+          // TODO add support for ~+ and ~-
+          // TODO move homedir expansion to ShellMixin and UserTracker
+          if (name) {
+            pattern = UserDir + "/" + name;
+          } else {
+            pattern = UserDir;
+          }
+        } else if (pattern[1] == '/') {
+          if (name) {
+            pattern = sprintf("%s/%s%s", UserDir, name, pattern[1..]);
+          } else {
+            pattern = UserDir + pattern[1..];
+          }
         } else {
-          pattern = UserDir;
+          pattern = UserDir + "/" + pattern[1..];
         }
-      } else if (pattern[1] == '/') {
-        if (name) {
-          pattern = sprintf("%s/%s%s", UserDir, name, pattern[1..]);
-        } else {
-          pattern = UserDir + pattern[1..];
-        }
-      } else {
-        pattern = UserDir + "/" + pattern[1..];
       }
       break;
     default:
@@ -141,15 +172,12 @@ varargs string expand_path(string pattern, object who) {
  * "home/*&#47;workroom.c" expands to all workroom files).
  *
  * @param  pattern the file pattern to expand
- * @param  who     optional object from which relative paths should be
- *                 resolved, defaults to THISO
+ * @param  rel     optional path or object from which relative paths should be
+ *                 resolved
  * @return         a list of all matching files (constrained by valid_read)
  */
-varargs mixed *expand_pattern(string pattern, object who) {
-  if (!objectp(who)) {
-    who = THISO;
-  }
-  pattern = expand_path(pattern, who);
+varargs mixed *expand_pattern(string pattern, object rel) {
+  pattern = expand_path(pattern, rel);
   if (pattern[<1] == '/') {
     pattern += "*";
   }

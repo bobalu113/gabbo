@@ -11,6 +11,7 @@
 #include <command.h>
 
 private variables private functions inherit ObjectLib;
+private variables private functions inherit FileLib;
 private variables private functions inherit ArrayLib;
 private variables private functions inherit CommandSpecLib;
 
@@ -23,6 +24,7 @@ nosave mixed *commands;
 default public functions;
 
 private mixed *load_command_spec(string specfile);
+object load_controller(string controller);
 
 /**
  * Test whether a given command object should be allowed this command giver's
@@ -57,7 +59,7 @@ mixed *load_commands() {
   while ((i = member(vars,  CMD_IMPORTS_VAR_STR, i)) != -1) {
     mixed val = vars[++i];
     if (stringp(val)) {
-      result += load_command_spec(val);
+      result += ({ ({ val, load_command_spec(val) }) });
     }
     i++;
   }
@@ -96,64 +98,72 @@ int do_command(string arg) {
   mapping matched = ([ ]);  // verb to arg
   int arglen = strlen(arg);
   int result = 0;
-  foreach (mixed *command : commands) {
-    foreach (string verb : command[COMMAND_VERBS]) {
-      if (member(matched, verb)) {
-        if (matched[verb]) {
-          object controller = load_controller(command[COMMAND_CONTROLLER]);
-          if (controller) {
-            result = controller->do_command(command, verb, matched[verb]);
+  foreach (mixed *cmd : commands) {
+    string specfile = cmd[0];
+    foreach (mixed *command : cmd[1]) {
+      foreach (string verb : command[COMMAND_VERBS]) {
+        if (member(matched, verb)) {
+          if (matched[verb]) {
+            object controller = load_controller(expand_path(
+                                  command[COMMAND_CONTROLLER], specfile));
+            if (controller) {
+              result = controller->do_command(command, verb, matched[verb]);
+            }
+            // TODO notify broken controller via result
+            if (result) {
+              break;
+            }
+          } else {
+            continue;
           }
-          // TODO notify broken controller via result
-          if (result) {
-            break;
-          }
-        } else {
+        }
+        int len = strlen(verb);
+        if (len > arglen) {
           continue;
         }
-      }
-      len = strlen(verb);
-      if (len > arglen) {
-        continue;
-      }
-      if (!member(fragments, len)) {
-        fragments[len] = arg[0..(len - 1)];
-      }
-      if ((fragments[len] == verb) {
-        if(len == arglen) {
-          matched[verb] = "";
-        } else if (arg[len] == ' ') {
-          // trim leading spaces
-          int i = len;
-          while (arg[i] == ' ') { 
-            i++;
-          }
-          // set the match
-          if (i < arglen) {
-            matched[verb] = arg[i..];
-          } else {
+        if (!member(fragments, len)) {
+          fragments[len] = arg[0..(len - 1)];
+        }
+        if (fragments[len] == verb) {
+          if (len == arglen) {
             matched[verb] = "";
+          } else if (arg[len] == ' ') {
+            // trim leading spaces
+            int i = len;
+            while (arg[i] == ' ') { 
+              i++;
+            }
+            // set the match
+            if (i < arglen) {
+              matched[verb] = arg[i..];
+            } else {
+              matched[verb] = "";
+            }
+          } else {
+            matched[verb] = 0;
           }
         } else {
           matched[verb] = 0;
         }
-      } else {
-        matched[verb] = 0;
-      }
 
-      if (matched[verb]) {
-        object controller = load_controller(command[COMMAND_CONTROLLER]);
-        if (controller) {
-          result = controller->do_command(command, verb, matched[verb]);
+        if (matched[verb]) {
+          object controller = load_controller(expand_path(
+                                command[COMMAND_CONTROLLER], specfile));
+          if (controller) {
+            result = controller->do_command(command, verb, matched[verb]);
+          }
+          if (result) {
+            break;
+          }
         }
-        if (result) {
-          break;
-        }
+      }
+      if (result) {
+        break;
       }
     }
     if (result) {
       break;
-    }
+    }    
   }
   
   return result;

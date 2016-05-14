@@ -515,6 +515,7 @@ private mixed json_decode_parse_value(mixed array parse) {
             json_decode_parse_error(parse, "Unexpected character", ch);
         }
     }
+    return 0;
 }
 
 private mixed json_decode_parse(mixed array parse) {

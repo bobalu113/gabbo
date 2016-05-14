@@ -16,5 +16,8 @@ public object get_renderer(string topic_id, string term) {
 }
 
 void create() {
-  topics = ([ "system.login" : ([ "renderer" : LoginRenderer ]) ]);
+  topics = ([ 
+    "system.login" : ([ "renderer" : LoginRenderer ]),
+    "system.welcome" : ([ "renderer" : LoginRenderer ]),
+  ]);
 }

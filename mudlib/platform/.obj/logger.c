@@ -21,7 +21,7 @@ private variables private functions inherit ObjectExpansionLib;
 
 default private variables;
 
-string category;
+string zone;
 
 mixed *output;
 
@@ -43,23 +43,23 @@ private mixed *find_caller();
 private string parse_program(string dbg_program);
 
 /**
- * Get the logger's category.
- * @return the period-delimited full category path of the logger
+ * Get the logger's zone.
+ * @return the period-delimited full zone path of the logger
  */
-string query_category() {
-  return category;
+string query_zone() {
+  return zone;
 }
 
 /**
- * Set the logger category.
- * @param  str the category to set
+ * Set the logger zone.
+ * @param  str the zone to set
  * @return     1 for success, 0 for failure
  */
-int set_category(string str) {
+int set_zone(string str) {
   if (!check_access()) {
     return 0;
   }
-  category = str;
+  zone = str;
   return 1;
 }
 
@@ -94,7 +94,7 @@ int set_output(mixed *arr) {
  * The closure will take the arguments:
  *
  * <pre>
-   'category: the category of the logger
+       'zone: the zone of the logger
    'priority: the priority of the log event
     'message: an optional error message
      'caller: an array read from
@@ -310,7 +310,7 @@ private int check_access() {
  * @param args    the values to be passed to sprintf() as args
  */
 void fatal(string msg_fmt, varargs string *args) {
-  apply(#'log, LVL_FATAL, msg_fmt, args);
+  apply(#'log, LVL_FATAL, msg_fmt, args); //'
 }
 
 /**
@@ -320,7 +320,7 @@ void fatal(string msg_fmt, varargs string *args) {
  * @param args    the values to be passed to sprintf() as args
  */
 void error(string msg_fmt, varargs string *args) {
-  apply(#'log, LVL_ERROR, msg_fmt, args);
+  apply(#'log, LVL_ERROR, msg_fmt, args); //'
 }
 
 /**
@@ -330,7 +330,7 @@ void error(string msg_fmt, varargs string *args) {
  * @param args    the values to be passed to sprintf() as args
  */
 void warn(string msg_fmt, varargs string *args) {
-  apply(#'log, LVL_WARN, msg_fmt, args);
+  apply(#'log, LVL_WARN, msg_fmt, args); //'
 }
 
 /**
@@ -340,7 +340,7 @@ void warn(string msg_fmt, varargs string *args) {
  * @param args    the values to be passed to sprintf() as args
  */
 void info(string msg_fmt, varargs string *args) {
-  apply(#'log, LVL_INFO, msg_fmt, args);
+  apply(#'log, LVL_INFO, msg_fmt, args); //'
 }
 
 /**
@@ -350,7 +350,7 @@ void info(string msg_fmt, varargs string *args) {
  * @param args    the values to be passed to sprintf() as args
  */
 void debug(string msg_fmt, varargs string *args) {
-  apply(#'log, LVL_DEBUG, msg_fmt, args);
+  apply(#'log, LVL_DEBUG, msg_fmt, args); //'
 }
 
 /**
@@ -360,7 +360,7 @@ void debug(string msg_fmt, varargs string *args) {
  * @param args    the values to be passed to sprintf() as args
  */
 void trace(string msg_fmt, varargs string *args) {
-  apply(#'log, LVL_TRACE, msg_fmt, args);
+  apply(#'log, LVL_TRACE, msg_fmt, args); //'
 }
 
 /**
@@ -379,7 +379,7 @@ void log(string priority, string msg_fmt, varargs string *args) {
   string msg = apply(#'sprintf, ({ msg_fmt }) + args); //'
   mixed *caller = find_caller();
   if (!is_muted(parse_program(caller[TRACE_PROGRAM]), caller[TRACE_LOC])) {
-    msg = funcall(formatter, category, priority, msg, caller);
+    msg = funcall(formatter, zone, priority, msg, caller);
     do_output(msg);
   }
   return;

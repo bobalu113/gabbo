@@ -16,11 +16,11 @@
           <xsd:attribute name="verb" type="xsd:string"></xsd:attribute>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="fieldList" type="fieldList" maxOccurs="1" minOccurs="0"></xsd:element>
-      <xsd:element name="argList" type="argList" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-      <xsd:element name="optSet" type="optSet" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-      <xsd:element name="syntax" type="syntax" maxOccurs="unbounded" minOccurs="1"></xsd:element>
       <xsd:element name="validate" type="validate" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="fields" type="fieldList" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element name="args" type="argList" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="opts" type="optSet" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="syntax" type="syntax" maxOccurs="unbounded" minOccurs="1"></xsd:element>
       <xsd:element name="subcommand" type="command" maxOccurs="unbounded" minOccurs="0"></xsd:element>
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
@@ -28,6 +28,13 @@
     <xsd:attribute name="primaryVerb" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="parser" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="controller" type="xsd:string"></xsd:attribute>
+    <xsd:attribute name="maxRetry">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:int">
+          <xsd:minInclusive value="0"></xsd:minInclusive>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
   </xsd:complexType>
 
   <xsd:complexType name="fieldList">
@@ -61,7 +68,24 @@
     </xsd:sequence>
     <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
     <xsd:attribute name="type" type="type"></xsd:attribute>
-    <xsd:attribute name="required" type="required"></xsd:attribute>
+    <xsd:attribute name="required" type="xsd:boolean"></xsd:attribute>
+    <xsd:attribute name="prompt">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="always"></xsd:enumeration>
+          <xsd:enumeration value="validate"></xsd:enumeration>
+          <xsd:enumeration value="syntax"></xsd:enumeration>
+          <xsd:enumeration value="never"></xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="maxRetry">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:int">
+          <xsd:minInclusive value="0"></xsd:minInclusive>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
   </xsd:complexType>
 
   <xsd:complexType name="arg">
@@ -99,8 +123,8 @@
   <xsd:complexType name="syntax">
     <xsd:sequence>
       <xsd:element name="validate" type="validate" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-      <xsd:element name="argList" type="argList" maxOccurs="1" minOccurs="0"></xsd:element>
-      <xsd:element name="optSet" type="optSet" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      <xsd:element name="args" type="argList" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element name="opts" type="optSet" maxOccurs="unbounded" minOccurs="0"></xsd:element>
       <xsd:element name="opt" type="opt" maxOccurs="unbounded" minOccurs="0"></xsd:element>
       <xsd:element name="longopt" type="longopt" maxOccurs="unbounded" minOccurs="0"></xsd:element>
       <xsd:element name="subcommand" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
@@ -137,32 +161,15 @@
           <xsd:attribute name="value" type="xsd:string"></xsd:attribute>
         </xsd:complexType>
       </xsd:element>
+      <xsd:element name="fail" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
     </xsd:sequence>
     <xsd:attribute name="validator" type="xsd:string"></xsd:attribute>
-    <xsd:attribute name="fail" type="xsd:string"></xsd:attribute>
   </xsd:complexType>
 
   <xsd:complexType name="prompt">
     <xsd:simpleContent>
       <xsd:extension base="xsd:string">
-      <xsd:attribute name="noecho" type="xsd:boolean"></xsd:attribute>
-      <xsd:attribute name="showAbort" type="xsd:boolean"></xsd:attribute>
-      <xsd:attribute name="showEnum">
-        <xsd:simpleType>
-          <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="false"></xsd:enumeration>
-            <xsd:enumeration value="short"></xsd:enumeration>
-            <xsd:enumeration value="long"></xsd:enumeration>
-          </xsd:restriction>
-        </xsd:simpleType>
-      </xsd:attribute>
-      <xsd:attribute name="maxRetry">
-        <xsd:simpleType>
-          <xsd:restriction base="xsd:int">
-            <xsd:minInclusive value="0"></xsd:minInclusive>
-          </xsd:restriction>
-        </xsd:simpleType>
-      </xsd:attribute>
+        <xsd:attribute name="noecho" type="xsd:boolean"></xsd:attribute>
       </xsd:extension>
     </xsd:simpleContent>
   </xsd:complexType>

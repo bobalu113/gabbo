@@ -38,6 +38,7 @@
 #define CommandLib           PlatformLibDir "/command"
 #define CommandSpecLib       PlatformLibDir "/command_spec"
 #define ConnectionLib        PlatformLibDir "/connection"
+#define DomainLib            PlatformLibDir "/domain"
 #define FileLib              PlatformLibDir "/file"
 #define FormatStringsLib     PlatformLibDir "/format_strings"
 #define GetoptsLib           PlatformLibDir "/getopts"
