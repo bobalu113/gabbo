@@ -51,7 +51,7 @@ string basename(string filename) {
  * @return          the name of the containing directory
  */
 string dirname(string filename) {
-  if (!stringp(filename) && !strlen(filename)) {
+  if (!stringp(filename) || !strlen(filename)) {
     return 0;
   }
   if (filename[<1] == '/') {

@@ -13,6 +13,7 @@
 private variables private functions inherit CommandLib;
 private variables private functions inherit ArgsLib;
 private variables private functions inherit StringsLib;
+private variables private functions inherit StructLib;
 private variables private functions inherit ObjectExpansionLib;
 private variables private functions inherit FormatStringsLib;
 
@@ -28,16 +29,16 @@ struct CommandState {
   int form_retry;
 };
 
-#define DEFAULT_PROMPT "(%t) %m [%d]: "
+#define DEFAULT_PROMPT "(%t) %m%d{ [%s]}: "
 
 int do_command(mixed *command, string verb, string arg);
 int process_command(struct CommandState state, closure callback);
 int process_args(struct CommandState state, closure callback);
 int process_opts(struct CommandState state, mapping opts, closure callback);
 int process_extra(struct CommandState state, closure callback);
-int process_field(struct CommandState state, mixed *field, string arg, closure callback);
-void field_prompt(struct CommandState state, mixed *field, mixed val, closure callback);
-void field_input(string arg, struct CommandState state, mixed *field, mixed val, closure callback);
+int process_field(struct CommandState state, mixed *field, string field_type, mixed index, closure callback);
+void field_prompt(struct CommandState state, mixed *field, string field_type, mixed index, closure callback);
+void field_input(string arg, struct CommandState state, mixed *field, string field_type, mixed index, closure callback);
 string parse_boolean(string arg, mixed val);
 string parse_int(string arg, mixed val);
 string parse_float(string arg, mixed val);
@@ -110,7 +111,7 @@ int process_args(struct CommandState state, closure callback) {
     if (!member(state->model, field[FIELD_ID])) {
       if (i < numargs) {
         // we have the arg, process it
-        if (!process_field(state, field, &(state->args[i]), callback)) {
+        if (!process_field(state, field, "args", i, callback)) {
           return 0;
         }
       } else {
@@ -119,7 +120,7 @@ int process_args(struct CommandState state, closure callback) {
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
           // prompt user for value
           state->args += ({ field[FIELD_DEFAULT] });
-          field_prompt(state, field, &(state->args[i]), callback);
+          field_prompt(state, field, "args", i, callback);
           return 0;
         } else {
           if (field[FIELD_REQUIRED]) {
@@ -128,7 +129,7 @@ int process_args(struct CommandState state, closure callback) {
           } else {
             // not required, continue with default
             state->args[i] = field[FIELD_DEFAULT];
-            if (!process_field(state, field, &(state->args[i]), callback)) {
+            if (!process_field(state, field, "args", i, callback)) {
               return 0;
             }
           }
@@ -145,7 +146,7 @@ int process_opts(struct CommandState state, mapping opts, closure callback) {
     if (!member(state->model, field[FIELD_ID])) {
       if (member(opts, opt)) {
         // we have the opt, process it
-        if (!process_field(state, field, &(state->opts[opt]), callback)) {
+        if (!process_field(state, field, "opts", opt, callback)) {
           return 0;
         }
       } else {
@@ -154,7 +155,7 @@ int process_opts(struct CommandState state, mapping opts, closure callback) {
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
           // prompt user for value
           m_add(state->opts, opt, field[FIELD_DEFAULT]);
-          field_prompt(state, field, &(state->opts[opt]), callback);
+          field_prompt(state, field, "opts", opt, callback);
           return 0;
         } else {
           if (field[FIELD_REQUIRED]) {
@@ -163,7 +164,7 @@ int process_opts(struct CommandState state, mapping opts, closure callback) {
           } else {
             // not required, continue with default
             m_add(state->opts, opt, field[FIELD_DEFAULT]);
-            if (!process_field(state, field, &(state->opts[opt]), callback)) {
+            if (!process_field(state, field, "opts", opt, callback)) {
               return 0;
             }
           }
@@ -180,7 +181,7 @@ int process_extra(struct CommandState state, closure callback) {
     if (!member(state->model, id)) {
       if (member(state->extra, id)) {
         // we have the field, process it
-        if (!process_field(state, field, &(state->extra[id]), callback)) {
+        if (!process_field(state, field, "extra", id, callback)) {
           return 0;
         }
       } else {
@@ -189,7 +190,7 @@ int process_extra(struct CommandState state, closure callback) {
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
           // prompt user for value
           m_add(state->extra, id, field[FIELD_DEFAULT]);
-          field_prompt(state, field, &(state->extra[id]), callback);
+          field_prompt(state, field, "extra", id, callback);
           return 0;
         } else {
           if (field[FIELD_REQUIRED]) {
@@ -198,7 +199,7 @@ int process_extra(struct CommandState state, closure callback) {
           } else {
             // not required, continue with default
             m_add(state->extra, id, field[FIELD_DEFAULT]);
-            if (!process_field(state, field, &(state->extra[id]), callback)) {
+            if (!process_field(state, field, "extra", id, callback)) {
               return 0;
             }
           }
@@ -209,10 +210,11 @@ int process_extra(struct CommandState state, closure callback) {
   return 1;
 }
 
-int process_field(struct CommandState state, mixed *field, string arg, closure callback) {
+int process_field(struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
   mixed val;
   string fail;
   string id = field[FIELD_ID];
+  string arg = get_struct_member(state, field_type)[index];
   switch (field[FIELD_TYPE]) {
     case "bool":
       fail = parse_boolean(arg, &val);
@@ -244,7 +246,7 @@ int process_field(struct CommandState state, mixed *field, string arg, closure c
     } else {
       // TODO print fail message
       state->field_retry += 1;
-      field_prompt(state, field, &arg, callback);
+      field_prompt(state, field, field_type, index, callback);
       return 0;
     }
   } else {
@@ -257,7 +259,7 @@ int process_field(struct CommandState state, mixed *field, string arg, closure c
         if ((field[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
           // prompt user for value
-          field_prompt(state, field, &(state->extra[id]), callback);
+          field_prompt(state, field, field_type, index, callback);
           return 0;
         } else {
           // fail
@@ -272,12 +274,13 @@ int process_field(struct CommandState state, mixed *field, string arg, closure c
   }
 }
 
-void field_prompt(struct CommandState state, mixed *field, mixed val, closure callback) {
+void field_prompt(struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
   int flags = INPUT_PROMPT;
   if (field[FIELD_PROMPT][PROMPT_NOECHO]) {
     flags |= INPUT_NOECHO;
   }
 
+  string val = get_struct_member(state, field_type)[index];
   string prompt = funcall(
     prompt_formatter, 
     field[FIELD_PROMPT][PROMPT_MSG],
@@ -288,11 +291,11 @@ void field_prompt(struct CommandState state, mixed *field, mixed val, closure ca
       : field[FIELD_TYPE]),
     val
   );
-  input_to("field_input", flags, prompt, state, field, &val, callback);
+  input_to("field_input", flags, prompt, state, field, field_type, index, callback);
 }
 
-void field_input(string arg, struct CommandState state, mixed *field, mixed val, closure callback) {
-  val = arg;
+void field_input(string arg, struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
+  get_struct_member(state, field_type)[index] = arg;
   process_command(state, callback);
 }
 
@@ -385,8 +388,14 @@ void create() {
   prompt_formatter = parse_format(DEFAULT_PROMPT, ([
       'm' : ({ 0, "%s", ({ ''message }) }),
       't' : ({ 0, "%s", ({ ''type }) }),
-      'd' : ({ 0, "%s", ({ ''default }) }),
+      'd' : ({ 0, "%s", ({ 
+               ({ #'?, 
+                  ({ #'stringp, ''default }), 
+                  ({ #'sprintf, 'arg, ''default }),
+                  ""
+               })
+            }) })
     ]),
     ({ 'message, 'type, 'default })
-  ); 
+  ); //'
 }

@@ -170,7 +170,7 @@ public varargs object get_logger(mixed zone, object rel, int reconfig) {
  * @return          the configuration mapping
  */
 mapping read_config(string zone, string dir) {
-  mapping result = ([ ]);
+  mapping result = ([ ]);  
   while (dir = dirname(dir)) {
 #ifdef EOTL
     mapping props = read_properties(dir + "/" + PROP_FILE);

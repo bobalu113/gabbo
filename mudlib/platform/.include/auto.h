@@ -50,6 +50,7 @@
 #define RenderLib            PlatformLibDir "/render"
 #define RodneyClientLib      PlatformLibDir "/rodney_client"
 #define StringsLib           PlatformLibDir "/strings"
+#define StructLib            PlatformLibDir "/struct"
 #define UserLib              PlatformLibDir "/user"
 
 #define AvatarMixin          PlatformModuleDir "/avatar"

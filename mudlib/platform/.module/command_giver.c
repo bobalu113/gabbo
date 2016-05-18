@@ -82,7 +82,7 @@ private mixed *load_command_spec(string specfile) {
 void setup_command_giver() {
   commands = load_commands();
   object logger = LoggerFactory->get_logger(THISO);
-  logger->debug("commands: %O\n", commands);
+  //logger->debug("commands: %O\n", commands);
 }
 
 /**

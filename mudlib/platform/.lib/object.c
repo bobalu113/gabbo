@@ -43,6 +43,7 @@ string get_user(object ob) {
 
 mixed *get_path_info(mixed ob) {
   string oname, uid, user;
+  int tmp;
   if (objectp(ob)) {
     oname = object_name(ob);
     uid = getuid(ob);
@@ -51,8 +52,13 @@ mixed *get_path_info(mixed ob) {
     oname = ob;
     uid = get_create_uid(ob);
   }
-  if (oname[<2..<1] == ".c") {
-    oname = oname[0..<3];
+  tmp = strlen(oname);
+  if ((tmp >= 2) && (oname[<2..<1] == ".c")) {
+    if (tmp) {
+      oname = oname[0..<3];
+    } else {
+      oname = "";
+    }
   }
 
   string zone, category, file;
@@ -61,18 +67,19 @@ mixed *get_path_info(mixed ob) {
   string *parts = explode(oname, "/");
   int len = sizeof(parts);
   int i = 0;
-  do {
-    if (parts[i][0] == '.') {
+  while (i < (len - 1)) {
+    if (strlen(parts[i]) && (parts[i][0] == '.')) {
       if (i == 0) {
         zone = "";
         category = implode(parts[i..<2], ".");
       } else {
-        zone = implode(parts[0..<(i - 1)], ".");
+        zone = implode(parts[0..(i - 1)], ".");
         category = implode(parts[i..<2], ".")[1..];
       }
       break;
     }
-  } while (++i < (len - 1));
+    i++;
+  }
   if (!zone) {
     zone = implode(parts[0..<2], ".");
     category = "";
@@ -81,7 +88,6 @@ mixed *get_path_info(mixed ob) {
   parts = explode(parts[<1], "#");
   file = parts[0];
   if (sizeof(parts) >= 2) {
-    file = parts[0];
     clone = to_int(parts[<1]);
   }
 

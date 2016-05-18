@@ -15,9 +15,12 @@
 #define ARG_CLOSE    "}]"
 
 private variables private functions inherit ArgsLib;
+private variables private functions inherit ArrayLib;
 private variables private functions inherit StringsLib;
 private variables private functions inherit ClosureLib;
 
+varargs string *explode_format(string str, string delim,
+                               string open, string close);
 /**
  * Compile a format string into a formatter closure with the given format
  * specifiers and args. Format strings may contain tokens of the format "%c"
@@ -65,7 +68,7 @@ closure parse_format(string format, mapping infomap, symbol *args) {
   string output_fmt = "";
   mixed *output_args = ({ });
 
-  string *parts = explode_nested(format, "%", ARG_OPEN, ARG_CLOSE);
+  string *parts = explode_format(format, "%");
   int size = sizeof(parts);
 
   output_fmt += parts[0]; // first part is always leading text (could be "")
@@ -95,8 +98,80 @@ closure parse_format(string format, mapping infomap, symbol *args) {
     output_fmt = sprintf("%s%s%s", output_fmt, info[SPRINTF_FMT], extra);
     output_args += funcall(
       reconstruct_lambda(({ 'arg }), info[FMT_LAMBDA]),
-      arg);
+      arg); //'
   }
 
-  return lambda(args, ({ #'sprintf, output_fmt }) + output_args);
+  return lambda(args, ({ #'sprintf, output_fmt }) + output_args); //'
+}
+
+
+/**
+ * Explode a string into substrings by a delimiter, ignoring any escaped
+ * delimiters, and delimiters nested within format parameters. See
+ * explode_nested().
+ *
+ * @param  str    the string to explode
+ * @param  delim  the string delimiting the substrings
+ * @param  open   a string of OPEN characters; defaults to "\"([{"
+ * @param  close  a string of CLOSE characters; defaults to "\")]}"
+ * @return        an array of strings separated by the delimiter
+ */
+varargs string *explode_format(string str, string delim,
+                               string open, string close) {
+  int delim_len = strlen(delim);
+  if (delim_len == 0) {
+    return explode(str, delim);
+  }
+
+  // If you explicitly specify 0 for open, you will get errors.
+  if (!stringp(close)) {
+    open  = ARG_OPEN;
+    close = ARG_CLOSE;
+  }
+
+  string *result = ({ });
+  int max = strlen(str) - delim_len;
+  int cursor = 0;
+  int start = 0;
+  int next_open = 0;
+  while (cursor <= max) {
+    int next_delim = strstr(str, delim, cursor);
+    if (next_delim == -1) {
+      break;
+    }
+    if (is_escaped(str, next_delim)) {
+      cursor = next_delim + 1;
+    } else {
+      int tmp = 0;
+      if (next_open > cursor) {
+        tmp = 1;
+      } else {
+        next_open = cursor - 1;
+        while ((next_open = searcha_any(str, open, next_open + 1)) != -1) {
+          if ((next_open > delim_len) 
+            && (str[(next_open - (delim_len + 1))..(next_open - 2)] 
+                == delim)) {
+            tmp = 1;
+            break;
+          }
+        }
+      }
+      if (tmp && (next_open < next_delim)) {
+        // Skip over the matching close char
+        cursor = 1 + find_close_char(str, next_open, open, close);
+        if( cursor <= 1 ) {
+          // Something went wrong
+          return 0;
+        } 
+      } else {
+        result += ({ str[start..next_delim - 1] });
+        cursor = next_delim + delim_len;
+        start = cursor;
+      }
+    }
+  }
+
+  result += ({ str[start..] });
+
+  return result;
 }

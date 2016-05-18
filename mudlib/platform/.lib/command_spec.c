@@ -122,8 +122,8 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
         }         
         break;
       case "syntax":
-        syntax += parse_syntax_xml(specfile, el, field_map, 
-                                   arg_lists, opt_sets, subcommand_map);
+        syntax += ({ parse_syntax_xml(specfile, el, field_map, 
+                                      arg_lists, opt_sets, subcommand_map) });
         break;
       case "validate":
         validation += parse_validate_xml(specfile, el);

@@ -38,7 +38,8 @@ mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts,
     int pos = 0;
 
     // XXX cache these?
-    LoggerFactory->get_logger(THISO)->info("%O", syntax);
+    object logger = LoggerFactory->get_logger(THISO);
+    logger->info("%O", syntax);
     mapping valid_opts = mkmapping(map(syntax[SYNTAX_OPTS], 
                                        #'[, OPT_OPT),//'
                                    syntax[SYNTAX_OPTS]);
@@ -105,8 +106,8 @@ mixed *get_matching_syntax(mapping syntax_map, mapping opts, mapping badopts,
 int valid_syntax(mixed *syntax, mapping opts, mapping badopts, mixed *args) {
   // TODO make sure multi opts are valid
   int numargs = sizeof(args);
-  if (syntax[SYNTAX_ARGS] >= 0) {
-    if (numargs == syntax[SYNTAX_ARGS]) {
+  if (syntax[SYNTAX_EXPLODE_ARGS] >= 0) {
+    if (numargs == syntax[SYNTAX_EXPLODE_ARGS]) {
       if (!sizeof(badopts)) {
         return 1;
       }

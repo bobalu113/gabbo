@@ -450,6 +450,8 @@ void runtime_error(string err, string prg, string curobj, int line,
 
 void runtime_warning(string err, string curobj, string prg, int line,
                      int inside_catch) {
+  // TODO needs to be retooled to capture prog/line right, test w/ range check
+
   string msg = sprintf("%s,%d %-5s %s - %s%s",
     strftime("%Y-%m-%d %H:%M:%S"),
     utime()[1],
