@@ -6,6 +6,7 @@
  * @alias MessageLib
  */
 
+#include <sys/strings.h>
 #include <message.h>
 #include <topic.h>
 
@@ -25,7 +26,11 @@ varargs struct Message fail_msg(string message, mapping context,
   if (!topic) {
     topic = TopicTracker->get_controller_topic(THISO);
   }
-  return PostalService->send_message(THISP, topic, message, context);
+  string trimmed = trim(message, TRIM_BOTH, " \t\n\r");
+  if (strlen(trimmed)) {
+    return PostalService->send_message(THISP, topic, message, context);
+  }
+  return 0;
 }
 
 varargs struct Message prompt_msg(string message, mapping context) {

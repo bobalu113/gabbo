@@ -52,6 +52,7 @@
 #define StringsLib           PlatformLibDir "/strings"
 #define StructLib            PlatformLibDir "/struct"
 #define UserLib              PlatformLibDir "/user"
+#define ValidationLib        PlatformLibDir "/validation"
 
 #define AvatarMixin          PlatformModuleDir "/avatar"
 #define CommandCode          PlatformModuleDir "/command"

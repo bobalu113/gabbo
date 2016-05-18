@@ -88,7 +88,7 @@ int process_command(struct CommandState state, closure callback) {
                        + state->command[COMMAND_VALIDATION];
   foreach (mixed *validation : validations) {
     string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
-    closure validator = symbol_function(func);
+    closure validator = symbol_function(func, THISO);
     if (!validator) {
       fail_msg(funcall(fail_formatter, sprintf(
           "Validator not found: %s.\n", 
@@ -224,6 +224,7 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
   string fail;
   string id = field[FIELD_ID];
   string arg = get_struct_member(state, field_type)[index];
+  arg = trim(arg, TRIM_BOTH);
   switch (field[FIELD_TYPE]) {
     case "bool":
       fail = parse_boolean(arg, &val);
@@ -262,7 +263,7 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
     // do field validation
     foreach (mixed *validation : field[FIELD_VALIDATION]) {
       string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
-      closure validator = symbol_function(func);
+      closure validator = symbol_function(func, THISO);
       if (!validator) {
         fail_msg(funcall(fail_formatter, sprintf(
             "Validator not found: %s.\n", 
@@ -315,7 +316,9 @@ void field_prompt(struct CommandState state, mixed *field, string field_type, mi
 }
 
 void field_input(string arg, struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
-  get_struct_member(state, field_type)[index] = arg;
+  if (arg && strlen(arg)) {
+    get_struct_member(state, field_type)[index] = arg;
+  }
   process_command(state, callback);
 }
 
@@ -420,7 +423,7 @@ void create() {
   ); //'
 
   fail_formatter = parse_format(DEFAULT_FAIL, ([
-      'm' : ({ 0, "%s", ({ ''message }) }),
+      'm' : ({ 0, "%s", ({ ({ #'||, ''message, "" }) }) }),
       'v' : ({ 0, "%s", ({ ''verb }) })
     ]),
     ({ 'message, 'verb })

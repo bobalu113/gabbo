@@ -5,14 +5,21 @@
  * @alias ValidationLib
  */
 
-string validate_not_empty() {
-  
+private functions private variables inherit UserLib;
+
+int validate_max_length(string arg, mixed len) {
+  return (strlen(arg) <= to_int(len));
 }
 
-string validate_is_user() {
-  
+int validate_min_length(string arg, mixed len) {
+  return (strlen(arg) >= to_int(len));
 }
 
-string validate_max_lenght() {
-  
+int validate_not_empty(string arg) {
+  return validate_min_length(arg, 1);
 }
+
+int validate_is_user(string username) {
+  return user_exists(username);
+}
+

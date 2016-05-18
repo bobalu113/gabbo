@@ -1,12 +1,25 @@
+/**
+ * Login controller. Authenticates a user and moves them to their starting 
+ * room. 
+ *
+ * @alias LoginController
+ */
 #include <topic.h>
-
-private variables private functions inherit MessageLib;
+#include <user.h>
 
 inherit CommandController;
+
+private variables private functions inherit MessageLib;
+private variables public functions inherit ValidationLib;
 
 int execute(mapping model, string verb) {
   system_msg(THISO, "Logged in!", ([ ]), TOPIC_LOGIN);
   return 1;
+}
+
+int validate_password_matches(mapping model) {
+  mapping data = restore_value(read_file(PASSWD_FILE(model["username"])));
+  return model["password"] == data["password"];
 }
 
 /**
