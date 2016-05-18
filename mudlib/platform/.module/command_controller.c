@@ -11,6 +11,7 @@
 #include <command.h>
 
 private variables private functions inherit CommandLib;
+private variables private functions inherit MessageLib;
 private variables private functions inherit ArgsLib;
 private variables private functions inherit StringsLib;
 private variables private functions inherit StructLib;
@@ -30,6 +31,7 @@ struct CommandState {
 };
 
 #define DEFAULT_PROMPT "(%t) %m%d{ [%s]}: "
+#define DEFAULT_FAIL "%m\n"
 
 int do_command(mixed *command, string verb, string arg);
 int process_command(struct CommandState state, closure callback);
@@ -48,7 +50,7 @@ string parse_objects(string arg, mixed val);
 int do_execute(mapping model, string verb);
 int execute(mapping model, string verb);
 
-closure prompt_formatter;
+closure prompt_formatter, fail_formatter;
 
 int do_command(mixed *command, string verb, string arg) {
   mapping opts, badopts;
@@ -85,17 +87,24 @@ int process_command(struct CommandState state, closure callback) {
   mixed *validations = state->syntax[SYNTAX_VALIDATION] 
                        + state->command[COMMAND_VALIDATION];
   foreach (mixed *validation : validations) {
-    closure validator = symbol_function(validation[VALIDATE_VALIDATOR]);
+    string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
+    closure validator = symbol_function(func);
+    if (!validator) {
+      fail_msg(funcall(fail_formatter, sprintf(
+          "Validator not found: %s.\n", 
+          validation[VALIDATE_VALIDATOR]
+        ), state->verb));
+    }
+
     int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
     if (!result) {
-      if (state->form_retry >= state->command[COMMAND_MAX_RETRY]) {
-        // TODO print fail message
-        return 0;
-      } else {
-        // TODO print fail message
+      fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
+      if (state->form_retry < state->command[COMMAND_MAX_RETRY]) {
         state->form_retry += 1;
         state->model = ([ ]);
         process_command(state, callback);
+        return 0;
+      } else {
         return 0;
       }
     }
@@ -252,17 +261,28 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
   } else {
     // do field validation
     foreach (mixed *validation : field[FIELD_VALIDATION]) {
-      closure validator = symbol_function(validation[VALIDATE_VALIDATOR]);
+      string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
+      closure validator = symbol_function(func);
+      if (!validator) {
+        fail_msg(funcall(fail_formatter, sprintf(
+            "Validator not found: %s.\n", 
+            validation[VALIDATE_VALIDATOR]
+          ), state->verb));
+      }
+
       int result = apply(validator, val, validation[VALIDATE_PARAMS]);
       if (!result) {
         // validation failed
-        if ((field[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
-            || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
+        fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
+        if (((field[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
+             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS))
+            && (state->field_retry < field[FIELD_MAX_RETRY])) {
           // prompt user for value
+          state->field_retry += 1;
           field_prompt(state, field, field_type, index, callback);
           return 0;
-        } else {
-          // fail
+        } else {          
+          return 0;
         }
       }
     }
@@ -397,5 +417,12 @@ void create() {
             }) })
     ]),
     ({ 'message, 'type, 'default })
+  ); //'
+
+  fail_formatter = parse_format(DEFAULT_FAIL, ([
+      'm' : ({ 0, "%s", ({ ''message }) }),
+      'v' : ({ 0, "%s", ({ ''verb }) })
+    ]),
+    ({ 'message, 'verb })
   ); //'
 }

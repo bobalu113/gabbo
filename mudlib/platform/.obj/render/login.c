@@ -7,43 +7,37 @@
 
 #include <ansi.h>
 #include <topic.h>
+
+inherit DefaultRenderer;
  
 private variables private functions inherit RenderLib;
 
-string render_welcome(string term, string topic, mapping msgdata, 
-                      object sender);
-string render_default(string term, string topic, mapping msgdata, 
-                      object sender);
+string render_welcome(string term, string topic, string message, 
+                      mapping context, object sender);
 
-string render(string term, string topic, mapping msgdata, object sender) {
+string render(string term, string topic, string message, mapping context, 
+              object sender) {
   switch (topic) {
     case TOPIC_WELCOME:
-      return render_welcome(term, topic, msgdata, sender);
+      return render_welcome(term, topic, message, context, sender);
     case TOPIC_LOGIN:
+      return render_default(term, topic, message, context, sender);
     default:
-      return render_default(term, topic, msgdata, sender);
+      return DefaultRenderer::render(term, topic, message, context, sender);
   }
   return "";
 }
 
-string render_welcome(string term, string topic, mapping msgdata, 
-                      object sender) {
+string render_welcome(string term, string topic, string message, 
+                      mapping context, object sender) {
   if (term == "gabbo") {
-    return render_json(topic, msgdata, sender);
+    return render_json(topic, message, context, sender);
   }
-  string msg = sprintf("%s%s%s%s\n", 
-    (msgdata["clearScreen"] ? CLEAR_SCREEN : ""), // TODO abstract ansi
-    (msgdata["defaultTerm"] ? msgdata["defaultTerm"] + "\n" : ""),
-    (msgdata["welcome"] ? msgdata["welcome"] : ""),
-    (msgdata["insecure"] ? msgdata["insecure"] + "\n" : "")
+  message = sprintf("%s%s%s%s\n", 
+    (context["clearScreen"] ? CLEAR_SCREEN : ""), // TODO abstract ansi
+    (context["defaultTerm"] ? context["defaultTerm"] + "\n" : ""),
+    (message),
+    (context["insecure"] ? context["insecure"] + "\n" : "")
   );
-  return msg;
-}
-
-string render_default(string term, string topic, mapping msgdata, 
-                      object sender) {
-  if (term == "gabbo") {
-    return render_json(topic, msgdata, sender);
-  }
-  return msgdata["message"];
+  return message;
 }

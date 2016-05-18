@@ -72,6 +72,7 @@
 #define TopicTracker         PlatformObjDir "/topic_tracker"
 
 #define PlatformRenderDir    PlatformObjDir "/render"
+#define DefaultRenderer      PlatformRenderDir "/default"
 #define LoginRenderer        PlatformRenderDir "/login"
 
 #define MasterObject         __MASTER_OBJECT__

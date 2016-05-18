@@ -108,13 +108,12 @@ static void welcome(string terminal, mixed is_default) {
 
   // display welcome screen
   system_msg(THISO, 
-             TOPIC_WELCOME, 
-             ([ "welcome" : welcome,
-                "insecure" : insecure,
+             welcome,
+             ([ "insecure" : insecure,
                 "defaultTerm" : is_default,
                 "clearScreen" : CLEAR_SCREEN
-             ]));
-
+             ]),
+             TOPIC_WELCOME);
 
   // restore prompt
   remove_input_to(THISO);
@@ -128,9 +127,7 @@ static void welcome(string terminal, mixed is_default) {
  * Exit login prompt because of idle timeout.
  */
 static void timeout() {
-  system_msg(THISO,
-             TOPIC_LOGIN, 
-             ([ "message" : TimeoutMessage ]));
+  system_msg(THISO, TimeoutMessage, ([ ]), TOPIC_LOGIN);
   abort();
 }
 

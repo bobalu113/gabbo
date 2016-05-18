@@ -5,9 +5,7 @@ private variables private functions inherit MessageLib;
 inherit CommandController;
 
 int execute(mapping model, string verb) {
-  system_msg(THISO,
-             TOPIC_LOGIN, 
-             ([ "message" : "Logged in!" ]));
+  system_msg(THISO, "Logged in!", ([ ]), TOPIC_LOGIN);
   return 1;
 }
 

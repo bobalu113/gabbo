@@ -4,7 +4,7 @@
   xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/bobalu113/gabbo/master/mudlib/platform/.etc/command.xsd">
 
   <command primaryVerb="login" controller="login" maxRetry="3">
-    <validate validator="do_auth">
+    <validate validator="password_matches">
       <fail>Wrong password.</fail>
     </validate>
     <fields>

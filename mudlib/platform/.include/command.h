@@ -60,5 +60,6 @@
 #define PROMPT_NEVER          "never"
 
 #define MAX_ARGS              26
+#define VALIDATION_PREFIX     "validate_"
 
 #endif  // _COMMAND_H

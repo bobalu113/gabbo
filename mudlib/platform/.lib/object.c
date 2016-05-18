@@ -110,6 +110,20 @@ string get_zone(object ob) {
 }
 
 /**
+ * Get the flavor the object belongs to.
+ *
+ * @param ob the object to query
+ * @return   the object's flavor
+ */
+string get_flavor(object ob) {
+  string name = program_name(ob);
+  if (name[0..12] == "/platform/") {
+    return "platform";
+  }
+  return "";
+}
+
+/**
  * Test if an object has a specified capability.
  *
  * @param  ob  the object to test
