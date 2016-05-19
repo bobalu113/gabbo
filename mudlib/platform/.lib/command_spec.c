@@ -126,7 +126,7 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
                                       arg_lists, opt_sets, subcommand_map) });
         break;
       case "validate":
-        validation += parse_validate_xml(specfile, el);
+        validation += ({ parse_validate_xml(specfile, el) });
         break;
       case "subcommand":
         if (member(xml[XML_TAG_ATTRIBUTES], "id")) {
@@ -408,6 +408,11 @@ mixed *parse_validate_xml(string specfile, mixed *xml) {
     parse_error(specfile, "missing attribute validator");
   }
 
+  int negate = DEFAULT_NEGATE;
+  if (member(xml[XML_TAG_ATTRIBUTES], "negate")) {
+    negate = parse_boolean(xml[XML_TAG_ATTRIBUTES]["negate"]);
+  } 
+
   string fail = 0;
   string *params = ({ });
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
@@ -424,7 +429,7 @@ mixed *parse_validate_xml(string specfile, mixed *xml) {
     }
   }
 
-  return ({ validator, fail, params });
+  return ({ validator, fail, params, negate });
 }
 
 mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,

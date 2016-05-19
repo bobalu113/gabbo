@@ -40,6 +40,7 @@
 #define VALIDATE_VALIDATOR    0
 #define VALIDATE_FAIL         1
 #define VALIDATE_PARAMS       2
+#define VALIDATE_NEGATE       3
 
 #define SYNTAX_EXPLODE_ARGS   0
 #define SYNTAX_MIN_ARGS       1

@@ -40,8 +40,9 @@
         <validate validator="not_empty"></validate>
         <validate validator="max_length">
           <param value="12"/>
+          <fail>Maximum username length is 12 characters.</fail>
         </validate>
-        <validate validator="not_user">
+        <validate validator="is_user" negate="true">
           <fail>That username already exists.</fail>
         </validate>
         <prompt>Enter your name</prompt>

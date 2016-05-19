@@ -13,5 +13,6 @@
 #define DEFAULT_SHOW_ABORT  0
 #define DEFAULT_SHOW_ENUM   0
 #define DEFAULT_MAX_RETRY   0
+#define DEFAULT_NEGATE      0
 
 #endif  // _COMMAND_SPEC_H

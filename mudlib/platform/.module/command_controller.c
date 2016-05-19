@@ -28,6 +28,7 @@ struct CommandState {
   mapping model;
   int field_retry;
   int form_retry;
+  int force_prompt;
 };
 
 #define DEFAULT_PROMPT "(%t) %m%d{ [%s]}: "
@@ -61,7 +62,7 @@ int do_command(mixed *command, string verb, string arg) {
   if (valid_syntax(syntax, opts, badopts, args)) {
     mapping model = ([ ]);
     struct CommandState state = 
-      (<CommandState> verb, command, syntax, opts, args, ([ ]), model, 0, 0);
+      (<CommandState> verb, command, syntax, opts, args, ([ ]), model, 0, 0, 0);
     return process_command(state, #'do_execute); //'
   } 
 
@@ -87,6 +88,7 @@ int process_command(struct CommandState state, closure callback) {
   mixed *validations = state->syntax[SYNTAX_VALIDATION] 
                        + state->command[COMMAND_VALIDATION];
   foreach (mixed *validation : validations) {
+    // invoke validation function
     string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
     closure validator = symbol_function(func, THISO);
     if (!validator) {
@@ -96,12 +98,15 @@ int process_command(struct CommandState state, closure callback) {
         ), state->verb));
     }
 
+    // process result
     int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
+    result = (validation[VALIDATE_NEGATE] ? !result : result);
     if (!result) {
       fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
       if (state->form_retry < state->command[COMMAND_MAX_RETRY]) {
         state->form_retry += 1;
         state->model = ([ ]);
+        state->force_prompt = 1;
         process_command(state, callback);
         return 0;
       } else {
@@ -118,12 +123,13 @@ int process_args(struct CommandState state, closure callback) {
   int numargs = sizeof(state->args);
   foreach (mixed *field : state->syntax[SYNTAX_ARGS]) {
     if (!member(state->model, field[FIELD_ID])) {
-      if (i < numargs) {
+      if ((i < numargs) && !state->force_prompt) {
         // we have the arg, process it
         if (!process_field(state, field, "args", i, callback)) {
           return 0;
         }
       } else {
+        state->force_prompt = 0;
         // not enough args provided
         if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
@@ -133,7 +139,7 @@ int process_args(struct CommandState state, closure callback) {
           return 0;
         } else {
           if (field[FIELD_REQUIRED]) {
-            // required field, fail usage
+            // TODO required field, fail usage
             return 0;            
           } else {
             // not required, continue with default
@@ -153,12 +159,13 @@ int process_args(struct CommandState state, closure callback) {
 int process_opts(struct CommandState state, mapping opts, closure callback) {
   foreach (mixed opt, mixed *field : opts) {
     if (!member(state->model, field[FIELD_ID])) {
-      if (member(opts, opt)) {
+      if (member(opts, opt) && !state->force_prompt) {
         // we have the opt, process it
         if (!process_field(state, field, "opts", opt, callback)) {
           return 0;
         }
       } else {
+        state->force_prompt = 0;
         // opt not provided
         if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
@@ -188,12 +195,13 @@ int process_extra(struct CommandState state, closure callback) {
   foreach (mixed *field : state->command[COMMAND_FIELDS]) {
     string id = field[FIELD_ID];
     if (!member(state->model, id)) {
-      if (member(state->extra, id)) {
+      if (member(state->extra, id) && !state->force_prompt) {
         // we have the field, process it
         if (!process_field(state, field, "extra", id, callback)) {
           return 0;
         }
       } else {
+        state->force_prompt = 0;
         // field not provided
         if ((field[FIELD_PROMPT_SETTING] == PROMPT_SYNTAX)
             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS)) {
@@ -224,7 +232,7 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
   string fail;
   string id = field[FIELD_ID];
   string arg = get_struct_member(state, field_type)[index];
-  arg = trim(arg, TRIM_BOTH);
+  arg = trim(arg || "", TRIM_BOTH);
   switch (field[FIELD_TYPE]) {
     case "bool":
       fail = parse_boolean(arg, &val);
@@ -262,6 +270,7 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
   } else {
     // do field validation
     foreach (mixed *validation : field[FIELD_VALIDATION]) {
+      // invoke validation function
       string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
       closure validator = symbol_function(func, THISO);
       if (!validator) {
@@ -271,7 +280,9 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
           ), state->verb));
       }
 
+      // process result
       int result = apply(validator, val, validation[VALIDATE_PARAMS]);
+      result = (validation[VALIDATE_NEGATE] ? !result : result);
       if (!result) {
         // validation failed
         fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
@@ -291,6 +302,10 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
     state->model[id] = val;
     // reset retries to 0 fo next field
     state->field_retry = 0;
+    // if form retry, force prompt for next field
+    if (state->form_retry > 0) {
+      state->force_prompt = 1;
+    }
     return 1;
   }
 }
