@@ -15,7 +15,17 @@ private functions private variables inherit FileLib;
  * @return          1 if the user exists, otherwise 0
  */
 int user_exists(string username) {
-  return file_exists(PASSWD_FILE(username));
+  return file_exists(user_dir(username));
+}
+
+/**
+ * Get the user directory for a given username.
+ * 
+ * @param  username the username of directory owner
+ * @return          the user dir
+ */
+string user_dir(string username) {
+  return UserDir "/" + username;
 }
 
 /**

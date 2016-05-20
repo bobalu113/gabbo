@@ -63,7 +63,7 @@ int do_command(mixed *command, string verb, string arg) {
     mapping model = ([ ]);
     struct CommandState state = 
       (<CommandState> verb, command, syntax, opts, args, ([ ]), model, 0, 0, 0);
-    return process_command(state, #'do_execute); //'
+    return process_command(state, symbol_function("do_execute", THISO)); //'
   } 
 
   // fail syntax
@@ -114,7 +114,7 @@ int process_command(struct CommandState state, closure callback) {
       }
     }
   }
-
+  
   return funcall(callback, state->model, state->verb);
 }
 

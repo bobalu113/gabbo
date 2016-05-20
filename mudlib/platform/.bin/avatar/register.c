@@ -12,7 +12,7 @@ private variables private functions inherit MessageLib;
 private variables public functions inherit ValidationLib;
 
 int execute(mapping model, string verb) {
-  system_msg(THISO, "Registered!", ([ ]), TOPIC_LOGIN);
+  system_msg(THISP, "Registered!\n", ([ ]), TOPIC_LOGIN);
   return 1;
 }
 
