@@ -257,13 +257,16 @@ void inaugurate_master(int arg) {
     })
   ) );
 
-  set_driver_hook(H_CREATE_OB, unbound_lambda(({ 'obj }),
+  set_driver_hook(H_CREATE_OB, unbound_lambda(
+    ({ 'obj }),
     ({ #'call_other, 'obj, "create" })
   )); //'
-  set_driver_hook(H_CREATE_CLONE, unbound_lambda(({ 'obj }),
+  set_driver_hook(H_CREATE_CLONE, unbound_lambda(
+    ({ 'obj }),
     ({ #'call_other, 'obj, "create" })
   )); //'
-  set_driver_hook(H_CREATE_SUPER, unbound_lambda(({ 'obj }),
+  set_driver_hook(H_CREATE_SUPER, unbound_lambda(
+    ({ 'obj }),
     ({ #'call_other, 'obj, "create" })
   )); //'
 
