@@ -34,7 +34,7 @@ int setup_tracker(string name, mapping config) {
   return 1;
 }
 
-mixed get_tracker_config(string name, string prop) {
+mixed query_tracker_config(string name, string prop) {
   if (mappingp(trackers[name])) {
     return trackers[name][prop];
   }

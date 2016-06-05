@@ -31,20 +31,22 @@ private mapping next_expire;
  *                        expire records from the in-memory tracked map
  * @return                the next expiration time
  */
-int setup_mem_tracker(string name, closure keymaker, varargs int *args) {
+int setup_mem_tracker(string name, varargs int *args) {
   int size = sizeof(args);
   int min_size = ((size >= 1) ? args[0] : DEFAULT_MIN_SIZE);
-  int max_size = ((size >= 1) ? args[0] : DEFAULT_MAX_SIZE);
-  int expire_interval = ((size >= 1) ? args[0] : DEFAULT_EXPIRE_INTERVAL);
+  int max_size = ((size >= 2) ? args[1] : DEFAULT_MAX_SIZE);
+  int expire_interval = ((size >= 3) ? args[2] : DEFAULT_EXPIRE_INTERVAL);
+  closure keymaker = ((size >= 4) ? args[3] : 0);
 
   int result = TrackerMixin::setup_tracker(name, ([ 
-    TRACKER_KEYMAKER : keymaker,
     TRACKER_MIN_SIZE : min_size,
     TRACKER_MAX_SIZE : max_size,
-    TRACKER_EXPIRE_INTERVAL : expire_interval
+    TRACKER_EXPIRE_INTERVAL : expire_interval,
+    TRACKER_KEYMAKER : keymaker,
   ]));
 
   expire_tracked(name);
+  next_expire[name] = time() + expire_interval;
   return result;
 }
 
@@ -66,17 +68,18 @@ int setup_mem_tracker(string name, closure keymaker, varargs int *args) {
  */
 varargs int add_tracked(string name, mapping data, closure callback, 
                         varargs mixed *args) {
-  if (member(data, ID_COLUMN)) {
-    return 0;
-  }
   if (!member(tracked, name)) {
     return 0;
   }
+  if (!member(data, ID_COLUMN)) {
+    closure keymaker = get_tracker_config(name, TRACKER_KEYMAKER);
+    if (keymaker) {
+      data[ID_COLUMN] = funcall(keymaker, data);
+    } else {
+      return 0;
+    }
+  }
 
-  closure keymaker = get_tracker_config(name, TRACKER_KEYMAKER);
-  mixed key = funcall(keymaker, data);
-
-  data[ID_COLUMN] = key; 
   tracked[name][TRACKED_MAP] = data;
   // XXX this could be faster (maybe use linked list of some sort)
   tracked[name][TRACKED_LIST] += data;
@@ -158,12 +161,18 @@ int expire_tracked(string type) {
   }
   mapping map = tracked[type][TRACKED_MAP];
   mixed *list = tracked[type][TRACKED_LIST];
+  int max_size = query_tracker_config(type, TRACKER_MAX_SIZE);
+  int min_size = query_tracker_config(type, TRACKER_MIN_SIZE);
   int size = sizeof(list);
-  if (size > tracked[type][TRACKED_MAX_SIZE]) {
-    mixed *expired = list[0..<(tracked[type][TRACKER_MIN_SIZE] + 1)];
-    list = list[<tracked[type][TRACKER_MIN_SIZE]..];
-    foreaach (mapping )
+  if (size > max_size]) {
+    mapping *expired = list[0..<(min_size + 1)];
+    list = list[<min_size..];
+    foreach (mapping data : expired) {
+      m_delete(map, data[ID_COLUMN]);
+    }
+    return sizeof(expired);
   }
+  return 0;
 }
 
 /**
@@ -174,24 +183,30 @@ int expire_tracked(string type) {
  * @return the number of seconds until the next expiration attempt
  */
 int get_next_expire() {
-  if (!sizeof(tracked)) {
+  if (!sizeof(next_expire)) {
     return 0;
   }
-  int next = min(map(m_values(tracked), (: $1[TRACKER_NEXT_EXPIRE] :)));
+  int next = min(m_values(next_expire));
   return max(0, (next - time()));
 }
 
-int reset() {
-  int time = time();
-  foreach (string type, mixed *t : tracked) {
-    if (t[TRACKED_NEXT_EXPIRE] < time) {
+int expire() {
+  int time = time();  
+  foreach (string type : next_expire) {
+    if (next_expire[type] < time) {
       expire_tracked(type);
-      t[TRACKED_NEXT_EXPIRE] = time + t[TRACKED_EXPIRE_INTERVAL];
+      next_expire[type] = 
+        time + query_tracker_config(type, TRACKER_EXPIRE_INTERVAL);
     }
   }
   return get_next_expire();
 }
 
+int reset() {
+  expire();
+}
+
 void setup_tracker() {
   tracked = ([ ]);
+  next_expire = ([ ]);
 }

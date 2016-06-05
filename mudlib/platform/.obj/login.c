@@ -52,7 +52,7 @@ int logon() {
   }
   ConnectionTracker->new_connection(THISO);
   ConnectionTracker->telnet_get_terminal(THISO);
-  input_to("suppress_prompt"); // suppress prompt until welcome screen is shown
+  input_to("suppress_prompt", INPUT_NOECHO|INPUT_IGNORE_BANG); // suppress prompt until welcome screen is shown
   get_terminal_type(#'welcome); //'
   set_heart_beat(1);
   return 1;
@@ -60,7 +60,7 @@ int logon() {
 
 void suppress_prompt() {
   remove_input_to(THISO);
-  input_to("suppress_prompt");
+  input_to("suppress_prompt", INPUT_NOECHO|INPUT_IGNORE_BANG);
   return;
 }
 
