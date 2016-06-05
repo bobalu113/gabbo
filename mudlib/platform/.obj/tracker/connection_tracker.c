@@ -8,26 +8,21 @@
 #include <telnet.h>
 #include <connection.h>
 
+inherit SQLTrackerMixin;
 private variables private functions inherit ConnectionLib;
 
 #define NEGOTIATION_LOG
 
-// ([ str connection_id : ({ ob interactive, 
-//                           int exec_time,
-//                           map negotiation_pending,
-//                           int naws_last,
-//                           ConnectionConfig config }) ])
+// ([ str connection_id : ConnectionState state ])
 private mapping connections;
 // ([ ob interactive : str connection_id ])
 private mapping interactives;
-
-private int connection_count;
+private int connection_counter;
 
 string query_connection_id(object interactive);
 object query_interactive(string id);
 int query_exec_time(string id);
-struct ConnectionConfig query_config(string id);
-string increment_connection_id();
+struct ConnectionInfo query_connection_info(string id);
 
 #ifdef NEGOTIATION_LOG
 void telnet_neg_log(string s) {
@@ -50,14 +45,18 @@ string new_connection(object interactive) {
     ));
   }
 
-  string connection_id = increment_connection_id();
-  connections[connection_id] = ({ 
-    interactive,
-    time(),
-    ([ ]),
-    0,
-    (<ConnectionConfig> id: connection_id, connect_time: time())
-  });
+  string connection_id = generate_id();
+  connections[connection_id] = (<ConnectionState> 
+    interactive: interactive,
+    exec_time: time(),
+    negotiation_pending: ([ ]),
+    naws_last: 0,
+    info: (<ConnectionInfo> id: 
+      connection_id, 
+      connect_time: time(),
+    ),
+    sessions: ({ })
+  );
   interactives[interactive] = connection_id;
   return connection_id;
 }
@@ -73,8 +72,20 @@ int switch_connection(mixed connection, object interactive) {
   } else {
     return 0;
   }
-  connection[CON_INTERACTIVE] = interactive;
-  connection[CON_EXEC_TIME] = time();
+  connection->interactive = interactive;
+  connection->exec_time = time();
+  return 1;
+}
+
+int new_session(mixed connection, string session_id) {
+  if (objectp(connection) && interactives[connection]) {
+    connection = connections[interactives[connection]];
+  } else if (member(connections, connection)) {
+    connection = connections[connection];
+  } else {
+    return 0;
+  }
+  connection->sessions += ({ session_id });
   return 1;
 }
 
@@ -89,8 +100,8 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
     connection_id = new_connection(THISP);
   }
   mixed *connection = connections[connection_id];
-  object interactive = connection[CON_INTERACTIVE];
-  struct ConnectionConfig config = connection[CON_CONFIG];
+  object interactive = connection->interactive;
+  struct ConnectionInfo info = connection->info;
 
   int dont_log;
 
@@ -121,10 +132,10 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
 #endif
   switch (cmd) {
     case WILL:
-      if (!connection[CON_NEG_PEND][opt]) {
+      if (!connection->negotiation_pending[opt]) {
         send_binary_message(interactive, ({ IAC, DO, opt }));
       }
-      connection[CON_NEG_PEND][opt] = 0;
+      connection->negotiation_pending[opt] = 0;
       send_binary_message(interactive, ({ IAC, SB, opt, TELQUAL_SEND, IAC, SE }));
       break;
     case DO:
@@ -132,15 +143,15 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
       break;
     case SB:
       if (opt == TELOPT_TTYPE && optargs[0] == TELQUAL_IS) {
-        config->terminal = to_string(optargs[1..]);
+        info->terminal = to_string(optargs[1..]);
 #ifdef NEGOTIATION_LOG
-        option_arguments += " " + config->terminal;
+        option_arguments += " " + info->terminal;
 #endif
         break;
       }
       if (opt == TELOPT_NAWS && sizeof(optargs) >= 4) {
-        config->terminal_width = optargs[1] - optargs[0];
-        config->terminal_height = optargs[3] - optargs[2];
+        info->terminal_width = optargs[1] - optargs[0];
+        info->terminal_height = optargs[3] - optargs[2];
 #ifdef NEGOTIATION_LOG
         option_arguments = sprintf("%d %d %d %d",
                                    optargs[0], optargs[1],
@@ -151,30 +162,30 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
       if (opt == TELOPT_TTYLOC 
           && optargs[0] == TELQUAL_IS 
           && sizeof(optargs) > 8) { 
-        if (config->ttyloc == 0) {
-          config->ttyloc = (int *) allocate(8);
+        if (info->ttyloc == 0) {
+          info->ttyloc = (int *) allocate(8);
         }
         for (int i = 0; i < 8; i++) {
-          config->ttyloc[i] = optargs[i + 1];
+          info->ttyloc[i] = optargs[i + 1];
         }
 #ifdef NEGOTIATION_LOG
         option_arguments = sprintf("0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
-                                   config->ttyloc[0], config->ttyloc[1],
-                                   config->ttyloc[2], config->ttyloc[3],
-                                   config->ttyloc[4], config->ttyloc[5],
-                                   config->ttyloc[6], config->ttyloc[7]);
+                                   info->ttyloc[0], info->ttyloc[1],
+                                   info->ttyloc[2], info->ttyloc[3],
+                                   info->ttyloc[4], info->ttyloc[5],
+                                   info->ttyloc[6], info->ttyloc[7]);
 #endif
         break;
       } 
-      connection[CON_NEG_PEND][opt] = 0;
+      connection->negotiation_pending[opt] = 0;
       break;
   }
 #ifdef NEGOTIATION_LOG
-  if (opt == TELOPT_NAWS && ((connection[CON_NAWS_LAST] + 30) > time())) {
+  if (opt == TELOPT_NAWS && ((connection->naws_last + 30) > time())) {
     dont_log = 1;
   }
   if (opt == TELOPT_NAWS && cmd == SB && !dont_log) {
-     connection[CON_NAWS_LAST] = time();
+     connection->naws_last = time();
   } 
 
   if (!dont_log) {
@@ -191,13 +202,13 @@ int telnet_get_terminal(object interactive) {
     return 0;
   }
   mixed *connection = connections[connection_id];
-  struct ConnectionConfig config = connection[CON_CONFIG];
+  struct ConnectionInfo info = connection->info;
 
 #ifdef NEGOTIATION_LOG
   telnet_neg_log("telnet_get_terminal");
 #endif
   send_binary_message(interactive, ({ IAC, DO, TELOPT_TTYPE }));
-  connection[CON_NEG_PEND] += ([ TELOPT_TTYPE : 1 ]);
+  connection->negotiation_pending += ([ TELOPT_TTYPE : 1 ]);
   return 1;
 }
 
@@ -207,12 +218,12 @@ int telnet_get_NAWS(object interactive) {
     return 0;
   }
   mixed *connection = connections[connection_id];
-  struct ConnectionConfig config = connection[CON_CONFIG];
+  struct ConnectionInfo info = connection->info;
 #ifdef NEGOTIATION_LOG
   telnet_neg_log("telnet_get_NAWS");
 #endif
   send_binary_message(interactive, ({ IAC, DO, TELOPT_NAWS }));
-  connection[CON_NEG_PEND] += ([ TELOPT_NAWS : 1 ]);
+  connection->negotiation_pending += ([ TELOPT_NAWS : 1 ]);
   return 1;
 }
 
@@ -222,12 +233,12 @@ int telnet_get_ttyloc(object interactive) {
     return 0;
   }
   mixed *connection = connections[connection_id];
-  struct ConnectionConfig config = connection[CON_CONFIG];
+  struct ConnectionInfo info = connection->info;
 #ifdef NEGOTIATION_LOG
   telnet_neg_log("telnet_get_ttyloc");
 #endif
   send_binary_message(interactive, ({ IAC, DO, TELOPT_TTYLOC }));
-  connection[CON_NEG_PEND] += ([ TELOPT_TTYLOC : 1 ]);
+  connection->negotiation_pending += ([ TELOPT_TTYLOC : 1 ]);
   return 1;
 }
 
@@ -235,25 +246,26 @@ string query_connection_id(object interactive) {
   return (member(interactives, interactive) && interactives[interactive]);
 }
 
-struct ConnectionConfig query_config(string id) {
-  return (member(connections, id) && connections[id][CON_CONFIG]);
+struct ConnectionInfo query_connection_info(string id) {
+  return (member(connections, id) && connections[id]->info);
 }
 
 object query_interactive(string id) {
-  return (member(connections, id) && connections[id][CON_INTERACTIVE]);
+  return (member(connections, id) && connections[id]->interactive);
 }
 
 int query_exec_time(string id) {
-  return (member(connections, id) && connections[id][CON_EXEC_TIME]);
+  return (member(connections, id) && connections[id]->exec_time);
 }
 
-string increment_connection_id() {
-  return "connection#" + ++connection_count;
+string generate_id() {
+  return sprintf("%s#%d", 
+                 ObjectTracker->query_object_id(THISO), ++connection_counter);
 }
 
 void create() {
   connections = ([ ]);
   interactives = ([ ]);
-  connection_count = 0;
+  connection_counter = 0;
   return;
 }

@@ -6,12 +6,15 @@
  */
 
 inherit SQLTrackerMixin;
+private functions private variables inherit ProgramLib;
 
-// program_id = "program_name#program_time3program_counter"
-// ([ program_id : ({ blueprint, ([ clones ]), program_counter }) ])
+// program_id = "program_name#program_time3program_count"
+// ([ str program_id : ProgramInfo info ])
 mapping programs;
-// ([ program_name : ({ program_id }) ])
+// ([ str program_name : ({ str program_id }) ])
 mapping program_names;
+// ([ obj ob : str program_id ])
+mapping object_map;
 int program_counter;
 
 #define PROGRAM_TRACKER   "program"
@@ -27,31 +30,39 @@ string get_id(string program_name, int program_time, int program_count) {
   return sprintf("%s#%d#%d", program_name, program_time, program_count);
 }
 
-string new_blueprint(object blueprint) {
+string new_program(object blueprint) {
   string program_name = program_name(blueprint);
   string program_time = program_time(blueprint);
   int program_count = ++program_counter;
   string id = get_id(program_name, program_time, program_count);
+
+  programs[id] = (<ProgramInfo> 
+    id: id,
+    blueprint: blueprint,
+    clones: ([ ]),
+    program_count: program_count
+  ); 
+  if (!member(program_names, program_name)) {
+    program_names[program_name] = ({ });
+  }
+  program_names[program_name] += ({ id });
+  object_map[blueprint] = id;
+
   mapping pdata = ([ 
     PROGRAM_ID : id,
     PROGRAM_NAME : program_name,
     PROGRAM_TIME : program_time,
     PROGRAM_SIZE : object_info(blueprint, OINFO_MEMORY, OIM_PROG_SIZE)
   ]);
-
-  programs[id] = ({ blueprint, ([ ]), program_count }); 
-  if (!member(program_names, program_name)) {
-    program_names[program_name] = ({ });
-  }
-  program_names[program_name] += ({ id });
   SQLTrackerMixin::add_tracked(PROGRAM_TRACKER, pdata);
 
   return id;
 }
 
-string new_clone(object clone) {  
+string program_cloned(object clone) {  
   string id = program_names[program_name(clone)][<1];
-  m_add(programs[id][PROGRAM_CLONES], clone); 
+  m_add(programs[id]->clones, clone); 
+  object_map[clone] = id;
   return id;
 }
 
@@ -63,18 +74,24 @@ mapping query_program_ids(string program_name) {
   return program_names[program_name];
 }
 
-int query_program_count(object ob) {
-  string program_name = load_name(ob); // program could have been replaced
-  if (!member(program_names, program_name)) {
+string query_program_id(object ob) {
+  if (!ob) {
     return 0;
   }
-  return programs[program_names[program_name][<1]][PROGRAM_COUNT];
+  return object_map[ob];
+}
+
+int query_program_count(string id) {
+  if (!member(programs, id)) {
+    return 0;
+  }
+  return programs[id]->program_count;
 }
 
 mapping query_clones(string program_id) {
   if (member(programs, program_id)) {
-    programs[program_id][PROGRAM_CLONES] -= ([ 0 ]);
-    return programs[program_id][PROGRAM_CLONES];
+    programs[program_id]->clones -= ([ 0 ]);
+    return programs[program_id]->clones;
   }
   return 0;
 }

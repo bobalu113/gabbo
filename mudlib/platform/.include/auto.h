@@ -25,60 +25,10 @@
 #define _ModuleDir           "/.module"
 #define _ObjDir              "/.obj"
 
-#define PlatformBinDir       PlatformDir _BinDir
-#define PlatformEtcDir       PlatformDir _EtcDir
-#define PlatformIncludeDir   PlatformDir _IncludeDir
-#define PlatformLibDir       PlatformDir _LibDir
-#define PlatformModuleDir    PlatformDir _ModuleDir
-#define PlatformObjDir       PlatformDir _ObjDir
-
-#define ArgsLib              PlatformLibDir "/args"
-#define ArrayLib             PlatformLibDir "/array"
-#define ClosureLib           PlatformLibDir "/closure"
-#define CommandLib           PlatformLibDir "/command"
-#define CommandSpecLib       PlatformLibDir "/command_spec"
-#define ConnectionLib        PlatformLibDir "/connection"
-#define DomainLib            PlatformLibDir "/domain"
-#define FileLib              PlatformLibDir "/file"
-#define FormatStringsLib     PlatformLibDir "/format_strings"
-#define GetoptsLib           PlatformLibDir "/getopts"
-#define JSONLib              PlatformLibDir "/json"
-#define MessageLib           PlatformLibDir "/message"
-#define MessageRenderingLib  PlatformLibDir "/render_message"
-#define ObjectExpansionLib   PlatformLibDir "/expand_object"
-#define ObjectLib            PlatformLibDir "/object"
-#define RenderLib            PlatformLibDir "/render"
-#define RodneyClientLib      PlatformLibDir "/rodney_client"
-#define StringsLib           PlatformLibDir "/strings"
-#define StructLib            PlatformLibDir "/struct"
-#define UserLib              PlatformLibDir "/user"
-#define ValidationLib        PlatformLibDir "/validation"
-
-#define AvatarMixin          PlatformModuleDir "/avatar"
-#define CommandCode          PlatformModuleDir "/command"
-#define CommandGiverMixin    PlatformModuleDir "/command_giver"
-#define PropertyMixin        PlatformModuleDir "/property"
-#define SensorMixin          PlatformModuleDir "/sensor"
-#define SoulMixin            PlatformModuleDir "/soul"
-
-#define CommandController    PlatformModuleDir "/command_controller"
-
-#define AccessService        PlatformObjDir "/access_service"
-#define ConnectionTracker    PlatformObjDir "/connection_tracker"
-#define DomainTracker        PlatformObjDir "/domain_tracker"
-#define FileTracker          PlatformObjDir "/file_tracker"
-#define LoggerFactory        PlatformObjDir "/logger_factory"
-#define LoginObject          PlatformObjDir "/login"
-#define PostalService        PlatformObjDir "/postal_service"
-#define TopicTracker         PlatformObjDir "/topic_tracker"
-
-#define PlatformRenderDir    PlatformObjDir "/render"
-#define DefaultRenderer      PlatformRenderDir "/default"
-#define LoginRenderer        PlatformRenderDir "/login"
+#include <platform.h>
 
 #define MasterObject         __MASTER_OBJECT__
 #define SimulEfunObject      SecureDir "/simul_efun"
-#define Workroom(u)          (UserDir + "/" + u + "/workroom")
 
 #define THISO                this_object()
 #define THISP                this_player()
