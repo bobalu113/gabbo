@@ -4,7 +4,7 @@
 #ifdef EOTL
 #define Logger             AcmeObjDir "logger"
 #else
-#define Logger             PlatformObjDir "/logger"
+#define Logger             PlatformObjDir "/logger/logger"
 #endif
 
 #ifdef EOTL

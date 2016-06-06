@@ -1,34 +1,24 @@
 /**
- * A module for tracker objects. The tracked metadata will be maintained in an 
- * ordered list (by time of creation) and a map using auto-generated keys,
- * which will be returned upon insertion. Each tracked type must be backed by
- * a SQL table with an auto-incrementing column, which will also contain any
- * tracked metadata. The metadata will be passed as a mapping, with the keys
- * denoting column names in the backing table. After insertion, an 'id' element
- * will be added with the id.
  *
  * @author devo@eotl
- * @alias TrackerMixin
+ * @alias SQLMixin
  */
+#include <sql.h>
 
-/**
- * Configure a tracker type. If the type already exists, it will be 
- * re-configured and records over the maximum will be expired from memory.
- * 
- * @param type            the tracker type
- * @param key             a array of keys from your tracked data; the values 
- *                        for those keys will be used to uniquely identify a 
- *                        record that hasn't yet been given an id
- * @param min_history     the minimum number of records that will be maintained
- *                        in the in-memory tracked map
- * @param max_history     the maximum number of records that will be maintained
- *                        in the in-memory tracked map
- * @param expire_interval the number of seconds to wait before attempting to
- *                        expire records from the in-memory tracked map
- * @return                the next expiration time
- */
-int setup_tracker(string type) {
-  return TrackerMixin::setup_tracker(type, ([ ]));
+// TODO expand interface to support objects that use more than one db
+string database;
+
+int setup_sql() {
+  database = DEFAULT_DATABASE;
+}
+
+int set_database(string db) {
+  database = db;
+  return 1;
+}
+
+string query_database() {
+  return database;
 }
 
 /**
@@ -47,18 +37,16 @@ int setup_tracker(string type) {
  * @param  args     extra args to pass to the callback
  * @return          0 for failure, 1 for success
  */
-varargs int add_tracked(string type, mapping data, closure callback, 
-                        varargs mixed *args) {
-  if (member(data, ID_COLUMN)) {
-    return 0;
-  }
-
-  object sql_client = SQLClientFactory->get_client();
+protected varargs int insert(string table, mapping data, 
+                             closure callback, varargs mixed *args) {
+  object sql_client = SqlClientFactory->get_client(database);
   sql_client->insert(
-    TableName(type), 
+    table, 
     data, 
     (:
-      $2[ID_COLUMN] = $1; // add id to data
+      // TODO add id to data in order to support sequences
+      // sequence support needs some validation changes elsewhere in the code
+      // $2[SQL_ID_COLUMN] = $1; 
       apply($3, $2, $4); // call callback with data
     :), 
     data,
@@ -86,12 +74,12 @@ varargs int add_tracked(string type, mapping data, closure callback,
  * @param  args     extra args to pass to the callback
  * @return          0 for failure, 1 for success
  */
-int set_tracked(string type, mapping data, closure callback,
-                varargs mixed *args) {
+protected varargs int update(string table, mapping data, 
+                             closure callback, varargs mixed *args) {
   if (!member(data, ID_COLUMN)) {
     return 0;
   }
-  object sql_client = SQLClientFactory->get_client();
+  object sql_client = SqlClientFactory->get_client(database);
   sql_client->update(
     TableName(type), 
     (data - ([ ID_COLUMN ])),
@@ -118,9 +106,9 @@ int set_tracked(string type, mapping data, closure callback,
  * @param  args     extra args to pass to the callback
  * @return          0 for failure, 1 for success
  */
-int query_tracked(string type, mapping data, closure callback,
-                  varargs mixed *args) {
-  object sql_client = SQLClientFactory->get_client();
+protected varargs int select(string table, mapping key, 
+                             closure callback, varargs mixed *args) {
+  object sql_client = SqlClientFactory->get_client(database);
   sql_client->select(
     TableName(type), 
     data,

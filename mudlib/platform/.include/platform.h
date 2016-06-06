@@ -27,6 +27,7 @@
 #define RenderLib            PlatformLibDir "/render"
 #define RodneyClientLib      PlatformLibDir "/rodney_client"
 #define SessionLib           PlatformLibDir "/session"
+#define SqlLib               PlatformLibDir "/sql"
 #define StringsLib           PlatformLibDir "/strings"
 #define StructLib            PlatformLibDir "/struct"
 #define UserLib              PlatformLibDir "/user"
@@ -43,10 +44,11 @@
 #define ZoneController       PlatformModuleDir "/zone_controller"
 
 #define AccessService        PlatformObjDir "/access_service"
-#define LoggerFactory        PlatformObjDir "/logger_factory"
+#define LoggerFactory        PlatformObjDir "/logger/logger_factory"
 #define LoginObject          PlatformObjDir "/login"
 #define PlatformController   PlatformObjDir "/platform_controller"
 #define PostalService        PlatformObjDir "/postal_service"
+#define SqlClientFactory     PlatformObjDir "/sql/sql_client_factory"
 
 #define PlatformTrackerDir   PlatformObjDir "/tracker"
 #define ConnectionTracker    PlatformTrackerDir "/connection_tracker"
