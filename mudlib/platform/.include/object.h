@@ -12,4 +12,6 @@
 #define PATH_INFO_FILE        6
 #define PATH_INFO_CLONE       7
 
+#define RELOAD_RELOAD_BLUEPRINT  0x1
+
 #endif  // _OBJECT_H

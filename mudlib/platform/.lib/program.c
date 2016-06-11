@@ -10,4 +10,4 @@ struct ProgramInfo {
   object blueprint;
   mapping clones;
   int program_count;
-}
+};

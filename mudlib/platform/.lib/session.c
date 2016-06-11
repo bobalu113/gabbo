@@ -10,4 +10,4 @@ struct SessionInfo {
   int user_id;
   int login_time;
   int logout_time;
-}
+};

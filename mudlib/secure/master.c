@@ -296,12 +296,12 @@ void flag(string arg) {
 }
 
 string *epilog(int eflag) {
-  return ({ LoggerFactory, FileTracker, DomainTracker });
+  return ({ LoggerFactory, TrackerService });
 }
 
 void preload(string file) {
   debug_message("Preloading " + file + "\n");
-  catch (load_object(file); publish);
+  load_object(file);
 }
 
 string get_simul_efun() {

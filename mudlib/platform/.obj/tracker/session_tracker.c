@@ -4,7 +4,7 @@
  * @alias SessionTracker
  */
 
-private variables private functions inherit SessionLib;
+inherit SessionLib;
 
 // program_id#session_count
 // ([ string session_id : SessionInfo session ])
@@ -12,6 +12,7 @@ mapping sessions;
 // ([ userid : SessionInfo session ])
 mapping last_sessions;
 int session_counter;
+string generate_id();
 
 string new_session(int user_id) {
   string id = generate_id();

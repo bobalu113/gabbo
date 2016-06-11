@@ -39,16 +39,20 @@
 #define PropertyMixin        PlatformModuleDir "/property"
 #define SensorMixin          PlatformModuleDir "/sensor"
 #define SoulMixin            PlatformModuleDir "/soul"
+#define SqlMixin             PlatformModuleDir "/sql"
 
 #define CommandController    PlatformModuleDir "/command_controller"
 #define ZoneController       PlatformModuleDir "/zone_controller"
 
 #define AccessService        PlatformObjDir "/access_service"
+#define PostalService        PlatformObjDir "/postal_service"
+#define TrackerService       PlatformObjDir "/tracker_service"
+
 #define LoggerFactory        PlatformObjDir "/logger/logger_factory"
+#define SqlClientFactory     PlatformObjDir "/sql/sql_client_factory"
+
 #define LoginObject          PlatformObjDir "/login"
 #define PlatformController   PlatformObjDir "/platform_controller"
-#define PostalService        PlatformObjDir "/postal_service"
-#define SqlClientFactory     PlatformObjDir "/sql/sql_client_factory"
 
 #define PlatformTrackerDir   PlatformObjDir "/tracker"
 #define ConnectionTracker    PlatformTrackerDir "/connection_tracker"
@@ -58,7 +62,6 @@
 #define ProgramTracker       PlatformTrackerDir "/program_tracker"
 #define SessionTracker       PlatformTrackerDir "/session_tracker"
 #define TopicTracker         PlatformTrackerDir "/topic_tracker"
-#define TrackerTracker       PlatformTrackerDir "/tracker_tracker"
 #define ZoneTracker          PlatformTrackerDir "/zone_tracker"
 
 #define PlatformRenderDir    PlatformObjDir "/render"

@@ -2,7 +2,7 @@
 #define LPC_STRUCTINFO_H_
 
 #ifndef __DRIVER_SOURCE__
-#include <sys/lpctypes.h>
+#include "lpctypes.h"
 #endif
 
 /* Definition of argument values for struct_info() and

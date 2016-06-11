@@ -23,11 +23,11 @@ string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
  * @return the user's screen width
  */
 public int query_screen_width() {
-  struct ConnectionConfig config = 
-    ConnectionTracker->query_config(
+  struct ConnectionInfo info = 
+    ConnectionTracker->query_connection_info(
       ConnectionTracker->query_connection_id(THISO)
     );
-  int result = config->terminal_width;
+  int result = info->terminal_width;
   if (result <= 0) {
     result = DEFAULT_SCREEN_WIDTH;
   }
@@ -39,11 +39,11 @@ public int query_screen_width() {
  * @return the user's screen length
  */
 public int query_screen_length() {
-  struct ConnectionConfig config = 
-    ConnectionTracker->query_config(
+  struct ConnectionInfo info = 
+    ConnectionTracker->query_connection_info(
       ConnectionTracker->query_connection_id(THISO)
     );
-  int result = config->terminal_width;
+  int result = info->terminal_width;
   if (result <= 0) {
     result = DEFAULT_SCREEN_LENGTH;
   }
@@ -56,12 +56,12 @@ public int query_screen_length() {
  * @return a string designating the terminal type
  */
 public string query_terminal_type() {
-  struct ConnectionConfig config = 
-    ConnectionTracker->query_config(
+  struct ConnectionInfo info = 
+    ConnectionTracker->query_connection_info(
       ConnectionTracker->query_connection_id(THISO)
     );
-  if (config) {
-    return config->terminal;
+  if (info) {
+    return info->terminal;
   }
   return 0;
 }

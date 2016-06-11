@@ -4,8 +4,9 @@
  * @author devo@eotl
  * @alias ProgramTracker
  */
+#include <sys/objectinfo.h>
 
-inherit SQLMixin;
+inherit SqlMixin;
 inherit ProgramLib;
 
 // program_id = "program_name#program_time3program_count"
@@ -17,7 +18,7 @@ private mapping program_names;
 private mapping object_map;
 private int program_counter;
 
-#define PROGRAM_TRACKER   "program"
+#define PROGRAM_TABLE     "program"
 #define PROGRAM_ID        "program_id"
 #define PROGRAM_NAME      "program_name"
 #define PROGRAM_TIME      "program_time"
@@ -32,7 +33,7 @@ string get_id(string program_name, int program_time, int program_count) {
 
 public string new_program(object blueprint) {
   string program_name = program_name(blueprint);
-  string program_time = program_time(blueprint);
+  int program_time = program_time(blueprint);
   int program_count = ++program_counter;
   string id = get_id(program_name, program_time, program_count);
 
@@ -54,7 +55,7 @@ public string new_program(object blueprint) {
     PROGRAM_TIME : program_time,
     PROGRAM_SIZE : object_info(blueprint, OINFO_MEMORY, OIM_PROG_SIZE)
   ]);
-  SQLMixin::insert(PROGRAM_TABLE, pdata);
+  SqlMixin::insert(PROGRAM_TABLE, pdata);
 
   return id;
 }
@@ -97,8 +98,12 @@ public mapping query_clones(string program_id) {
 }
 
 protected int setup() {
-  SQLTracker::setup_sql();
+  SqlMixin::setup_sql();
+  programs = ([ ]);
+  program_names = ([ ]);
+  object_map = ([ ]);
   // TODO fill mem cache with existing programs/clones from objdump
+  return 0;
 }
 
 int create() {

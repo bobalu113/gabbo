@@ -25,7 +25,7 @@
 #define _ModuleDir           "/.module"
 #define _ObjDir              "/.obj"
 
-#include <platform.h>
+#include "platform.h"
 
 #define MasterObject         __MASTER_OBJECT__
 #define SimulEfunObject      SecureDir "/simul_efun"

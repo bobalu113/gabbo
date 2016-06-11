@@ -28,7 +28,7 @@ private variables private functions inherit ObjectLib;
 #define TimeoutMessage         "Timeout exceeded, disconnecting...\n"
 
 int logon();
-void suppress_prompt();
+void suppress_prompt(string arg);
 varargs void get_terminal_type(closure callback, int retry);
 static void welcome(string terminal, int is_default);
 static void timeout();
@@ -52,13 +52,13 @@ int logon() {
   }
   ConnectionTracker->new_connection(THISO);
   ConnectionTracker->telnet_get_terminal(THISO);
-  input_to("suppress_prompt", INPUT_NOECHO|INPUT_IGNORE_BANG); // suppress prompt until welcome screen is shown
-  get_terminal_type(#'welcome); //'
+  suppress_prompt(0); // suppress prompt until welcome screen is shown
+  get_terminal_type(#'welcome);
   set_heart_beat(1);
   return 1;
 }
 
-void suppress_prompt() {
+void suppress_prompt(string arg) {
   remove_input_to(THISO);
   input_to("suppress_prompt", INPUT_NOECHO|INPUT_IGNORE_BANG);
   return;
@@ -116,6 +116,8 @@ static void welcome(string terminal, mixed is_default) {
              TOPIC_WELCOME);
 
   // restore prompt
+  remove_input_to(THISO);
+  input_to("dummy"); // bug workaround, needed to restore echo
   remove_input_to(THISO);
   restore_prompt();
   send_prompt(THISO);

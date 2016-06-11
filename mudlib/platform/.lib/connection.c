@@ -21,4 +21,4 @@ struct ConnectionState {
   int naws_last;
   struct ConnectionInfo info;
   string *sessions;
-}
+};

@@ -6,17 +6,7 @@
  */
 #include <user.h>
 
-private functions private variables inherit FileLib;
-
-/**
- * Test whether a user with a given name exists.
- * 
- * @param  username the username to test
- * @return          1 if the user exists, otherwise 0
- */
-int user_exists(string username) {
-  return file_exists(user_dir(username));
-}
+inherit FileLib;
 
 /**
  * Get the user directory for a given username.
@@ -26,6 +16,16 @@ int user_exists(string username) {
  */
 string user_dir(string username) {
   return UserDir "/" + username;
+}
+
+/**
+ * Test whether a user with a given name exists.
+ * 
+ * @param  username the username to test
+ * @return          1 if the user exists, otherwise 0
+ */
+int user_exists(string username) {
+  return file_exists(user_dir(username));
 }
 
 /**

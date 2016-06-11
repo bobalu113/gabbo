@@ -8,8 +8,8 @@
 #include <telnet.h>
 #include <connection.h>
 
-inherit SQLTrackerMixin;
-private variables private functions inherit ConnectionLib;
+inherit SqlMixin;
+inherit ConnectionLib;
 
 #define NEGOTIATION_LOG
 
@@ -23,6 +23,7 @@ string query_connection_id(object interactive);
 object query_interactive(string id);
 int query_exec_time(string id);
 struct ConnectionInfo query_connection_info(string id);
+string generate_id();
 
 #ifdef NEGOTIATION_LOG
 void telnet_neg_log(string s) {
@@ -99,7 +100,7 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
     // I hope this should never happen
     connection_id = new_connection(THISP);
   }
-  mixed *connection = connections[connection_id];
+  struct ConnectionState connection = connections[connection_id];
   object interactive = connection->interactive;
   struct ConnectionInfo info = connection->info;
 
@@ -201,7 +202,7 @@ int telnet_get_terminal(object interactive) {
   if (!connection_id) {
     return 0;
   }
-  mixed *connection = connections[connection_id];
+  struct ConnectionState connection = connections[connection_id];
   struct ConnectionInfo info = connection->info;
 
 #ifdef NEGOTIATION_LOG
@@ -217,7 +218,7 @@ int telnet_get_NAWS(object interactive) {
   if (!connection_id) {
     return 0;
   }
-  mixed *connection = connections[connection_id];
+  struct ConnectionState connection = connections[connection_id];
   struct ConnectionInfo info = connection->info;
 #ifdef NEGOTIATION_LOG
   telnet_neg_log("telnet_get_NAWS");
@@ -232,7 +233,7 @@ int telnet_get_ttyloc(object interactive) {
   if (!connection_id) {
     return 0;
   }
-  mixed *connection = connections[connection_id];
+  struct ConnectionState connection = connections[connection_id];
   struct ConnectionInfo info = connection->info;
 #ifdef NEGOTIATION_LOG
   telnet_neg_log("telnet_get_ttyloc");

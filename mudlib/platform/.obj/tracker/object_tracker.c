@@ -4,17 +4,22 @@
  * @author devo@eotl
  * @alias ObjectTracker
  */
+#include <sys/objectinfo.h>
+#include <sql.h>
 
-inherit SQLTrackerMixin;
+inherit SqlMixin;
 
-#define OBJECT_TRACKER  "object"
+#define OBJECT_TABLE    "object"
 #define OBJECT_ID       "object_id"
 #define OBJECT_NAME     "object_name"
 #define OBJECT_TIME     "object_time"
+#define PROGRAM         "program"
 #define DESTRUCT_TIME   "destruct_time"
 #define LAST_REF_TIME   "last_ref_time"
 #define GIGATICKS       "gigaticks"
 #define TICKS           "ticks"
+
+string query_object_id(object ob);
 
 void new_object(object o) {
   string program_id;
@@ -24,24 +29,24 @@ void new_object(object o) {
     program_id = ProgramTracker->new_clone(o);
   }
   mapping odata = ([ 
-    OBJECT_ID : query_object_id($2),
-    OBJECT_NAME : object_name($2),
-    OBJECT_TIME : object_time($2),
+    OBJECT_ID : query_object_id(o),
+    OBJECT_NAME : object_name(o),
+    OBJECT_TIME : object_time(o),
     PROGRAM : program_id
   ]);
-  SQLTrackerMixin::add_tracked(OBJECT_TRACKER, odata);
+  SqlMixin::insert(OBJECT_TABLE, odata);
   return;
 }
 
 void object_destructed(object o) {
   mapping odata = ([ 
-    ID_COLUMN : query_object_id(o),
+    SQL_ID_COLUMN : query_object_id(o),
     DESTRUCT_TIME : time(),
-    LAST_REF_TIME : object_info($2, OINFO_BASIC, OIB_TIME_OF_REF),
-    GIGATICKS : object_info($2, OINFO_BASIC, OIB_GIGATICKS),
-    TICKS : object_info($2, OINFO_BASIC, OIB_TICKS),
+    LAST_REF_TIME : object_info(o, OINFO_BASIC, OIB_TIME_OF_REF),
+    GIGATICKS : object_info(o, OINFO_BASIC, OIB_GIGATICKS),
+    TICKS : object_info(o, OINFO_BASIC, OIB_TICKS),
   ]);
-  SQLTrackerMixin::set_tracked(OBJECT_TRACKER, odata);
+  SqlMixin::update(OBJECT_TABLE, odata);
   return;
 }
 
@@ -60,5 +65,6 @@ string query_object_id(object ob) {
 }
 
 int create() {
-  SQLTracker::setup_tracker(OBJECT_TRACKER);
+  SqlMixin::setup_sql();
+  return 0;
 }

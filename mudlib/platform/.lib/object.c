@@ -7,6 +7,7 @@
 
 #include <sys/files.h>
 #include <sys/inherit_list.h>
+#include <sys/functionlist.h>
 #include <object.h>
 
 /**
@@ -179,4 +180,61 @@ int send_prompt(object who) {
     efun::tell_object(who, prompt);
   }
   return 1;
+}
+
+varargs object reload_object(mixed ob, int flags) {  
+  // TODO move/restore inventory
+  // TODO move/restore shadows
+
+  string name;
+  if (stringp(ob)) {
+    name = ob;
+    ob = 0;
+  } else if (objectp(ob)) {
+    name = load_name(ob);
+  } else {
+    return 0;
+  }
+
+  // save variable values
+  mixed *vars;
+  if (ob) {
+    vars = variable_list(ob, RETURN_FUNCTION_NAME|RETURN_VARIABLE_VALUE);
+  }
+
+  // TODO reload inherited programs
+  // reload the blueprint, and clone if necessary
+  object result;
+  if (ob) {
+    if (clonep(ob)) {
+      if (flags & RELOAD_RELOAD_BLUEPRINT) {
+        object blueprint = blueprint(ob);
+        if (blueprint) {
+          destruct(blueprint);
+        }
+      }
+      if (ob) {
+        destruct(ob);
+      }
+      result = clone_object(name);
+    } else {
+      destruct(ob);
+      result = load_object(name);
+    }
+  } else {
+    result = load_object(name);
+  }
+  
+  // restore variables
+  if (vars) {
+    for (int i = 0, int j = sizeof(vars); i < j; i += 2) {
+      closure var = funcall(bind_lambda(#'symbol_variable, result), vars[i]);
+      closure setter = bind_lambda(unbound_lambda(({ 'val }),
+        ({ #'=, var, 'val })
+      ), result);
+      funcall(setter, vars[i + 1]);
+    }    
+  }
+
+  return result;
 }

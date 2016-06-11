@@ -1,15 +1,16 @@
 /**
  *
  * @author devo@eotl
- * @alias SQLMixin
+ * @alias SqlMixin
  */
 #include <sql.h>
 
 // TODO expand interface to support objects that use more than one db
 string database;
 
-int setup_sql() {
+void setup_sql() {
   database = DEFAULT_DATABASE;
+  return;
 }
 
 int set_database(string db) {
@@ -47,7 +48,7 @@ protected varargs int insert(string table, mapping data,
       // TODO add id to data in order to support sequences
       // sequence support needs some validation changes elsewhere in the code
       // $2[SQL_ID_COLUMN] = $1; 
-      apply($3, $2, $4); // call callback with data
+      return apply($3, $2, $4); // call callback with data
     :), 
     data,
     callback, 
@@ -76,14 +77,14 @@ protected varargs int insert(string table, mapping data,
  */
 protected varargs int update(string table, mapping data, 
                              closure callback, varargs mixed *args) {
-  if (!member(data, ID_COLUMN)) {
+  if (!member(data, SQL_ID_COLUMN)) {
     return 0;
   }
   object sql_client = SqlClientFactory->get_client(database);
   sql_client->update(
-    TableName(type), 
-    (data - ([ ID_COLUMN ])),
-    ([ ID_COLUMN : data[ID_COLUMN] ]), 
+    table, 
+    (data - ([ SQL_ID_COLUMN ])),
+    ([ SQL_ID_COLUMN : data[SQL_ID_COLUMN] ]), 
     (:
       apply($2, $1, $3)
     :), 
@@ -110,10 +111,10 @@ protected varargs int select(string table, mapping key,
                              closure callback, varargs mixed *args) {
   object sql_client = SqlClientFactory->get_client(database);
   sql_client->select(
-    TableName(type), 
-    data,
+    table, 
+    key,
     (:
-      apply($2, $1, $3)
+      return apply($2, $1, $3);
     :), 
     callback, 
     args

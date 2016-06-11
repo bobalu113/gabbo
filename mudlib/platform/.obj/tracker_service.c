@@ -5,6 +5,8 @@
  * @alias TrackerService
  */
 
+inherit ObjectLib;
+
 object reload_tracker(string tracker) {
   object result = FINDO(tracker);
   if (result) {
