@@ -8,11 +8,27 @@
 
 inherit CommandController;
 
-private variables private functions inherit MessageLib;
-private variables public functions inherit ValidationLib;
+inherit FileLib;
+inherit MessageLib;
+inherit ValidationLib;
 
 int execute(mapping model, string verb) {
-  system_msg(THISP, "Registered!\n", ([ ]), TOPIC_LOGIN);
+  string user_id = create_user(model["username"], model["password"]);
+  if (!user_id) {
+    string msg = sprintf("User creation failed: username: %O", 
+                         model["username"]); 
+    system_msg(THISP, msg, ([ ]), TOPIC_LOGIN);
+    return 1;
+  }
+
+  string session_id = start_session(user_id);
+  if (!session_id) {
+    string msg = sprintf("Starting session failed: username: %O", 
+                         model["username"]); 
+    system_msg(THISP, msg, ([ ]), TOPIC_LOGIN);
+    return 1;
+  }
+
   return 1;
 }
 
@@ -20,57 +36,57 @@ int validate_passwords_match(mapping model) {
   return model["password"] == model["confirmPassword"];
 }
 
-
-/**
- * Create a new user.
- * @param user     the username of the new user
- * @param password the user's password
-protected void new_user(string user, string password) {
-  // TODO encrypt passwords
-  mapping data = ([ "username" : user,
-                    "password" : password,
-                    "location" : CommonRoom,
-                    "connect_time" : -1,
-                    "disconnect_time" : -1 ]);
-  if (!save_passwd(user, data, 0)) {
-    destruct(THISO);
+string create_user(string username, string password) {
+  object logger = LoggerFactory->get_logger(THISO);
+  string user_dir = user_dir(username);
+  // right now only one user id per user name/dir, but might change someday
+  if (file_exists(user_dir)) {
+    logger->warn("user directory already exists: %O", user_dir);
+    return 0;
   } else {
-    string homedir = HomeDir + "/" + user;
-    if (!file_exists(homedir)) {
-      mkdir(homedir);
-    }
-    spawn_avatar(user);
+    copy_tree(SkelDir, user_dir);
   }
-}
- */
 
-/**
- * Save user data to password file.
- *
- * @param  user      the username of the file
- * @param  data      the password data
- * @param  overwrite 1 to force overwrite of existing file, 0 otherwise
- * @return           1 for success, 0 for failure
-protected int save_passwd(string user, mapping data, int overwrite) {
-  string passwd_file = PASSWD_FILE(user);
-  if (file_exists(passwd_file)) {
-    if (overwrite) {
-      if (!rm(passwd_file)) {
-        printf("Unable to remove old password file for user %s. Contact an "
-          "administrator.\n", user);
-        return 0;
-      }
-    } else {
-      printf("Password file for user %s already exists. Contact an "
-        "administrator.\n", user);
-      return 0;
-    }
+  // create user
+  string user_id = UserTracker->new_user(username, password);
+
+  // save password
+  mapping passwd = read_value(passwd_file(username));
+  if (!mappingp(passwd)) {
+    passwd = ([ ]);
   }
-  if (!write_file(passwd_file, save_value(data))) {
-    printf("Unable to write password file for user %s. Contact an "
-      "administrator.\n", user);
+  passwd[user_id] = ([ PASSWD_PASSWORD: hash ]);
+  write_value(passwd_file(username), passwd);
+  
+  return user_id;
+}
+
+string start_session(string user_id) {
+  object logger = LoggerFactory->get_logger(THISO);
+  object login = THISP;
+  object avatar = clone_object(PlatformAvatar);
+  if (!avatar) {
+    logger->warn("failed to clone platform avatar: %O %O", THISP, user_id);
     return 0;
   }
-  return 1;
+  if (!avatar->try_descend(user_id, login)) {
+    if (!switch_connection(login, avatar)) {
+      logger->warn("failed to switch connection from login to avatar: %O %O", 
+                   login, avatar);
+      return 0;
+    }
+    string session_id = SessionTracker->new_session(user_id);
+    if (!session_id) {
+      logger->warn("failed to start session: %O", user_id);
+      return 0;
+    }
+    if (!UserTracker->session_start(user_id, session_id)) {
+      logger->warn("failed to attach user session: %O %O", 
+                   user_id, session_id);
+      return 0;
+    }
+    avatar->descend_signal(session_id, login);
+    return session_id;
+  } 
+  return 0;
 }
- */

@@ -31,7 +31,7 @@ int file_exists(string filename) {
  * @return          1 if the path is a directory, otherwise 0
  */
 int is_directory(string filename) {
-  return file_size(filename) == -2;
+  return file_size(filename) == FSIZE_DIR;
 }
 
 /**
@@ -214,7 +214,7 @@ private mixed *expand_files(string *path, mixed *dirs) {
       mixed *alist = collate_files(dir[1], pattern);
       if (!alist) { continue; }
       alist = order_alist(alist[1], alist[0], alist[2], alist[3], alist[4]);
-      int dir_index = rmember(alist[0], -2);
+      int dir_index = rmember(alist[0], FSIZE_DIR);
       alist[0] = alist[0][0..dir_index];
       alist[1] = alist[1][0..dir_index];
       alist[2] = alist[2][0..dir_index];
@@ -294,4 +294,65 @@ private mixed *collate_files(string dir, string pattern) {
  */
 int is_loadable(string file) {
   return (file[<2..<1] == ".c");
+}
+
+private int _traverse(closure callback, mixed *info, string src, mixed *args) {
+  int result = 0;
+  if (apply(callback, info[0], info[0][strlen(src)..], info[1], info[2], 
+            info[3], info[4], args)) {
+    result = 1;
+    if (info[1] == FSIZE_DIR) {
+      mixed *dir = get_dir(info[0], GETDIR_ALL|GETDIR_UNSORTED);
+      for (int i = 0, int j = sizeof(dir); i < j; i += 5) {
+        result += _traverse(callback, dir[i..(i + 4)], src, args);
+      }    
+    } 
+  }
+  return result;
+}
+
+int traverse_tree(string src, closure callback, varargs mixed *args) {
+  string src = munge_filename(src);
+  mixed *info;
+  if (src[<1] == '/') {
+    src = src[0..<2];
+    info = get_dir(src, GETDIR_ALL);
+    if (sizeof(info) && (info[1] != FSIZE_DIR)) {
+      return 0;
+    }
+  }
+  else {
+    info = get_dir(src, GETDIR_ALL);
+  }
+  if (!sizeof(info)) {
+    return 0;
+  }
+  return _traverse(callback, info, src, args);
+}
+
+int copy_tree(string src, string dest) {
+  closure copy_file = (: 
+    object logger = LoggerFactory->get_logger(THISO);
+    string file = $1;
+    string rel = $2;
+    string size = $3;
+    string dest = $7;
+
+    if (size == FSIZE_DIR) {
+      string to = sprintf("%s/%s", dest, rel);
+      if (!mkdir(to)) {
+        logger->debug("Couldn't mkdir %s", to);
+        return 0;
+      }      
+    } else {
+      string to = sprintf("%s/%s", dest, rel);
+      if (!copy_file(file, to)) {
+        logger->debug("Couldn't copy file from %s to %s", file, to);
+        return 0;
+      }
+    }
+    return 1;
+  :);
+
+  return traverse_tree(src, copy_file, dest);
 }

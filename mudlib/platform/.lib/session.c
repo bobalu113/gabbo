@@ -7,7 +7,9 @@
 
 struct SessionInfo {
   string id;
-  int user_id;
+  string user;
   int login_time;
   int logout_time;
+  int invisible;
+  string *connections;
 };

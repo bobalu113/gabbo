@@ -14,7 +14,7 @@ mapping last_sessions;
 int session_counter;
 string generate_id();
 
-string new_session(int user_id) {
+string new_session(string user_id) {
   string id = generate_id();
   sessions[id] = (<SessionInfo>
     id: id,
@@ -25,7 +25,7 @@ string new_session(int user_id) {
   return id;
 }
 
-int session_ended(int user_id) {
+int session_ended(string user_id) {
   if (!member(last_sessions, user_id)) {
     return 0;
   }
@@ -36,7 +36,7 @@ int session_ended(int user_id) {
   return 1;
 }
 
-struct SessionInfo query_last_session(int user_id) {
+struct SessionInfo query_last_session(string user_id) {
   return last_sessions[user_id];
 }
 
