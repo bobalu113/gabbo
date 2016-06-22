@@ -6,11 +6,19 @@
  * @alias PlatformAvatar
  */
 
-int try_descend(string user_id, object login) {
-
-}
+inherit AvatarMixin;
+inherit CommandGiverMixin;
 
 void descend_signal(string session_id, object login) {
-
+  // look up default player (one player allowed)
+  // determine start room from last session
+  // find/clone start room
+  // determine flavor
+  // clone flavor avatar
+  // avatar->try_descend
+  // ::descend_signal
+  // avatar->descend_signal
+  //   move to start room
+  //   restore inventory 
+  //   `sense here`  
 }
-

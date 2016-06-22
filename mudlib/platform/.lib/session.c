@@ -5,11 +5,21 @@
  * @alias SessionLib
  */
 
+struct ConnectedSessionInfo {
+  string connection;
+  int connect_time;
+  int disconnect_time;
+};
+
 struct SessionInfo {
   string id;
+  object avatar;
   string user;
-  int login_time;
-  int logout_time;
+  int state; // new, running, suspended, done
+  int create_time;
+  int transition_time;
   int invisible;
-  string *connections;
+  string *subsessions;
+  string *supersessions;
+  ConnectedSessionInfo *connection_history;
 };
