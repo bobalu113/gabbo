@@ -54,7 +54,7 @@ mixed *get_path_info(mixed ob) {
     uid = get_create_uid(ob);
   }
   tmp = strlen(oname);
-  if ((tmp >= 2) && (oname[<2..<1] == ".c")) {
+  if ((tmp >= 2) && (oname[<2..<1] == LPC_EXTENSION)) {
     if (tmp) {
       oname = oname[0..<3];
     } else {
@@ -69,24 +69,24 @@ mixed *get_path_info(mixed ob) {
   int len = sizeof(parts);
   int i = 0;
   while (i < (len - 1)) {
-    if (strlen(parts[i]) && (parts[i][0] == '.')) {
+    if (strlen(parts[i]) && (parts[i][0] == ZONE_DELIM[0])) {
       if (i == 0) {
         zone = "";
-        category = implode(parts[i..<2], ".");
+        category = implode(parts[i..<2], CATEGORY_DELIM);
       } else {
-        zone = implode(parts[0..(i - 1)], ".");
-        category = implode(parts[i..<2], ".")[1..];
+        zone = implode(parts[0..(i - 1)], ZONE_DELIM);
+        category = implode(parts[i..<2], CATEGORY_DELIM)[1..];
       }
       break;
     }
     i++;
   }
   if (!zone) {
-    zone = implode(parts[0..<2], ".");
+    zone = implode(parts[0..<2], ZONE_DELIM);
     category = "";
   }
 
-  parts = explode(parts[<1], "#");
+  parts = explode(parts[<1], CLONE_DELIM);
   file = parts[0];
   if (sizeof(parts) >= 2) {
     clone = to_int(parts[<1]);
@@ -98,16 +98,6 @@ mixed *get_path_info(mixed ob) {
   }
 
   return ({ oname, uid, user, domain, zone, category, file, clone });
-}
-
-/**
- * Get the zone an object belongs to.
- *
- * @param  ob the object to query
- * @return    the object's zone
- */
-string get_zone(object ob) {
-  return get_path_info(ob)[PATH_INFO_ZONE];
 }
 
 /**

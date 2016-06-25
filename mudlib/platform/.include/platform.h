@@ -32,6 +32,7 @@
 #define StructLib            PlatformLibDir "/struct"
 #define UserLib              PlatformLibDir "/user"
 #define ValidationLib        PlatformLibDir "/validation"
+#define ZoneLib              PlatformLibDir "/zone"
 
 #define AvatarMixin          PlatformModuleDir "/avatar"
 #define CommandCode          PlatformModuleDir "/command"

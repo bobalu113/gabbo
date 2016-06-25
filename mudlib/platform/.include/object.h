@@ -1,6 +1,11 @@
 #ifndef _OBJECT_H
 #define _OBJECT_H
 
+#define LPC_EXTENSION         ".c"
+#define ZONE_DELIM            "."
+#define CAGEGORY_DELIM        "."
+#define CLONE_DELIM           "#"
+
 #define DEFAULT_DOMAIN        ".platform"
 
 #define PATH_INFO_ONAME       0
