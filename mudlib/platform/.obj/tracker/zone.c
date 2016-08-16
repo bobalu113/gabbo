@@ -16,6 +16,9 @@ mapping instances;
 int instance_counter;
 
 struct ZoneInfo new_zone(string zone_id) {
+  if (!valid_zone_id(zone_id)) {
+    return 0;
+  }
   struct ZoneInfo parent;
   string parent_id = get_parent_zone(zone_id);
   if (parent_id) {
@@ -28,11 +31,36 @@ struct ZoneInfo new_zone(string zone_id) {
   zones[zone_id] = (<ZoneInfo> 
     id: zone_id,
     parent: parent_id,
+    root: zone_id,
     children: ([ ]),
     instances: ([ ])
   );
   parent->children += ([ zone_id ]);
+
+  load_config(zone_id);
   return zones[zone_id];
+}
+
+int load_config(string zone_id) {
+  struct ZoneInfo zone = zones[zone_id];
+  if (!zone) {
+    return 0;
+  }
+  string zone_file = zone->root + "/" ZONE_FILE;
+  if (!file_exists(zone_file)) {
+    return 0;
+  }
+  mixed *xml = xml_parse(read_file(zone_file));
+  if (xml[XML_TAG_NAME] != "zone") {
+    logger->info("invalid zone.xml: root tag must be <zone>");
+    return 0;
+  }
+  if (member(xml[XML_TAG_ATTRIBUTES], "flavor")) {
+    zone->flavor = xml[XML_TAG_ATTRIBUTES]["flavor"];
+  } else {
+    zone->flavor = 0;
+  }
+  return 1;
 }
 
 string new_instance(string zone_id, string label) {
@@ -63,6 +91,14 @@ string query_starting_instance(string zone_id, string session_id) {
   } else {
     return new_instance(zone_id, DEFAULT_INSTANCE);
   }
+}
+
+string query_flavor(string zone_id) {
+  struct ZoneInfo zone = zones[zone_id];
+  if (!zone) {
+    return 0;
+  }
+  return zone->flavor;
 }
 
 string get_instance_id(string zone_id, int instance_count) {

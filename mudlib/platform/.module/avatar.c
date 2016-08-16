@@ -8,11 +8,11 @@
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
 string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
 
-int try_descend(string user_id, object login) {
+mixed *try_descend(string user_id, object login) {
   // can only attach connection (e.g. exec) to top avatar?
 }
 
-void descend_signal(string session_id, object login) {
+void descend_signal(string session_id, object login, varargs mixed *args) {
   // attach connection/superavatar
 }
 

@@ -69,7 +69,12 @@ string start_session(string user_id) {
     logger->warn("failed to clone platform avatar: %O %O", THISP, user_id);
     return 0;
   }
-  if (!avatar->try_descend(user_id, login)) {
+
+  mixed *args, ex;
+  if (ex = catch(args = avatar->try_descend(user_id, login))) {
+    logger->warn("caught exception in try_descend: %O", ex);
+    return 0;
+  } else {
     if (!switch_connection(login, avatar)) {
       logger->warn("failed to switch connection from login to avatar: %O %O", 
                    login, avatar);
@@ -85,7 +90,7 @@ string start_session(string user_id) {
                    user_id, session_id);
       return 0;
     }
-    avatar->descend_signal(session_id, login);
+    apply(#'call_other, avatar, "on_descend", session_id, login, args);
     return session_id;
   } 
   return 0;

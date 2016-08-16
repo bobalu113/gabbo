@@ -68,216 +68,56 @@ void inaugurate_master(int arg) {
 
   set_driver_hook(H_TELNET_NEG, unbound_lambda(
     ({ 'action, 'option, 'opts }),
-    ({ #'call_other, 
-       ConnectionTracker, 
-       "telnet_negotiation",
-       'action,
-       'option,
-       'opts 
-    })
+    ({ #'call_other, HookService, "telnet_neg_hook", 'action, 'option, 'opts })
   )); //'
 
   // FUTURE add support for local auto includes
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),
-    ({ #'?,
-       ({ #'&&,
-          'current_file,
-          ({ #'==,
-             ({ #'[<.., 'current_file, 7 }),
-             "/auto.h"
-          })
-       }),
-       "",
-       "#include <auto.h>\n"
-    })
+    ({ #'call_other, HookService, "auto_include_hook", 'base_file, 'current_file, 'sys })
   )); //'
 
   // FUTURE implement uids
   set_driver_hook(H_LOAD_UIDS, unbound_lambda(
     ({ 'objectname }),
-    ({ #'return, "root" })
+    ({ #'call_other, HookService, "uids_hook", 'objectname })
   ));
-
   set_driver_hook(H_CLONE_UIDS, unbound_lambda(
     ({ 'blueprint, 'objectname }),
-    ({ #'return, "root" })
+    ({ #'call_other, HookService, "uids_hook", 'objectname, 'blueprint })
   )); //'
 
   set_driver_hook(H_COMMAND, unbound_lambda(
     ({ 'command, 'command_giver }),
-    ({ #'call_other, 'command_giver, "do_command", 'command })
+    ({ #'call_other, HookService, "command_hook", 'command, 'command_giver })
   )); //'
 
   set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
-    ({'item, 'dest }),
-    ({ #'?,
-       ({ #',,
-          ({ #'=, 'origin, ({ #'environment, 'item }) }),
-          0
-       }),
-       0, // no op
-       ({ #'?,
-          // check prevent_leave
-          ({ #'&&,
-             'origin,
-             ({ #'call_other,
-                'origin,
-                "prevent_leave",
-                'item,
-                'dest
-             }),
-          }),
-          1, // fail prevent_leave
-          ({ #'!, 'item }),
-          1,
-          ({ #'!, 'dest }),
-          1,
-          // check prevent_move
-          ({ #'call_other,
-             'item,
-             "prevent_move",
-             'dest
-          }),
-          1,
-          ({ #'!, 'item }),
-          1,
-          ({ #'!, 'dest }),
-          1,
-          // check prevent_enter
-          ({ #'call_other,
-             'dest,
-             "prevent_enter",
-             'item
-          }),
-          1, // fail prevent_enter
-          ({ #'!, 'item }),
-          1,
-          ({ #'!, 'dest }),
-          1,
-          0 // all pass
-       }),
-       0, // prevent failed
-       // move
-       ({ #',, ({ #'efun::set_environment, 'item, 'dest }), 0 }),
-       0, // no op
-       // signal leave
-       ({ #'&&,
-          'origin,
-          ({ #'call_other,
-             'origin,
-             "leave_signal",
-             'item,
-             'dest
-          }),
-          0
-       }),
-       0, // no op
-       ({ #'!, 'item }),
-       0,
-       ({ #'!, 'dest }),
-       0,
-       // signal move
-       ({ #',,
-          ({ #'call_other,
-            'item,
-            "move_signal",
-            'origin
-          }),
-          0
-       }),
-       0, // no op
-       ({ #'!, 'item }),
-       0,
-       ({ #'!, 'dest }),
-       0,
-       // signal enter
-       ({ #',,
-          ({ #'call_other,
-             'dest,
-             "enter_signal",
-             'origin
-          }),
-          0
-       }),
-       0, // no op
-       ({ #'!, 'item }),
-       0,
-       ({ #'!, 'dest }),
-       0,
-       // sanity check
-       ({ #'==, ({ #'environment, 'item }), 'dest }),
-       ({ #',,
-          // dest->init(item)
-          ({ #'?,
-             ({ #'living, 'item }),
-             ({ #',,
-                ({ #'efun::set_this_player, 'item }),
-                ({ #'call_other, 'dest, "init" }),
-                ({ #'?,
-                   ({ #'!=, ({ #'environment, 'item }), 'dest }),
-                   ({ #'return })
-                })
-             })
-          }),
-          // item->init(inv(dest))
-          ({ #'=, 'others, ({ #'all_inventory, 'dest }) }),
-          ({ #'=, ({ #'[, 'others, ({ #'member, 'others, 'item }) }), 0 }),
-          ({ #'filter,
-             'others,
-             ({ #'bind_lambda, unbound_lambda(
-                ({ 'ob, 'item }),
-                ({ #'?,
-                   ({ #'living, 'ob }),
-                   ({ #',,
-                      ({ #'efun::set_this_player, 'ob }),
-                      ({ #'call_other, 'item, "init" })
-                   })
-                })
-             ) }),
-            'item
-          }),
-          // inv(dest)->init(item)
-          ({ #'?,
-             ({ #'living, 'item }),
-             ({ #',,
-                ({ #'efun::set_this_player, 'item }),
-                ({ #'filter_objects, 'others, "init" }),
-             })
-          }),
-          // item->init(dest)
-          ({ #'?,
-             ({ #'living, 'dest }),
-             ({ #',,
-                ({ #'efun::set_this_player, 'dest }),
-                ({ #'call_other, 'item, "init" }),
-             })
-          })
-       })
-    })
-  ) );
+    ({ 'item, 'dest }),
+    ({ #'call_other, HookService, "move_object_hook", 'item, 'dest })
+  ));
 
   set_driver_hook(H_CREATE_OB, unbound_lambda(
     ({ 'obj }),
-    ({ #'call_other, 'obj, "create" })
+    ({ #'call_other, HookService, "create_hook", 'obj })
   )); //'
   set_driver_hook(H_CREATE_CLONE, unbound_lambda(
     ({ 'obj }),
-    ({ #'call_other, 'obj, "create" })
+    ({ #'call_other, HookService, "create_hook", 'obj })
   )); //'
   set_driver_hook(H_CREATE_SUPER, unbound_lambda(
     ({ 'obj }),
-    ({ #'call_other, 'obj, "create" })
+    ({ #'call_other, HookService, "create_hook", 'obj })
   )); //'
 
   set_driver_hook(H_RESET, unbound_lambda(
     0,
-    ({ #'call_other, ({ #'this_object }), "reset" })
+    ({ #'call_other, HookService, "reset_hook", ({ #'this_object }) })
   ));
 
   set_driver_hook(H_CLEAN_UP, unbound_lambda(
     ({ 'ref, 'obj }),
-    ({ #'call_other, 'obj, "clean_up" })
+    ({ #'call_other, HookService, "clean_up_hook", 'ref, 'obj })
   ));
 }
 

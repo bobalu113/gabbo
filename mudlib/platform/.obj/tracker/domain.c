@@ -1,14 +1,15 @@
 /**
  * A service object for tracking domain configurations.
  *
+ * @author devo@eotl
  * @alias DomainTracker
  */
 #pragma no_clone
 #include <sys/xml.h>
 #include <domain.h>
 
-private functions private variables inherit FileLib;
-private functions private variables inherit DomainLib;
+inherit FileLib;
+inherit DomainLib;
 
 // ([ str domain_id : DomainConfig domain ])
 mapping domains;

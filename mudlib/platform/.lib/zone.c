@@ -13,6 +13,8 @@ struct ZoneInfo {
   string parent;
   mapping children;  // ([ zone_id ])
   mapping instances;  // ([ instance_id ])
+  string root;
+  string flavor;
 };
 
 struct ZoneInstanceInfo {
@@ -22,7 +24,14 @@ struct ZoneInstanceInfo {
   string label;
 };
 
+int valid_zone_id(string zone_id) {
+  return (strstr(zone_id, ZONE_DELIM CATEGORY_DELIM) == -1);
+}
+
 string get_parent_zone(string zone_id) {
+  if (!valid_zone_id(zone_id)) {
+    return 0;
+  }
   string *parts = explode(zone_id, ZONE_DELIM);
   if (sizeof(parts) == 1) {
     return 0;

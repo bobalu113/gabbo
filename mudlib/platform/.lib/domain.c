@@ -8,7 +8,10 @@
 #include <domain.h>
 
 struct DomainConfig {
-  string id, parent, domain_id;
+  string id;
+  string parent;
+  string domain_id;
   string root;
-  closure allow_read, allow_write;
+  closure allow_read;
+  closure allow_write;
 };

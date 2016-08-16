@@ -1,6 +1,7 @@
 /**
  * The UserTracker keeps track of the game's users.
- * 
+ *
+ * @author devo@eotl
  * @alias UserTracker
  */
 
