@@ -7,7 +7,7 @@ section: blog
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 
-{% for item in site.categories.blog limit:20 %}
+{% for item in site.categories.blog limit:100 %}
   <article>
   {% capture date %}{{ item.date | date: '%B %Y' }}{% endcapture %}
   {% capture ndate %}{{ item.next.date | date: '%B %Y' }}{% endcapture %}
