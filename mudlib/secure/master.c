@@ -74,7 +74,8 @@ void inaugurate_master(int arg) {
   // FUTURE add support for local auto includes
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),
-    ({ #'call_other, HookService, "auto_include_hook", 'base_file, 'current_file, 'sys })
+    ({ #'call_other, HookService, "auto_include_hook", 'base_file, 
+                                                       'current_file, 'sys })
   )); //'
 
   // FUTURE implement uids

@@ -57,7 +57,7 @@ public void create() {
  * avatar. It also has not yet been moved to the player's starting location.
  * @param  username the username to which this avatar belongs
  */
-public void setup(string username) {
+public void setup() {
   // TODO previous_object check
   setup_name();
   setup_visible();
@@ -66,14 +66,6 @@ public void setup(string username) {
   setup_mobile();
   setup_avatar();
 
-  set_username(username);
-  set_primary_id(username);
-  add_secondary_id(CAP(username));
-  set_nickname(CAP(username));
-  set_homedir(HomeDir + "/" + username);
-  set_cwd(query_homedir());
-  set_short(query_nickname());
-  set_long("A player object.");
   return;
 }
 
@@ -135,13 +127,36 @@ protected void setup_command_giver() {
   }
 }
 
+mixed *try_descend(string user_id) {
+  mixed *result = AvatarMixin::try_descend(user_id);
+  return result;
+}
+
 /**
  * Invoked by the login object once the avatar object is interactive and
  * has been moved to its start location.
  */
-void enter_game() {
+void on_descend(string session_id, string player_id, object room, 
+                varargs mixed *args) {
+  AvatarMixin::on_descend(session_id);
+
+  set_player_id(player_id);
+  set_username(username);
+  set_primary_id(username);
+  add_secondary_id(CAP(username));
+  set_nickname(CAP(username));
+  set_homedir(HomeDir + "/" + username);
+  set_cwd(query_homedir());
+  set_short(query_nickname());
+  set_long("A player object.");
+
   restore_actions();
   restore_prompt();
+  restore_inventory();
+  if (room) {
+    move_object(THISO, room);
+  }
+  command("sense here");
 }
 
 /**

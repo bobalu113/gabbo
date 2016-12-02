@@ -12,7 +12,7 @@ inherit CommandGiverMixin;
 #define WORKROOM   "workroom"
 
 mixed *try_descend(string user_id, object login) {
-  mixed *result = AvatarMixin::try_descend(user_id, login);
+  mixed *result = AvatarMixin::try_descend(user_id);
   string username = UserTracker->query_username(user_id);
   string player_id = get_player(user_id, username);
   if (!player_id) {
@@ -29,25 +29,67 @@ mixed *try_descend(string user_id, object login) {
     ));
   }
 
+  // clone flavor-specific avatar
   string zone = get_zone(room);
   string flavor = ZoneTracker->query_flavor(zone);
+  if (!flavor) {
+    throw((<Exception> 
+      message: sprintf("unable to deterimine avatar flavor for zone %O", zone)
+    ));    
+  }
   string avatar_path = FlavorTracker->query_avatar(flavor, player_id);
-  
-
-
-  // clone flavor avatar
+  if (!avatar_path) {
+    throw((<Exception> 
+      message: sprintf("unable to deterimine avatar path for flavor %O", 
+                       flavor)
+    ));    
+  }
+  object avatar = clone_object(avatar_path);
   
   // avatar->try_descend
-  result = ({ avatar });
+  mixed *args, ex;
+  if (ex = catch(args = avatar->try_descend(user_id, THISO))) {
+    logger->warn("caught exception in try_descend: %O", ex);
+    result = ({ 0, 0, 0 }) + result;
+  else {
+    result = ({ avatar, player_id, room }) + result;
+  }
+
   return result;
 }
 
-void on_descend(string session_id, object login, object avatar) {
-  // ::on_descend
-  // avatar->descend_signal
-  //   move to start room
-  //   restore inventory 
-  //   `sense here`  
+void on_descend(string session_id, object login, object avatar, 
+                object room, varargs mixed *args) {
+  AvatarMixin::on_descend(session_id);
+
+  if (avatar) {
+    string subsession_id = start_session(avatar, session_id);
+    avatar->on_descend(subsession_id, player_id, room, args)
+  }
+
+  return;
+}
+
+string start_session(object avatar, string session_id) {
+  /* WTF only register can set connection (only platform avatar)? 
+  if (!switch_connection(THISO, avatar);
+    logger->warn("failed to switch connection from platform avatar to "
+                 "flavor avatar: %O %O", THISO, avatar);
+    return;
+  }
+  */
+  string user_id = SessionTracker->query_user(session_id)
+  string subsession_id = SessionTracker->new_session(user_id, session_id);
+  if (!subsession_id) {
+    logger->warn("failed to start session: %O", user_id);
+    return;
+  }
+  if (!UserTracker->session_start(user_id, subsession_id)) {
+    logger->warn("failed to attach user session: %O %O", 
+                 user_id, subsession_id);
+    return;
+  }
+  return subsession_id;
 }
 
 string get_player(string user_id, string username) {

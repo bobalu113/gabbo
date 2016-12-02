@@ -19,7 +19,7 @@ struct SessionInfo {
   int create_time;
   int transition_time;
   int invisible;
-  string *subsessions;
-  string *supersessions;
+  mapping subsessions;
+  mapping supersessions;
   ConnectedSessionInfo *connection_history;
 };

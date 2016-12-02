@@ -78,6 +78,7 @@ int switch_connection(mixed connection, object interactive) {
   return 1;
 }
 
+// TODO rename push_session and pop_session?
 int new_session(mixed connection, string session_id) {
   if (objectp(connection) && interactives[connection]) {
     connection = connections[interactives[connection]];

@@ -5,3 +5,9 @@
  * @alias FlavorTracker
  */
 
+#define DefaultFlavor   "gabbo-basic"
+#define FlavorAvatar    "/obj/avatar"
+
+string query_avatar(string flavor, string player_id) {
+  return FlavorDir "/" DefaultFlavor FlavorAvatar;
+}

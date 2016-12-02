@@ -8,6 +8,7 @@
 
 inherit CommandController;
 
+inherit ConnectionLib;
 inherit FileLib;
 inherit MessageLib;
 inherit ValidationLib;
