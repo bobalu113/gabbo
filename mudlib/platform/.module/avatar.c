@@ -5,15 +5,42 @@
  * @alias AvatarMixin
  */
 
+inherit CommandGiverMixin;
+inherit SensorMixin;
+inherit ShellMixin;
+inherit SoulMixin;
+
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
 string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
 
-mixed *try_descend(string user_id) {
+string session;
+
+/**
+ * Initialize AvatarMixin. If this function is overloaded, be advised
+ * that the mixin's private variables are initialized in the parent
+ * implementation.
+ */
+protected void setup() {
+  CommandGiverMixin::setup();
+  SensorMixin::setup();
+  ShellMixin::setup();
+  SoulMixin::setup();
+}
+
+public mixed *try_descend(string user_id) {
   return ({ });
 }
 
-void on_descend(string session_id) {
-  // attach connection/superavatar
+public void on_descend(string session_id) {
+  return;
+}
+
+protected void set_session(string s) {
+  session = s;
+}
+
+public string query_session() {
+  return session;
 }
 
 /**
@@ -21,21 +48,6 @@ void on_descend(string session_id) {
  *
  * @return 1
  */
-nomask int is_avatar() {
+public nomask int is_avatar() {
   return 1;
-}
-
-/**
- * Initialize AvatarMixin. If this function is overloaded, be advised
- * that the mixin's private variables are initialized in the parent
- * implementation.
- */
-void setup_avatar() {
-  /* change this check to top avatar
-  if (interactive(THISO)) {
-    ConnectionTracker->telnet_get_terminal(THISO);
-    ConnectionTracker->telnet_get_NAWS(THISO);
-    ConnectionTracker->telnet_get_ttyloc(THISO);
-  }
-  */
 }

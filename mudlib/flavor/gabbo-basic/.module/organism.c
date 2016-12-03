@@ -10,6 +10,10 @@ inherit IdMixin;
 
 private string gender;
 
+protected void setup() {
+  IdMixin::setup();
+}
+
 public string query_gender() {
   return gender;
 }
@@ -17,13 +21,6 @@ public string query_gender() {
 public int set_gender(string g) {
   gender = g;
   return 1;
-}
-
-/**
- * Set up a new living object.
- */
-public void create() {
-  setup_id();
 }
 
 /**
@@ -36,11 +33,9 @@ nomask public int is_organism() {
 }
 
 /**
- * Return a zero-width mapping of the capabilities this program provides.
- *
- * @return a zero-width mapping of capabilities
+ * Set up a new living object.
  */
-public mapping query_capabilities() {
-  return StuffCode::query_capabilities()
-         + IdMixin::query_capabilities();
+protected void create() {
+  StuffCode::create();
+  setup();
 }

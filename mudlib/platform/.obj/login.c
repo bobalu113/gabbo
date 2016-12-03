@@ -7,13 +7,11 @@
 #include <sys/input_to.h>
 #include <topic.h>
 
-inherit CommandGiverMixin;
-inherit SoulMixin;
 inherit AvatarMixin;
-inherit SensorMixin;
 
-private variables private functions inherit MessageLib;
-private variables private functions inherit ObjectLib;
+inherit ConnectionLib;
+inherit MessageLib;
+inherit ObjectLib;
 
 #define LOCALHOST              "127.0.0.1"
 #define WELCOME_FILE           PlatformEtcDir "/issue"
@@ -27,38 +25,27 @@ private variables private functions inherit ObjectLib;
                                "Using default.\n"
 #define TimeoutMessage         "Timeout exceeded, disconnecting...\n"
 
-int logon();
-void suppress_prompt(string arg);
-varargs void get_terminal_type(closure callback, int retry);
-static void welcome(string terminal, int is_default);
-static void timeout();
-static void abort();
-void heart_beat();
+protected void setup();
+protected void connect();
+protected varargs void suppress_prompt(string arg);
+protected varargs void get_terminal_type(closure callback, int retry);
+protected void welcome(string terminal, int is_default);
+protected void timeout();
+protected void abort();
 
-void create() {
-  setup_avatar();
-  setup_sensor();
+protected void setup() {
+  AvatarMixin::setup();
 }
 
-/**
- * Invoked by the master object when a new connection is established.
- *
- * @return 1 for success, 0 for failure
- */
-int logon() {
-  object logger = LoggerFactory->getLogger(THISO);
-  if (caller_stack_depth() > 0) {
-    return 0;
-  }
+protected void connect() {
   ConnectionTracker->new_connection(THISO);
   ConnectionTracker->telnet_get_terminal(THISO);
-  suppress_prompt(0); // suppress prompt until welcome screen is shown
+  suppress_prompt(); // suppress prompt until welcome screen is shown
   get_terminal_type(#'welcome);
   set_heart_beat(1);
-  return 1;
 }
 
-void suppress_prompt(string arg) {
+protected varargs void suppress_prompt(string arg) {
   remove_input_to(THISO);
   input_to("suppress_prompt", INPUT_NOECHO|INPUT_IGNORE_BANG);
   return;
@@ -71,7 +58,7 @@ void suppress_prompt(string arg) {
  * @param callback upon detection, run this callback with terminal type
  * @param retry    designates which how many retries have been run
  */
-varargs void get_terminal_type(closure callback, int retry) {
+protected varargs void get_terminal_type(closure callback, int retry) {
   string term = query_terminal_type();
   if (term) {
     funcall(callback, term);
@@ -91,7 +78,7 @@ varargs void get_terminal_type(closure callback, int retry) {
  * @param terminal 
  * @param is_default  [description]
  */
-static void welcome(string terminal, mixed is_default) {
+protected void welcome(string terminal, mixed is_default) {
   object logger = LoggerFactory->getLogger(THISO);
 
   if (is_default && !stringp(is_default)) {
@@ -121,14 +108,20 @@ static void welcome(string terminal, mixed is_default) {
   remove_input_to(THISO);
   restore_prompt();
   send_prompt(THISO);
-  setup_command_giver();
   return;
+}
+
+protected void attempt_timeout() {
+  if (query_idle(THISO) > TIMEOUT_SECS) {
+    timeout();
+    set_heart_beat(0);
+  }
 }
 
 /**
  * Exit login prompt because of idle timeout.
  */
-static void timeout() {
+protected void timeout() {
   system_msg(THISO, TimeoutMessage, ([ ]), TOPIC_LOGIN);
   abort();
 }
@@ -136,17 +129,30 @@ static void timeout() {
 /**
  * Abort login.
  */
-static void abort() {
+protected void abort() {
   destruct(THISO);
+}
+
+/**
+ * Invoked by the master object when a new connection is established.
+ *
+ * @return 1 for success, 0 for failure
+ */
+protected int logon() {
+//  if (caller_stack_depth() > 0) {
+//    return 0;
+//  }
+  connect();
+  return 1;
 }
 
 /**
  * Called every heart beat interval to check for idle timeout.
  */
-void heart_beat() {
-  if (query_idle(THISO) > TIMEOUT_SECS) {
-    timeout();
-    set_heart_beat(0);
-  }
-  return;
+protected void heart_beat() {
+  attempt_timeout();
+}
+
+protected void create() {
+  setup();
 }

@@ -8,12 +8,11 @@
 #include <capabilities.h>
 #include <command_giver.h>
 
-private variables private functions inherit ConnectionLib;
-private variables private functions inherit ObjectLib;
+inherit ObjectLib;
 
 #define DEFAULT_SCREEN_WIDTH   80
 #define DEFAULT_SCREEN_LENGTH  25
-#define AvatarBinDir           PlatformBinDir "/avatar"
+#define DEFAULT_PROMPT         "> "
 
 struct ConnectionInfo {
   string id;
@@ -50,10 +49,13 @@ int switch_connection(object from, object to) {
  * Returns the user's screen width. Currently hard-coded to 80 characters.
  * @return the user's screen width
  */
-public int query_screen_width() {
+public int query_screen_width(object ob) {
+  if (!ob) {
+    ob = THISO;
+  }
   struct ConnectionInfo info = 
     ConnectionTracker->query_connection_info(
-      ConnectionTracker->query_connection_id(THISO)
+      ConnectionTracker->query_connection_id(ob)
     );
   int result = info->terminal_width;
   if (result <= 0) {
@@ -66,10 +68,13 @@ public int query_screen_width() {
  * Returns the user's screen length. Currently hard-coded to 25 lines.
  * @return the user's screen length
  */
-public int query_screen_length() {
+public int query_screen_length(object ob) {
+  if (!ob) {
+    ob = THISO;
+  }
   struct ConnectionInfo info = 
     ConnectionTracker->query_connection_info(
-      ConnectionTracker->query_connection_id(THISO)
+      ConnectionTracker->query_connection_id(ob)
     );
   int result = info->terminal_width;
   if (result <= 0) {
@@ -83,10 +88,13 @@ public int query_screen_length() {
  * 
  * @return a string designating the terminal type
  */
-public string query_terminal_type() {
+public string query_terminal_type(object ob) {
+  if (!ob) {
+    ob = THISO;
+  }
   struct ConnectionInfo info = 
     ConnectionTracker->query_connection_info(
-      ConnectionTracker->query_connection_id(THISO)
+      ConnectionTracker->query_connection_id(ob)
     );
   if (info) {
     return info->terminal;
@@ -97,15 +105,18 @@ public string query_terminal_type() {
 /**
  * Restore the default prompt.
  */
-public void restore_prompt() {
-  if (is_capable(THISO, CAP_SHELL)) {
+public void restore_prompt(object ob) {
+  if (!ob) {
+    ob = THISO;
+  }
+  if (is_capable(ob, CAP_SHELL)) {
     set_prompt(lambda(0,
       ({ #'+,
-        ({ #'call_other, THISO, "query_context" }),
-        "> "
+        ({ #'call_other, ob, "query_context" }),
+        DEFAULT_PROMPT
       })
-    ), THISO);
+    ), ob);
   } else {
-    set_prompt("> ");
+    set_prompt(DEFAULT_PROMPT, ob);
   }
 }

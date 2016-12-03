@@ -4,52 +4,22 @@
  * @author devo@eotl
  * @alias Avatar
  */
-
 #include <sys/functionlist.h>
 
-inherit OrganismCode;
+inherit HumanCode;
+inherit PlayerMixin;
+inherit AvatarMixin;
 
-inherit MobileMixin;
-inherit CarrierMixin;
-inherit VisibleMixin;
-inherit NameMixin;
-inherit SoulMixin;
-inherit LiteracyMixin;
-inherit SpeechMixin;
-inherit ShellMixin;
-inherit SensorMixin;
-inherit CommandGiverMixin;
+inherit ConnectionLib;
 
-/* usernames */
+#define UserCommandSpec  (query_homedir() + _EtcDir "/commands.xml")
+#define DescendScript    (query_homedir() + _BinDir "/descend.cmd")
 
-private string username;
+string player;
 
-/**
- * Return the username associated with this avatar. This name will be
- * consistent across all characters a user plays.
- *
- * @return the username
- */
-public string query_username() {
-  return username;
-}
-
-/**
- * Set the username for this avatar.
- *
- * @param str the username to set
- * @return 0 for failure, 1 for success
- */
-protected int set_username(string str) {
-  username = str;
-  return 1;
-}
-
-/* initialization */
-
-public void create() {
-  OrganismCode::create();
-}
+public string query_username();
+protected void set_player(string player_id);
+public string query_player();
 
 /**
  * Invoked by the login object to set up a newly spawned avatar. At the time
@@ -57,121 +27,9 @@ public void create() {
  * avatar. It also has not yet been moved to the player's starting location.
  * @param  username the username to which this avatar belongs
  */
-public void setup() {
-  // TODO previous_object check
-  setup_name();
-  setup_visible();
-  setup_shell();
-  setup_command_giver();
-  setup_mobile();
-  setup_avatar();
-
-  return;
-}
-
-/**
- * Temporary implementation to initialize a static list of commands. Will be
- * replaced with configuration-driven logic instead.
- */
-protected void setup_command_giver() {
-  CommandGiverMixin::setup_command_giver();
-
-  // TODO make this configuration-driven
-  string *command_files = ({
-    BinDir "/pwd",
-    BinDir "/chdir",
-    BinDir "/mkdir",
-    BinDir "/rmdir",
-    BinDir "/ls",
-    BinDir "/cp",
-    BinDir "/mv",
-    BinDir "/rm",
-    BinDir "/touch",
-    BinDir "/ed",
-    BinDir "/more",
-    BinDir "/tail",
-    BinDir "/grep",
-    BinDir "/cc",
-    BinDir "/call",
-    BinDir "/load",
-    BinDir "/reload",
-    BinDir "/clone",
-    BinDir "/dest",
-    BinDir "/man",
-    BinDir "/look",
-    BinDir "/get",
-    BinDir "/drop",
-    BinDir "/put",
-    BinDir "/goto",
-    BinDir "/trans",
-    BinDir "/walk",
-    BinDir "/follow",
-    BinDir "/trace",
-    BinDir "/logger",
-    BinDir "/qvars",
-    BinDir "/which",
-    BinDir "/chi"
-  });
-
-  foreach (string command : command_files) {
-    object cmd_ob = load_command(command);
-    if (!cmd_ob) {
-      continue;
-    }
-    mixed *actions = cmd_ob->query_actions();
-    foreach (mixed *action : actions) {
-      string verb = action[0];
-      int flag = action[1];
-      add_command(command, verb, flag);
-    }
-  }
-}
-
-mixed *try_descend(string user_id) {
-  mixed *result = AvatarMixin::try_descend(user_id);
-  return result;
-}
-
-/**
- * Invoked by the login object once the avatar object is interactive and
- * has been moved to its start location.
- */
-void on_descend(string session_id, string player_id, object room, 
-                varargs mixed *args) {
-  AvatarMixin::on_descend(session_id);
-
-  set_player_id(player_id);
-  set_username(username);
-  set_primary_id(username);
-  add_secondary_id(CAP(username));
-  set_nickname(CAP(username));
-  set_homedir(HomeDir + "/" + username);
-  set_cwd(query_homedir());
-  set_short(query_nickname());
-  set_long("A player object.");
-
-  restore_actions();
-  restore_prompt();
-  restore_inventory();
-  if (room) {
-    move_object(THISO, room);
-  }
-  command("sense here");
-}
-
-/**
- * Return a zero-width mapping of the capabilities this program provides.
- *
- * @return a zero-width mapping of capabilities
- */
-public mapping query_capabilities() {
-  return   OrganismCode::query_capabilities()
-          + AvatarMixin::query_capabilities()
-            + NameMixin::query_capabilities()
-         + VisibleMixin::query_capabilities()
-           + ShellMixin::query_capabilities()
-    + CommandGiverMixin::query_capabilities()
-          + MobileMixin::query_capabilities();
+protected void setup() {
+  PlayerMixin::setup();
+  AvatarMixin::setup();
 }
 
 #ifdef STATEOB
@@ -238,3 +96,61 @@ private void restore_state() {
 }
 
 #endif
+
+public mixed *try_descend(string user_id) {
+  mixed *result = AvatarMixin::try_descend(user_id);
+  return result;
+}
+
+/**
+ * Invoked by the login object once the avatar object is interactive and
+ * has been moved to its start location.
+ */
+public void on_descend(string session_id, string player_id, object room, 
+                       varargs mixed *args) {
+  object logger = LoggerFactory->get_logger(THISO);
+  AvatarMixin::on_descend(session_id);
+
+  set_player(player_id);
+  set_primary_id(query_username());
+  add_secondary_id(CAP(query_username()));
+  set_nickname(CAP(query_username()));
+  set_homedir(HomeDir + "/" + query_username());
+  set_cwd(query_homedir());
+  set_short(query_nickname());
+  set_long("A player object.");
+
+  load_command_spec(UserCommandSpec);
+  restore_prompt();
+  // TODO restore_inventory();
+  if (room) {
+    if (!move_object(THISO, room)) {
+      logger->warn("Unable to move player avatar to start room: %O", room);
+    }
+  }
+  run_script(DescendScript);
+}
+
+/**
+ * Return the username associated with this avatar. This name will be
+ * consistent across all characters a user plays.
+ *
+ * @return the username
+ */
+public string query_username() {
+  string user_id = SessionTracker->query_user(query_session());
+  return UserTracker->query_username(user_id);
+}
+
+protected void set_player(string player_id) {
+  player = player_id;
+}
+
+public string query_player() {
+  return player;
+}
+
+protected void create() {
+  HumanCode::create();
+  setup();
+}

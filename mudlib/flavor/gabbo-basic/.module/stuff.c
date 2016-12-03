@@ -5,11 +5,22 @@
  * @alias StuffCode
  */
 
+protected void setup() {
+  return;
+}
+
 /**
- * Return a zero-width mapping of the capabilities this program provides.
+ * Returns true to designate that this object is made of stuff.
  *
- * @return a zero-width mapping of capabilities
+ * @return 1
  */
-public mapping query_capabilities() {
-  return ([ ]);
+nomask public int is_stuff() {
+  return 1;
+}
+
+/**
+ * Set up a new living object.
+ */
+protected void create() {
+  setup();
 }

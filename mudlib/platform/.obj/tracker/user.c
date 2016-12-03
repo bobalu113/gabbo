@@ -31,8 +31,11 @@ int session_start(string user_id, string session_id) {
   return 1;
 }
 
-struct UserInfo query_user(string user_id) {
-  return users[user_id];
+string query_username(string user_id) {
+  if (!member(users, user_id)) {
+    return 0;
+  }
+  return users[user_id]->username;
 }
 
 string generate_id() {

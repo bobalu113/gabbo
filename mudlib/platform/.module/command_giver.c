@@ -169,6 +169,18 @@ int do_command(string arg) {
   return result;
 }
 
+int run_script(string script_file) {
+  string script = read_file(script_file);
+  if (!script) {
+    return 0;
+  }
+  string *lines = explode(script, "\n");
+  foreach (string line : lines) {
+    command(line);
+  }
+  return 1;
+}
+
 object load_controller(string controller) {
   object result;
   object logger = LoggerFactory->get_logger(THISO);

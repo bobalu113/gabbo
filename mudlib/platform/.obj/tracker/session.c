@@ -9,7 +9,7 @@ inherit SessionLib;
 // program_id#session_count
 // ([ string session_id : SessionInfo session ])
 mapping sessions;
-// ([ userid : SessionInfo session ])
+// ([ user_id : SessionInfo session ])
 mapping last_sessions;
 int session_counter;
 string generate_id();

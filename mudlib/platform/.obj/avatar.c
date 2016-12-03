@@ -7,9 +7,12 @@
  */
 
 inherit AvatarMixin;
-inherit CommandGiverMixin;
 
 #define WORKROOM   "workroom"
+
+protected void setup() {
+  return;
+}
 
 mixed *try_descend(string user_id, object login) {
   mixed *result = AvatarMixin::try_descend(user_id);
