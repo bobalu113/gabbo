@@ -312,7 +312,7 @@ private int _traverse(closure callback, mixed *info, string src, mixed *args) {
 }
 
 int traverse_tree(string src, closure callback, varargs mixed *args) {
-  string src = munge_filename(src);
+  src = munge_filename(src);
   mixed *info;
   if (src[<1] == '/') {
     src = src[0..<2];
@@ -335,7 +335,7 @@ int copy_tree(string src, string dest) {
     object logger = LoggerFactory->get_logger(THISO);
     string file = $1;
     string rel = $2;
-    string size = $3;
+    int size = $3;
     string dest = $7;
 
     if (size == FSIZE_DIR) {

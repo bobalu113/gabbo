@@ -131,7 +131,7 @@ private struct DomainConfig parse_config(string domain_file) {
   }
   config->id = xml[XML_TAG_ATTRIBUTES]["id"];
   if (parent_config) {
-    config->domain_id = parent_config->domain_id + "." + config->id;
+    config->domain_id = parent_config->domain_id + DOMAIN_DELIM + config->id;
   } else {
     config->domain_id = config->id;
   }
@@ -410,7 +410,7 @@ private int delete_domain(struct DomainConfig config) {
   if (member(children, config->domain_id)) {
     string parent = "";
     if (config->parent) {
-      parent = config->parent + ".";
+      parent = config->parent + DOMAIN_DELIM;
     }
     foreach (string child_id : children[config->domain_id]) {
       string id = domains[child_id]->id;
@@ -438,7 +438,7 @@ private int delete_domain(struct DomainConfig config) {
       child->parent = config->parent;
       m_delete(domains, child_id);
       if (child->parent) {
-        child->domain_id = child->parent + "." + child->id;
+        child->domain_id = child->parent + DOMAIN_DELIM + child->id;
       } else {
         child->domain_id = child->id;
       }

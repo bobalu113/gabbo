@@ -9,6 +9,7 @@
 #include <sys/inherit_list.h>
 #include <sys/functionlist.h>
 #include <object.h>
+#include <zone.h>
 
 /**
  * Test whether an object is reachable from another object.

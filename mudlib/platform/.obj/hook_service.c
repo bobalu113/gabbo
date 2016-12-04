@@ -4,20 +4,22 @@
  * @author devo@eotl
  * @alias HookService
  */
+inherit ObjectLib;
 
 void telnet_neg_hook(int action, int option, int *opts) {
   return ConnectionTracker->telnet_negotiation(action, option, opts);
 }
 
 string auto_include_hook(string base_file, string current_file, int sys) {
-  if (current_file && (current_file[<7..] == "/auto.h")) {
+  if (current_file && (current_file[<7..] == "/" AutoInclude)) {
     return "";
   } else {
-    return "#include <auto.h>\n";
+    return "#include <" AutoInclude ">\n";
   }
 }
 
 varargs mixed uids_hook(string objectname, object blueprint) {
+  // FUTURE implement uids
   return "root";
 }
 
@@ -60,6 +62,7 @@ void move_object_hook(object item, object dest) {
       set_this_player($1);
       $2->init();
     }
+    return;
   :), item);
 
   if (living(item)) {
@@ -93,4 +96,63 @@ int reset_hook(object ob) {
 
 int clean_up_hook(int ref, object ob) {
   return ob->clean_up(ref);
+}
+
+private void register_hooks() {
+  set_driver_hook(H_TELNET_NEG, unbound_lambda(
+    ({ 'action, 'option, 'opts }),
+    ({ #'call_other, HookService, "telnet_neg_hook", 'action, 'option, 'opts })
+  )); //'
+
+  set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
+    ({ 'base_file, 'current_file, 'sys }),
+    ({ #'call_other, HookService, "auto_include_hook", 'base_file, 
+                                                       'current_file, 'sys })
+  )); //'
+
+  set_driver_hook(H_LOAD_UIDS, unbound_lambda(
+    ({ 'objectname }),
+    ({ #'call_other, HookService, "uids_hook", 'objectname })
+  ));
+  set_driver_hook(H_CLONE_UIDS, unbound_lambda(
+    ({ 'blueprint, 'objectname }),
+    ({ #'call_other, HookService, "uids_hook", 'objectname, 'blueprint })
+  )); //'
+
+  set_driver_hook(H_COMMAND, unbound_lambda(
+    ({ 'command, 'command_giver }),
+    ({ #'call_other, HookService, "command_hook", 'command, 'command_giver })
+  )); //'
+
+  set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
+    ({ 'item, 'dest }),
+    ({ #'call_other, HookService, "move_object_hook", 'item, 'dest })
+  ));
+
+  set_driver_hook(H_CREATE_OB, unbound_lambda(
+    ({ 'obj }),
+    ({ #'call_other, HookService, "create_hook", 'obj })
+  )); //'
+  set_driver_hook(H_CREATE_CLONE, unbound_lambda(
+    ({ 'obj }),
+    ({ #'call_other, HookService, "create_hook", 'obj })
+  )); //'
+  set_driver_hook(H_CREATE_SUPER, unbound_lambda(
+    ({ 'obj }),
+    ({ #'call_other, HookService, "create_hook", 'obj })
+  )); //'
+
+  set_driver_hook(H_RESET, unbound_lambda(
+    0,
+    ({ #'call_other, HookService, "reset_hook", ({ #'this_object }) })
+  ));
+
+  set_driver_hook(H_CLEAN_UP, unbound_lambda(
+    ({ 'ref, 'obj }),
+    ({ #'call_other, HookService, "clean_up_hook", 'ref, 'obj })
+  ));
+}
+
+void create() {
+  register_hooks();
 }

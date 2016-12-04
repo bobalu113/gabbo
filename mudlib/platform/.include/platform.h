@@ -1,6 +1,8 @@
 #ifndef _PLATFORM_H
 #define _PLATFORM_H
 
+#define PlatformDomain       "platform"
+
 #define PlatformBinDir       PlatformDir _BinDir
 #define PlatformEtcDir       PlatformDir _EtcDir
 #define PlatformIncludeDir   PlatformDir _IncludeDir
@@ -46,6 +48,7 @@
 #define ZoneController       PlatformModuleDir "/zone_controller"
 
 #define AccessService        PlatformObjDir "/access_service"
+#define HookService          PlatformObjDir "/hook_service"
 #define PostalService        PlatformObjDir "/postal_service"
 #define TrackerService       PlatformObjDir "/tracker_service"
 

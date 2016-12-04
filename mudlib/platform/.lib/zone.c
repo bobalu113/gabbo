@@ -5,6 +5,7 @@
  * @alias ZoneLib
  */
 #include <zone.h>
+#include <object.h>
 
 inherit ObjectLib;
 

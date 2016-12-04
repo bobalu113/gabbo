@@ -13,6 +13,9 @@
 #pragma warn_missing_return
 #pragma warn_function_inconsistent
 
+#define AutoInclude          "auto.h"
+#define ToplevelDomain       "gabbo"
+
 #define FlavorDir            "/flavor"
 #define PlatformDir          "/platform"
 #define SecureDir            "/secure"

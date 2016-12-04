@@ -19,6 +19,7 @@
 */
 
 #include "/platform/.include/auto.h"
+#include "/platform/.include/domain.h"
 #include "/platform/.include/sys/driver_hook.h"
 #include "/platform/.include/sys/debug_info.h"
 
@@ -66,60 +67,41 @@ void inaugurate_master(int arg) {
     set_extra_wizinfo(0, 5);
   }
 
-  set_driver_hook(H_TELNET_NEG, unbound_lambda(
-    ({ 'action, 'option, 'opts }),
-    ({ #'call_other, HookService, "telnet_neg_hook", 'action, 'option, 'opts })
-  )); //'
-
-  // FUTURE add support for local auto includes
+  // some basic hooks needed before HookService is available
   set_driver_hook(H_AUTO_INCLUDE, unbound_lambda(
     ({ 'base_file, 'current_file, 'sys }),
-    ({ #'call_other, HookService, "auto_include_hook", 'base_file, 
-                                                       'current_file, 'sys })
+    ({ #'?, 
+       ({ #'&&, 
+          'current_file, 
+          ({ #'==, ({ #'[<.., 'current_file, 7 }), "/" AutoInclude }) 
+       }),
+       "",
+       "#include <" AutoInclude ">\n"
+    })
   )); //'
-
-  // FUTURE implement uids
   set_driver_hook(H_LOAD_UIDS, unbound_lambda(
     ({ 'objectname }),
-    ({ #'call_other, HookService, "uids_hook", 'objectname })
+    ({ #'?,
+       ({ #'==, ({ #'[..], 'objectname, 0, 6 }), SecureDir "/"[1..] }),
+       ToplevelDomain,
+       ({ #'==, ({ #'[..], 'objectname, 0, 8 }), PlatformDir "/"[1..] }),
+       ToplevelDomain DOMAIN_DELIM PlatformDomain,
+       0
+    })
   ));
   set_driver_hook(H_CLONE_UIDS, unbound_lambda(
     ({ 'blueprint, 'objectname }),
-    ({ #'call_other, HookService, "uids_hook", 'objectname, 'blueprint })
-  )); //'
-
-  set_driver_hook(H_COMMAND, unbound_lambda(
-    ({ 'command, 'command_giver }),
-    ({ #'call_other, HookService, "command_hook", 'command, 'command_giver })
-  )); //'
-
-  set_driver_hook(H_MOVE_OBJECT0, unbound_lambda(
-    ({ 'item, 'dest }),
-    ({ #'call_other, HookService, "move_object_hook", 'item, 'dest })
+    ({ #'?,
+       ({ #'==, ({ #'[..], 'objectname, 0, 6 }), SecureDir "/"[1..] }),
+       ToplevelDomain,
+       ({ #'==, ({ #'[..], 'objectname, 0, 8 }), PlatformDir "/"[1..] }),
+       ToplevelDomain DOMAIN_DELIM PlatformDomain,
+       0
+    })
   ));
-
-  set_driver_hook(H_CREATE_OB, unbound_lambda(
-    ({ 'obj }),
-    ({ #'call_other, HookService, "create_hook", 'obj })
-  )); //'
-  set_driver_hook(H_CREATE_CLONE, unbound_lambda(
-    ({ 'obj }),
-    ({ #'call_other, HookService, "create_hook", 'obj })
-  )); //'
-  set_driver_hook(H_CREATE_SUPER, unbound_lambda(
-    ({ 'obj }),
-    ({ #'call_other, HookService, "create_hook", 'obj })
-  )); //'
-
-  set_driver_hook(H_RESET, unbound_lambda(
-    0,
-    ({ #'call_other, HookService, "reset_hook", ({ #'this_object }) })
-  ));
-
-  set_driver_hook(H_CLEAN_UP, unbound_lambda(
-    ({ 'ref, 'obj }),
-    ({ #'call_other, HookService, "clean_up_hook", 'ref, 'obj })
-  ));
+  set_driver_hook(H_CREATE_OB, "create");
+  set_driver_hook(H_CREATE_CLONE, "create");
+  set_driver_hook(H_CREATE_SUPER, "create");
 }
 
 string get_master_uid() {
@@ -137,7 +119,7 @@ void flag(string arg) {
 }
 
 string *epilog(int eflag) {
-  return ({ LoggerFactory, TrackerService });
+  return ({ LoggerFactory, TrackerService, HookService });
 }
 
 void preload(string file) {

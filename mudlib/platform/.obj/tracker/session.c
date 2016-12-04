@@ -15,6 +15,7 @@ int session_counter;
 string generate_id();
 
 string new_session(string user_id, string supersession_id) {
+  object logger = LoggerFactory->get_logger(THISO);
   if (supersession_id && !member(sessions, supersession_id)) {
     logger->warn("unable to create session: supersession %O doesn't exist",
                  supersession_id);
@@ -23,7 +24,7 @@ string new_session(string user_id, string supersession_id) {
   string id = generate_id();
   sessions[id] = (<SessionInfo>
     id: id,
-    user_id: user_id,
+    user: user_id,
     create_time: time(),
     subsessions: ([ ]),
     supersessions: ([ ])

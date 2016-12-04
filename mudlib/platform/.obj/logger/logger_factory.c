@@ -25,9 +25,10 @@
 private inherit AcmeFormatStrings;
 private inherit AcmeFile;
 #else
-private variables private functions inherit FileLib;
-private variables private functions inherit ObjectLib;
-private variables private functions inherit FormatStringsLib;
+inherit FileLib;
+inherit ObjectLib;
+inherit ZoneLib;
+inherit FormatStringsLib;
 #endif
 
 // FUTURE add color
