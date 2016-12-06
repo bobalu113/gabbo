@@ -23,7 +23,14 @@ string new_user(string username) {
   return user_id;
 }
 
-int session_start(string user_id, string session_id) {
+string query_username(string user_id) {
+  if (!member(users, user_id)) {
+    return 0;
+  }
+  return users[user_id]->username;
+}
+
+int set_last_session(string user_id, string session_id) {
   if (!member(users, user_id)) {
     return 0;
   }
@@ -31,11 +38,15 @@ int session_start(string user_id, string session_id) {
   return 1;
 }
 
-string query_username(string user_id) {
+string query_last_session(string user_id) {
   if (!member(users, user_id)) {
     return 0;
   }
-  return users[user_id]->username;
+  return users[user_id]->last_session;
+}
+
+string query_primary_user(string username) {
+  return primary_user_ids[username];
 }
 
 string generate_id() {

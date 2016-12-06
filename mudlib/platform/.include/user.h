@@ -1,7 +1,10 @@
 #ifndef _USER_H
 #define _USER_H
 
-#define PASSWD_DIR        _EtcDir "/passwd"
-#define PASSWD_FILE(u)    sprintf("%s/%s.val", PASSWD_DIR, u)
+#include <sys/tls.h>
+
+#define PASSWD_FILE             _EtcDir "/passwd.val"
+#define PASSWD_HASH_METHOD      TLS_HASH_MD5
+#define PASSWD_HASH_ITERATIONS  1
 
 #endif  // _USER_H

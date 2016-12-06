@@ -63,36 +63,41 @@ mixed *try_descend(string user_id, object login) {
 
 void on_descend(string session_id, object login, object avatar, 
                 object room, varargs mixed *args) {
-  AvatarMixin::on_descend(session_id);
+  AvatarMixin::on_descend(([ session_id ]));
 
   if (avatar) {
-    string subsession_id = start_session(avatar, session_id);
-    avatar->on_descend(subsession_id, player_id, room, args)
+    mapping subsession_ids = attach_sessions(avatar, session_id);
+    avatar->on_descend(subsession_ids, player_id, room, args)
   }
 
   return;
 }
 
-string start_session(object avatar, string session_id) {
-  /* WTF only register can set connection (only platform avatar)? 
-  if (!switch_connection(THISO, avatar);
-    logger->warn("failed to switch connection from platform avatar to "
-                 "flavor avatar: %O %O", THISO, avatar);
-    return;
+mapping attach_sessions(object avatar, string session_id) {
+  object logger = LoggerFactory->get_logger(THISO);
+  string user_id = SessionTracker->query_user(session_id);
+  mapping subsession_ids = SessionTracker->query_subsessions(session_id);
+  subsession_ids = filter(subsession_ids, (: 
+    member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
+           SessionTracker->query_state($1))
+  :));
+  if (!sizeof(subsession_ids)) {
+    string subsession_id = SessionTracker->new_session(user_id, session_id);
+    if (!subsession_id) {
+      logger->warn("failed to start session: %O", user_id);
+      return 0;
+    }
+    subsession_ids = ([ subsession_id ]);
   }
-  */
-  string user_id = SessionTracker->query_user(session_id)
-  string subsession_id = SessionTracker->new_session(user_id, session_id);
-  if (!subsession_id) {
-    logger->warn("failed to start session: %O", user_id);
-    return;
-  }
-  if (!UserTracker->session_start(user_id, subsession_id)) {
-    logger->warn("failed to attach user session: %O %O", 
-                 user_id, subsession_id);
-    return;
-  }
-  return subsession_id;
+
+  subsession_ids = filter(subsession_ids, (:
+    if (!SessionTracker->resume_session($1)) {
+      $2->warn("failed to resume session: %O %O", $3, $1);
+      return 0;
+    }
+  :), logger, user_id);
+
+  return subsession_ids;
 }
 
 string get_player(string user_id, string username) {

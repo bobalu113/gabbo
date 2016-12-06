@@ -203,3 +203,13 @@ mixed *m_value(mapping map, string k) {
   }
   return result;
 }
+
+varargs mixed reduce(mixed data, closure reducer, mixed initial, 
+                     varargs mixed *args) {
+  mixed result = initial;
+  foreach (mixed el : data) {
+    result = apply(reducer, result, el, args);
+  }
+  return result;
+}
+

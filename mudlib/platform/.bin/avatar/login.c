@@ -1,94 +1,51 @@
 /**
- * Login controller. Authenticates a user and moves them to their starting 
- * room. 
+ * User registration controller. Also will log user into game upon success.
  *
- * @alias LoginController
+ * @alias RegistrationController
  */
 #include <topic.h>
 #include <user.h>
 
 inherit CommandController;
 
-private variables private functions inherit MessageLib;
-private variables public functions inherit ValidationLib;
+inherit MessageLib;
+inherit ValidationLib;
+inherit UserLib;
 
 int execute(mapping model, string verb) {
-  system_msg(THISO, "Logged in!", ([ ]), TOPIC_LOGIN);
+  // get id for username
+  string user_id = UserTracker->query_primary_user(model["username"]);
+  if (!user_id) {
+    string msg = sprintf("Login failed: no user_id found for username: %O", 
+                         model["username"]); 
+    system_msg(THISP, msg, ([ ]), TOPIC_LOGIN);
+    return 1;
+  }
+
+  string session_id = attach_session(THISP, user_id);
+  if (!session_id) {
+    string msg = sprintf("Attaching user session failed: username: %O", 
+                         model["username"]); 
+    system_msg(THISP, msg, ([ ]), TOPIC_LOGIN);
+    return 1;
+  }
   return 1;
 }
 
 int validate_password_matches(mapping model) {
-  mapping data = restore_value(read_file(PASSWD_FILE(model["username"])));
-  return model["password"] == data["password"];
+  object logger = LoggerFactory->get_logger(THISO);
+  mapping passwd = read_value(passwd_file(model["username"]));
+  if (!mappingp(passwd)) {
+    // password file missing or corrupt
+    return 0;
+  }
+  string user_id = UserTracker->query_primary_user(model["username"]);
+  if (!mappingp(passwd[user_id])) {
+    logger->warn("Primary user id %O for user %O not found in password file",
+                 user_id, model["username"]);
+    return 0;
+  }  
+  string hash = hash_passwd(model["password"]);
+  return passwd[user_id][PASSWD_PASSWORD] == hash;
 }
 
-/**
- * Spawn a new avatar object, move to starting location, and transfer
- * interactivity from login object to new avatar.
- *
- * @param user the username of the new avatar
- */
-/*
-protected void enter_game(string user) {
-  object logger = LoggerFactory->getLogger(THISO);
-  string err;
-
-  mapping data = restore_value(read_file(PASSWD_FILE(user)));
-  data["connect_time"] = time();
-  data["disconnect_time"] = -1;
-  if (!save_passwd(user, data, 1)) {
-    // TODO give friendly warning
-    logger->info("Unable to save password data for user %s", user);
-  }
-
-  // FUTURE implement 2-tier character selection
-
-  object avatar;
-  string avatar_name;
-  err = catch (
-    (avatar = clone_object(Avatar)),
-    (avatar_name = object_name(avatar)),
-    (avatar->setup(user) && (
-      destruct(avatar),
-      throw(sprintf("%s reported setup failure for user %s\n",
-        avatar_name, user))
-    ));
-    publish
-  );
-  if (err) {
-    printf("Caught error setting up avatar for user %s: %s\n", user, err);
-    destruct(THISO);
-    return;
-  }
-
-  object location;
-  err = catch (location = load_object(data["location"]); publish);
-  if (err) {
-    printf("Caught error loading starting location for user %s: %s\n", user,
-      err);
-  } else {
-    err = catch (
-      move_object(avatar, location);
-      publish
-    );
-    if (err) {
-      // TODO  give friendly error
-      logger->info("Caught error moving %O to starting location %O for user "
-        "%s: %s\n", avatar, location, user, err);
-      printf("Caught error moving %O to starting location %O for user "
-        "%s: %s\n", avatar, location, user, err);
-    }
-  }
-
-  if (exec(avatar, THISO)) {
-    set_this_player(avatar);
-    avatar->enter_game();
-    destruct(THISO);
-  } else {
-    logger->error("Unable to exec user %s into avatar %O\n", user, avatar);
-    printf("Unable to exec user %s into avatar %O\n", user, avatar);
-    destruct(avatar);
-    destruct(THISO);
-  }
-}
-*/

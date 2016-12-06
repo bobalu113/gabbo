@@ -13,7 +13,7 @@ inherit SoulMixin;
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
 string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
 
-string session;
+mapping sessions;
 
 /**
  * Initialize AvatarMixin. If this function is overloaded, be advised
@@ -31,16 +31,16 @@ public mixed *try_descend(string user_id) {
   return ({ });
 }
 
-public void on_descend(string session_id) {
-  return;
+public void on_descend(mapping session_ids) {
+  set_sessions(session_ids);
 }
 
-protected void set_session(string s) {
-  session = s;
+protected void set_sessions(mapping s) {
+  sessions = s;
 }
 
-public string query_session() {
-  return session;
+public string query_sessions() {
+  return sessions;
 }
 
 /**

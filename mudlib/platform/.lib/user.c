@@ -7,6 +7,7 @@
 #include <user.h>
 
 inherit FileLib;
+inherit ConnectionLib;
 
 struct UserInfo {
   string id;
@@ -34,15 +35,84 @@ int user_exists(string username) {
   return file_exists(user_dir(username));
 }
 
-/**
- * Test whether a password is valid for the specified user.
- * 
- * @param  username the username to test
- * @param  password the password
- * @return          1 if the password matches the password on file, otherwise 
- *                  0
- */
-int valid_password(string username, string password) {
-  mapping data = restore_value(read_file(PASSWD_FILE(username)));
-  return password == data["password"];
+string passwd_file(string username) {
+  return user_dir(username) + PASSWD_FILE;
+}
+
+string hash_passwd(string password) {
+  return hash(PASSWD_HASH_METHOD, password, PASSWD_HASH_ITERATIONS);
+}
+
+string create_user(string username, string password) {
+  object logger = LoggerFactory->get_logger(THISO);
+  string user_dir = user_dir(username);
+  // right now only one user id per user name/dir, but might change someday
+  if (file_exists(user_dir)) {
+    logger->warn("user directory already exists: %O", user_dir);
+    return 0;
+  } else {
+    copy_tree(SkelDir, user_dir);
+  }
+
+  // create user
+  string user_id = UserTracker->new_user(username);
+
+  // save password
+  mapping passwd = read_value(passwd_file(username));
+  if (!mappingp(passwd)) {
+    passwd = ([ ]);
+  }
+  string hash = hash_passwd(password);
+  passwd[user_id] = ([ PASSWD_PASSWORD: hash ]);
+  write_value(passwd_file(username), passwd);
+  
+  return user_id;
+}
+
+string attach_session(object login, string user_id) {
+  object logger = LoggerFactory->get_logger(THISO);
+  object avatar = clone_object(PlatformAvatar);
+  if (!avatar) {
+    logger->warn("failed to clone platform avatar: %O %O", THISP, user_id);
+    return 0;
+  }
+
+  mixed *args, ex;
+  if (ex = catch(args = avatar->try_descend(user_id, login))) {
+    logger->warn("caught exception in try_descend: %O", ex);
+    return 0;
+  } else {
+    if (!switch_connection(login, avatar)) {
+      logger->warn("failed to switch connection from login to avatar: %O %O", 
+                   login, avatar);
+      return 0;
+    }
+
+    // get last session or create new one
+    string session_id = UserTracker->query_last_session(user_id);
+    if (!session_id 
+        || !member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
+                   SessionTracker->query_state(session_id))) {
+      session_id = SessionTracker->new_session(user_id);
+      if (!session_id) {
+        logger->warn("failed to start session: %O", user_id);
+        return 0;
+      }
+    }
+
+    // start session
+    if (!SessionTracker->resume_session(session_id)) {
+      logger->warn("failed to resume session: %O %O", user_id, session_id);
+      return 0; 
+    }
+    if (!UserTracker->set_last_session(user_id, session_id)) {
+      logger->warn("failed to update last session: %O %O", 
+                   user_id, session_id);
+      return 0;
+    }
+
+    apply(#'call_other, avatar, "on_descend", session_id, login, args);
+    return session_id;
+  } 
+  return 0;
 }

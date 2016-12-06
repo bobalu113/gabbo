@@ -9,8 +9,6 @@ inherit SessionLib;
 // program_id#session_count
 // ([ string session_id : SessionInfo session ])
 mapping sessions;
-// ([ user_id : SessionInfo session ])
-mapping last_sessions;
 int session_counter;
 string generate_id();
 
@@ -31,9 +29,9 @@ string new_session(string user_id, string supersession_id) {
   );
   if (supersession_id) {
     sessions[id]->supersessions += ([ supersession_id ]);
-    sessions[supersession_id] += ([ id ]);
+    sessions[supersession_id]->subsessions += ([ id ]);
   }
-  last_sessions[user_id] = sessions[id];
+  last_sessions[user_id] = id; // XXX wait until running?
   return id;
 }
 
@@ -53,10 +51,6 @@ int session_ended(string user_id) {
   }
   last_sessions[user_id]->logout_time = time();
   return 1;
-}
-
-struct SessionInfo query_last_session(string user_id) {
-  return last_sessions[user_id];
 }
 
 string generate_id() {

@@ -5,7 +5,7 @@
  * @alias ValidationLib
  */
 
-private functions private variables inherit UserLib;
+inherit UserLib;
 
 int validate_max_length(string arg, mixed len) {
   return (strlen(arg) <= to_int(len));
