@@ -14,7 +14,7 @@ protected void setup() {
   return;
 }
 
-mixed *try_descend(string user_id, object login) {
+mixed *try_descend(string user_id) {
   mixed *result = AvatarMixin::try_descend(user_id);
   string username = UserTracker->query_username(user_id);
   string player_id = get_player(user_id, username);
@@ -51,7 +51,7 @@ mixed *try_descend(string user_id, object login) {
   
   // avatar->try_descend
   mixed *args, ex;
-  if (ex = catch(args = avatar->try_descend(user_id, THISO))) {
+  if (ex = catch(args = avatar->try_descend(user_id))) {
     logger->warn("caught exception in try_descend: %O", ex);
     result = ({ 0, 0, 0 }) + result;
   else {
@@ -61,19 +61,19 @@ mixed *try_descend(string user_id, object login) {
   return result;
 }
 
-void on_descend(string session_id, object login, object avatar, 
+void on_descend(string session_id, object avatar, string player_id, 
                 object room, varargs mixed *args) {
   AvatarMixin::on_descend(([ session_id ]));
 
   if (avatar) {
-    mapping subsession_ids = attach_sessions(avatar, session_id);
+    mapping subsession_ids = attach_session(avatar, session_id);
     avatar->on_descend(subsession_ids, player_id, room, args)
   }
 
   return;
 }
 
-mapping attach_sessions(object avatar, string session_id) {
+mapping attach_session(object avatar, string session_id) {
   object logger = LoggerFactory->get_logger(THISO);
   string user_id = SessionTracker->query_user(session_id);
   mapping subsession_ids = SessionTracker->query_subsessions(session_id);

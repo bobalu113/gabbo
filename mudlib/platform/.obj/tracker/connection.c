@@ -56,39 +56,51 @@ string new_connection(object interactive) {
       connection_id, 
       connect_time: time(),
     ),
-    sessions: ({ })
+    session: 0
   );
   interactives[interactive] = connection_id;
   return connection_id;
 }
 
-int switch_connection(mixed connection, object interactive) {
+int set_interactive(string connection_id, object interactive) {
   if (!interactive(interactive)) {
     return 0;
   }
-  if (objectp(connection) && interactives[connection]) {
-    connection = connections[interactives[connection]];
-  } else if (member(connections, connection)) {
-    connection = connections[connection];
-  } else {
+  if (!member(connections, connection_id)) {
     return 0;
   }
-  connection->interactive = interactive;
-  connection->exec_time = time();
+  connections[connection_id]->interactive = interactive;
+  connections[connection_id]->exec_time = time();
   return 1;
 }
 
-// TODO rename push_session and pop_session?
-int new_session(mixed connection, string session_id) {
-  if (objectp(connection) && interactives[connection]) {
-    connection = connections[interactives[connection]];
-  } else if (member(connections, connection)) {
-    connection = connections[connection];
-  } else {
+int set_session(string connection_id, string session_id) {
+  if (!member(connections, connection_id)) {
     return 0;
   }
-  connection->sessions += ({ session_id });
+  connections[connection_id]->session = session_id;
   return 1;
+}
+
+string query_connection(object interactive) {
+  if (!member(interactives, interactive)) {
+    return 0;
+  }
+  return interactives[interactive];
+}
+
+object query_interactive(string connection_id) {
+  if (!member(connections, connection_id)) {
+    return 0;
+  }
+  return connections[connection_id]->interactive;
+}
+
+int query_exec_time(string id) {
+  if (!member(connections, connection_id)) {
+    return 0;
+  }
+  return connections[connection_id]->exec_time;
 }
 
 void telnet_negotiation(int cmd, int opt, int *optargs) {
@@ -242,22 +254,6 @@ int telnet_get_ttyloc(object interactive) {
   send_binary_message(interactive, ({ IAC, DO, TELOPT_TTYLOC }));
   connection->negotiation_pending += ([ TELOPT_TTYLOC : 1 ]);
   return 1;
-}
-
-string query_connection_id(object interactive) {
-  return (member(interactives, interactive) && interactives[interactive]);
-}
-
-struct ConnectionInfo query_connection_info(string id) {
-  return (member(connections, id) && connections[id]->info);
-}
-
-object query_interactive(string id) {
-  return (member(connections, id) && connections[id]->interactive);
-}
-
-int query_exec_time(string id) {
-  return (member(connections, id) && connections[id]->exec_time);
 }
 
 string generate_id() {

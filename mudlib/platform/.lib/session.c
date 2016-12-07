@@ -21,5 +21,5 @@ struct SessionInfo {
   int invisible;
   mapping subsessions;
   mapping supersessions;
-  struct ConnectedSessionInfo *connection_history;
+  struct ConnectedSessionInfo *connections;
 };

@@ -71,47 +71,46 @@ string create_user(string username, string password) {
 
 string attach_session(object login, string user_id) {
   object logger = LoggerFactory->get_logger(THISO);
-  object avatar = clone_object(PlatformAvatar);
+
+  // get last connected session, or create new one
+  string session_id = UserTracker->query_last_session(user_id);
+  if (!session_id 
+      || !member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
+                 SessionTracker->query_state(session_id))) {
+    session_id = SessionTracker->new_session(user_id);
+    if (!session_id) {
+      logger->warn("failed to start session: %O", user_id);
+      return 0;
+    }
+  }
+
+  // get the session avatar, or create a new one
+  object avatar = SessionTracker->query_avatar(session_id);
   if (!avatar) {
-    logger->warn("failed to clone platform avatar: %O %O", THISP, user_id);
-    return 0;
+    avatar = clone_object(PlatformAvatar);
+    if (!avatar) {
+      logger->warn("failed to clone platform avatar: %O %O", login, user_id);
+      return 0;
+    }
+    SessionTracker->set_avatar(session_id, avatar);
   }
 
   mixed *args, ex;
-  if (ex = catch(args = avatar->try_descend(user_id, login))) {
+  if (ex = catch(args = avatar->try_descend(user_id))) {
     logger->warn("caught exception in try_descend: %O", ex);
     return 0;
   } else {
-    if (!switch_connection(login, avatar)) {
-      logger->warn("failed to switch connection from login to avatar: %O %O", 
-                   login, avatar);
-      return 0;
-    }
-
-    // get last session or create new one
-    string session_id = UserTracker->query_last_session(user_id);
-    if (!session_id 
-        || !member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
-                   SessionTracker->query_state(session_id))) {
-      session_id = SessionTracker->new_session(user_id);
-      if (!session_id) {
-        logger->warn("failed to start session: %O", user_id);
-        return 0;
-      }
-    }
-
-    // start session
+    // (re)start session
     if (!SessionTracker->resume_session(session_id)) {
       logger->warn("failed to resume session: %O %O", user_id, session_id);
       return 0; 
     }
-    if (!UserTracker->set_last_session(user_id, session_id)) {
-      logger->warn("failed to update last session: %O %O", 
-                   user_id, session_id);
+    // switch connection to session
+    if (!connect_session(login, session_id)) {
+      logger->warn("failed to connect session: %O %O", login, session_id);
       return 0;
     }
-
-    apply(#'call_other, avatar, "on_descend", session_id, login, args);
+    apply(#'call_other, avatar, "on_descend", session_id, args);
     return session_id;
   } 
   return 0;

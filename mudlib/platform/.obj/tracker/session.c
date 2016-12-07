@@ -25,7 +25,8 @@ string new_session(string user_id, string supersession_id) {
     user: user_id,
     create_time: time(),
     subsessions: ([ ]),
-    supersessions: ([ ])
+    supersessions: ([ ]),
+    connections: ({ })
   );
   if (supersession_id) {
     sessions[id]->supersessions += ([ supersession_id ]);
@@ -42,14 +43,36 @@ string query_user(string session_id) {
   return 0;
 }
 
-int session_ended(string user_id) {
-  if (!member(last_sessions, user_id)) {
+int is_connected(string session_id) {
+  if (!member(sessions, session_id)) {
     return 0;
   }
-  if (last_sessions[user_id]->logout_time != 0) {
+  struct SessionInfo session = sessions[session_id];
+  return (sizeof(session->connections) 
+          && (session->connections[<1]->disconnect_time));
+}
+
+int connect_session(string session_id, string connection) {
+  if (!member(sessions, session_id)) {
     return 0;
   }
-  last_sessions[user_id]->logout_time = time();
+  disconnect_session(session_id);
+  struct SessionInfo session = sessions[session_id];
+  session->connections += ({ (<ConnectedSessionInfo>
+    connection: connection,
+    connect_time: time()
+  ) )});
+}
+
+int disconnect_session(string session_id) {
+  if (!member(sessions, session_id)) {
+    return 0;
+  }
+  if (!is_connected(session_id)) {
+    return 0;
+  }
+  struct SessionInfo session = sessions[session_id];
+  session->connections[<1]->disconnect_time = time();
   return 1;
 }
 

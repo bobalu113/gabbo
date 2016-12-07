@@ -29,17 +29,31 @@ struct ConnectionState {
   mapping negotiation_pending;
   int naws_last;
   struct ConnectionInfo info;
-  string *sessions;
+  string session;
 };
 
-int switch_connection(object from, object to) {
+int connect_session(object who, string session) {
   object logger = LoggerFactory->get_logger(THISO);
-  if (!exec(to, from)) {
-    logger->debug("exec failed: %O %O", to, from);
+  object avatar = SessionTracker->query_avatar(session);
+  if (!avatar) {
+    logger->debug("no avatar attached to session: %O %O", session, who);
     return 0;
   }
-  if (!ConnectionTracker->switch_connection(from, to)) {
-    logger->debug("failed to switch connection: %O %O", from, to);
+  if (!is_capable(avatar, CAP_AVATAR)) {
+    logger->debug("attempting to connect a non-avatar: %O %O", avatar, who);
+    return 0;
+  }
+  if (!exec(avatar, who)) {
+    logger->debug("exec failed: %O %O", avatar, who);
+    return 0;
+  }
+  string connection = ConnectionTracker->query_connection(who);
+  if (!ConnectionTracker->set_interactive(connection, avatar)) {
+    logger->debug("failed to switch connection: %O %O", connection, avatar);
+    return 0;
+  }
+  if (!SessionTracker->connect_session(session, connection)) {
+    logger->debug("failed to connect session: %O %O", session, connection);
     return 0;
   }
   return 1;
