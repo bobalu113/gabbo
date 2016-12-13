@@ -8,7 +8,7 @@
 
 inherit HumanCode;
 inherit PlayerMixin;
-inherit AvatarMixin;
+inherit CharacterMixin;
 
 inherit ConnectionLib;
 inherit ArrayLib;
@@ -40,8 +40,8 @@ private void save_state() {
   mapping out = ([ ]);
   mixed *vars = variable_list(THISO,
                               RETURN_FUNCTION_NAME
-                            | RETURN_FUNCTION_FLAGS
-                            | RETURN_VARIABLE_VALUE);
+                              | RETURN_FUNCTION_FLAGS
+                              | RETURN_VARIABLE_VALUE);
   for (int i = 0, int j = sizeof(vars); i < j; i += 3) {
     string name = vars[i];
     int type = vars[i + 1];
@@ -98,8 +98,8 @@ private void restore_state() {
 
 #endif
 
-public mixed *try_descend(string user_id) {
-  mixed *result = AvatarMixin::try_descend(user_id);
+public mixed *try_descend(string session_id) {
+  mixed *result = AvatarMixin::try_descend(session_id);
   return result;
 }
 
@@ -107,10 +107,10 @@ public mixed *try_descend(string user_id) {
  * Invoked by the login object once the avatar object is interactive and
  * has been moved to its start location.
  */
-public void on_descend(mapping session_ids, string player_id, object room, 
+public void on_descend(string session_id, string player_id, object room, 
                        varargs mixed *args) {
   object logger = LoggerFactory->get_logger(THISO);
-  AvatarMixin::on_descend(session_ids);
+  AvatarMixin::on_descend(session_id);
 
   set_player(player_id);
   set_primary_id(query_username());
@@ -124,7 +124,7 @@ public void on_descend(mapping session_ids, string player_id, object room,
   load_command_spec(UserCommandSpec);
   restore_prompt();
   // TODO restore_inventory();
-  if (room) {
+  if (room && (room != ENV(THISO))) {
     if (!move_object(THISO, room)) {
       logger->warn("Unable to move player avatar to start room: %O", room);
     }

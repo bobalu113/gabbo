@@ -8,7 +8,6 @@
 inherit CommandGiverMixin;
 inherit SensorMixin;
 inherit ShellMixin;
-inherit SoulMixin;
 
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
 string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
@@ -24,19 +23,25 @@ protected void setup() {
   CommandGiverMixin::setup();
   SensorMixin::setup();
   ShellMixin::setup();
-  SoulMixin::setup();
+  sessions = ([ ]);
 }
 
-public mixed *try_descend(string user_id) {
+public mixed *try_descend(string session_id) {
   return ({ });
 }
 
-public void on_descend(mapping session_ids) {
-  set_sessions(session_ids);
+public void on_descend(string session_id) {
+  add_session(session_id);
 }
 
-protected void set_sessions(mapping s) {
-  sessions = s;
+protected int add_session(string session_id) {
+  sessions += ([ session_id ]); 
+  return 1;
+}
+
+protected int remove_session(string session_id) {
+  sessions -= ([ session_id ]);
+  return 1;
 }
 
 public string query_sessions() {

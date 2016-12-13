@@ -74,9 +74,7 @@ string attach_session(object login, string user_id) {
 
   // get last connected session, or create new one
   string session_id = UserTracker->query_last_session(user_id);
-  if (!session_id 
-      || !member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
-                 SessionTracker->query_state(session_id))) {
+  if (!session_id || !is_active(session_id)) {
     session_id = SessionTracker->new_session(user_id);
     if (!session_id) {
       logger->warn("failed to start session: %O", user_id);
@@ -96,18 +94,20 @@ string attach_session(object login, string user_id) {
   }
 
   mixed *args, ex;
-  if (ex = catch(args = avatar->try_descend(user_id))) {
+  if (ex = catch(args = avatar->try_descend(session_id))) {
     logger->warn("caught exception in try_descend: %O", ex);
     return 0;
   } else {
     // (re)start session
     if (!SessionTracker->resume_session(session_id)) {
-      logger->warn("failed to resume session: %O %O", user_id, session_id);
+      logger->warn("failed to resume user session: %O %O", 
+                   user_id, session_id);
       return 0; 
     }
     // switch connection to session
     if (!connect_session(login, session_id)) {
-      logger->warn("failed to connect session: %O %O", login, session_id);
+      logger->warn("failed to connect user session: %O %O", 
+                   login, session_id);
       return 0;
     }
     apply(#'call_other, avatar, "on_descend", session_id, args);

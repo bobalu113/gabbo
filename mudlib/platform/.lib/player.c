@@ -7,6 +7,5 @@
 
 struct PlayerInfo {
   string id;
-  string username;
   string last_session;
 }

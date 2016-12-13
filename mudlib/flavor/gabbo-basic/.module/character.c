@@ -1,15 +1,15 @@
 /**
- * A module to support player characters.
+ * A module to support character objects.
  *
  * @author devo@eotl
- * @alias PlayerMixin
+ * @alias CharacterMixin
  */
 
 inherit NameMixin;
 inherit LiteracyMixin;
 inherit SpeechMixin;
 
-mapping CAPABILITIES_VAR = ([ CAP_PLAYER ]);
+mapping CAPABILITIES_VAR = ([ CAP_CHARACTER ]);
 
 /**
  * Initialize AvatarMixin. If this function is overloaded, be advised
@@ -23,10 +23,10 @@ protected void setup() {
 }
 
 /**
- * Returns true to designate that this object represents a player character.
+ * Returns true to designate that this object represents a character.
  *
  * @return 1
  */
-public nomask int is_player() {
+public nomask int is_character() {
   return 1;
 }

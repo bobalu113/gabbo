@@ -4,6 +4,7 @@
  * @author devo@eotl
  * @alias SessionLib
  */
+#include <session.h>
 
 struct ConnectedSessionInfo {
   string connection;
@@ -23,3 +24,8 @@ struct SessionInfo {
   mapping supersessions;
   struct ConnectedSessionInfo *connections;
 };
+
+int is_active(string session_id) {
+  return member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
+                SessionTracker->query_state(session_id)); 
+}

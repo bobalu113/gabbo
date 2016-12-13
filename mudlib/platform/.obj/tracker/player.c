@@ -11,27 +11,33 @@ inherit PlayerLib;
 
 // ([ str player_id : PlayerInfo ])
 mapping players;
-// ([ str user_id : ([ str name : str player_id, ...]) ])
+// ([ str user_id : ([ str player_id, ...]) ])
 mapping users;
 int player_counter;
 
-string new_player(string user_id, string name) {
+string new_player(string user_id) {
   object logger = LoggerFactory->get_logger(THISO);
   string player_id = generate_id();
-  users[player_id] = (<UserInfo> 
+  players[player_id] = (<PlayerInfo> 
     id: player_id,
-    name: name
+    user: user_id
   );
   if (!member(users, user_id)) {
     users[user_id] = ([ ]);
   }
-  if (member(users[user_id], name)) { 
-    logger->warn("failed to create player for %O: player %O already exists", 
-                 user_id, name);
+  users[user_id] += ([ player_id ]);
+  return player_id;
+}
+
+mapping query_players(string user_id) {
+  return users[user_id];
+}
+
+string query_last_session(string player_id) {
+  if (!member(players, player_id)) {
     return 0;
   }
-  users[user_id] += ([ name : player_id ]);
-  return player_id;
+  return players[player_id]->last_session;
 }
 
 string generate_id() {
