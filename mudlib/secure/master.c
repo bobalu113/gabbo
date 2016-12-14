@@ -122,9 +122,7 @@ string *epilog(int eflag) {
   return ({ 
     LoggerFactory, 
     TrackerService, 
-    HookService, 
-    ZoneTracker, 
-    ObjectTracker 
+    HookService
   });
 }
 

@@ -6,6 +6,7 @@
  */
 #include <sys/driver_hook.h>
 #include <object.h>
+#include <sql.h>
 
 inherit ObjectLib;
 
@@ -86,15 +87,18 @@ int create_hook(object ob) {
   mixed path_info = get_path_info(ob);
   string zone_id = path_info[PATH_INFO_ZONE];
   
-  if (find_object(ZoneTracker)) {
+  SqlClientFactory->get_client(DEFAULT_DATABASE);
+
+  if (FINDO(ZoneTracker)) {
     ZoneTracker->new_zone(zone_id);
   }
 
-  if (find_object(ObjectTracker)) {
+  if (FINDO(ObjectTracker)) {
     ObjectTracker->new_object(ob);
   }
 
-  return ob->create();
+  int result = ob->create();
+  return result;
 }
 
 int reset_hook(object ob) {

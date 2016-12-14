@@ -82,6 +82,7 @@ string new_instance(string zone_id, string label) {
     label: label
   );
   zones[zone_id]->instances += ([ instance_id ]);
+  return instance_id;
 }
 
 string query_starting_instance(string zone_id, string session_id) {

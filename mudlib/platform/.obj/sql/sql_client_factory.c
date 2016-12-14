@@ -15,6 +15,7 @@ object get_sqlite_client(string file) {
   }
   object client = clone_object(SQLiteClient);
   if (client->connect(file)) {
+    sqlite_clients[file] = client;
     return client;
   }
   destruct(client);

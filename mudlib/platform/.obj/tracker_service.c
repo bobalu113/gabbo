@@ -25,6 +25,7 @@ void load_trackers() {
   reload_tracker(ObjectTracker);
   reload_tracker(ConnectionTracker);
   reload_tracker(SessionTracker);
+  reload_tracker(ZoneTracker);
 }
 
 void create() {
