@@ -4,6 +4,7 @@
  * @author devo@eotl
  * @alias SqlLib
  */
+#include <sql.h>
 
 inherit JSONLib;
 
@@ -29,7 +30,7 @@ string get_insert_statement(string table, mapping data, mixed *params) {
   string *columns = m_indices(data);
   params = m_values(data);
   string query;
-  if (referencep(params)) {
+  if (referencep(&params)) {
     query = sprintf("insert into %s (%s) values (%s)", 
                     table, 
                     implode(columns, ","), 
@@ -48,9 +49,9 @@ string get_update_statement(string table, mixed id, mapping data,
   string *columns = m_indices(data);
   params = m_values(data);
   string query;
-  if (referencep(params)) {
+  if (referencep(&params)) {
     string set = "";
-    for (int i = 0, j = sizeof(columns); i < j; i++) {
+    for (int i = 0, int j = sizeof(columns); i < j; i++) {
       set = sprintf("%s%s=?,", set, columns[i]);
     }
     set[<1] = 0; // remove trailing comma
@@ -61,7 +62,7 @@ string get_update_statement(string table, mixed id, mapping data,
     params += ({ id });
   } else {
     string set = "";
-    for (int i = 0, j = sizeof(columns); i < j; i++) {
+    for (int i = 0, int j = sizeof(columns); i < j; i++) {
       set = sprintf("%s%s=%s,", set, columns[i], encode_value(params[i]));
     }
     set[<1] = 0; // remove trailing comma
@@ -78,16 +79,16 @@ string get_select_statement(string table, mapping key, mixed *params) {
   string *columns = m_indices(key);
   params = m_values(key);
   string query;
-  if (referencep(params)) {
+  if (referencep(&params)) {
     string where = "";
-    for (int i = 0, j = sizeof(columns); i < j; i++) {
+    for (int i = 0, int j = sizeof(columns); i < j; i++) {
       where = sprintf("%s%s=? and ", where, columns[i]);
     }
     where[<5] = 0; // remove trailing 'and'
     query = sprintf("select * from %s where %s", table, where);
   } else {
     string where = "";
-    for (int i = 0, j = sizeof(columns); i < j; i++) {
+    for (int i = 0, int j = sizeof(columns); i < j; i++) {
       where = sprintf("%s%s=%s and ", 
                       where, columns[i], encode_value(params[i]));
     }

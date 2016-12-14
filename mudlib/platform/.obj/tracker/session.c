@@ -3,13 +3,18 @@
  * 
  * @alias SessionTracker
  */
-
 inherit SessionLib;
 
 // program_id#session_count
 // ([ string session_id : SessionInfo session ])
 mapping sessions;
 int session_counter;
+
+string new_session(string user_id, string supersession_id);
+string query_user(string session_id);
+int is_connected(string session_id);
+int connect_session(string session_id, string connection);
+int disconnect_session(string session_id);
 string generate_id();
 
 string new_session(string user_id, string supersession_id) {
@@ -32,7 +37,6 @@ string new_session(string user_id, string supersession_id) {
     sessions[id]->supersessions += ([ supersession_id ]);
     sessions[supersession_id]->subsessions += ([ id ]);
   }
-  last_sessions[user_id] = id; // XXX wait until running?
   return id;
 }
 
@@ -61,7 +65,8 @@ int connect_session(string session_id, string connection) {
   session->connections += ({ (<ConnectedSessionInfo>
     connection: connection,
     connect_time: time()
-  ) )});
+  ) });
+  return 1;
 }
 
 int disconnect_session(string session_id) {

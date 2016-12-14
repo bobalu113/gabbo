@@ -96,7 +96,7 @@ object query_interactive(string connection_id) {
   return connections[connection_id]->interactive;
 }
 
-int query_exec_time(string id) {
+int query_exec_time(string connection_id) {
   if (!member(connections, connection_id)) {
     return 0;
   }

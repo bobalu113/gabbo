@@ -21,6 +21,10 @@ inherit SqlMixin;
 
 string query_object_id(object ob);
 
+void setup() {
+  SqlMixin::setup();
+}
+
 void new_object(object o) {
   string program_id;
   if (!clonep(o)) {
@@ -65,6 +69,6 @@ string query_object_id(object ob) {
 }
 
 int create() {
-  SqlMixin::setup_sql();
+  setup();
   return 0;
 }

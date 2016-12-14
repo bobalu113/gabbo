@@ -4,6 +4,8 @@
  * @author devo@eotl
  * @alias SQLiteClient
  */
+#include <sql.h>
+
 inherit SqlLib;
 
 int connect(string file) {
@@ -28,7 +30,7 @@ varargs int update(string table, mapping data,
   data -= ([ SQL_ID_COLUMN ]);
 
   mixed *params;
-  string query = get_update_statement(table, data, &params);
+  string query = get_update_statement(table, id, data, &params);
   mixed result = apply(#'sl_exec, query, params); //'
   apply(callback, result, args);
   return 1;

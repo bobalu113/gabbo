@@ -119,7 +119,13 @@ void flag(string arg) {
 }
 
 string *epilog(int eflag) {
-  return ({ LoggerFactory, TrackerService, HookService });
+  return ({ 
+    LoggerFactory, 
+    TrackerService, 
+    HookService, 
+    ZoneTracker, 
+    ObjectTracker 
+  });
 }
 
 void preload(string file) {

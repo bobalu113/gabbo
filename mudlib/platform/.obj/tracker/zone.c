@@ -4,16 +4,24 @@
  * @author devo@eotl
  * @alias ZoneTracker
  */
-
+#include <sys/xml.h>
 #include <zone.h>
 
 inherit ZoneLib;
+inherit FileLib;
 
 // ([ str id : ZoneInfo zone ])
 mapping zones;
 // ([ str id : ZoneInstance instance ])
 mapping instances;
 int instance_counter;
+
+struct ZoneInfo new_zone(string zone_id);
+int load_config(string zone_id);
+string new_instance(string zone_id, string label);
+string query_starting_instance(string zone_id, string session_id);
+string query_flavor(string zone_id);
+string get_instance_id(string zone_id, int instance_count);
 
 struct ZoneInfo new_zone(string zone_id) {
   if (!valid_zone_id(zone_id)) {
@@ -22,7 +30,7 @@ struct ZoneInfo new_zone(string zone_id) {
   struct ZoneInfo parent;
   string parent_id = get_parent_zone(zone_id);
   if (parent_id) {
-    if (!member(zones[parent_id])) {
+    if (!member(zones, parent_id)) {
       parent = new_zone(parent_id);
     } else {
       parent = zones[parent_id];
@@ -42,6 +50,7 @@ struct ZoneInfo new_zone(string zone_id) {
 }
 
 int load_config(string zone_id) {
+  object logger = LoggerFactory->get_logger(THISO);
   struct ZoneInfo zone = zones[zone_id];
   if (!zone) {
     return 0;

@@ -97,16 +97,16 @@ public mapping query_clones(string program_id) {
   return 0;
 }
 
-protected int setup() {
-  SqlMixin::setup_sql();
+protected void setup() {
+  SqlMixin::setup();
   programs = ([ ]);
   program_names = ([ ]);
   object_map = ([ ]);
   // TODO fill mem cache with existing programs/clones from objdump
-  return 0;
 }
 
 int create() {
-  return setup();
+  setup();
+  return 0;
 }
 

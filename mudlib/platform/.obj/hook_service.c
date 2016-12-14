@@ -4,6 +4,9 @@
  * @author devo@eotl
  * @alias HookService
  */
+#include <sys/driver_hook.h>
+#include <object.h>
+
 inherit ObjectLib;
 
 void telnet_neg_hook(int action, int option, int *opts) {
@@ -79,13 +82,17 @@ void move_object_hook(object item, object dest) {
   return;
 }
 
-int create_hook(object ob) 
+int create_hook(object ob) {
   mixed path_info = get_path_info(ob);
   string zone_id = path_info[PATH_INFO_ZONE];
   
-  ZoneTracker->new_zone(zone_id);
+  if (find_object(ZoneTracker)) {
+    ZoneTracker->new_zone(zone_id);
+  }
 
-  ObjectTracker->new_object(ob);
+  if (find_object(ObjectTracker)) {
+    ObjectTracker->new_object(ob);
+  }
 
   return ob->create();
 }

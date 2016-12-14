@@ -8,7 +8,8 @@
 // TODO expand interface to support objects that use more than one db
 string database;
 
-void setup_sql() {
+void setup() {
+  load_object(SqlClientFactory);
   database = DEFAULT_DATABASE;
   return;
 }

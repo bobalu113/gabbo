@@ -33,8 +33,11 @@ object get_client(string database) {
       raise_error("Unknown database type: " + type);
       break;
   }
+  return 0;
 }
 
 int create() {
+  load_object(SQLiteClient);
   sqlite_clients = ([ ]);
+  return 0;
 }
