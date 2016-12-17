@@ -87,14 +87,16 @@ int create_hook(object ob) {
   mixed path_info = get_path_info(ob);
   string zone_id = path_info[PATH_INFO_ZONE];
   
-  SqlClientFactory->get_client(DEFAULT_DATABASE);
-
   if (FINDO(ZoneTracker)) {
     ZoneTracker->new_zone(zone_id);
   }
 
   if (FINDO(ObjectTracker)) {
-    ObjectTracker->new_object(ob);
+    if (load_name(ob) == SQLiteClient) {
+      call_out(#'call_other, 0, ObjectTracker, "new_object", ob);
+    } else {
+      ObjectTracker->new_object(ob);
+    }
   }
 
   int result = ob->create();

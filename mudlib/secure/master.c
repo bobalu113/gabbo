@@ -20,6 +20,7 @@
 
 #include "/platform/.include/auto.h"
 #include "/platform/.include/domain.h"
+#include "/platform/.include/sql.h"
 #include "/platform/.include/sys/driver_hook.h"
 #include "/platform/.include/sys/debug_info.h"
 
@@ -121,6 +122,8 @@ void flag(string arg) {
 string *epilog(int eflag) {
   return ({ 
     LoggerFactory, 
+    SqlClientFactory,
+    SQLiteClient,
     TrackerService, 
     HookService
   });

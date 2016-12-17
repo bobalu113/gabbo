@@ -213,3 +213,19 @@ varargs mixed reduce(mixed data, closure reducer, mixed initial,
   return result;
 }
 
+mapping *mapping_array(mixed *keys, mixed *data) {
+  mapping *result = ({ });
+  int size = sizeof(keys);
+  foreach (mixed *values : data) {
+    mapping map = ([ ]);
+    for (int i = 0, int j = sizeof(values); i < j; i++) {
+      if (i < size) {
+        map[keys[i]] = values[i];
+      } else {
+        break;
+      }
+    }
+    result += ({ map });
+  }
+  return result;
+}

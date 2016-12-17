@@ -123,3 +123,31 @@ protected varargs int select(string table, mapping key,
   return 1;
 }
 
+protected varargs int create_table(string table, mapping *cols,
+                                   closure callback, varargs mixed *args) {
+  object sql_client = SqlClientFactory->get_client(database);
+  sql_client->create_table(
+    table, 
+    cols,
+    (:
+      return apply($2, $1, $3);
+    :), 
+    callback, 
+    args
+  );
+  return 1;
+}
+
+protected varargs int table_info(string table, 
+                                 closure callback, varargs mixed *args) {
+  object sql_client = SqlClientFactory->get_client(database);
+  sql_client->table_info(
+    table, 
+    (:
+      return apply($2, $1, $3);
+    :), 
+    callback, 
+    args
+  );
+  return 1;
+}

@@ -8,6 +8,7 @@
 #include <sql.h>
 
 inherit SqlMixin;
+inherit ArrayLib;
 
 #define OBJECT_TABLE    "object"
 #define OBJECT_ID       "object_id"
@@ -23,6 +24,27 @@ string query_object_id(object ob);
 
 void setup() {
   SqlMixin::setup();
+  SqlMixin::table_info(OBJECT_TABLE, (:
+    if (!$1) {
+      SqlMixin::create_table(OBJECT_TABLE, mapping_array(
+        ({ SQL_COL_NAME, SQL_COL_TYPE, SQL_COL_FLAGS, SQL_COL_DEFAULT }),
+        ({ 
+           ({ SQL_ID_COLUMN, SQL_TYPE_INTEGER, 
+              SQL_FLAG_PRIMARY_KEY|SQL_FLAG_AUTOINCREMENT }),
+           ({ OBJECT_ID, SQL_TYPE_TEXT, SQL_FLAG_UNIQUE }),
+           ({ OBJECT_NAME, SQL_TYPE_TEXT }),
+           ({ OBJECT_TIME, SQL_TYPE_INTEGER }),
+           ({ PROGRAM, SQL_TYPE_TEXT }),
+           ({ DESTRUCT_TIME, SQL_TYPE_INTEGER }),
+           ({ LAST_REF_TIME, SQL_TYPE_INTEGER }),
+           ({ GIGATICKS, SQL_TYPE_INTEGER }),
+           ({ TICKS, SQL_TYPE_INTEGER })
+        })
+      ));
+    }
+    return;
+  :));
+  return;
 }
 
 void new_object(object o) {
