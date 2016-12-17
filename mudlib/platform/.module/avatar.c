@@ -7,7 +7,6 @@
 
 inherit CommandGiverMixin;
 inherit SensorMixin;
-inherit ShellMixin;
 
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
 string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";

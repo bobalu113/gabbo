@@ -7,6 +7,7 @@
  */
 
 inherit AvatarMixin;
+inherit ShellMixin;
 inherit SoulMixin;
 
 #define WORKROOM   "workroom"

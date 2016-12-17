@@ -19,7 +19,7 @@ private mapping connections;
 private mapping interactives;
 private int connection_counter;
 
-string query_connection_id(object interactive);
+string query_connection(object interactive);
 object query_interactive(string id);
 int query_exec_time(string id);
 struct ConnectionInfo query_connection_info(string id);
@@ -108,7 +108,7 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
     return;
   }
 
-  string connection_id = query_connection_id(THISP);
+  string connection_id = query_connection(THISP);
   if (!connection_id) {
     // I hope this should never happen
     connection_id = new_connection(THISP);
@@ -211,7 +211,7 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
 }
 
 int telnet_get_terminal(object interactive) {
-  string connection_id = query_connection_id(interactive);
+  string connection_id = query_connection(interactive);
   if (!connection_id) {
     return 0;
   }
@@ -227,7 +227,7 @@ int telnet_get_terminal(object interactive) {
 }
 
 int telnet_get_NAWS(object interactive) {
-  string connection_id = query_connection_id(interactive);
+  string connection_id = query_connection(interactive);
   if (!connection_id) {
     return 0;
   }
@@ -242,7 +242,7 @@ int telnet_get_NAWS(object interactive) {
 }
 
 int telnet_get_ttyloc(object interactive) {
-  string connection_id = query_connection_id(interactive);
+  string connection_id = query_connection(interactive);
   if (!connection_id) {
     return 0;
   }

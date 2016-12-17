@@ -7,7 +7,7 @@
 #include <sys/input_to.h>
 #include <topic.h>
 
-inherit AvatarMixin;
+inherit CommandGiverMixin;
 
 inherit ConnectionLib;
 inherit MessageLib;
@@ -34,7 +34,7 @@ protected void timeout();
 protected void abort();
 
 protected void setup() {
-  AvatarMixin::setup();
+  CommandGiverMixin::setup();
 }
 
 protected void connect() {
@@ -138,10 +138,10 @@ protected void abort() {
  *
  * @return 1 for success, 0 for failure
  */
-protected int logon() {
-//  if (caller_stack_depth() > 0) {
-//    return 0;
-//  }
+public int logon() {
+  if (caller_stack_depth() > 0) {
+    return 0;
+  }
   connect();
   return 1;
 }

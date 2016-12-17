@@ -102,7 +102,7 @@ public int query_screen_length(object ob) {
  * 
  * @return a string designating the terminal type
  */
-public string query_terminal_type(object ob) {
+public varargs string query_terminal_type(object ob) {
   if (!ob) {
     ob = THISO;
   }
@@ -119,7 +119,7 @@ public string query_terminal_type(object ob) {
 /**
  * Restore the default prompt.
  */
-public void restore_prompt(object ob) {
+public varargs void restore_prompt(object ob) {
   if (!ob) {
     ob = THISO;
   }

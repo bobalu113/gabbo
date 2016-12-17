@@ -10,10 +10,10 @@
 #include <command_giver.h>
 #include <command.h>
 
-private variables private functions inherit ObjectLib;
-private variables private functions inherit FileLib;
-private variables private functions inherit ArrayLib;
-private variables private functions inherit CommandSpecLib;
+inherit ObjectLib;
+inherit FileLib;
+inherit ArrayLib;
+inherit CommandSpecLib;
 
 mapping CAPABILITIES_VAR = ([ CAP_COMMAND_GIVER ]);
 
@@ -79,7 +79,7 @@ private mixed *load_command_spec(string specfile) {
  * that the mixin's private variables are initialized in the parent
  * implementation.
  */
-void setup_command_giver() {
+void setup() {
   commands = load_commands();
   object logger = LoggerFactory->get_logger(THISO);
   //logger->debug("commands: %O\n", commands);

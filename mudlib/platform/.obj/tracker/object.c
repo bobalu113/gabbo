@@ -44,6 +44,8 @@ void setup() {
     }
     return;
   :));
+
+  // TODO discover existing objects with debug_info()
   return;
 }
 
