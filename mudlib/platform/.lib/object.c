@@ -70,7 +70,7 @@ mixed *get_path_info(mixed ob) {
   int len = sizeof(parts);
   int i = 0;
   while (i < (len - 1)) {
-    if (strlen(parts[i]) && (parts[i][0] == ZONE_DELIM[0])) {
+    if (strlen(parts[i]) && (parts[i][0] == CATEGORY_DELIM[0])) {
       if (i == 0) {
         zone = "";
         category = implode(parts[i..<2], CATEGORY_DELIM);

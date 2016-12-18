@@ -62,7 +62,7 @@ void new_object(object o) {
     OBJECT_TIME : object_time(o),
     PROGRAM : program_id
   ]);
-  SqlMixin::insert(OBJECT_TABLE, odata);
+  //SqlMixin::insert(OBJECT_TABLE, odata);
   return;
 }
 
@@ -74,7 +74,7 @@ void object_destructed(object o) {
     GIGATICKS : object_info(o, OINFO_BASIC, OIB_GIGATICKS),
     TICKS : object_info(o, OINFO_BASIC, OIB_TICKS),
   ]);
-  SqlMixin::update(OBJECT_TABLE, odata);
+  //SqlMixin::update(OBJECT_TABLE, odata);
   return;
 }
 

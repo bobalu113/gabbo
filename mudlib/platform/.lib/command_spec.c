@@ -8,6 +8,9 @@
 #include <command_spec.h>
 #include <command.h>
 
+inherit FileLib;
+
+mixed *load_command_spec(string specfile);
 mixed *parse_commands_xml(string specfile, mixed *xml);
 varargs mixed *parse_command_xml(string specfile, mixed *xml, 
                                  mapping subcommand_map);
@@ -26,8 +29,14 @@ mixed *parse_validate_xml(string specfile, mixed *xml);
 mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
                         mapping arg_lists, mapping opt_sets, 
                         mapping subcommand_map);
+mixed *parse_import_xml(string specfile, mixed *xml, mapping imports);
 int parse_boolean(string value);
 void parse_error(string specfile, string msg);
+
+mixed *load_command_spec(string specfile) {
+  mixed *xml = xml_parse(read_file(specfile));
+  return parse_commands_xml(specfile, xml);
+}
 
 mixed *parse_commands_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
@@ -36,11 +45,18 @@ mixed *parse_commands_xml(string specfile, mixed *xml) {
     parse_error(specfile, "unknown document root");
   }
 
+  mapping imports = ([ ]);
   mixed *commands = ({ });
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
     switch (el[XML_TAG_NAME]) {
       case "command":
         mixed *command = parse_command_xml(specfile, el);
+        if (command) {
+          commands += ({ command });
+        }
+        break;
+      case "import":
+        mixed *command = parse_import_xml(specfile, el, imports);
         if (command) {
           commands += ({ command });
         }
@@ -497,6 +513,46 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
 
   return ({ explode_args, min_args, max_args, pattern, format, 
             args, opts, longopts, validation, subcommands });
+}
+
+mixed *parse_import_xml(string specfile, mixed *xml, mapping imports) {
+  xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
+  string id;
+  if (member(xml[XML_TAG_ATTRIBUTES], "id")) {
+    id = xml[XML_TAG_ATTRIBUTES]["id"];
+  }
+
+  string spec;
+  if (member(xml[XML_TAG_ATTRIBUTES], "spec")) {
+    spec = xml[XML_TAG_ATTRIBUTES]["spec"];
+  } else {
+    parse_error(specfile, "missing attribute spec");
+  }
+
+  string primary_verb;
+  if (member(xml[XML_TAG_ATTRIBUTES], "primaryVerb")) {
+    primary_verb = xml[XML_TAG_ATTRIBUTES]["primaryVerb"];
+  } else {
+    parse_error(specfile, "missing attribute primaryVerb");
+  }
+
+  mixed *commands = imports[spec];
+  if (!commands) {
+    commands = load_command_spec(expand_path(spec, specfile));
+    imports[spec] = commands;
+  }
+  foreach (mixed *command : commands) {
+    if (sizeof(command[COMMAND_VERBS]) 
+        && (primary_verb == command[COMMAND_VERBS][0])) {
+      command = deep_copy(command);
+      command[COMMAND_ID] = id;
+      command[COMMAND_CONTROLLER] = 
+        expand_path(command[COMMAND_CONTROLLER], spec);
+      return command;
+    }
+  }
+
+  return 0;
 }
 
 int parse_boolean(string value) {

@@ -5,6 +5,7 @@
  * @alias LoginObject
  */
 #include <sys/input_to.h>
+#include <command_giver.h>
 #include <topic.h>
 
 inherit CommandGiverMixin;
@@ -24,6 +25,8 @@ inherit ObjectLib;
 #define DefaultTermWarning     "Unable to detect terminal type. " \
                                "Using default.\n"
 #define TimeoutMessage         "Timeout exceeded, disconnecting...\n"
+
+private string CMD_IMPORTS_VAR = PlatformBinDir "/login.cmds";
 
 protected void setup();
 protected void connect();
@@ -79,7 +82,7 @@ protected varargs void get_terminal_type(closure callback, int retry) {
  * @param is_default  [description]
  */
 protected void welcome(string terminal, mixed is_default) {
-  object logger = LoggerFactory->getLogger(THISO);
+  object logger = LoggerFactory->get_logger(THISO);
 
   if (is_default && !stringp(is_default)) {
     is_default = DefaultTermWarning;
@@ -139,6 +142,7 @@ protected void abort() {
  * @return 1 for success, 0 for failure
  */
 public int logon() {
+  object logger = LoggerFactory->get_logger(THISO);
   if (caller_stack_depth() > 0) {
     return 0;
   }
@@ -149,10 +153,10 @@ public int logon() {
 /**
  * Called every heart beat interval to check for idle timeout.
  */
-protected void heart_beat() {
+public void heart_beat() {
   attempt_timeout();
 }
 
-protected void create() {
+public void create() {
   setup();
 }

@@ -31,7 +31,7 @@
 #ifdef EOTL
 #define PROP_FILE          ".logger.properties"
 #else
-#define PROP_FILE          ".etc/logger.properties"
+#define PROP_FILE          _EtcDir "/logger.properties"
 #endif
 
 #define ALLOWED_PROPS      ({ "output", "format", "level" })

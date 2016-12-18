@@ -15,7 +15,8 @@ inherit FileLib;
 inherit ArrayLib;
 inherit CommandSpecLib;
 
-mapping CAPABILITIES_VAR = ([ CAP_COMMAND_GIVER ]);
+private mapping CAPABILITIES_VAR = ([ CAP_COMMAND_GIVER ]);
+private string CMD_IMPORTS_VAR = PlatformBinDir "/command_giver/command_giver.cmds";
 
 default private variables;
 
@@ -66,23 +67,15 @@ mixed *load_commands() {
   return result;
 }
 
-private mixed *load_command_spec(string specfile) {
-  mixed *result = ({ });
-  mixed *xml = xml_parse(read_file(specfile));
-  object logger = LoggerFactory->get_logger(THISO);
-
-  return parse_commands_xml(specfile, xml);
-}
-
 /**
  * Initialize CommandGiverMixin. If this function is overloaded, be advised
  * that the mixin's private variables are initialized in the parent
  * implementation.
  */
 void setup() {
-  commands = load_commands();
   object logger = LoggerFactory->get_logger(THISO);
-  //logger->debug("commands: %O\n", commands);
+  commands = load_commands();
+  //logger->info("commands: %O\n", commands);
 }
 
 /**

@@ -43,7 +43,9 @@ struct ZoneInfo new_zone(string zone_id) {
     children: ([ ]),
     instances: ([ ])
   );
-  parent->children += ([ zone_id ]);
+  if (parent) {
+    parent->children += ([ zone_id ]);
+  }
 
   load_config(zone_id);
   return zones[zone_id];

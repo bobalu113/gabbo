@@ -393,6 +393,7 @@ int logging = 0;
 private void do_output(string msg) {
   if (logging) { return; }
   logging = 1;
+  debug_message(msg + "\n");
   foreach (mixed *target : output) {
     switch (target[0]) {
 #ifdef EOTL

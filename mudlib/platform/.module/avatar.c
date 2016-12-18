@@ -9,7 +9,7 @@ inherit CommandGiverMixin;
 inherit SensorMixin;
 
 mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
-string CMD_IMPORTS_VAR = AvatarBinDir "/avatar.xml";
+string CMD_IMPORTS_VAR = PlatformBinDir "/avatar/avatar.cmds";
 
 mapping sessions;
 

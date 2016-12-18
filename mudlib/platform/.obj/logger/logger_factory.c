@@ -82,6 +82,7 @@ void init_static_loggers();
  * @return          a logger instance
  */
 public varargs object get_logger(mixed zone, object rel, int reconfig) {
+  return logger_logger;
   // normalize some input
   mixed *pathinfo = get_path_info(zone);
   zone = pathinfo[PATH_INFO_ZONE];
@@ -109,6 +110,7 @@ public varargs object get_logger(mixed zone, object rel, int reconfig) {
 
   // build our configuration
   mapping config = read_config(zone, load_name(rel));
+  efun::printf("%O %O %O\n", zone, rel, config);
   if (!member(config, "output")) {
     // no output
     return get_null_logger();
@@ -173,11 +175,7 @@ public varargs object get_logger(mixed zone, object rel, int reconfig) {
 mapping read_config(string zone, string dir) {
   mapping result = ([ ]);  
   while (dir = dirname(dir)) {
-#ifdef EOTL
-    mapping props = read_properties(dir + "/" + PROP_FILE);
-#else
-    mapping props = read_properties(dir + "/" + PROP_FILE);
-#endif
+    mapping props = read_properties(dir + "/" PROP_FILE);
     if (props) {
       foreach (string prop : ALLOWED_PROPS) {
         string val = read_prop_value(props, prop, dir, zone);
@@ -387,21 +385,10 @@ int clean_up_loggers() {
 void init_static_loggers() {
   string euid = geteuid();
 
-  seteuid(FACTORY_LOGGER_UID);
-  factory_logger = clone_object(Logger);
-  export_uid(factory_logger);
-  factory_logger->set_zone(get_zone(THISO));
-  factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
-  factory_logger->set_formatter(
-    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
-                 ({ 'zone, 'priority, 'message, 'caller }))
-  );
-  factory_logger->set_level(LVL_WARN);
-
   seteuid(LOGGER_LOGGER_UID);
   logger_logger = clone_object(Logger);
   export_uid(logger_logger);
-  logger_logger->set_zone(get_zone(THISO));
+  logger_logger->set_level(LVL_INFO);
 #ifdef EOTL
   logger_logger->set_output(parse_output_prop("a:me"));
 #else
@@ -411,7 +398,18 @@ void init_static_loggers() {
     parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
                  ({ 'zone, 'priority, 'message, 'caller }))
   );
-  logger_logger->set_level(LVL_WARN);
+  logger_logger->set_zone(get_zone(THISO));
+
+  seteuid(FACTORY_LOGGER_UID);
+  factory_logger = clone_object(Logger);
+  export_uid(factory_logger);
+  factory_logger->set_level(LVL_WARN);
+  factory_logger->set_output(parse_output_prop("f:/log/logger_factory.log"));
+  factory_logger->set_formatter(
+    parse_format(DEFAULT_FORMAT, LOGGER_MESSAGE,
+                 ({ 'zone, 'priority, 'message, 'caller }))
+  );
+  factory_logger->set_zone(get_zone(THISO));
 
   seteuid(euid);
   return;
@@ -429,7 +427,6 @@ public int create() {
   local_ref_counts = ([ ]);
 
   init_static_loggers();
-
   return FACTORY_RESET_TIME;
 }
 

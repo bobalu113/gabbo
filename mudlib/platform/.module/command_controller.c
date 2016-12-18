@@ -10,13 +10,13 @@
 #include <sys/input_to.h>
 #include <command.h>
 
-private variables private functions inherit CommandLib;
-private variables private functions inherit MessageLib;
-private variables private functions inherit ArgsLib;
-private variables private functions inherit StringsLib;
-private variables private functions inherit StructLib;
-private variables private functions inherit ObjectExpansionLib;
-private variables private functions inherit FormatStringsLib;
+inherit CommandLib;
+inherit MessageLib;
+inherit ArgsLib;
+inherit StringsLib;
+inherit StructLib;
+inherit ObjectExpansionLib;
+inherit FormatStringsLib;
 
 struct CommandState {
   string verb;
