@@ -85,3 +85,8 @@ string generate_id() {
   return sprintf("%s#%d", 
                  ObjectTracker->query_object_id(THISO), ++session_counter);
 }
+
+int create() {
+  sessions = ([ ]);
+  return 0;
+}

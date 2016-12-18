@@ -13,6 +13,13 @@ mapping users;
 mapping primary_user_ids;
 int user_counter;
 
+string new_user(string username);
+string query_username(string user_id);
+int set_last_session(string user_id, string session_id);
+string query_last_session(string user_id);
+string query_primary_user(string username);
+string generate_id();
+
 string new_user(string username) {
   string user_id = generate_id();
   users[user_id] = (<UserInfo> 
@@ -51,4 +58,10 @@ string query_primary_user(string username) {
 
 string generate_id() {
   return sprintf("%s#%d", program_name(THISO), ++user_counter);
+}
+
+int create() {
+  users = ([ ]);
+  primary_user_ids = ([ ]);
+  return 0;
 }

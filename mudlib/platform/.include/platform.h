@@ -63,10 +63,13 @@
 #define ConnectionTracker    PlatformTrackerDir "/connection"
 #define DomainTracker        PlatformTrackerDir "/domain"
 #define FileTracker          PlatformTrackerDir "/file"
+#define FlavorTracker        PlatformTrackerDir "/flavor"
 #define ObjectTracker        PlatformTrackerDir "/object"
+#define PlayerTracker        PlatformTrackerDir "/player"
 #define ProgramTracker       PlatformTrackerDir "/program"
 #define SessionTracker       PlatformTrackerDir "/session"
 #define TopicTracker         PlatformTrackerDir "/topic"
+#define UserTracker          PlatformTrackerDir "/user"
 #define ZoneTracker          PlatformTrackerDir "/zone"
 
 #define PlatformRenderDir    PlatformObjDir "/render"

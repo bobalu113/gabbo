@@ -8,12 +8,13 @@
 
 inherit FileLib;
 inherit ConnectionLib;
+inherit SessionLib;
 
 struct UserInfo {
   string id;
   string username;
   string last_session;
-}
+};
 
 /**
  * Get the user directory for a given username.

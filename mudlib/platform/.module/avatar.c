@@ -4,6 +4,7 @@
  * @author devo@eotl
  * @alias AvatarMixin
  */
+#include <capabilities.h>
 
 inherit CommandGiverMixin;
 inherit SensorMixin;

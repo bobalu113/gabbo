@@ -6,5 +6,8 @@
 #define PASSWD_FILE             _EtcDir "/passwd.val"
 #define PASSWD_HASH_METHOD      TLS_HASH_MD5
 #define PASSWD_HASH_ITERATIONS  1
+#define PASSWD_PASSWORD         "password"
+
+#define SkelDir                 PlatformEtcDir "/skel"
 
 #endif  // _USER_H

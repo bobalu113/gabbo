@@ -388,7 +388,7 @@ void init_static_loggers() {
   seteuid(LOGGER_LOGGER_UID);
   logger_logger = clone_object(Logger);
   export_uid(logger_logger);
-  logger_logger->set_level(LVL_INFO);
+  logger_logger->set_level(LVL_DEBUG);
 #ifdef EOTL
   logger_logger->set_output(parse_output_prop("a:me"));
 #else

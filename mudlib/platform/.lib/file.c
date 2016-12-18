@@ -296,16 +296,36 @@ int is_loadable(string file) {
   return (file[<2..<1] == ".c");
 }
 
+int is_special_dir(string path) {
+  int len = strlen(path);
+  if (!len) {
+    return 0;
+  }
+  if (path[0] == '/') {
+    if ((len >= 3) && (path[<3..<1] == "/..")) {
+      return 1;
+    }
+    if ((len >= 2) && (path[<2..<1] == "/.")) {
+      return 1;
+    }
+    return 0;
+  } else {
+    return ((path == ".") || (path == ".."));
+  }
+  return 0;
+}
+
 private int _traverse(closure callback, mixed *info, string src, mixed *args) {
   int result = 0;
   if (apply(callback, info[0], info[0][strlen(src)..], info[1], info[2], 
             info[3], info[4], args)) {
     result = 1;
-    if (info[1] == FSIZE_DIR) {
-      mixed *dir = get_dir(info[0], GETDIR_ALL|GETDIR_UNSORTED);
+    if ((info[1] == FSIZE_DIR) && !is_special_dir(info[0])) {
+      mixed *dir = get_dir(info[0] + "/", 
+                           GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
       for (int i = 0, int j = sizeof(dir); i < j; i += 5) {
         result += _traverse(callback, dir[i..(i + 4)], src, args);
-      }    
+      }
     } 
   }
   return result;
@@ -316,13 +336,13 @@ int traverse_tree(string src, closure callback, varargs mixed *args) {
   mixed *info;
   if (src[<1] == '/') {
     src = src[0..<2];
-    info = get_dir(src, GETDIR_ALL);
+    info = get_dir(src, GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
     if (sizeof(info) && (info[1] != FSIZE_DIR)) {
       return 0;
     }
   }
   else {
-    info = get_dir(src, GETDIR_ALL);
+    info = get_dir(src, GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
   }
   if (!sizeof(info)) {
     return 0;
@@ -340,19 +360,37 @@ int copy_tree(string src, string dest) {
 
     if (size == FSIZE_DIR) {
       string to = sprintf("%s/%s", dest, rel);
+      /* WTF mkdir doesn't return 1 like the manpage says
       if (!mkdir(to)) {
         logger->debug("Couldn't mkdir %s", to);
         return 0;
-      }      
+      }
+      */
+      mkdir(to);
     } else {
       string to = sprintf("%s/%s", dest, rel);
+      /* WTF copy_file doesn't either 
       if (!copy_file(file, to)) {
         logger->debug("Couldn't copy file from %s to %s", file, to);
         return 0;
       }
+      */
+      copy_file(file, to);
     }
     return 1;
   :);
 
   return traverse_tree(src, copy_file, dest);
+}
+
+mixed read_value(string file) {
+  string data = read_file(file);
+  if (!data) {
+    return 0;
+  }
+  return restore_value(data);
+}
+
+int write_value(string file, mixed value) {
+  return write_file(file, save_value(value));
 }
