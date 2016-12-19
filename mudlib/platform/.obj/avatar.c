@@ -7,10 +7,23 @@
  */
 
 inherit AvatarMixin;
-inherit ShellMixin;
 inherit SoulMixin;
 
+inherit ExceptionLib;
+inherit SessionLib;
+inherit ZoneLib;
+
 #define WORKROOM   "workroom"
+
+protected void setup();
+mixed *try_descend(string session_id);
+void on_descend(string session_id, string subsession_id, string player_id, 
+                object room, varargs mixed *args);
+string get_player(string user_id);
+string get_start_room(string player_id, string username);
+object load_start_room(string room, string username);
+string get_avatar_path(object room, string player_id);
+string get_default_start_room(string username);
 
 protected void setup() {
   AvatarMixin::setup();
@@ -19,8 +32,9 @@ protected void setup() {
 }
 
 mixed *try_descend(string session_id) {
+  object logger = LoggerFactory->get_logger(THISO);
   mixed *result = AvatarMixin::try_descend(session_id);
-  string user_id = SesssionTracker->query_user(session_id);
+  string user_id = SessionTracker->query_user(session_id);
   string username = UserTracker->query_username(user_id);
 
   string player_id = get_player(user_id);
@@ -73,10 +87,10 @@ mixed *try_descend(string session_id) {
 
   // avatar->try_descend
   mixed *args, ex;
-  if (ex = catch(args = avatar->try_descend(subsession_id))) {
+  if (ex = catch(args = avatar->try_descend(subsession_id); publish)) {
     logger->warn("caught exception in try_descend: %O", ex);
     result = ({ 0, 0, 0 }) + result;
-  else {
+  } else {
     result = ({ subsession_id, player_id, room }) + result;
   }
 
@@ -85,6 +99,7 @@ mixed *try_descend(string session_id) {
 
 void on_descend(string session_id, string subsession_id, string player_id, 
                 object room, varargs mixed *args) {
+  object logger = LoggerFactory->get_logger(THISO);
   AvatarMixin::on_descend(session_id);
 
   object avatar = SessionTracker->query_avatar(subsession_id);  
@@ -122,7 +137,7 @@ string get_start_room(string player_id, string username) {
 }
 
 object load_start_room(string room, string username) {
-  object result = load_object(name);
+  object result = load_object(room);
   if (!result) {
     string default_room = get_default_start_room(username);
     if (default_room != room) {

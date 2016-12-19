@@ -11,16 +11,9 @@ inherit PlayerMixin;
 inherit CharacterMixin;
 
 inherit ConnectionLib;
-inherit ArrayLib;
 
 #define UserCommandSpec  (query_homedir() + _EtcDir "/commands.xml")
 #define DescendScript    (query_homedir() + _BinDir "/descend.cmd")
-
-string player;
-
-public string query_username();
-protected void set_player(string player_id);
-public string query_player();
 
 /**
  * Invoked by the login object to set up a newly spawned avatar. At the time
@@ -130,31 +123,6 @@ public void on_descend(string session_id, string player_id, object room,
     }
   }
   run_script(DescendScript);
-}
-
-public string query_user() {
-  return reduce(query_sessions(), (: 
-    string user_id = SessionTracker->query_user($2);
-    return ( ($1 == -1) ? user_id : (($1 == user_id) && user_id) );
-  :), -1);
-}
-
-/**
- * Return the username associated with this avatar. This name will be
- * consistent across all characters a user plays.
- *
- * @return the username
- */
-public string query_username() {
-  return UserTracker->query_username(query_user());
-}
-
-protected void set_player(string player_id) {
-  player = player_id;
-}
-
-public string query_player() {
-  return player;
 }
 
 protected void create() {

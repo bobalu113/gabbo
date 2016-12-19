@@ -5,6 +5,6 @@
  * @alias SoulMixin
  */
 
-void setup_soul() {
+void setup() {
 
 }

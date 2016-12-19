@@ -12,9 +12,12 @@
 // TODO aliases
 // TODO subs
 
-private variables private functions inherit FileLib;
+inherit FileLib;
 
 default private variables;
+
+private mapping CAPABILITIES_VAR = ([ CAP_SHELL ]);
+private mapping CMD_IMPORTS_VAR = ([ ]);
 
 string cwd, homedir, *dirstack, context;
 
@@ -136,59 +139,8 @@ public int set_context(string c) {
 /**
  * Initialize ShellMixin.
  */
-protected void setup_shell() {
+protected void setup() {
   dirstack = ({ });
   context = "";
   return;
-}
-
-/**
- * Return a zero-width mapping of the capabilities this program provides.
- *
- * @return a zero-width mapping of capabilities
- */
-public mapping query_capabilities() {
-  return ([ CAP_SHELL ]);
-}
-
-/**
- * Return the CommandCode commands that will be made available to
- * implementors of this mixin. This will be invoked by objects implementing
- * CommandGiverMixin for each inherited blueprint.
- *
- * @return an array of paths to CommandCode objects
- */
-public string *query_command_imports(object command_giver) {
-  // TODO make this configurable
-  return ({
-    ShellBinDir "/call",
-    ShellBinDir "/cc",
-    ShellBinDir "/chdir",
-    ShellBinDir "/chi"
-    ShellBinDir "/clone",
-    ShellBinDir "/cp",
-    ShellBinDir "/dest",
-    ShellBinDir "/dirs",
-    ShellBinDir "/ed",
-    ShellBinDir "/grep",
-    ShellBinDir "/load",
-    ShellBinDir "/logger",
-    ShellBinDir "/ls",
-    ShellBinDir "/man",
-    ShellBinDir "/mkdir",
-    ShellBinDir "/more",
-    ShellBinDir "/mv",
-    ShellBinDir "/pushd",
-    ShellBinDir "/popd",
-    ShellBinDir "/pwd",
-    ShellBinDir "/qvars",
-    ShellBinDir "/reload",
-    ShellBinDir "/rm",
-    ShellBinDir "/rmdir",
-    ShellBinDir "/tail",
-    ShellBinDir "/touch",
-    ShellBinDir "/trace",
-    ShellBinDir "/trans",
-    ShellBinDir "/which"
- });
 }

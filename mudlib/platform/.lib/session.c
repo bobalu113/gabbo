@@ -29,3 +29,11 @@ int is_active(string session_id) {
   return member(([ SESSION_STATE_RUNNING, SESSION_STATE_SUSPENDED ]), 
                 SessionTracker->query_state(session_id)); 
 }
+
+int is_subsession(string session_id, string subsession_id) {
+  mapping subsessions = SessionTracker->get_subsessions(session_id);
+  if (subsessions) {
+    return member(subsessions, subsession_id);
+  }
+  return 0;
+}

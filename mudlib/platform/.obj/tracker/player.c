@@ -15,6 +15,11 @@ mapping players;
 mapping users;
 int player_counter;
 
+string new_player(string user_id);
+mapping query_players(string user_id);
+string query_last_session(string player_id);
+string generate_id();
+
 string new_player(string user_id) {
   object logger = LoggerFactory->get_logger(THISO);
   string player_id = generate_id();
@@ -42,4 +47,10 @@ string query_last_session(string player_id) {
 
 string generate_id() {
   return sprintf("%s#%d", program_name(THISO), ++player_counter);
+}
+
+int create() {
+  players = ([ ]);
+  users = ([ ]);
+  return 0;
 }

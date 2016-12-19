@@ -11,12 +11,12 @@
 #include <command_giver.h>
 #include <message.h>
 
-private variables private functions inherit JSONLib;
-private variables private functions inherit MessageLib;
-private variables private functions inherit ObjectLib;
+inherit JSONLib;
+inherit MessageLib;
+inherit ObjectLib;
 
-mapping CAPABILITIES_VAR = ([ CAP_SENSOR ]);
-mapping CMD_IMPORTS_VAR = ([ ]);
+private mapping CAPABILITIES_VAR = ([ CAP_SENSOR ]);
+private mapping CMD_IMPORTS_VAR = ([ ]);
 
 int prevent_message(string topic, string message, mapping context, 
                     object sender) {
@@ -51,5 +51,5 @@ void message_signal(struct Message msg) {
 /**
  * Initialize SensorMixin.
  */
-protected void setup_sensor() {
+protected void setup() {
 }

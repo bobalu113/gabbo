@@ -11,9 +11,23 @@ inherit SoulMixin;
 mapping CAPABILITIES_VAR = ([ CAP_PLAYER ]);
 string CMD_IMPORTS_VAR = ([ ]);
 
+
+string player;
+
+protected void set_player(string player_id);
+public string query_player();
+
 protected void setup() {
   AvatarMixin::setup();
   SoulMixin::setup();
+}
+
+protected void set_player(string player_id) {
+  player = player_id;
+}
+
+public string query_player() {
+  return player;
 }
 
 /**

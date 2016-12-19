@@ -8,11 +8,24 @@
 
 inherit CommandGiverMixin;
 inherit SensorMixin;
+inherit ShellMixin;
 
-mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
-string CMD_IMPORTS_VAR = PlatformBinDir "/avatar/avatar.cmds";
+inherit ArrayLib;
+
+private mapping CAPABILITIES_VAR = ([ CAP_AVATAR ]);
+private string CMD_IMPORTS_VAR = PlatformBinDir "/avatar/avatar.cmds";
 
 mapping sessions;
+
+protected void setup();
+public mixed *try_descend(string session_id);
+public void on_descend(string session_id);
+protected int add_session(string session_id);
+protected int remove_session(string session_id);
+public mapping query_sessions();
+protected int set_username(string name);
+public string query_username();
+public nomask int is_avatar();
 
 /**
  * Initialize AvatarMixin. If this function is overloaded, be advised
@@ -27,11 +40,15 @@ protected void setup() {
 }
 
 public mixed *try_descend(string session_id) {
+  // XXX guard against username conflicts?
   return ({ });
 }
 
 public void on_descend(string session_id) {
   add_session(session_id);
+  string user_id = SessionTracker->query_user(session_id); 
+  string name = UserTracker->query_username(user_id);
+  set_username(name);
 }
 
 protected int add_session(string session_id) {
@@ -44,8 +61,25 @@ protected int remove_session(string session_id) {
   return 1;
 }
 
-public string query_sessions() {
+public mapping query_sessions() {
   return sessions;
+}
+
+public string query_user() {
+  return reduce(query_sessions(), (: 
+    string user_id = SessionTracker->query_user($2);
+    return ( ($1 == -1) ? user_id : (($1 == user_id) && user_id) );
+  :), -1);
+}
+
+/**
+ * Return the username associated with this avatar. This name will be
+ * consistent across all characters a user plays.
+ *
+ * @return the username
+ */
+public string query_username() {
+  return UserTracker->query_username(query_user());
 }
 
 /**

@@ -1,4 +1,4 @@
-#define Flavor "gabbo-rpg"
+#define Flavor "gabbo-basic"
 #include <flavor_config.h>
 
 #define CartesianRoomCode    ModuleDir "/room_cartesian"
@@ -19,7 +19,6 @@
 #define MobileMixin          ModuleDir "/mobile"
 #define NameMixin            ModuleDir "/name"
 #define PreferencesMixin     ModuleDir "/preferences"
-#define ShellMixin           ModuleDir "/shell"
 #define SpeechMixin          ModuleDir "/speech"
 #define VisibleMixin         ModuleDir "/visible"
 

@@ -53,6 +53,7 @@ string create_user(string username, string password) {
     return 0;
   } else {
     copy_tree(SkelDir, user_dir);
+    // TODO apply templates
   }
 
   // create user
@@ -95,7 +96,7 @@ string attach_session(object login, string user_id) {
   }
 
   mixed *args, ex;
-  if (ex = catch(args = avatar->try_descend(session_id))) {
+  if (ex = catch(args = avatar->try_descend(session_id); publish)) {
     logger->warn("caught exception in try_descend: %O", ex);
     return 0;
   } else {

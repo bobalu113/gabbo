@@ -72,7 +72,7 @@ mixed *load_commands() {
  * that the mixin's private variables are initialized in the parent
  * implementation.
  */
-void setup() {
+protected void setup() {
   object logger = LoggerFactory->get_logger(THISO);
   commands = load_commands();
   //logger->info("commands: %O\n", commands);
