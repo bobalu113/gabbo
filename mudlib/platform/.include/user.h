@@ -9,5 +9,8 @@
 #define PASSWD_PASSWORD         "password"
 
 #define SkelDir                 PlatformEtcDir "/skel"
+#define TEMPLATE_SUFFIX         ".template"
+#define DOMAIN_TEMPLATE         _EtcDir "/domain.xml" TEMPLATE_SUFFIX
+#define ZONE_TEMPLATE           _EtcDir "/zone.xml" TEMPLATE_SUFFIX
 
 #endif  // _USER_H

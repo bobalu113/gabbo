@@ -50,7 +50,7 @@ protected void connect() {
 
 protected varargs void suppress_prompt(string arg) {
   remove_input_to(THISO);
-  input_to("suppress_prompt", INPUT_NOECHO|INPUT_IGNORE_BANG);
+  input_to("suppress_prompt", INPUT_NOECHO|INPUT_CHARMODE|INPUT_IGNORE_BANG);
   return;
 }
 

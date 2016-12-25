@@ -22,6 +22,7 @@ void parse_longopt(string arg, int pos, string opt, string param,
                    mapping badopts, mapping valid_longopts);
 void parse_opt(string arg, int pos, mapping opts, mapping badopts, 
                mapping valid_opts);
+string *parse_args(string arg, int pos, mapping syntax);
 string *parse_args_explode(string arg, int pos, int numargs);
 string *parse_args_sscanf(string arg, int pos, string pattern);
 string *parse_args_regexp(string arg, int pos, string pattern);
@@ -46,27 +47,14 @@ mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts,
     mapping valid_longopts = mkmapping(map(syntax[SYNTAX_LONGOPTS], 
                                            #'[, OPT_OPT),//'
                                        syntax[SYNTAX_LONGOPTS]);
+
     opts = ([ ]);
     badopts = ([ ]);
     args = ({ });
-    parse_opts(arg, &pos, &opts, &badopts, valid_opts, valid_longopts);
 
+    parse_opts(arg, &pos, &opts, &badopts, valid_opts, valid_longopts);
     pos = find_nonws(arg, pos);
-    switch (syntax[SYNTAX_FORMAT]) {
-      case "sscanf":
-        args = parse_args_sscanf(arg, &pos, syntax[SYNTAX_PATTERN]);
-        break;
-      case "regexp":
-        args = parse_args_regexp(arg, &pos, syntax[SYNTAX_PATTERN]);
-        break;
-      case "parse_command":
-        args = parse_args_parse_command(arg, &pos, syntax[SYNTAX_PATTERN]);
-        break;
-      case "explode":
-      default:
-        args = parse_args_explode(arg, &pos, syntax[SYNTAX_EXPLODE_ARGS]);
-        break;
-    }
+    args = parse_args(arg, &pos, syntax);
 
     if (valid_syntax(syntax, opts, badopts, args)) {
       return syntax;
@@ -226,6 +214,20 @@ void parse_opt(string arg, int pos, mapping opts, mapping badopts,
     } else {
       badopts[opt] = 1;
     }
+  }
+}
+
+string *parse_args(string arg, int pos, mapping syntax) {
+  switch (syntax[SYNTAX_FORMAT]) {
+    case "sscanf":
+      return parse_args_sscanf(arg, &pos, syntax[SYNTAX_PATTERN]);
+    case "regexp":
+      return parse_args_regexp(arg, &pos, syntax[SYNTAX_PATTERN]);
+    case "parse_command":
+      return parse_args_parse_command(arg, &pos, syntax[SYNTAX_PATTERN]);
+    case "explode":
+    default:
+      return parse_args_explode(arg, &pos, syntax[SYNTAX_EXPLODE_ARGS]);
   }
 }
 

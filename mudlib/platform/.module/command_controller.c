@@ -48,6 +48,7 @@ string parse_float(string arg, mixed val);
 string parse_enum(string arg, mixed val, mixed *enum);
 string parse_object(string arg, mixed val);
 string parse_objects(string arg, mixed val);
+varargs int validate(struct CommandState state, closure callback, int flags);
 int do_execute(mapping model, string verb);
 int execute(mapping model, string verb);
 
@@ -83,38 +84,10 @@ int process_command(struct CommandState state, closure callback) {
   if (!process_extra(state, callback)) {
     return 0;
   }
-
-  // do form validation
-  mixed *validations = state->syntax[SYNTAX_VALIDATION] 
-                       + state->command[COMMAND_VALIDATION];
-  foreach (mixed *validation : validations) {
-    // invoke validation function
-    string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
-    closure validator = symbol_function(func, THISO);
-    if (!validator) {
-      fail_msg(funcall(fail_formatter, sprintf(
-          "Validator not found: %s.\n", 
-          validation[VALIDATE_VALIDATOR]
-        ), state->verb));
-    }
-
-    // process result
-    int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
-    result = (validation[VALIDATE_NEGATE] ? !result : result);
-    if (!result) {
-      fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
-      if (state->form_retry < state->command[COMMAND_MAX_RETRY]) {
-        state->form_retry += 1;
-        state->model = ([ ]);
-        state->force_prompt = 1;
-        process_command(state, callback);
-        return 0;
-      } else {
-        return 0;
-      }
-    }
+  if (!validate(state, callback, VALIDATE_SKIP_FIELDS)) {
+    return 0;
   }
-  
+
   return funcall(callback, state->model, state->verb);
 }
 
@@ -414,6 +387,46 @@ string parse_objects(string arg, mixed val) {
   return 0;
 }
 
+varargs int validate(struct CommandState state, closure callback, int flags) {
+  if (!(flags & VALIDATE_SKIP_FIELDS)) {
+    // TODO perform all field level validations
+  }
+
+  // do form validation
+  mixed *validations = state->syntax[SYNTAX_VALIDATION] 
+                       + state->command[COMMAND_VALIDATION];
+  foreach (mixed *validation : validations) {
+    // invoke validation function
+    string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
+    closure validator = symbol_function(func, THISO);
+    if (!validator) {
+      fail_msg(funcall(fail_formatter, sprintf(
+          "Validator not found: %s.\n", 
+          validation[VALIDATE_VALIDATOR]
+        ), state->verb));
+    }
+
+    // process result
+    int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
+    result = (validation[VALIDATE_NEGATE] ? !result : result);
+    if (!result) {
+      fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
+      if (state->form_retry < state->command[COMMAND_MAX_RETRY]) {
+        state->form_retry += 1;
+        state->model = ([ ]);
+        state->force_prompt = 1;
+        process_command(state, callback);
+        return 0;
+      } else {
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
+// TODO convert this to try/on model? 
+// execute should return model that can be piped to another verb
 int do_execute(mapping model, string verb) {
   return execute(model, verb);
 }

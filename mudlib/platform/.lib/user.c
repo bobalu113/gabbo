@@ -9,12 +9,21 @@
 inherit FileLib;
 inherit ConnectionLib;
 inherit SessionLib;
+inherit FormatStringsLib;
 
 struct UserInfo {
   string id;
   string username;
   string last_session;
 };
+
+string user_dir(string username);
+int user_exists(string username);
+string passwd_file(string username);
+string hash_passwd(string password);
+string create_user(string username, string password);
+int apply_template(string template, string username);
+string attach_session(object login, string user_id);
 
 /**
  * Get the user directory for a given username.
@@ -53,7 +62,12 @@ string create_user(string username, string password) {
     return 0;
   } else {
     copy_tree(SkelDir, user_dir);
-    // TODO apply templates
+    if (!apply_template(user_dir + DOMAIN_TEMPLATE, username)) {
+      logger->warn("unable to apply domain template: %O", user_dir);
+    }
+    if (!apply_template(user_dir + ZONE_TEMPLATE, username)) {
+      logger->warn("unable to apply zone template: %O", user_dir);
+    }
   }
 
   // create user
@@ -69,6 +83,35 @@ string create_user(string username, string password) {
   write_value(passwd_file(username), passwd);
   
   return user_id;
+}
+
+int apply_template(string template_path, string username) {
+  if ((strlen(template_path) < 10) 
+      || (template_path[<9..<1] != TEMPLATE_SUFFIX)) {
+    return 0;
+  }
+  mapping infomap = ([ 
+    'f' : ({ 0,
+             "%s",
+             ({ "gabbo-basic" }) // TODO support user flavors
+          }),
+    'u' : ({ 0,
+             "%s",
+             ({ username }) 
+          })
+  ]);
+  string template = read_file(template_path);
+  if (!template) {
+    return 0;
+  }
+  string body = funcall(parse_format(template, infomap, 0));
+  if (!write_file(template_path[0..<10], body)) {
+    return 0;
+  }
+  if (!rm(template_path)) {
+    return 0;
+  }
+  return 1;
 }
 
 string attach_session(object login, string user_id) {
