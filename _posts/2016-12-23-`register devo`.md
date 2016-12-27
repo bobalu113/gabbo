@@ -38,7 +38,7 @@ Once the connection tracker knows about the connection, it can start handling th
 >                1. SensorMixin::get_term()
 >                2. TopicTracker->get_renderer(topic, term)
 >                3. DefaultRenderer->render(term, message, topic)
->       3. efun::tell_object(message)
+>       3. efun::tell_object(rendered_message)
 >       4. LoginObject->on_message()
 >          1. SensorMixin::on_message()
 
