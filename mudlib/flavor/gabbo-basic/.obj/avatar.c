@@ -8,7 +8,7 @@
 
 inherit HumanCode;
 inherit PlayerMixin;
-inherit CharacterMixin;
+//inherit CharacterMixin;
 
 inherit ConnectionLib;
 
@@ -23,7 +23,6 @@ inherit ConnectionLib;
  */
 protected void setup() {
   PlayerMixin::setup();
-  AvatarMixin::setup();
 }
 
 #ifdef STATEOB
@@ -92,7 +91,7 @@ private void restore_state() {
 #endif
 
 public mixed *try_descend(string session_id) {
-  mixed *result = AvatarMixin::try_descend(session_id);
+  mixed *result = PlayerMixin::try_descend(session_id);
   return result;
 }
 
@@ -103,29 +102,30 @@ public mixed *try_descend(string session_id) {
 public void on_descend(string session_id, string player_id, object room, 
                        varargs mixed *args) {
   object logger = LoggerFactory->get_logger(THISO);
-  AvatarMixin::on_descend(session_id);
+  PlayerMixin::on_descend(session_id);
 
   set_player(player_id);
+/*
   set_primary_id(query_username());
   add_secondary_id(CAP(query_username()));
   set_nickname(CAP(query_username()));
-  set_homedir(HomeDir + "/" + query_username());
-  set_cwd(query_homedir());
   set_short(query_nickname());
   set_long("A player object.");
-
+*/
   load_command_spec(UserCommandSpec);
-  restore_prompt();
+  // TODO restore_prompt();
   // TODO restore_inventory();
   if (room && (room != ENV(THISO))) {
-    if (!move_object(THISO, room)) {
+    // TODO use mobile mixin
+    if (!move_resolved(THISO, room)) {
       logger->warn("Unable to move player avatar to start room: %O", room);
     }
   }
   run_script(DescendScript);
 }
 
-protected void create() {
-  HumanCode::create();
+int create() {
+  int result = HumanCode::create();
   setup();
+  return result;
 }

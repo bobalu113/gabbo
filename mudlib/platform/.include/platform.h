@@ -41,6 +41,7 @@
 #define AvatarMixin          PlatformModuleDir "/avatar"
 #define CommandCode          PlatformModuleDir "/command"
 #define CommandGiverMixin    PlatformModuleDir "/command_giver"
+#define PlayerMixin          PlatformModuleDir "/player"
 #define PropertyMixin        PlatformModuleDir "/property"
 #define SensorMixin          PlatformModuleDir "/sensor"
 #define ShellMixin           PlatformModuleDir "/shell"

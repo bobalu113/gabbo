@@ -4,8 +4,7 @@
  */
 
 #include <capabilities.h>
-
-#define ShellBinDir        BinDir "/shell"
+#include <command_giver.h>
 
 // TODO environment variables
 // TODO prompt
@@ -17,7 +16,7 @@ inherit FileLib;
 default private variables;
 
 private mapping CAPABILITIES_VAR = ([ CAP_SHELL ]);
-private mapping CMD_IMPORTS_VAR = ([ ]);
+private string CMD_IMPORTS_VAR = PlatformBinDir "/shell/shell.cmds";
 
 string cwd, homedir, *dirstack, context;
 

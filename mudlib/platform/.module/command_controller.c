@@ -16,6 +16,7 @@ inherit ArgsLib;
 inherit StringsLib;
 inherit StructLib;
 inherit ObjectExpansionLib;
+inherit FileLib;
 inherit FormatStringsLib;
 
 struct CommandState {
@@ -46,6 +47,8 @@ string parse_boolean(string arg, mixed val);
 string parse_int(string arg, mixed val);
 string parse_float(string arg, mixed val);
 string parse_enum(string arg, mixed val, mixed *enum);
+string parse_file(string arg, mixed val);
+string parse_files(string arg, mixed val);
 string parse_object(string arg, mixed val);
 string parse_objects(string arg, mixed val);
 varargs int validate(struct CommandState state, closure callback, int flags);
@@ -219,6 +222,12 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
     case "enum":
       fail = parse_enum(arg, &val, field[FIELD_ENUM]);
       break;
+    case "file":
+      fail = parse_file(arg, &val);
+      break;
+    case "files":
+      fail = parse_files(arg, &val);
+      break;
     case "object":
       fail = parse_object(arg, &val);
       break;
@@ -247,10 +256,10 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
       string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
       closure validator = symbol_function(func, THISO);
       if (!validator) {
-        fail_msg(funcall(fail_formatter, sprintf(
-            "Validator not found: %s.\n", 
-            validation[VALIDATE_VALIDATOR]
-          ), state->verb));
+        stderr_msg(funcall(fail_formatter, sprintf(
+          "Validator not found: %s.\n", 
+          validation[VALIDATE_VALIDATOR]
+        ), state->verb));
       }
 
       // process result
@@ -258,7 +267,8 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
       result = (validation[VALIDATE_NEGATE] ? !result : result);
       if (!result) {
         // validation failed
-        fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
+        stderr_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], 
+                           state->verb));
         if (((field[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
              || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS))
             && (state->field_retry < field[FIELD_MAX_RETRY])) {
@@ -377,7 +387,33 @@ string parse_enum(string arg, mixed val, mixed *enum) {
   return 0;
 }
 
+string parse_file(string arg, mixed val) {
+  // TODO optimize and customize this logic
+  mixed result;
+  string err = parse_files(arg, &result);
+  if (err) {
+    return err;
+  }
+  if (!sizeof(result)) {
+    val = 0;
+  } else {
+    val = result[0];
+  }
+  return 0;
+}
+
+string parse_files(string arg, mixed val) {
+  string *args = explode_args(arg);
+  mixed *result = ({ });
+  foreach (string pattern : args) {
+    result += expand_pattern(pattern, THISP);
+  }
+  val = result;
+  return 0;
+}
+
 string parse_object(string arg, mixed val) {
+  // TODO optimize and customize this logic
   val = expand_object(arg, THISP, 0);
   return 0;
 }
@@ -400,17 +436,18 @@ varargs int validate(struct CommandState state, closure callback, int flags) {
     string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
     closure validator = symbol_function(func, THISO);
     if (!validator) {
-      fail_msg(funcall(fail_formatter, sprintf(
-          "Validator not found: %s.\n", 
-          validation[VALIDATE_VALIDATOR]
-        ), state->verb));
+      stderr_msg(funcall(fail_formatter, sprintf(
+        "Validator not found: %s.\n", 
+        validation[VALIDATE_VALIDATOR]
+      ), state->verb));
     }
 
     // process result
     int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
     result = (validation[VALIDATE_NEGATE] ? !result : result);
     if (!result) {
-      fail_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], state->verb));
+      stderr_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], 
+                         state->verb));
       if (state->form_retry < state->command[COMMAND_MAX_RETRY]) {
         state->form_retry += 1;
         state->model = ([ ]);

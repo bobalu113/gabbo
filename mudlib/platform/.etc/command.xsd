@@ -181,6 +181,8 @@
       <xsd:enumeration value="float"></xsd:enumeration>
       <xsd:enumeration value="string"></xsd:enumeration>
       <xsd:enumeration value="enum"></xsd:enumeration>
+      <xsd:enumeration value="file"></xsd:enumeration>
+      <xsd:enumeration value="files"></xsd:enumeration>
       <xsd:enumeration value="object"></xsd:enumeration>
       <xsd:enumeration value="objects"></xsd:enumeration>
     </xsd:restriction>

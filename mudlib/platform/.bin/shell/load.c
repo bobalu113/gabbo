@@ -1,62 +1,50 @@
-inherit CommandCode;
+/**
+ * Controller for loading objects from files.
+ *
+ * @alias LoadController
+ */
+inherit CommandController;
 
-private variables private functions inherit ArgsLib;
-private variables private functions inherit GetoptsLib;
-private variables private functions inherit FileLib;
-private variables private functions inherit ObjectLib;
+inherit ValidationLib;
 
-int do_command(string arg) {
-  // TODO add -f option to force
-  // XXX messaging?
-  mixed *args = getopts(explode_args(arg), "v");
+int load_files(mapping model, string verb);
 
-  if (!sizeof(args[0])) {
-    notify_fail(sprintf("Usage: %s file\n", query_verb()));
-    return 0;
-  }
+int execute(mapping model, string verb) {
+  return load_files(model, verb);
+}
 
-  mixed *files = ({ });
-  foreach (string a : args[0]) {
-    files += expand_pattern(a, THISP);
-  }
-
-  if (!sizeof(files)) {
-    printf("%s: %s: No such file.\n", query_verb(), implode(args[0], " "));
-    return 1;
-  }
-
+int load_files(mapping model, string verb) {
   int count = 0;
-  string out = "";
-  foreach (mixed *f : files) {
+  foreach (mixed *f : model["files"]) {
     string file = f[0];
     if (FINDO(file)) {
-      out += sprintf("%s: %s: Already loaded. Destruct or use the reload "
-                     "command.\n",
-                     query_verb(), file);
+      if (!model["quiet"]) {
+        stderr_msg(sprintf("%s: %s: Already loaded. Destruct or use the "
+                           "reload command.\n", verb, file));
+      }
       continue;
     }
 
     string err = catch (load_object(file); publish);
     if (err) {
-      out += sprintf("%s: %s: Caught error %s\n", 
-                     query_verb(), file, err); 
+      stderr += sprintf("%s: %s: Caught error %s\n", verb, file, err); 
       mixed *last_err = get_error_file(MasterObject->get_wiz_name(file));
-      if (last_err) {
-        out += sprintf("%s line %d: %s\n", 
-                       last_err[0], last_err[1], last_err[2]);
+      if (last_err && !model["quiet"]) {
+        stderr_msg(sprintf("%s line %d: %s\n", 
+                           last_err[0], last_err[1], last_err[2]));
       }
       continue;
     } else {
       count++;
-      if (member(arg, 'v')) {
-        out += sprintf("%s: %s: loaded\n", query_verb(), file);
+      if (model["verbose"]) {
+        stdout_msg(sprintf("%s: %s: loaded\n", verb, file));
       }
     }
   }
   
-  out += sprintf("%s: %s: %d object%s loaded.\n", 
-                 query_verb(), implode(args[0], " "), 
-                 count, (count != 1 ? "s" : ""));
-  tell_player(THISP, out);
-  return 1;
+  if (!model["quiet"]) {
+    stdout_msg(sprintf("%s: %d object%s loaded.\n", 
+                       verb, count, (count != 1 ? "s" : "")));
+  }
+  return count;
 }

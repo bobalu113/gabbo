@@ -163,16 +163,6 @@ string objective(object what) {
   return "it";
 }
 
-int send_prompt(object who) {
-  mixed prompt = set_prompt(0, who);
-  if (closurep(prompt)) {
-    efun::tell_object(who, funcall(prompt));
-  } else {
-    efun::tell_object(who, prompt);
-  }
-  return 1;
-}
-
 varargs object reload_object(mixed ob, int flags) {  
   // TODO move/restore inventory
   // TODO move/restore shadows

@@ -9,6 +9,7 @@
 #include <topic.h>
 
 inherit CommandGiverMixin;
+inherit SensorMixin;
 
 inherit ConnectionLib;
 inherit MessageLib;
@@ -97,13 +98,13 @@ protected void welcome(string terminal, mixed is_default) {
   }
 
   // display welcome screen
-  system_msg(THISO, 
-             welcome,
-             ([ "insecure" : insecure,
-                "defaultTerm" : is_default,
-                "clearScreen" : CLEAR_SCREEN
-             ]),
-             TOPIC_WELCOME);
+  send_msg(welcome,
+           ([ "insecure" : insecure,
+              "defaultTerm" : is_default,
+              "clearScreen" : CLEAR_SCREEN
+           ]),
+           THISO, 
+           TOPIC_WELCOME);
 
   // restore prompt
   remove_input_to(THISO);
@@ -125,7 +126,7 @@ protected void attempt_timeout() {
  * Exit login prompt because of idle timeout.
  */
 protected void timeout() {
-  system_msg(THISO, TimeoutMessage, ([ ]), TOPIC_LOGIN);
+  send_msg(TimeoutMessage, ([ ]), THISO, TOPIC_LOGIN);
   abort();
 }
 
@@ -154,6 +155,9 @@ public int logon() {
  * Called every heart beat interval to check for idle timeout.
  */
 public void heart_beat() {
+  if (!interactive(THISO)) {
+    abort();
+  }
   attempt_timeout();
 }
 

@@ -36,7 +36,8 @@ mixed *try_descend(string session_id) {
   mixed *result = AvatarMixin::try_descend(session_id);
   string user_id = SessionTracker->query_user(session_id);
   string username = UserTracker->query_username(user_id);
-
+  string err;
+  
   string player_id = get_player(user_id);
   if (!player_id) {
     throw((<Exception> 
@@ -56,21 +57,21 @@ mixed *try_descend(string session_id) {
   } else {
     // load start room
     string start_room = get_start_room(player_id, username);
-    room = load_start_room(start_room, username);
+    err = catch(room = load_start_room(start_room, username); publish);
     if (!room) {
       throw((<Exception> 
-        message: sprintf("unable to load start room %O %O", 
-                         player_id, start_room)
+        message: sprintf("unable to load start room %O %O %O", 
+                         player_id, start_room, err)
       ));
     }
 
     // clone new avatar
     string avatar_path = get_avatar_path(room, player_id);
-    avatar = clone_object(avatar_path);
+    err = catch(avatar = clone_object(avatar_path); publish);
     if (!avatar) {
       throw((<Exception> 
-        message: sprintf("unable to clone avatar %O %O", 
-                         player_id, avatar_path)
+        message: sprintf("unable to clone avatar %O %O %O", 
+                         player_id, avatar_path, err)
       ));
     }
 
@@ -110,7 +111,7 @@ void on_descend(string session_id, string subsession_id, string player_id,
       return;
     }
     apply(#'call_other, avatar, "on_descend", 
-          subsession_id, room, player_id, args);
+          subsession_id, player_id, room, args);
   }
 
   return;
@@ -168,4 +169,9 @@ string get_avatar_path(object room, string player_id) {
 
 string get_default_start_room(string username) {
   return sprintf("%s/%s/%s.c", UserDir, username, WORKROOM);
+}
+
+int create() { 
+  setup();
+  return 0;
 }

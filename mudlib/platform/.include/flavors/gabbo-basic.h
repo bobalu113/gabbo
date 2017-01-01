@@ -20,7 +20,6 @@
 #define LockMixin            ModuleDir "/lock"
 #define MobileMixin          ModuleDir "/mobile"
 #define NameMixin            ModuleDir "/name"
-#define PlayerMixin          ModuleDir "/player"
 #define PreferencesMixin     ModuleDir "/preferences"
 #define SpeechMixin          ModuleDir "/speech"
 #define VisibleMixin         ModuleDir "/visible"

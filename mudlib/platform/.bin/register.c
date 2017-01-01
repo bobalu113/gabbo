@@ -1,7 +1,7 @@
 /**
  * User registration controller. Also will log user into game upon success.
  *
- * @alias RegistrationController
+ * @alias RegisterController
  */
 #include <topic.h>
 #include <user.h>
@@ -16,18 +16,18 @@ int execute(mapping model, string verb) {
   // create new user
   string user_id = create_user(model["username"], model["password"]);
   if (!user_id) {
-    string msg = sprintf("User creation failed: username: %O", 
+    string msg = sprintf("User creation failed: username: %O\n", 
                          model["username"]); 
-    system_msg(THISP, msg, ([ ]), TOPIC_LOGIN);
+    stdout_msg(msg, ([ ]), THISP, TOPIC_LOGIN);
     return 1;
   }
 
   // attach to session
   string session_id = attach_session(THISP, user_id);
   if (!session_id) {
-    string msg = sprintf("Attaching user session failed: username: %O", 
+    string msg = sprintf("Attaching user session failed: username: %O\n", 
                          model["username"]); 
-    system_msg(THISP, msg, ([ ]), TOPIC_LOGIN);
+    stdout_msg(msg, ([ ]), THISP, TOPIC_LOGIN);
     return 1;
   }
 

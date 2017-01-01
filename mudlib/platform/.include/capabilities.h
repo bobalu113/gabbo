@@ -11,6 +11,7 @@
 #define CAP_LOCK             "lock"
 #define CAP_MOBILE           "mobile"
 #define CAP_NAME             "name"
+#define CAP_PLAYER           "player"
 #define CAP_PROPERTY         "property"
 #define CAP_SENSOR           "sensor"
 #define CAP_SHELL            "shell"

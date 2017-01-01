@@ -10,6 +10,8 @@
 
 inherit FileLib;
 
+object logger = LoggerFactory->get_logger(THISO);
+
 mixed *load_command_spec(string specfile);
 mixed *parse_commands_xml(string specfile, mixed *xml);
 varargs mixed *parse_command_xml(string specfile, mixed *xml, 
@@ -114,11 +116,10 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
   mixed *syntax = ({ });
   mixed *validation = ({ });
   subcommand_map ||= ([ ]);
-  mapping field_map;
+  mapping field_map = ([ ]);
   foreach (mixed *el : xml[XML_TAG_CONTENTS]) {
     switch (el[XML_TAG_NAME]) {
       case "fields":
-        field_map = ([ ]);
         fields = parse_fields_xml(specfile, el, field_map);
         break;
       case "args":
@@ -280,8 +281,8 @@ mixed *parse_arg_xml(string specfile, mixed *xml, mapping field_map) {
   }
 }
 
-mixed *parse_opts_xml(string specfile, mixed *xml, mapping opt_sets, 
-                      mapping field_map) {
+mixed *parse_opts_xml(string specfile, mixed *xml, mapping field_map, 
+                      mapping opt_sets) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
   if (member(xml[XML_TAG_ATTRIBUTES], "ref")) {
@@ -304,8 +305,7 @@ mixed *parse_opts_xml(string specfile, mixed *xml, mapping opt_sets,
         }
         break;
       case "longopt":
-        mixed *longopt = parse_opt_xml(specfile, el, 
-                                       field_map);
+        mixed *longopt = parse_opt_xml(specfile, el, field_map);
         if (longopt) {
           longopts += ({ longopt });
         }

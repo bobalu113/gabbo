@@ -3,6 +3,8 @@
  * 
  * @alias SessionTracker
  */
+#include <session.h>
+
 inherit SessionLib;
 
 // program_id#session_count
@@ -28,6 +30,7 @@ string new_session(string user_id, string supersession_id) {
   sessions[id] = (<SessionInfo>
     id: id,
     user: user_id,
+    state: SESSION_STATE_NEW,
     create_time: time(),
     subsessions: ([ ]),
     supersessions: ([ ]),
@@ -79,6 +82,34 @@ int disconnect_session(string session_id) {
   struct SessionInfo session = sessions[session_id];
   session->connections[<1]->disconnect_time = time();
   return 1;
+}
+
+int resume_session(string session_id) {
+  if (!member(sessions, session_id)) {
+    return 0;
+  }
+  struct SessionInfo session = sessions[session_id];
+  int previous = session->state;
+  if (previous == SESSION_STATE_DONE) {
+    return 0;
+  }
+  session->state = SESSION_STATE_RUNNING;
+  return previous;
+}
+
+int set_avatar(string session_id, object avatar) {
+  if (!member(sessions, session_id)) {
+    return 0;
+  }
+  sessions[session_id]->avatar = avatar;
+  return 1;
+}
+
+object query_avatar(string session_id) {
+  if (!member(sessions, session_id)) {
+    return 0;
+  }
+  return sessions[session_id]->avatar;
 }
 
 string generate_id() {

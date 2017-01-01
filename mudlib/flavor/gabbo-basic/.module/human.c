@@ -5,14 +5,14 @@
  * @alias HumanCode
  */
 
-inherit MobileMixin;
-inherit CarrierMixin;
-inherit VisibleMixin;
+//inherit MobileMixin;
+//inherit CarrierMixin;
+//inherit VisibleMixin;
 
 protected void setup() {
-  MobileMixin::setup();
-  CarrierMixin::setup();
-  VisibleMixin::setup();
+//  MobileMixin::setup();
+//  CarrierMixin::setup();
+//  VisibleMixin::setup();
 }
 
 /**
@@ -24,6 +24,7 @@ nomask public int is_human() {
   return 1;
 }
 
-protected void create() {
+protected int create() {
   setup();
+  return 0;
 }

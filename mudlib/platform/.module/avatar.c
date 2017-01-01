@@ -23,7 +23,6 @@ public void on_descend(string session_id);
 protected int add_session(string session_id);
 protected int remove_session(string session_id);
 public mapping query_sessions();
-protected int set_username(string name);
 public string query_username();
 public nomask int is_avatar();
 
@@ -46,9 +45,8 @@ public mixed *try_descend(string session_id) {
 
 public void on_descend(string session_id) {
   add_session(session_id);
-  string user_id = SessionTracker->query_user(session_id); 
-  string name = UserTracker->query_username(user_id);
-  set_username(name);
+  set_homedir(UserDir "/" + query_username());
+  set_cwd(query_homedir());
 }
 
 protected int add_session(string session_id) {

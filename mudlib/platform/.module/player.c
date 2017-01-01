@@ -4,13 +4,12 @@
  * @author devo@eotl
  * @alias PlayerMixin
  */
+#include <capabilities.h>
 
 inherit AvatarMixin;
 inherit SoulMixin;
 
-mapping CAPABILITIES_VAR = ([ CAP_PLAYER ]);
-string CMD_IMPORTS_VAR = ([ ]);
-
+private mapping CAPABILITIES_VAR = ([ CAP_PLAYER ]);
 
 string player;
 
