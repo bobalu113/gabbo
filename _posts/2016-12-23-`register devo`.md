@@ -36,7 +36,7 @@ Once the connection tracker knows about the connection, it can start handling th
 
 ### intro to messaging: the welcome screen
 > 4. display welcome
->    1. MessageLib::system_msg(login, message, topic)
+>    1. MessageLib::send_msg(login, message, topic)
 >    2. PostalService->send_message(login, message, topic)
 >       1. LoginObject->try_message(message, topic)
 >          1. SensorMixin::try_message(message, topic)
@@ -45,11 +45,11 @@ Once the connection tracker knows about the connection, it can start handling th
 >                1. SensorMixin::get_term()
 >                2. TopicTracker->get_renderer(topic, term)
 >                3. DefaultRenderer->render(term, message, topic)
->       3. efun::tell_object(rendered_message)
+>       3. efun::tell_object(login, rendered_message)
 >       4. LoginObject->on_message()
 >          1. SensorMixin::on_message()
 
-I'm actually writing this section last because I thought a dissection of messaging might be too much for this post, but it's a pretty big omission so I thought I should at least try and summarize. In this section we're backtracking one step to the step where we display the welcome screen (and also the prompt, and future command feedback). There's actually not much to it once you get past the interplay between the different APIs. The de facto method for sending a message to a player is via PostalService->send_message(); and there are some convenience wrapper functions for common message types in MessageLib. To send a message you must specify a destination object, a "topic," and the message itself, which is made up of a message string and a mapping "message context."
+I'm actually writing this section last because I thought a dissection of messaging might be too much for this post, but it's a pretty big omission so I thought I should at least try and summarize. In this section we're backtracking one step to the step where we display the welcome screen (and also the prompt, and future command feedback). There's actually not much to it once you get past the interplay between the different APIs. The de facto method for sending a message to a player is via PostalService->send_message(); and there are some convenience wrapper functions for common message types in MessageLib. To send a message you must specify a destination object, a "topic," and the message itself, which is made up of a message string and a mapping "message context." The message context is where you can specify things like which sense the message is triggering (sight, sound, etc). You can also define extra senses outside of the basic five; examples of this are "stdout" and "stderr" used for generic system messages, but the label could be anything.
 
 When PostalService gets a send_message() call, it first calls try_message() in the destination object -- in our case, the LoginObject. It is up to try_message render the final message or throw an exception if the message can't be delivered. The try_message() function is provided by SensorMixin, a mixin for "sensing" game events via receiving messages. It also provides render_message(), which gets a renderer object from the TopicTracker for the given topic and terminal type. Topics are just a way to group messages together into channels. You can form topics by membership in user groups like guilds or forums, interactions with your environment or specific objects, or ad-hoc topics for on-the-fly group chat. That's a whole other post, though. Currently there's just one renderer for all topics and terminal types, but this should expand rather quickly.
 
