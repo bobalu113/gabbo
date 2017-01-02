@@ -1,0 +1,355 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="topNav"><a name="navbar_top">
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../../index.html?/platform/.module/command_giver.html" target="_top">Frames</a></li>
+<li><a href="../../../platform/.module/command_giver.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">/platform/.module/command_giver</div>
+<h2 title="Program CommandGiverMixin " class="title">Program CommandGiverMixin </h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li><a href="../../platform/.lib/object.html" title="">ObjectLib </a>
+</li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>
+</li><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>
+</li><li class="last"><a href="../../platform/.lib/command_spec.html" title="">CommandSpecLib </a>
+<ul class="tree"><li class="last"><a href="../../platform/.lib/file.html" title="">FileLib </a>
+</li></ul></li></ul></dd>
+</dl>
+<hr>
+<br>
+<div class="block">A module for objects to execute user commands.</div>
+<!-- 
+<dl><dt><span class="strong">See Also:</span></dt><dd>
+<a href="../...html#toString()"><code>->toString()</code></a>
+</dd></dl>
+-->
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#check_command_access()">check_command_access</a></strong>(object&nbsp;cmd_ob,&nbsp;int&nbsp;read)</code>
+<div class="block">Test whether a given command object should be allowed this command giver's
+read/write access.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#do_command()">do_command</a></strong>(string&nbsp;arg)</code>
+<div class="block">Main command router.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#load_commands()">load_commands</a></strong>()</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#load_controller()">load_controller</a></strong>(string&nbsp;controller)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#modify_command()">modify_command</a></strong>(string&nbsp;cmd)</code>
+<div class="block">Implementation of the modify_command hook.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#run_script()">run_script</a></strong>(string&nbsp;script_file)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#setup()">setup</a></strong>()</code>
+<div class="block">Initialize CommandGiverMixin.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
+<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/file">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/file.html" title="program /platform/.lib/file">FileLib </a></h3>
+<code><a href="../../platform/.lib/file.html#basename()">basename</a>, <a href="../../platform/.lib/file.html#copy_tree()">copy_tree</a>, <a href="../../platform/.lib/file.html#dirname()">dirname</a>, <a href="../../platform/.lib/file.html#expand_path()">expand_path</a>, <a href="../../platform/.lib/file.html#expand_pattern()">expand_pattern</a>, <a href="../../platform/.lib/file.html#file_exists()">file_exists</a>, <a href="../../platform/.lib/file.html#is_directory()">is_directory</a>, <a href="../../platform/.lib/file.html#is_loadable()">is_loadable</a>, <a href="../../platform/.lib/file.html#is_special_dir()">is_special_dir</a>, <a href="../../platform/.lib/file.html#munge_filename()">munge_filename</a>, <a href="../../platform/.lib/file.html#read_value()">read_value</a>, <a href="../../platform/.lib/file.html#traverse_tree()">traverse_tree</a>, <a href="../../platform/.lib/file.html#write_value()">write_value</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/array">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/array.html" title="program /platform/.lib/array">ArrayLib </a></h3>
+<code><a href="../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/command_spec">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/command_spec.html" title="program /platform/.lib/command_spec">CommandSpecLib </a></h3>
+<code><a href="../../platform/.lib/command_spec.html#->get_logger(this_object()">->get_logger(this_object</a>, <a href="../../platform/.lib/command_spec.html#load_command_spec()">load_command_spec</a>, <a href="../../platform/.lib/command_spec.html#parse_arg_xml()">parse_arg_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_args_xml()">parse_args_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_boolean()">parse_boolean</a>, <a href="../../platform/.lib/command_spec.html#parse_command_xml()">parse_command_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_commands_xml()">parse_commands_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_enum_value_xml()">parse_enum_value_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_enum_xml()">parse_enum_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_error()">parse_error</a>, <a href="../../platform/.lib/command_spec.html#parse_field_xml()">parse_field_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_fields_xml()">parse_fields_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_import_xml()">parse_import_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_opt_xml()">parse_opt_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_opts_xml()">parse_opts_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_prompt_xml()">parse_prompt_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_syntax_xml()">parse_syntax_xml</a>, <a href="../../platform/.lib/command_spec.html#parse_validate_xml()">parse_validate_xml</a></code></li>
+
+</ul>
+
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="check_command_access()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>check_command_access</h4>
+<pre>public&nbsp;int&nbsp;check_command_access(object&nbsp;cmd_ob,&nbsp;int&nbsp;read)</pre>
+<div class="block">Test whether a given command object should be allowed this command giver's
+read/write access.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>cmd_ob</code> - the command object being executed </dd>
+<dd><code>read</code> - non-zero if only read access is being granted </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero if access should be granted </dd>
+</dl>
+</li>
+</ul>
+<a name="load_commands()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>load_commands</h4>
+<pre>public&nbsp;mixed&nbsp;*load_commands()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>protected&nbsp;void&nbsp;setup()</pre>
+<div class="block">Initialize CommandGiverMixin. If this function is overloaded, be advised
+that the mixin's private variables are initialized in the parent
+implementation.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="do_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>do_command</h4>
+<pre>public&nbsp;int&nbsp;do_command(string&nbsp;arg)</pre>
+<div class="block">Main command router. Any added commands will pass through this action
+function before being routed to the proper command object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - the command-line argument </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of the command execution; 1 for success, 0 for failure. </dd>
+</dl>
+</li>
+</ul>
+<a name="run_script()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>run_script</h4>
+<pre>public&nbsp;int&nbsp;run_script(string&nbsp;script_file)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>script_file</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="load_controller()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>load_controller</h4>
+<pre>public&nbsp;object&nbsp;load_controller(string&nbsp;controller)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>controller</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="modify_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>modify_command</h4>
+<pre>public&nbsp;mixed&nbsp;modify_command(string&nbsp;cmd)</pre>
+<div class="block">Implementation of the modify_command hook. Every command executed by the
+player will have a chance to be modified before being parsed by this
+function.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>cmd</code> - the command string being executed </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the new command string to execute </dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ======== END OF CLASS DATA ======== -->
+<div class="bottomNav"><a name="navbar_bottom">
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../../index.html?/platform/.module/command_giver.html" target="_top">Frames</a></li>
+<li><a href="../../../platform/.module/command_giver.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+</body>
+</html>

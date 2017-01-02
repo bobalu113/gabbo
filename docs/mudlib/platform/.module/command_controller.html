@@ -1,0 +1,768 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="topNav"><a name="navbar_top">
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../../index.html?/platform/.module/command_controller.html" target="_top">Frames</a></li>
+<li><a href="../../../platform/.module/command_controller.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">/platform/.module/command_controller</div>
+<h2 title="Program CommandController " class="title">Program CommandController </h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Inherited Programs:</dt>
+<dd>
+<ul class="tree"><li><a href="../../platform/.lib/command.html" title="">CommandLib </a>
+<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></li><li><a href="../../platform/.lib/message.html" title="">MessageLib </a>
+</li><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>
+<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../../platform/.lib/struct.html" title="">StructLib </a>
+</li><li><a href="../../platform/.lib/expand_object.html" title="">ObjectExpansionLib </a>
+<ul class="tree"><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li class="last"><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>
+</li><li class="last"><a href="../../platform/.lib/format_strings.html" title="">FormatStringsLib </a>
+<ul class="tree"><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li class="last"><a href="../../platform/.lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li></ul></dd>
+</dl>
+<hr>
+<br>
+<div class="block">A generic CommandController module for commands added through the
+CommandGiver mixin. Each command must define a controller, and those
+controllers may inherit this program to gain simplicity and uniformity
+in handling command execution.</div>
+<!-- 
+<dl><dt><span class="strong">See Also:</span></dt><dd>
+<a href="../...html#toString()"><code>->toString()</code></a>
+</dd></dl>
+-->
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Variable Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Variable Summary table, listing fields, and an explanation">
+<caption><span>Variables</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Variable and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../..//platform/.module/command_controller.html#fail_formatter">fail_formatter</strong></code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../..//platform/.module/command_controller.html#prompt_formatter">prompt_formatter</strong></code>
+<div class="block"></div>
+</td>
+</tr>
+</table>
+
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#create()">create</a></strong>()</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#do_command()">do_command</a></strong>(mixed *command,&nbsp;string&nbsp;verb,&nbsp;string&nbsp;arg)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#do_execute()">do_execute</a></strong>(mapping&nbsp;model,&nbsp;string&nbsp;verb)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#execute()">execute</a></strong>(mapping&nbsp;model,&nbsp;string&nbsp;verb)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#field_input()">field_input</a></strong>(string&nbsp;arg,&nbsp;struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#field_prompt()">field_prompt</a></strong>(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_boolean()">parse_boolean</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_enum()">parse_enum</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val,&nbsp;mixed *enum)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_file()">parse_file</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_files()">parse_files</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_float()">parse_float</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_int()">parse_int</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_object()">parse_object</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_objects()">parse_objects</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_args()">process_args</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_command()">process_command</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_extra()">process_extra</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_field()">process_field</a></strong>(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_opts()">process_opts</a></strong>(struct CommandState&nbsp;state,&nbsp;mapping&nbsp;opts,&nbsp;closure&nbsp;callback)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#validate()">validate</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback,&nbsp;int&nbsp;flags)</code>
+<div class="block"></div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/command">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/command.html" title="program /platform/.lib/command">CommandLib </a></h3>
+<code><a href="../../platform/.lib/command.html#apply_syntax()">apply_syntax</a>, <a href="../../platform/.lib/command.html#get_matching_syntax()">get_matching_syntax</a>, <a href="../../platform/.lib/command.html#parse_args()">parse_args</a>, <a href="../../platform/.lib/command.html#parse_args_explode()">parse_args_explode</a>, <a href="../../platform/.lib/command.html#parse_args_parse_command()">parse_args_parse_command</a>, <a href="../../platform/.lib/command.html#parse_args_regexp()">parse_args_regexp</a>, <a href="../../platform/.lib/command.html#parse_args_sscanf()">parse_args_sscanf</a>, <a href="../../platform/.lib/command.html#parse_longopt()">parse_longopt</a>, <a href="../../platform/.lib/command.html#parse_opt()">parse_opt</a>, <a href="../../platform/.lib/command.html#parse_opts()">parse_opts</a>, <a href="../../platform/.lib/command.html#parse_param()">parse_param</a>, <a href="../../platform/.lib/command.html#valid_syntax()">valid_syntax</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/message">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/message.html" title="program /platform/.lib/message">MessageLib </a></h3>
+<code><a href="../../platform/.lib/message.html#prompt_msg()">prompt_msg</a>, <a href="../../platform/.lib/message.html#send_msg()">send_msg</a>, <a href="../../platform/.lib/message.html#send_prompt()">send_prompt</a>, <a href="../../platform/.lib/message.html#stderr_msg()">stderr_msg</a>, <a href="../../platform/.lib/message.html#stdout_msg()">stdout_msg</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/args">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/args.html" title="program /platform/.lib/args">ArgsLib </a></h3>
+<code><a href="../../platform/.lib/args.html#explode_args()">explode_args</a>, <a href="../../platform/.lib/args.html#explode_nested()">explode_nested</a>, <a href="../../platform/.lib/args.html#explode_unescaped()">explode_unescaped</a>, <a href="../../platform/.lib/args.html#find_close_char()">find_close_char</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/strings">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/strings.html" title="program /platform/.lib/strings">StringsLib </a></h3>
+<code><a href="../../platform/.lib/strings.html#find_nonws()">find_nonws</a>, <a href="../../platform/.lib/strings.html#is_escaped()">is_escaped</a>, <a href="../../platform/.lib/strings.html#match_quote()">match_quote</a>, <a href="../../platform/.lib/strings.html#search_str_unescaped()">search_str_unescaped</a>, <a href="../../platform/.lib/strings.html#unescape()">unescape</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/struct">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/struct.html" title="program /platform/.lib/struct">StructLib </a></h3>
+<code><a href="../../platform/.lib/struct.html#get_struct_member()">get_struct_member</a>, <a href="../../platform/.lib/struct.html#set_struct_member()">set_struct_member</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/expand_object">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/expand_object.html" title="program /platform/.lib/expand_object">ObjectExpansionLib </a></h3>
+<code><a href="../../platform/.lib/expand_object.html#expand_destination()">expand_destination</a>, <a href="../../platform/.lib/expand_object.html#expand_object()">expand_object</a>, <a href="../../platform/.lib/expand_object.html#expand_objects()">expand_objects</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/file">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/file.html" title="program /platform/.lib/file">FileLib </a></h3>
+<code><a href="../../platform/.lib/file.html#basename()">basename</a>, <a href="../../platform/.lib/file.html#copy_tree()">copy_tree</a>, <a href="../../platform/.lib/file.html#dirname()">dirname</a>, <a href="../../platform/.lib/file.html#expand_path()">expand_path</a>, <a href="../../platform/.lib/file.html#expand_pattern()">expand_pattern</a>, <a href="../../platform/.lib/file.html#file_exists()">file_exists</a>, <a href="../../platform/.lib/file.html#is_directory()">is_directory</a>, <a href="../../platform/.lib/file.html#is_loadable()">is_loadable</a>, <a href="../../platform/.lib/file.html#is_special_dir()">is_special_dir</a>, <a href="../../platform/.lib/file.html#munge_filename()">munge_filename</a>, <a href="../../platform/.lib/file.html#read_value()">read_value</a>, <a href="../../platform/.lib/file.html#traverse_tree()">traverse_tree</a>, <a href="../../platform/.lib/file.html#write_value()">write_value</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/format_strings">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/format_strings.html" title="program /platform/.lib/format_strings">FormatStringsLib </a></h3>
+<code><a href="../../platform/.lib/format_strings.html#explode_format()">explode_format</a>, <a href="../../platform/.lib/format_strings.html#parse_format()">parse_format</a></code></li>
+
+</ul>
+
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Variable Detail</h3>
+<a name="prompt_formatter">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>prompt_formatter</h4>
+<pre>public&nbsp;closure&nbsp;prompt_formatter</pre>
+<div class="block"></div>
+</li>
+</ul>
+<a name="fail_formatter">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fail_formatter</h4>
+<pre>public&nbsp;closure&nbsp;fail_formatter</pre>
+<div class="block"></div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="do_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>do_command</h4>
+<pre>public&nbsp;int&nbsp;do_command(mixed *command,&nbsp;string&nbsp;verb,&nbsp;string&nbsp;arg)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>command</code> - </dd>
+<dd><code>verb</code> - </dd>
+<dd><code>arg</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="process_command()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>process_command</h4>
+<pre>public&nbsp;int&nbsp;process_command(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="process_args()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>process_args</h4>
+<pre>public&nbsp;int&nbsp;process_args(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="process_opts()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>process_opts</h4>
+<pre>public&nbsp;int&nbsp;process_opts(struct CommandState&nbsp;state,&nbsp;mapping&nbsp;opts,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>opts</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="process_extra()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>process_extra</h4>
+<pre>public&nbsp;int&nbsp;process_extra(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="process_field()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>process_field</h4>
+<pre>public&nbsp;int&nbsp;process_field(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>field</code> - </dd>
+<dd><code>field_type</code> - </dd>
+<dd><code>index</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="field_prompt()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>field_prompt</h4>
+<pre>public&nbsp;void&nbsp;field_prompt(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>field</code> - </dd>
+<dd><code>field_type</code> - </dd>
+<dd><code>index</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="field_input()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>field_input</h4>
+<pre>public&nbsp;void&nbsp;field_input(string&nbsp;arg,&nbsp;struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>state</code> - </dd>
+<dd><code>field</code> - </dd>
+<dd><code>field_type</code> - </dd>
+<dd><code>index</code> - </dd>
+<dd><code>callback</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_boolean()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_boolean</h4>
+<pre>public&nbsp;string&nbsp;parse_boolean(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_int()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_int</h4>
+<pre>public&nbsp;string&nbsp;parse_int(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_float()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_float</h4>
+<pre>public&nbsp;string&nbsp;parse_float(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_enum()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_enum</h4>
+<pre>public&nbsp;string&nbsp;parse_enum(string&nbsp;arg,&nbsp;mixed&nbsp;val,&nbsp;mixed *enum)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+<dd><code>enum</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_file()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_file</h4>
+<pre>public&nbsp;string&nbsp;parse_file(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_files()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_files</h4>
+<pre>public&nbsp;string&nbsp;parse_files(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_object()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_object</h4>
+<pre>public&nbsp;string&nbsp;parse_object(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="parse_objects()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse_objects</h4>
+<pre>public&nbsp;string&nbsp;parse_objects(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>arg</code> - </dd>
+<dd><code>val</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="validate()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>validate</h4>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;validate(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback,&nbsp;int&nbsp;flags)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>state</code> - </dd>
+<dd><code>callback</code> - </dd>
+<dd><code>flags</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="do_execute()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>do_execute</h4>
+<pre>public&nbsp;int&nbsp;do_execute(mapping&nbsp;model,&nbsp;string&nbsp;verb)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>model</code> - </dd>
+<dd><code>verb</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="execute()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>execute</h4>
+<pre>public&nbsp;int&nbsp;execute(mapping&nbsp;model,&nbsp;string&nbsp;verb)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>model</code> - </dd>
+<dd><code>verb</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block"></div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ======== END OF CLASS DATA ======== -->
+<div class="bottomNav"><a name="navbar_bottom">
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../../index.html?/platform/.module/command_controller.html" target="_top">Frames</a></li>
+<li><a href="../../../platform/.module/command_controller.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="topNav"><a name="navbar_top">
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../../../index.html?/flavor/gabbo-basic/.module/visible.html" target="_top">Frames</a></li>
+<li><a href="../../../../flavor/gabbo-basic/.module/visible.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">/flavor/gabbo-basic/.module/visible</div>
+<h2 title="Program VisibleMixin " class="title">Program VisibleMixin </h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<div class="block">Support for items which can be seen with the "look" command.</div>
+<!-- 
+<dl><dt><span class="strong">See Also:</span></dt><dd>
+<a href="../../...html#toString()"><code>->toString()</code></a>
+</dd></dl>
+-->
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Function Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
+<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Function and Description</th>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.module/visible.html#query_capabilities()">query_capabilities</a></strong>()</code>
+<div class="block">Return the capabilities this mixin provides.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.module/visible.html#query_long()">query_long</a></strong>()</code>
+<div class="block">Return a long description of the room.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.module/visible.html#query_short()">query_short</a></strong>()</code>
+<div class="block">Return a short description of the room.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.module/visible.html#set_long()">set_long</a></strong>(string&nbsp;str)</code>
+<div class="block">Set the room's long description.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.module/visible.html#set_short()">set_short</a></strong>(string&nbsp;str)</code>
+<div class="block">Set the short description of the room.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.module/visible.html#setup_visible()">setup_visible</a></strong>()</code>
+<div class="block">Initialize VisibleMixin.</div>
+</td>
+</tr>
+</table>
+
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Function Detail</h3>
+<a name="query_short()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_short</h4>
+<pre>public&nbsp;string&nbsp;query_short()</pre>
+<div class="block">Return a short description of the room. This name will be shown to the
+user everytime they enter the room so it should be short and recognizable.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the short description </dd>
+</dl>
+</li>
+</ul>
+<a name="set_short()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_short</h4>
+<pre>public&nbsp;int&nbsp;set_short(string&nbsp;str)</pre>
+<div class="block">Set the short description of the room.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the short to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="query_long()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_long</h4>
+<pre>public&nbsp;string&nbsp;query_long()</pre>
+<div class="block">Return a long description of the room. This will be displayed to the
+player when they explicitly look inside a room. It can be as long as is
+needed, but probably shouldn't take up more than a page of a user's
+screen.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the long description of the room </dd>
+</dl>
+</li>
+</ul>
+<a name="set_long()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_long</h4>
+<pre>public&nbsp;int&nbsp;set_long(string&nbsp;str)</pre>
+<div class="block">Set the room's long description.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>str</code> - the description to set </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="setup_visible()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup_visible</h4>
+<pre>protected&nbsp;void&nbsp;setup_visible()</pre>
+<div class="block">Initialize VisibleMixin.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
+<div class="block">Return the capabilities this mixin provides.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the 'visible' capability </dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ======== END OF CLASS DATA ======== -->
+<div class="bottomNav"><a name="navbar_bottom">
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
+</a>
+<ul class="navList" title="Navigation">
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>
+<ul class="navList">
+<li><a href="../../../../index.html?/flavor/gabbo-basic/.module/visible.html" target="_top">Frames</a></li>
+<li><a href="../../../../flavor/gabbo-basic/.module/visible.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Programs</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li><a href="#field_summary">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Function</a></li>
+</ul>
+</li>
+<li>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Variable</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Function</a></li>
+</ul>
+</li>
+</ul>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+</body>
+</html>

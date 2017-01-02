@@ -9,7 +9,7 @@
 </a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_">
 </a>
 <ul class="navList" title="Navigation">
-<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
 </ul>
 </div>
 <div class="subNav">
@@ -63,7 +63,7 @@
 <hr>
 <br>
 <div class="block">The simulated efun object.</div>
-<!--
+<!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="...html#toString()"><code>->toString()</code></a>
 </dd></dl>
@@ -74,28 +74,6 @@
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_summary">
-<!--   -->
-</a>
-<h3>Variable Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Variable Summary table, listing fields, and an explanation">
-<caption><span>Variables</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Variable and Description</th>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="..//secure/simul_efun.html#players">players</strong></code>
-<div class="block"></div>
-</td>
-</tr>
-</table>
-
-</li>
-</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method_summary">
@@ -109,14 +87,50 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../secure/simul_efun.html#find_player()">find_player</a></strong>(string&nbsp;username)</code>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#move_resolved()">move_resolved</a></strong>(mixed&nbsp;item,&nbsp;mixed&nbsp;dest)</code>
+<div class="block">Move an object and return success or failure.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;nomask&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#printf()">printf</a></strong>(varargs mixed *args)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#query_capabilities()">query_capabilities</a></strong>(object&nbsp;ob)</code>
+<div class="block">Return an object's capabilities map.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;nomask&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#say()">say</a></strong>(varargs mixed *args)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#send_binary_message()">send_binary_message</a></strong>(object&nbsp;who,&nbsp;mixed&nbsp;message,&nbsp;int&nbsp;flags)</code>
+<div class="block">Allows you to target an object for the efun binary_message().</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#tell_object()">tell_object</a></strong>(varargs mixed *args)</code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;nomask&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#tell_room()">tell_room</a></strong>(varargs mixed *args)</code>
 <div class="block"></div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../secure/simul_efun.html#move_resolved()">move_resolved</a></strong>(mixed&nbsp;item,&nbsp;mixed&nbsp;dest)</code>
+<td class="colFirst"><code>public&nbsp;nomask&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../secure/simul_efun.html#write()">write</a></strong>(varargs mixed *args)</code>
 <div class="block"></div>
 </td>
 </tr>
@@ -130,45 +144,12 @@
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Variable Detail</h3>
-<a name="players">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>players</h4>
-<pre>public&nbsp;mapping&nbsp;players</pre>
-<div class="block"></div>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method_detail">
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="find_player()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>find_player</h4>
-<pre>public&nbsp;object&nbsp;find_player(string&nbsp;username)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
-</dl>
-</li>
-</ul>
 <a name="move_resolved()">
 <!--   -->
 </a>
@@ -176,12 +157,122 @@
 <li class="blockList">
 <h4>move_resolved</h4>
 <pre>public&nbsp;int&nbsp;move_resolved(mixed&nbsp;item,&nbsp;mixed&nbsp;dest)</pre>
+<div class="block">Move an object and return success or failure.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>item</code> - the item to move </dd>
+<dd><code>dest</code> - the environment to move to </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="query_capabilities()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_capabilities</h4>
+<pre>public&nbsp;mapping&nbsp;query_capabilities(object&nbsp;ob)</pre>
+<div class="block">Return an object's capabilities map.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>ob</code> - the object to query </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a mapping of all the object's capabilities </dd>
+</dl>
+</li>
+</ul>
+<a name="send_binary_message()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>send_binary_message</h4>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;send_binary_message(object&nbsp;who,&nbsp;mixed&nbsp;message,&nbsp;int&nbsp;flags)</pre>
+<div class="block">Allows you to target an object for the efun binary_message().</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>who</code> - the object to receive message </dd>
+<dd><code>message</code> - the message to send </dd>
+<dd><code>flags</code> - message flags </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of characters written </dd>
+</dl>
+</li>
+</ul>
+<a name="write()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>write</h4>
+<pre>public&nbsp;nomask&nbsp;void&nbsp;write(varargs mixed *args)</pre>
 <div class="block"></div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>item</code> - </dd>
-<dd><code>dest</code> - </dd>
+<dd><code>args</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="tell_room()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>tell_room</h4>
+<pre>public&nbsp;nomask&nbsp;void&nbsp;tell_room(varargs mixed *args)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>args</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="say()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>say</h4>
+<pre>public&nbsp;nomask&nbsp;void&nbsp;say(varargs mixed *args)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>args</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="tell_object()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>tell_object</h4>
+<pre>public&nbsp;void&nbsp;tell_object(varargs mixed *args)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>args</code> - </dd>
+</dl>
+</li>
+</ul>
+<a name="printf()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>printf</h4>
+<pre>public&nbsp;nomask&nbsp;void&nbsp;printf(varargs mixed *args)</pre>
+<div class="block"></div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>args</code> - </dd>
 </dl>
 </li>
 </ul>
@@ -200,7 +291,7 @@
 </a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_">
 </a>
 <ul class="navList" title="Navigation">
-<div class="aboutLanguage"><em><strong>untitled gamification project<br/>version 0.1</strong></em></div>
+<div class="aboutLanguage"><em><strong>gabbo mudlib foundation<br/>version 0.1</strong></em></div>
 </ul>
 </div>
 <div class="subNav">
