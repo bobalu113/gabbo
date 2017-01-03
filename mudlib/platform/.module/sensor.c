@@ -18,9 +18,9 @@ inherit ObjectLib;
 private mapping CAPABILITIES_VAR = ([ CAP_SENSOR ]);
 private mapping CMD_IMPORTS_VAR = ([ ]);
 
-int prevent_message(string topic, string message, mapping context, 
-                    object sender) {
-  return 0;
+mixed *try_message(string topic, string message, mapping context, 
+                   object sender) {
+  return ({ });
 }
 
 struct Message render_message(string topic, string message, mapping context, 
@@ -44,7 +44,7 @@ struct Message render_message(string topic, string message, mapping context,
   return result;
 }
 
-void message_signal(struct Message msg) {
+void on_message(struct Message msg) {
   return;
 }
 

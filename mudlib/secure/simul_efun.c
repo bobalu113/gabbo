@@ -8,19 +8,13 @@
 #include <sys/functionlist.h>
 #include <capabilities.h>
 
-// ([ username : active_avatar ])
-mapping players;
-
-object find_player(string username) {
-  //return players[username];
-  object *u = filter(users(), (: $1->query_username() == $2 :), username);
-  if (sizeof(u)) {
-    return u[0];
-  } else {
-    return 0;
-  }
-}
-
+/**
+ * Move an object and return success or failure.
+ * 
+ * @param  item          the item to move
+ * @param  dest          the environment to move to
+ * @return 0 for failure, 1 for success
+ */
 int move_resolved(mixed item, mixed dest) {
   move_object(item, dest);
   if (!objectp(item)) { item = find_object(item); }
@@ -28,6 +22,12 @@ int move_resolved(mixed item, mixed dest) {
   return (item && dest && (environment(item) == dest));
 }
 
+/**
+ * Return an object's capabilities map.
+ * 
+ * @param  ob           the object to query
+ * @return a mapping of all the object's capabilities
+ */
 mapping query_capabilities(object ob) {
   mapping result = ([ ]);
   mixed *vars = variable_list(ob, RETURN_FUNCTION_NAME
@@ -43,6 +43,14 @@ mapping query_capabilities(object ob) {
   return result;
 }
 
+/**
+ * Allows you to target an object for the efun binary_message().
+ * 
+ * @param  who           the object to receive message
+ * @param  message       the message to send
+ * @param  flags         message flags
+ * @return the number of characters written
+ */
 varargs int send_binary_message(object who, mixed message, int flags) {
   object old = previous_object();
   set_this_object(who);

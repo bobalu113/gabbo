@@ -4,7 +4,7 @@
  * 
  * @alias ConnectionTracker
  */
-
+#pragma no_clone
 #include <telnet.h>
 #include <connection.h>
 
@@ -19,10 +19,16 @@ private mapping connections;
 private mapping interactives;
 private int connection_counter;
 
+string new_connection(object interactive);
+int set_interactive(string connection_id, object interactive);
+object query_interactive(string connection_id);
+int set_session(string connection_id, string session_id);
 string query_connection(object interactive);
-object query_interactive(string id);
-int query_exec_time(string id);
-struct ConnectionInfo query_connection_info(string id);
+int query_exec_time(string connection_id);
+void telnet_negotiation(object interactive, int cmd, int opt, int *optargs);
+int telnet_get_terminal(object interactive);
+int telnet_get_NAWS(object interactive);
+int telnet_get_ttyloc(object interactive);
 string generate_id();
 
 #ifdef NEGOTIATION_LOG
@@ -38,6 +44,13 @@ void telnet_neg_log(string s) {
 }
 #endif
 
+/**
+ * Invoked when a new connection is established with the interactive object
+ * doing the connecting.
+ * 
+ * @param  interactive   the connected object
+ * @return the newly tracked connection id
+ */
 string new_connection(object interactive) {
   if (!interactive(interactive)) {
     raise_error(sprintf(
@@ -62,6 +75,13 @@ string new_connection(object interactive) {
   return connection_id;
 }
 
+/**
+ * Change the interactive object associated with a connection.
+ * 
+ * @param connection_id the connection to update
+ * @param interactive   the interactive object for the connection
+ * @return 0 for failure, 1 for success
+ */
 int set_interactive(string connection_id, object interactive) {
   if (!interactive(interactive)) {
     return 0;
@@ -74,6 +94,26 @@ int set_interactive(string connection_id, object interactive) {
   return 1;
 }
 
+/**
+ * Get the interactive object associated with a connection.
+ * 
+ * @param  connection_id the connection to query
+ * @return the interactive object for the connection
+ */
+object query_interactive(string connection_id) {
+  if (!member(connections, connection_id)) {
+    return 0;
+  }
+  return connections[connection_id]->interactive;
+}
+
+/**
+ * Set the session associated with a connection.
+ * 
+ * @param connection_id the connection to update
+ * @param session_id    the session id for the connection
+ * @return 0 for failure, 1 for success
+ */
 int set_session(string connection_id, string session_id) {
   if (!member(connections, connection_id)) {
     return 0;
@@ -82,6 +122,12 @@ int set_session(string connection_id, string session_id) {
   return 1;
 }
 
+/**
+ * Get the connection for an interactive object.
+ * 
+ * @param  interactive   the connected interactive
+ * @return the connection id of the interactive
+ */
 string query_connection(object interactive) {
   if (!member(interactives, interactive)) {
     return 0;
@@ -89,13 +135,13 @@ string query_connection(object interactive) {
   return interactives[interactive];
 }
 
-object query_interactive(string connection_id) {
-  if (!member(connections, connection_id)) {
-    return 0;
-  }
-  return connections[connection_id]->interactive;
-}
-
+/**
+ * Get the exec time for a connection.
+ * 
+ * @param  connection_id the connection to query
+ * @return the time of the last exec operation for the connect (the last time
+ *         the interactive was changed)
+ */
 int query_exec_time(string connection_id) {
   if (!member(connections, connection_id)) {
     return 0;
@@ -103,15 +149,23 @@ int query_exec_time(string connection_id) {
   return connections[connection_id]->exec_time;
 }
 
-void telnet_negotiation(int cmd, int opt, int *optargs) {
-  if (previous_object() != THISP) {
+/**
+ * Handle a telnet negotiation for an interactive.
+ * 
+ * @param  interactive   the interactive object receiving the telnet negotation
+ * @param  cmd           negotation action (DO/DONT/WILL/WONT)
+ * @param  opt           negotation option
+ * @param  optargs       extra args to the negotation
+ */
+void telnet_negotiation(object interactive, int cmd, int opt, int *optargs) {
+  if (previous_object() != FINDO(HookService)) {
     return;
   }
 
-  string connection_id = query_connection(THISP);
+  string connection_id = query_connection(interactive);
   if (!connection_id) {
     // I hope this should never happen
-    connection_id = new_connection(THISP);
+    connection_id = new_connection(interactive);
   }
   struct ConnectionState connection = connections[connection_id];
   object interactive = connection->interactive;
@@ -210,6 +264,12 @@ void telnet_negotiation(int cmd, int opt, int *optargs) {
 #endif
 }
 
+/**
+ * Send a telnet negotation to get terminal type for the specified interactive.
+ * 
+ * @param  interactive   the interactive for which to update terminal type
+ * @return 0 for failure, 1 for success
+ */
 int telnet_get_terminal(object interactive) {
   string connection_id = query_connection(interactive);
   if (!connection_id) {
@@ -226,6 +286,12 @@ int telnet_get_terminal(object interactive) {
   return 1;
 }
 
+/**
+ * Send a telnet negotation to get NAWS for the specified interactive.
+ * 
+ * @param  interactive   the interactive for which to update NAWS
+ * @return 0 for failure, 1 for success
+ */
 int telnet_get_NAWS(object interactive) {
   string connection_id = query_connection(interactive);
   if (!connection_id) {
@@ -241,6 +307,12 @@ int telnet_get_NAWS(object interactive) {
   return 1;
 }
 
+/**
+ * Send a telnet negotation to get tty location for the specified interactive.
+ * 
+ * @param  interactive   the interactive for which to update tty location
+ * @return 0 for failure, 1 for success
+ */
 int telnet_get_ttyloc(object interactive) {
   string connection_id = query_connection(interactive);
   if (!connection_id) {
@@ -256,14 +328,21 @@ int telnet_get_ttyloc(object interactive) {
   return 1;
 }
 
+/**
+ * Generate a new, unique connection id.
+ * 
+ * @return the connection id
+ */
 string generate_id() {
   return sprintf("%s#%d", 
                  ObjectTracker->query_object_id(THISO), ++connection_counter);
 }
 
+/**
+ * Constructor.
+ */
 void create() {
   connections = ([ ]);
   interactives = ([ ]);
   connection_counter = 0;
-  return;
 }

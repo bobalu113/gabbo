@@ -11,6 +11,8 @@
 inherit FileLib;
 inherit DomainLib;
 
+#define DOMAIN_FILE_REGEX     "/\\.etc/\\.domain\\.xml$"
+
 // ([ str domain_id : DomainConfig domain ])
 mapping domains;
 
@@ -20,7 +22,6 @@ mapping children;
 // ([ str domain_root : DomainConfig domain ])
 mapping domain_roots;
 
-void create();
 void reconfig_signal(string file, string func);
 private struct DomainConfig parse_config(string domain_file);
 private void parse_directive(mixed *tag, struct DomainConfig config,
@@ -34,27 +35,6 @@ private int delete_domain(struct DomainConfig config);
 string query_domain_id(string path);
 struct DomainConfig query_domain(string domain_id);
 mapping query_children(string domain_id);
-
-/*
-  Initialize global variables and start listening to domain.xml changes.
- */
-void create() {
-  // couple sanity checks
-  if (!FINDO(LoggerFactory)) {
-    destruct(THISO);
-    raise_error("LoggerFactory must be preloaded for DomainTracker to "
-                  "function properly\n");
-  } 
-  if (!FINDO(FileTracker)) {
-    destruct(THISO);
-    raise_error("FileTracker must be preloaded for DomainTracker to "
-                  "function properly\n");
-  } 
-  FileTracker->subscribe("/etc/\\.domain\\.xml$", #'reconfig_signal); //'
-  domains = ([ ]);
-  children = ([ ]);
-  domain_roots = ([ ]);
-}
 
 /**
  * Called when a domain.xml file is modified or removed.
@@ -489,6 +469,7 @@ string query_domain_id(string path) {
  *                   was found
  */
 struct DomainConfig query_domain(string domain_id) {
+  raise_error("FIXME");
   return deep_copy(domains[domain_id]);
 }
 
@@ -508,11 +489,11 @@ mapping query_children(string domain_id) {
 
 /**
  * Resolve a sysinclude (<file> style include) for files in a domain. First
- * the domain's include/ directory will be tried, if no matching file was
+ * the domain's .include/ directory will be tried, if no matching file was
  * found, the global include directory will be searched. The ".." directory
  * in the include path will back up not just one directory but one entire
  * domain, even if that domain spans multiple levels of the directory tree.
- * The parent domain's "include/" directory will be searched for the file
+ * The parent domain's ".include/" directory will be searched for the file
  * path instead.
  *
  * @param  file the file (possibly relative) being included
@@ -557,4 +538,25 @@ string resolve_sysinclude(string file, string p) {
     }
   }
   return path;
+}
+
+/**
+ * Constructor. Make sure LoggerFactory and FileTracker have been preloaded.
+ */
+void create() {
+  // couple sanity checks
+  if (!FINDO(LoggerFactory)) {
+    destruct(THISO);
+    raise_error("LoggerFactory must be preloaded for DomainTracker to "
+                  "function properly\n");
+  } 
+  if (!FINDO(FileTracker)) {
+    destruct(THISO);
+    raise_error("FileTracker must be preloaded for DomainTracker to "
+                  "function properly\n");
+  } 
+  FileTracker->subscribe(DOMAIN_FILE_REGEX, #'reconfig_signal); //'
+  domains = ([ ]);
+  children = ([ ]);
+  domain_roots = ([ ]);
 }

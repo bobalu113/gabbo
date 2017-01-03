@@ -10,10 +10,28 @@
 
 inherit ObjectLib;
 
+void track_object(object ob);
+
+/**
+ * Telnet negotiation hook. Defer to ConnectionTracker for processing.
+ * 
+ * @param  action        negotation action (DO/DONT/WILL/WONT)
+ * @param  option        negotation option
+ * @param  opts          extra args to the negotation
+ */
 void telnet_neg_hook(int action, int option, int *opts) {
-  return ConnectionTracker->telnet_negotiation(action, option, opts);
+  return ConnectionTracker->telnet_negotiation(THISP, action, option, opts);
 }
 
+/**
+ * Auto-include string hook. This is simply '#include <auto.h>' in everything
+ * but another auto.h.
+ * 
+ * @param  base_file     filename of compiled object
+ * @param  current_file  the file doing the include
+ * @param  sys           1 if sys include, otherwise 0
+ * @return the auto include string
+ */
 string auto_include_hook(string base_file, string current_file, int sys) {
   if (current_file && (current_file[<7..] == "/" AutoInclude)) {
     return "";
@@ -22,15 +40,38 @@ string auto_include_hook(string base_file, string current_file, int sys) {
   }
 }
 
+/**
+ * UIDs hook. Currently a stub returning "root" for all objects.
+ * 
+ * @param  objectname    the object name of the compiled object
+ * @param  blueprint     the program name of the blue print, if a clone
+ * @return a string to use for both uid and euid
+ */
 varargs mixed uids_hook(string objectname, object blueprint) {
   // FUTURE implement uids
   return "root";
 }
 
+/**
+ * Command hook. Runs whenever a user command is executed. Defers to 
+ * do_command() in the command giver.
+ * 
+ * @param  command       the command being executed
+ * @param  command_giver the command giver
+ * @return 1 if command was found and executed, otherwise 0
+ */
 int command_hook(string command, object command_giver) {
   return command_giver->do_command(command);
 }
 
+/**
+ * Move object hook. Handles the try/catch and signal function sequence, as 
+ * well as init() with the appropriate command giver and actually moving the
+ * object.
+ * 
+ * @param  item          the item being moved
+ * @param  dest          the environment being moved into
+ */
 void move_object_hook(object item, object dest) {  
   object origin = ENV(item);
   if (origin && origin->prevent_leave(item, dest)) { return; }
@@ -83,34 +124,79 @@ void move_object_hook(object item, object dest) {
   return;
 }
 
-int create_hook(object ob) {
+/**
+ * Used by the create hook to notify appropriate tracker objects of the 
+ * creation of a new object.
+ * 
+ * @param  ob            the object being created
+ */
+void track_object(object ob) {
   mixed path_info = get_path_info(ob);
   string zone_id = path_info[PATH_INFO_ZONE];
-  
+
   if (FINDO(ZoneTracker)) {
     ZoneTracker->new_zone(zone_id);
   }
 
-  if (FINDO(ObjectTracker)) {
-    if (load_name(ob) == SQLiteClient) {
-      call_out(#'call_other, 0, ObjectTracker, "new_object", ob);
+  if (FINDO(ProgramTracker)) {
+    if (!clonep(ob)) {
+      ProgramTracker->new_program(o);
     } else {
-      ObjectTracker->new_object(ob);
+      ProgramTracker->program_cloned(o);
     }
   }
 
-  int result = ob->create();
-  return result;
+  if (FINDO(ObjectTracker)) {
+    ObjectTracker->new_object(ob);
+  }
+
+  return;
 }
 
+/**
+ * Create hook, for initializing newly compiled objects. Informs ZoneTracker
+ * and ObjectTracker there is a new object being created, and finishes by 
+ * invoking create() in the new object.
+ * 
+ * @param  ob            the object being created
+ * @return 0, to indicate the object's current time to reset should be 
+ *         preserved
+ */
+int create_hook(object ob) {  
+  if (load_name(ob) == SQLiteClient) {
+    call_out(#'track_object, 0, ob);
+  } else
+    track_object(ob);
+  }
+
+  ob->create();
+  return 0;
+}
+
+/**
+ * Reset hook. Defer to reset() lfun in object being reset.
+ * 
+ * @param  ob            the object being reset
+ * @return time until next reset, in seconds
+ */
 int reset_hook(object ob) {
   return ob->reset();
 }
 
+/**
+ * Clean up hook. Defer to clean_up() lfun in object being cleaned up.
+ * 
+ * @param  ref           the object's ref count
+ * @param  ob            the object being cleaned up
+ * @return time until next clean up attempt, in seconds
+ */
 int clean_up_hook(int ref, object ob) {
   return ob->clean_up(ref);
 }
 
+/**
+ * Register all of HookService's hooks with the driver.
+ */
 private void register_hooks() {
   set_driver_hook(H_TELNET_NEG, unbound_lambda(
     ({ 'action, 'option, 'opts }),
@@ -166,6 +252,9 @@ private void register_hooks() {
   ));
 }
 
+/**
+ * Constructor. Register hooks.
+ */
 void create() {
   register_hooks();
 }

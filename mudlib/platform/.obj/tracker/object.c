@@ -4,6 +4,7 @@
  * @author devo@eotl
  * @alias ObjectTracker
  */
+#pragma no_clone
 #include <sys/objectinfo.h>
 #include <sql.h>
 
@@ -20,8 +21,14 @@ inherit ArrayLib;
 #define GIGATICKS       "gigaticks"
 #define TICKS           "ticks"
 
+void setup();
+void new_object(object o);
+void object_destructed(object o);
 string query_object_id(object ob);
 
+/**
+ * Setup the ObjectTracker.
+ */
 void setup() {
   SqlMixin::setup();
   SqlMixin::table_info(OBJECT_TABLE, (:
@@ -49,13 +56,13 @@ void setup() {
   return;
 }
 
+/**
+ * Invoked by the HookService when a new object is created.
+ * 
+ * @param  o             the object being created
+ */
 void new_object(object o) {
-  string program_id;
-  if (!clonep(o)) {
-    program_id = ProgramTracker->new_blueprint(o);
-  } else {
-    program_id = ProgramTracker->new_clone(o);
-  }
+  string program_id = ProgramTracker->query_program_id(o);
   mapping odata = ([ 
     OBJECT_ID : query_object_id(o),
     OBJECT_NAME : object_name(o),
@@ -66,6 +73,11 @@ void new_object(object o) {
   return;
 }
 
+/**
+ * Invoked by the master object when an object is destructed.
+ * 
+ * @param  o             the object being destructed
+ */
 void object_destructed(object o) {
   mapping odata = ([ 
     SQL_ID_COLUMN : query_object_id(o),
@@ -78,9 +90,19 @@ void object_destructed(object o) {
   return;
 }
 
-// Reminder: clone object names are "load_name#clone_counter"
-// blueprint_object_id = "object_name#object_time#blueprint_counter"
-// clone_object_id = "object_name#object_time"
+/**
+ * Get the object id for an object. Unlike most other trackers, object ids
+ * aren't constructed with incrementing counters. Instead, they are based on
+ * timestamps so the query operation is idempotent assuming I'm using that word
+ * correctly.
+ *
+ * blueprint ids = "object_name#object_time#blueprint_counter"
+ * clone ids = "object_name#object_time"
+ * Reminder: clone object names are "load_name#clone_counter"
+ *        
+ * @param  ob            the object to get an id for
+ * @return the object id
+ */
 string query_object_id(object ob) {
   if (clonep(ob)) {
     return sprintf("%s#%d", object_name(ob), object_time(ob));
@@ -92,7 +114,9 @@ string query_object_id(object ob) {
   }
 }
 
-int create() {
+/**
+ * Constructor.
+ */
+void create() {
   setup();
-  return 0;
 }

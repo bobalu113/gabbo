@@ -3,6 +3,7 @@
  * 
  * @alias SessionTracker
  */
+#pragma no_clone
 #include <session.h>
 
 inherit SessionLib;
@@ -12,13 +13,31 @@ inherit SessionLib;
 mapping sessions;
 int session_counter;
 
+void setup();
 string new_session(string user_id, string supersession_id);
 string query_user(string session_id);
 int is_connected(string session_id);
 int connect_session(string session_id, string connection);
 int disconnect_session(string session_id);
+int resume_session(string session_id);
+int set_avatar(string session_id, object avatar);
+object query_avatar(string session_id);
 string generate_id();
 
+/**
+ * Setup the SessionTracker.
+ */
+void setup() {
+  sessions = ([ ]);
+}
+
+/**
+ * Invoked to create a new session.
+ * 
+ * @param  user_id         the user id who owns the session
+ * @param  supersession_id the new session's parent session
+ * @return the newly created session id
+ */
 string new_session(string user_id, string supersession_id) {
   object logger = LoggerFactory->get_logger(THISO);
   if (supersession_id && !member(sessions, supersession_id)) {
@@ -43,6 +62,12 @@ string new_session(string user_id, string supersession_id) {
   return id;
 }
 
+/**
+ * Get the user who owns a given session.
+ * 
+ * @param  session_id    the session being queried
+ * @return the user id who owns the session
+ */
 string query_user(string session_id) {
   if (member(sessions, session_id)) {
     return sessions[session_id]->user;
@@ -50,6 +75,12 @@ string query_user(string session_id) {
   return 0;
 }
 
+/**
+ * Query whether a session is connected or not.
+ * 
+ * @param  session_id    the session id being queried
+ * @return 1 if the session is connected, otherwise 0
+ */
 int is_connected(string session_id) {
   if (!member(sessions, session_id)) {
     return 0;
@@ -59,6 +90,13 @@ int is_connected(string session_id) {
           && (session->connections[<1]->disconnect_time));
 }
 
+/**
+ * Associate a session with a connection, making it a "connected" session.
+ * 
+ * @param  session_id    the session being connected
+ * @param  connection    the connection id of the connection using the session
+ * @return 1 for success, 0 for failure
+ */
 int connect_session(string session_id, string connection) {
   if (!member(sessions, session_id)) {
     return 0;
@@ -72,6 +110,12 @@ int connect_session(string session_id, string connection) {
   return 1;
 }
 
+/**
+ * Disconnect a session.
+ * 
+ * @param  session_id    the session to disconnect
+ * @return 1 for success, 0 for failure
+ */
 int disconnect_session(string session_id) {
   if (!member(sessions, session_id)) {
     return 0;
@@ -84,6 +128,13 @@ int disconnect_session(string session_id) {
   return 1;
 }
 
+/**
+ * Start or resume a session by changing its session state to "running". 
+ * Sessions with a state of "done" may not be resumed.
+ * 
+ * @param  session_id    the session to resume
+ * @return 1 for success, 0 for failure
+ */
 int resume_session(string session_id) {
   if (!member(sessions, session_id)) {
     return 0;
@@ -97,6 +148,14 @@ int resume_session(string session_id) {
   return previous;
 }
 
+/**
+ * Associate an avatar object with a given session. Avatars can implement the
+ * CommandGiverMixin and SensorMixin to share interactivity between sessions.
+ * 
+ * @param session_id the session owning the avatar
+ * @param avatar     the avatar for the session
+ * @return 1 for success, 0 for failure
+ */
 int set_avatar(string session_id, object avatar) {
   if (!member(sessions, session_id)) {
     return 0;
@@ -105,6 +164,12 @@ int set_avatar(string session_id, object avatar) {
   return 1;
 }
 
+/**
+ * Get the avatar for a given session.
+ * 
+ * @param  session_id    the session id being queried
+ * @return the session's avatar object
+ */
 object query_avatar(string session_id) {
   if (!member(sessions, session_id)) {
     return 0;
@@ -112,12 +177,19 @@ object query_avatar(string session_id) {
   return sessions[session_id]->avatar;
 }
 
+/**
+ * Generate a new session id.
+ * 
+ * @return the new, unique session id
+ */
 string generate_id() {
   return sprintf("%s#%d", 
                  ObjectTracker->query_object_id(THISO), ++session_counter);
 }
 
-int create() {
-  sessions = ([ ]);
-  return 0;
+/**
+ * Constructor.
+ */
+void create() {
+  setup();
 }

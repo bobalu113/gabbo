@@ -1,6 +1,7 @@
 /**
  * The access service objet.
- *
+ * TODO not yet supported
+ * 
  * @author devo@eotl
  * @alias AccessService
  */

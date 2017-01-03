@@ -4,9 +4,14 @@
  * @author devo@eotl
  * @alias TrackerService
  */
-
 inherit ObjectLib;
 
+/**
+ * Load or reload a specified tracker object.
+ * 
+ * @param  tracker       the path to the tracker object to load
+ * @return the loaded tracker object
+ */
 object reload_tracker(string tracker) {
   object result = FINDO(tracker);
   if (result) {
@@ -18,6 +23,9 @@ object reload_tracker(string tracker) {
   return result;
 }
 
+/**
+ * Global tracker load sequence.
+ */
 void load_trackers() {
   reload_tracker(FileTracker);
   reload_tracker(DomainTracker);
@@ -28,6 +36,9 @@ void load_trackers() {
   reload_tracker(ZoneTracker);
 }
 
+/**
+ * Constructor. Load trackers.
+ */
 void create() {
   load_trackers();
 }

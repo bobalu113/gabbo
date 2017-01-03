@@ -7,6 +7,7 @@
 #include <sys/input_to.h>
 #include <command_giver.h>
 #include <topic.h>
+#include <login.h>
 
 inherit CommandGiverMixin;
 inherit SensorMixin;
@@ -14,18 +15,6 @@ inherit SensorMixin;
 inherit ConnectionLib;
 inherit MessageLib;
 inherit ObjectLib;
-
-#define LOCALHOST              "127.0.0.1"
-#define WELCOME_FILE           PlatformEtcDir "/issue"
-#define TERMINAL_MAX_TRIES     3
-#define TIMEOUT_SECS           (10 * 60)
-#define DEFAULT_TERMINAL_TYPE  "vt100"
-#define CLEAR_SCREEN           1
-#define InsecureWarning        "Warning: You are on an insecure connection. " \
-                               "Act accordingly.\n"
-#define DefaultTermWarning     "Unable to detect terminal type. " \
-                               "Using default.\n"
-#define TimeoutMessage         "Timeout exceeded, disconnecting...\n"
 
 private string CMD_IMPORTS_VAR = PlatformBinDir "/login.cmds";
 
@@ -37,10 +26,19 @@ protected void welcome(string terminal, int is_default);
 protected void timeout();
 protected void abort();
 
+/**
+ * Setup login object.
+ */
 protected void setup() {
   CommandGiverMixin::setup();
+  SensorMixin::setup();
 }
 
+/**
+ * Initiate a new connection. Informs ConnectTracker of a new connection and
+ * suppresses I/O until terminal type can be determined, at which point I/O is
+ * resumed and a welcome screen is displayed.
+ */
 protected void connect() {
   ConnectionTracker->new_connection(THISO);
   ConnectionTracker->telnet_get_terminal(THISO);
@@ -49,6 +47,12 @@ protected void connect() {
   set_heart_beat(1);
 }
 
+/**
+ * Circular input_to() loop to suppress user from getting a prompt from the
+ * driver.
+ * 
+ * @param  arg           discarded user input
+ */
 protected varargs void suppress_prompt(string arg) {
   remove_input_to(THISO);
   input_to("suppress_prompt", INPUT_NOECHO|INPUT_CHARMODE|INPUT_IGNORE_BANG);
@@ -79,8 +83,8 @@ protected varargs void get_terminal_type(closure callback, int retry) {
 /**
  * Display the welcome screen.
  * 
- * @param terminal 
- * @param is_default  [description]
+ * @param terminal    the terminal type
+ * @param is_default  non-zero if default terminal type had to be used
  */
 protected void welcome(string terminal, mixed is_default) {
   object logger = LoggerFactory->get_logger(THISO);
@@ -115,6 +119,10 @@ protected void welcome(string terminal, mixed is_default) {
   return;
 }
 
+/**
+ * Check the idle time of this login object and timeout after a period of
+ * inactivity.
+ */
 protected void attempt_timeout() {
   if (query_idle(THISO) > TIMEOUT_SECS) {
     timeout();
@@ -131,7 +139,7 @@ protected void timeout() {
 }
 
 /**
- * Abort login.
+ * Abort login. Destructs this object.
  */
 protected void abort() {
   destruct(THISO);
@@ -161,6 +169,9 @@ public void heart_beat() {
   attempt_timeout();
 }
 
+/**
+ * Constructor. Calls setup().
+ */
 public void create() {
   setup();
 }

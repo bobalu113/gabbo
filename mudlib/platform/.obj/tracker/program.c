@@ -4,6 +4,7 @@
  * @author devo@eotl
  * @alias ProgramTracker
  */
+#pragma no_clone
 #include <sys/objectinfo.h>
 
 inherit SqlMixin;
@@ -27,10 +28,45 @@ private int program_counter;
 #define PROGRAM_CLONES     1
 #define PROGRAM_COUNT      2
 
+protected void setup();
+string get_id(string program_name, int program_time, int program_count);
+public string new_program(object blueprint);
+public string program_cloned(object clone);  
+public string *query_program_names();
+public mapping query_program_ids(string program_name);
+public string query_program_id(object ob);
+public int query_program_count(string id);
+public mapping query_clones(string program_id);
+
+/**
+ * Setup the ProgramTracker.
+ */
+protected void setup() {
+  SqlMixin::setup();
+  programs = ([ ]);
+  program_names = ([ ]);
+  object_map = ([ ]);
+  // TODO fill mem cache with existing programs/clones from objdump
+}
+
+/**
+ * Get a program id its constitutent components.
+ * 
+ * @param  program_name  the program name
+ * @param  program_time  the program time
+ * @param  program_count the program count
+ * @return the program id
+ */
 string get_id(string program_name, int program_time, int program_count) {
   return sprintf("%s#%d#%d", program_name, program_time, program_count);
 }
 
+/**
+ * Invoked by the HookService when a new blueprint is created.
+ * 
+ * @param  blueprint     the blueprint being created
+ * @return the blueprint's program id
+ */
 public string new_program(object blueprint) {
   string program_name = program_name(blueprint);
   int program_time = program_time(blueprint);
@@ -60,6 +96,12 @@ public string new_program(object blueprint) {
   return id;
 }
 
+/**
+ * Invoked by the HookService when a new clone is created.
+ * 
+ * @param  clone         the clone object
+ * @return the program id of the clone
+ */
 public string program_cloned(object clone) {  
   string id = program_names[program_name(clone)][<1];
   m_add(programs[id]->clones, clone); 
@@ -67,14 +109,31 @@ public string program_cloned(object clone) {
   return id;
 }
 
+/**
+ * Get a list of all known program names.
+ * 
+ * @return an unsorted list of all known program names
+ */
 public string *query_program_names() {
   return m_indices(program_names);
 }
 
+/**
+ * Get a collection of known program ids for a given program name.
+ * 
+ * @param  program_name  the program name
+ * @return a zero-width mapping of program ids from program 
+ */
 public mapping query_program_ids(string program_name) {
   return program_names[program_name];
 }
 
+/**
+ * Get the program id of an object.
+ * 
+ * @param  ob            the object being queried
+ * @return the program of the object
+ */
 public string query_program_id(object ob) {
   if (!ob) {
     return 0;
@@ -82,6 +141,12 @@ public string query_program_id(object ob) {
   return object_map[ob];
 }
 
+/**
+ * Get the program count portion of a program id.
+ * 
+ * @param  id            the program id
+ * @return the program count
+ */
 public int query_program_count(string id) {
   if (!member(programs, id)) {
     return 0;
@@ -89,6 +154,12 @@ public int query_program_count(string id) {
   return programs[id]->program_count;
 }
 
+/**
+ * Get a collection of all the clones for a given program id.
+ * 
+ * @param  program_id    the program id being queried
+ * @return a zero-width mapping of clones from the given program
+ */
 public mapping query_clones(string program_id) {
   if (member(programs, program_id)) {
     programs[program_id]->clones -= ([ 0 ]);
@@ -97,16 +168,10 @@ public mapping query_clones(string program_id) {
   return 0;
 }
 
-protected void setup() {
-  SqlMixin::setup();
-  programs = ([ ]);
-  program_names = ([ ]);
-  object_map = ([ ]);
-  // TODO fill mem cache with existing programs/clones from objdump
-}
-
-int create() {
+/**
+ * Constructor.
+ */
+void create() {
   setup();
-  return 0;
 }
 

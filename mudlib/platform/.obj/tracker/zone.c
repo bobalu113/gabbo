@@ -4,6 +4,7 @@
  * @author devo@eotl
  * @alias ZoneTracker
  */
+#pragma no_clone
 #include <sys/xml.h>
 #include <zone.h>
 
@@ -16,14 +17,34 @@ mapping zones;
 mapping instances;
 int instance_counter;
 
-struct ZoneInfo new_zone(string zone_id);
+void setup();
+string new_zone(string zone_id);
 int load_config(string zone_id);
 string new_instance(string zone_id, string label);
 string query_starting_instance(string zone_id, string session_id);
 string query_flavor(string zone_id);
 string get_instance_id(string zone_id, int instance_count);
 
-struct ZoneInfo new_zone(string zone_id) {
+/**
+ * Setup the ZoneTracker.
+ */
+void setup() {
+  zones = ([ ]);
+  instances = ([ ]);
+}
+
+/**
+ * Invoked to initiate a zone in the system. This can happen anytime for any
+ * valid zone, but it will necessarily always have occured by the time the 
+ * first object loaded from a zone is initialized.
+ * 
+ * @param  zone_id       the zone id of the new zone, same as the system path
+ * @return the zone id for success, 0 for failure
+ */
+string new_zone(string zone_id) {
+  if (member(zones, zone_id)) {
+    return 0;
+  }
   if (!valid_zone_id(zone_id)) {
     return 0;
   }
@@ -48,9 +69,15 @@ struct ZoneInfo new_zone(string zone_id) {
   }
 
   load_config(zone_id);
-  return zones[zone_id];
+  return zone_id;
 }
 
+/**
+ * Reload configuration from the zone config file for the specified zone.
+ * 
+ * @param  zone_id       the zone id to configure
+ * @return 0 for failure, 1 for success
+ */
 int load_config(string zone_id) {
   object logger = LoggerFactory->get_logger(THISO);
   struct ZoneInfo zone = zones[zone_id];
@@ -74,6 +101,13 @@ int load_config(string zone_id) {
   return 1;
 }
 
+/**
+ * Invoked to initialize a new "zone instance" in the system.
+ * 
+ * @param  zone_id       the zone id spawning the new instance
+ * @param  label         a friendly label for the new instance
+ * @return the instance id of the newly created instance
+ */
 string new_instance(string zone_id, string label) {
   int instance_count = ++instance_counter;
   string instance_id = get_instance_id(zone_id, instance_count);
@@ -87,6 +121,16 @@ string new_instance(string zone_id, string label) {
   return instance_id;
 }
 
+/**
+ * Get the zone instance to use for new sessions. This will always be a zone
+ * instance with a specific default label. If no matching label is found, a
+ * new instance will be created with that label.
+ * 
+ * @param  zone_id       the zone to get the instance for
+ * @param  session_id    the session id of the new session
+ * @return the zone instance id of the starting zone instance for the specified
+ *         session
+ */
 string query_starting_instance(string zone_id, string session_id) {
   struct ZoneInfo zone = zones[zone_id];
   if (!zone) {
@@ -100,11 +144,16 @@ string query_starting_instance(string zone_id, string session_id) {
       }
     }
     return instance_id;
-  } else {
-    return new_instance(zone_id, DEFAULT_INSTANCE);
-  }
+  } 
+  return new_instance(zone_id, DEFAULT_INSTANCE);
 }
 
+/**
+ * Get a zone's configured flavor.
+ * 
+ * @param  zone_id       the zone being queried
+ * @return the flavor of the specified zone
+ */
 string query_flavor(string zone_id) {
   struct ZoneInfo zone = zones[zone_id];
   if (!zone) {
@@ -113,11 +162,20 @@ string query_flavor(string zone_id) {
   return zone->flavor;
 }
 
+/**
+ * Get a zone instance id from its constituent parts.
+ * 
+ * @param  zone_id        the zone id
+ * @param  instance_count the instance count
+ * @return the zone instance id
+ */
 string get_instance_id(string zone_id, int instance_count) {
   return sprintf("%s#%d", zone_id, instance_count);
 }
 
+/**
+ * Constructor.
+ */
 void create() {
-  zones = ([ ]);
-  instances = ([ ]);
+  setup();
 }

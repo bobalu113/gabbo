@@ -22,6 +22,7 @@ int user_exists(string username);
 string passwd_file(string username);
 string hash_passwd(string password);
 string create_user(string username, string password);
+int install_skeleton(string user_dir);
 int apply_template(string template, string username);
 string attach_session(object login, string user_id);
 
@@ -55,34 +56,34 @@ string hash_passwd(string password) {
 
 string create_user(string username, string password) {
   object logger = LoggerFactory->get_logger(THISO);
+
   string user_dir = user_dir(username);
-  // right now only one user id per user name/dir, but might change someday
-  if (file_exists(user_dir)) {
-    logger->warn("user directory already exists: %O", user_dir);
-    return 0;
-  } else {
-    copy_tree(SkelDir, user_dir);
-    if (!apply_template(user_dir + DOMAIN_TEMPLATE, username)) {
-      logger->warn("unable to apply domain template: %O", user_dir);
-    }
-    if (!apply_template(user_dir + ZONE_TEMPLATE, username)) {
-      logger->warn("unable to apply zone template: %O", user_dir);
-    }
+  if (!install_skeleton(user_dir)) {
+    logger->warn("unable to install skeleton user dir: %O", user_dir);
   }
 
-  // create user
   string user_id = UserTracker->new_user(username);
 
-  // save password
-  mapping passwd = read_value(passwd_file(username));
-  if (!mappingp(passwd)) {
-    passwd = ([ ]);
+  if (!save_password(user_id, password)) {
+    logger->warn("unable to save password for user: %O %O", user_id, username);
   }
-  string hash = hash_passwd(password);
-  passwd[user_id] = ([ PASSWD_PASSWORD: hash ]);
-  write_value(passwd_file(username), passwd);
   
   return user_id;
+}
+
+int install_skeleton(string user_dir) {
+  object logger = LoggerFactory->get_logger(THISO);
+  if (file_exists(user_dir)) {
+    return 0;
+  }
+  copy_tree(SkelDir, user_dir);
+  if (!apply_template(user_dir + DOMAIN_TEMPLATE, username)) {
+    logger->warn("unable to apply domain template: %O", user_dir);
+  }
+  if (!apply_template(user_dir + ZONE_TEMPLATE, username)) {
+    logger->warn("unable to apply zone template: %O", user_dir);
+  }
+  return 1;
 }
 
 int apply_template(string template_path, string username) {
@@ -111,6 +112,23 @@ int apply_template(string template_path, string username) {
   if (!rm(template_path)) {
     return 0;
   }
+  return 1;
+}
+
+int save_password(string user_id, string password) {
+  object logger = LoggerFactory->get_logger(THISO);
+  string username = UserTracker->query_username(user_id);
+  string passwd_file = passwd_file(username);
+  mapping passwd = read_value(passwd_file);
+  if (!mappingp(passwd)) {
+    passwd = ([ ]);
+    if (file_exists(passwd_file)) {
+      logger->warn("Overwriting corrupt password file %O", passwd_file);
+    }
+  }
+  string hash = hash_passwd(password);
+  passwd[user_id] = ([ PASSWD_PASSWORD: hash ]);
+  write_value(passwd_file, passwd);
   return 1;
 }
 
