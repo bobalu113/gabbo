@@ -8,10 +8,23 @@
 // TODO expand interface to support objects that use more than one db
 string database;
 
-void setup() {
+protected void setup();
+int set_database(string db);
+string query_database();
+protected varargs int insert(string table, mapping data, 
+                             closure callback, varargs mixed *args);
+protected varargs int update(string table, mapping data, 
+                             closure callback, varargs mixed *args);
+protected varargs int select(string table, mapping key, 
+                             closure callback, varargs mixed *args);
+protected varargs int create_table(string table, mapping *cols,
+                                   closure callback, varargs mixed *args);
+protected varargs int table_info(string table, 
+                                 closure callback, varargs mixed *args);
+
+protected void setup() {
   load_object(SqlClientFactory);
   database = DEFAULT_DATABASE;
-  return;
 }
 
 int set_database(string db) {

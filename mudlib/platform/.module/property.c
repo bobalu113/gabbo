@@ -32,9 +32,11 @@
 #include <property.h>
 #include <capabilities.h>
 
-private functions private variables inherit FileLib;
+inherit FileLib;
 
 default private variables;
+
+private mapping CAPABILITIES_VAR = ([ CAP_PROPERTY ]);
 
 nosave mapping props;
 
@@ -48,6 +50,7 @@ nosave mapping masks;
 
 default public functions;
 
+protected void setup();
 varargs int init_prop(string prop, int flags, mixed method);
 varargs int configure_prop(string prop, int flags, mixed method);
 mixed query_prop(string prop);
@@ -66,6 +69,13 @@ varargs private int check_access(string prop, int op, object source,
                                  mixed special);
 private varargs mixed munge_method(mixed method, int extern, int mask);
 private int run_mask(mixed mask, string prop, mixed value);
+
+/**
+ * Initialize PropertyMixin.
+ */
+protected void setup() {
+  check_vars();
+}
 
 /**
  * Initialize a property with a specified configuration. Configuration may be
@@ -688,20 +698,4 @@ private int run_mask(mixed mask, string prop, mixed value) {
 
   value = apply(mask[1], prop, &value, args);
   return 1;
-}
-
-/**
- * Initialize PropertyMixin.
- */
-protected void setup_property() {
-  check_vars();
-}
-
-/**
- * Return a zero-width mapping of the capabilities this program provides.
- * 
- * @return a zero-width mapping of capabilities
- */
-public mapping query_capabilities() {
-  return ([ CAP_PROPERTY ]);
 }

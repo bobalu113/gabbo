@@ -5,6 +5,12 @@
  * @alias SoulMixin
  */
 
+private mapping CAPABILITIES_VAR = ([ CAP_SOUL ]);
+//private string CMD_IMPORTS_VAR = PlatformBinDir "/soul.cmds";
+
+/**
+ * Setup the SoulMixin.
+ */
 void setup() {
 
 }

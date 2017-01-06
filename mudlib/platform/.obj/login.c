@@ -8,6 +8,7 @@
 #include <command_giver.h>
 #include <topic.h>
 #include <login.h>
+#include <sensor.h>
 
 inherit CommandGiverMixin;
 inherit SensorMixin;

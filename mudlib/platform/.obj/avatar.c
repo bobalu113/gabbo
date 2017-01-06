@@ -48,7 +48,7 @@ void setup() {
  *         subsession_id   the subsession for the player-level avatar
  *         player_id       the player's player id
  *         room            the player's start room
- * @throws Exception       if something goes wrong
+ * @throws Exception       if something goes wrong to prevent descension
  */
 mixed *try_descend(string session_id) {
   object logger = LoggerFactory->get_logger(THISO);

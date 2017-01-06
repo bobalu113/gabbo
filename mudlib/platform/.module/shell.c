@@ -2,7 +2,6 @@
  * The ShellMixin provides the features of a Unix-like shell.
  * @alias ShellMixin
  */
-
 #include <capabilities.h>
 #include <command_giver.h>
 
@@ -23,7 +22,15 @@ string cwd, homedir, *dirstack, context;
 default private functions;
 
 /**
- * Return the player's current working directory.
+ * Setup the ShellMixin.
+ */
+protected void setup() {
+  dirstack = ({ });
+  context = "";
+}
+
+/**
+ * Get the player's current working directory.
  *
  * @return the player's current working directory
  */
@@ -133,13 +140,4 @@ public int set_context(string c) {
   }
   context = c;
   return 1;
-}
-
-/**
- * Initialize ShellMixin.
- */
-protected void setup() {
-  dirstack = ({ });
-  context = "";
-  return;
 }

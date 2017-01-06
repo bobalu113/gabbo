@@ -10,4 +10,6 @@
 #define SENSE_STDOUT          "stdout"
 #define SENSE_STDERR          "stderr"
 
+#define DEFAULT_TERMINAL_TYPE  "vt100"
+
 #endif  // _SENSOR_H

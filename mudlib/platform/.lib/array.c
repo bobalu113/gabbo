@@ -229,3 +229,8 @@ mapping *mapping_array(mixed *keys, mixed *data) {
   }
   return result;
 }
+
+mixed random_key(mapping map) {
+  string *keys = m_indices(map);
+  return keys[random(sizeof(keys))];
+}

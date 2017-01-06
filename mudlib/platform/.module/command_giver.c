@@ -16,7 +16,8 @@ inherit ArrayLib;
 inherit CommandSpecLib;
 
 private mapping CAPABILITIES_VAR = ([ CAP_COMMAND_GIVER ]);
-private string CMD_IMPORTS_VAR = PlatformBinDir "/command_giver/command_giver.cmds";
+private string CMD_IMPORTS_VAR = 
+  PlatformBinDir "/command_giver/command_giver.cmds";
 
 default private variables;
 
@@ -24,8 +25,21 @@ nosave mixed *commands;
 
 default public functions;
 
-private mixed *load_command_spec(string specfile);
+protected void setup();
+int check_command_access(object cmd_ob, int read);
+mixed *load_cmd_imports();
+int do_command(string arg);
+int run_script(string script_file);
 object load_controller(string controller);
+
+/**
+ * Setup the CommandGiverMixin.
+ */
+protected void setup() {
+  object logger = LoggerFactory->get_logger(THISO);
+  commands = load_cmd_imports();
+  //logger->info("commands: %O\n", commands);
+}
 
 /**
  * Test whether a given command object should be allowed this command giver's
@@ -52,7 +66,13 @@ int check_command_access(object cmd_ob, int read) {
   return 0;
 }
 
-mixed *load_commands() {
+/**
+ * Introspect the inherit tree for the command imports variable assignments and 
+ * load the configured command specs from disk.
+ * 
+ * @return a 2-dimensional array of command spec and the parsed command data
+ */
+mixed *load_cmd_imports() {
   mixed *result = ({ });
   mixed *vars = variable_list(THISO, RETURN_FUNCTION_NAME
                                      | RETURN_VARIABLE_VALUE);
@@ -68,20 +88,11 @@ mixed *load_commands() {
 }
 
 /**
- * Initialize CommandGiverMixin. If this function is overloaded, be advised
- * that the mixin's private variables are initialized in the parent
- * implementation.
- */
-protected void setup() {
-  object logger = LoggerFactory->get_logger(THISO);
-  commands = load_commands();
-  //logger->info("commands: %O\n", commands);
-}
-
-/**
- * Main command router. Any added commands will pass through this action
- * function before being routed to the proper command object.
- *
+ * Main command router invoked by HookService. Any added commands will pass 
+ * through this action function to parse out the verb and argument portion of
+ * the command. Then control will be routed to the associated command 
+ * controller for validation and execution.
+ * 
  * @param  arg the command-line argument
  * @return     the result of the command execution; 1 for success, 0 for
  *             failure.
@@ -162,6 +173,12 @@ int do_command(string arg) {
   return result;
 }
 
+/**
+ * Simple script handling supporting basic source files.
+ * 
+ * @param  script_file   the script file
+ * @return 1 for success, 0 for failure
+ */
 int run_script(string script_file) {
   string script = read_file(script_file);
   if (!script) {
@@ -174,6 +191,12 @@ int run_script(string script_file) {
   return 1;
 }
 
+/**
+ * Attempt to load a command controller object.
+ * 
+ * @param  controller    the path to the controller
+ * @return the loaded controller object
+ */
 object load_controller(string controller) {
   object result;
   object logger = LoggerFactory->get_logger(THISO);
@@ -185,14 +208,7 @@ object load_controller(string controller) {
 }
 
 
-/**
- * Implementation of the modify_command hook. Every command executed by the
- * player will have a chance to be modified before being parsed by this
- * function.
- *
- * @param  cmd the command string being executed
- * @return     the new command string to execute
- */
+/*
 mixed modify_command(string cmd) {
   // TODO add support for default exit verb setting
   if (ENV(THISO) && ENV(THISO)->query_exit(cmd)) {
@@ -200,3 +216,4 @@ mixed modify_command(string cmd) {
   }
   return 0;
 }
+*/

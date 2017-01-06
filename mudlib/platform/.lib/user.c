@@ -146,6 +146,7 @@ string attach_session(object login, string user_id) {
   }
 
   // get the session avatar, or create a new one
+  // TODO add a way to use another session's avatar?
   object avatar = SessionTracker->query_avatar(session_id);
   if (!avatar) {
     avatar = clone_object(PlatformAvatar);
