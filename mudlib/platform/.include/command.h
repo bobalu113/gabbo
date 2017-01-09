@@ -63,5 +63,8 @@
 #define MAX_ARGS              26
 #define VALIDATION_PREFIX     "validate_"
 #define VALIDATE_SKIP_FIELDS  0x01
+#define VALIDATION_PASS       1
+#define VALIDATION_FAIL       0
+#define VALIDATION_RETRY      -1
 
 #endif  // _COMMAND_H

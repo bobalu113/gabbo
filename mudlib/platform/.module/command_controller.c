@@ -1,8 +1,10 @@
 /**
  * A generic CommandController module for commands added through the 
- * CommandGiver mixin. Each command must define a controller, and those
+ * CommandGiverMixin. Each command must define a controller, and those
  * controllers may inherit this program to gain simplicity and uniformity
- * in handling command execution.
+ * in handling command execution. This is an abstract class, it implements the
+ * do_command() function invoked directly by CommandGiver but expects the
+ * inheriting programs to implement the execute() function.
  *
  * @alias CommandController
  */
@@ -35,14 +37,17 @@ struct CommandState {
 #define DEFAULT_PROMPT "(%t) %m%d{ [%s]}: "
 #define DEFAULT_FAIL "%m\n"
 
-int do_command(mixed *command, string verb, string arg);
+mapping do_command(mixed *command, string verb, string arg);
 int process_command(struct CommandState state, closure callback);
 int process_args(struct CommandState state, closure callback);
 int process_opts(struct CommandState state, mapping opts, closure callback);
 int process_extra(struct CommandState state, closure callback);
-int process_field(struct CommandState state, mixed *field, string field_type, mixed index, closure callback);
-void field_prompt(struct CommandState state, mixed *field, string field_type, mixed index, closure callback);
-void field_input(string arg, struct CommandState state, mixed *field, string field_type, mixed index, closure callback);
+int process_field(struct CommandState state, mixed *field, string field_type, 
+                  mixed index, closure callback);
+void field_prompt(struct CommandState state, mixed *field, string field_type, 
+                  mixed index, closure callback);
+void field_input(string arg, struct CommandState state, mixed *field, 
+                 string field_type, mixed index, closure callback);
 string parse_boolean(string arg, mixed val);
 string parse_int(string arg, mixed val);
 string parse_float(string arg, mixed val);
@@ -51,22 +56,57 @@ string parse_file(string arg, mixed val);
 string parse_files(string arg, mixed val);
 string parse_object(string arg, mixed val);
 string parse_objects(string arg, mixed val);
-varargs int validate(struct CommandState state, closure callback, int flags);
+varargs int do_validate(struct CommandState state, closure callback, 
+                        int flags);
+int validate(mixed *validations, struct CommandState state, mixed val, 
+             mixed *field, closure retry_test) {
 int do_execute(mapping model, string verb);
 int execute(mapping model, string verb);
 
 closure prompt_formatter, fail_formatter;
 
-int do_command(mixed *command, string verb, string arg) {
+/**
+ * Run a command. Takes a command definition loaded from a command spec file,
+ * and collects all specified fields and runs validation against the values
+ * input by the user, either from arg list, getopts-style parameters, or a
+ * series of one or more interactive user prompts (with retries). Once all 
+ * fields values have been provided and validated, they are passed to the 
+ * execute() function as the "model" mapping along with the verb being used.
+ * The execute function may return a new model mapping that can be piped to
+ * a new command on the command line. This behavior is only guaranteed when
+ * not running in 'interactive' mode; if it is necessary to prompt the user for
+ * a missing or invalid value, this function will return 0. However it may be
+ * possible to preserve the command pipeline and resolve the rest of the
+ * command in the future after execute() finishes, if it is desirable to do so
+ * by the user.
+ *
+ * TODO implement command piping
+ * 
+ * @param  command       the command info as loaded from the command spec
+ * @param  verb          the verb being used
+ * @param  arg           the argument string
+ * @return an "output" model mapping, or 0 if either the command failed or an
+ *         interactive prompt was issued
+ */
+mapping do_command(mixed *command, string verb, string arg) {
   mapping opts, badopts;
   string *args;
   arg = trim(arg, TRIM_RIGHT, ' ');
   mixed *syntax = apply_syntax(command, arg, &opts, &badopts, &args);
 
   if (valid_syntax(syntax, opts, badopts, args)) {
-    mapping model = ([ ]);
     struct CommandState state = 
-      (<CommandState> verb, command, syntax, opts, args, ([ ]), model, 0, 0, 0);
+      (<CommandState> 
+        verb: verb, 
+        command: command, 
+        syntax: syntax, 
+        opts: opts, 
+        args: args, 
+        extra: ([ ]), 
+        model: ([ ]), 
+        field_retry: 0, 
+        form_retry: 0, 
+        force_prompt: 0);
     return process_command(state, symbol_function("do_execute", THISO)); //'
   } 
 
@@ -74,7 +114,21 @@ int do_command(mixed *command, string verb, string arg) {
   return 0;
 }
 
-int process_command(struct CommandState state, closure callback) {
+/**
+ * Entry-point into command processor. Anytime the command state changes, this
+ * function may be called which attempts to run the command. If there is still
+ * missing or invalid input, it will descend into sub-processing functions to
+ * correct the problem, and re-run process_command() with the new command 
+ * state. If the command state is good, the callback will be executed.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  callback      the callback to execute the validated command
+ * @return the result of the callback, or 0 if command could not be run as 
+ *         input
+ */
+mapping process_command(struct CommandState state, closure callback) {
   if (!process_args(state, callback)) {
     return 0;
   }
@@ -94,6 +148,19 @@ int process_command(struct CommandState state, closure callback) {
   return funcall(callback, state->model, state->verb);
 }
 
+/**
+ * Process the field values passed via the command arg list. This simply 
+ * runs process_field() for each command arg, and runs field_prompt() if you
+ * didn't specify enough args for the number of fields required. If all the
+ * arg values are good, return 1 to continue processing. To halt or terminate
+ * processing, return 0.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  callback      the callback to execute the validated command
+ * @return 1 to continue processing, otherwise 0
+ */
 int process_args(struct CommandState state, closure callback) {
   int i = 0;
   int numargs = sizeof(state->args);
@@ -132,6 +199,20 @@ int process_args(struct CommandState state, closure callback) {
   return 1;
 }
 
+/**
+ * Process the field values passed via the command opts and longopts. This 
+ * simply runs process_field() for each specified opt or longopt, and runs 
+ * field_prompt() for any required-but-missing fields. If all the values are 
+ * good, return 1 to continue processing. To halt or terminate processing, 
+ * return 0.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  opts          a map of opt or longopt string to the field definition
+ * @param  callback      the callback to execute the validated command
+ * @return 1 to continue processing, otherwise 0
+ */
 int process_opts(struct CommandState state, mapping opts, closure callback) {
   foreach (mixed opt, mixed *field : opts) {
     if (!member(state->model, field[FIELD_ID])) {
@@ -167,6 +248,19 @@ int process_opts(struct CommandState state, mapping opts, closure callback) {
   return 1;
 }
 
+/**
+ * Process the extra field values that were defined but not specified as 
+ * passed via args or opts. This simply runs process_field() for each extra 
+ * field, and runs field_prompt() for any required-but-missing fields. If all 
+ * the values are good, return 1 to continue processing. To halt or terminate 
+ * processing, return 0.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  callback      the callback to execute the validated command
+ * @return 1 to continue processing, otherwise 0
+ */
 int process_extra(struct CommandState state, closure callback) {
   foreach (mixed *field : state->command[COMMAND_FIELDS]) {
     string id = field[FIELD_ID];
@@ -203,84 +297,56 @@ int process_extra(struct CommandState state, closure callback) {
   return 1;
 }
 
-int process_field(struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
+/**
+ * Process a field. This function has 3 duties, parse the field value from the
+ * input string, run field validations on the value, and add the value to the 
+ * model. If anything goes wrong along the way, it should attempt to retry 
+ * field processing via a field_prompt() call. Returns 1 if everything was 
+ * good, otherwise 0 to halt/terminate processing.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  field         the field info from the parsed command spec: id, type
+ *                       info, required/prompt settings, max retry, default 
+ *                       value, prompt string, validations
+ * @param  field_type    field type: "args", "opts", or "extra"
+ * @param  index         field index, int for arg position, string for opts or
+ *                       extra field ids
+ * @param  callback      the callback to execute the validated command
+ * @return 1 to continue processing, otherwise 0
+ */
+int process_field(struct CommandState state, mixed *field, string field_type, 
+                  mixed index, closure callback) {
   mixed val;
-  string fail;
-  string id = field[FIELD_ID];
-  string arg = get_struct_member(state, field_type)[index];
-  arg = trim(arg || "", TRIM_BOTH);
-  switch (field[FIELD_TYPE]) {
-    case "bool":
-      fail = parse_boolean(arg, &val);
-      break;
-    case "int":
-      fail = parse_int(arg, &val);
-      break;
-    case "float":
-      fail = parse_float(arg, &val);
-      break;
-    case "enum":
-      fail = parse_enum(arg, &val, field[FIELD_ENUM]);
-      break;
-    case "file":
-      fail = parse_file(arg, &val);
-      break;
-    case "files":
-      fail = parse_files(arg, &val);
-      break;
-    case "object":
-      fail = parse_object(arg, &val);
-      break;
-    case "objects":
-      fail = parse_objects(arg, &val);
-      break;
-    case "string":
-    default:
-      val = arg;
-      break;
-  }
+  string fail = parse_field(state, field, field_type, index, &val);
   if (fail) {
     if (state->field_retry >= field[FIELD_MAX_RETRY]) {
       // TODO set fail message
-      return 0;
     } else {
       // TODO print fail message
       state->field_retry += 1;
       field_prompt(state, field, field_type, index, callback);
+    }
+    return 0;
+  } else {
+    closure retry_test = (: 
+      return ( (($2[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
+                || ($2[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS))
+                && ($1->field_retry < $2[FIELD_MAX_RETRY]) );
+    :);
+
+    int valid = validate(field[FIELD_VALIDATION], state, val, field, 
+                         retry_test);
+    if (valid == VALIDATION_RETRY) {
+      // prompt user for value
+      state->field_retry += 1;
+      field_prompt(state, field, field_type, index, callback);
+      return 0;
+    } else if (valid == VALIDATION_FAIL) {
       return 0;
     }
-  } else {
-    // do field validation
-    foreach (mixed *validation : field[FIELD_VALIDATION]) {
-      // invoke validation function
-      string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
-      closure validator = symbol_function(func, THISO);
-      if (!validator) {
-        stderr_msg(funcall(fail_formatter, sprintf(
-          "Validator not found: %s.\n", 
-          validation[VALIDATE_VALIDATOR]
-        ), state->verb));
-      }
 
-      // process result
-      int result = apply(validator, val, validation[VALIDATE_PARAMS]);
-      result = (validation[VALIDATE_NEGATE] ? !result : result);
-      if (!result) {
-        // validation failed
-        stderr_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], 
-                           state->verb));
-        if (((field[FIELD_PROMPT_SETTING] == PROMPT_VALIDATE)
-             || (field[FIELD_PROMPT_SETTING] == PROMPT_ALWAYS))
-            && (state->field_retry < field[FIELD_MAX_RETRY])) {
-          // prompt user for value
-          state->field_retry += 1;
-          field_prompt(state, field, field_type, index, callback);
-          return 0;
-        } else {          
-          return 0;
-        }
-      }
-    }
     // validation passed, add to model
     state->model[id] = val;
     // reset retries to 0 fo next field
@@ -293,7 +359,22 @@ int process_field(struct CommandState state, mixed *field, string field_type, mi
   }
 }
 
-void field_prompt(struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
+/**
+ * Prompt the user for a field value.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  field         the field info from the parsed command spec: id, type
+ *                       info, required/prompt settings, max retry, default 
+ *                       value, prompt string, validations
+ * @param  field_type    field type: "args", "opts", or "extra"
+ * @param  index         field index, int for arg position, string for opts or
+ *                       extra field ids
+ * @param  callback      the callback to execute the validated command
+ */
+void field_prompt(struct CommandState state, mixed *field, string field_type, 
+                  mixed index, closure callback) {
   int flags = INPUT_PROMPT;
   if (field[FIELD_PROMPT][PROMPT_NOECHO]) {
     flags |= INPUT_NOECHO;
@@ -310,16 +391,88 @@ void field_prompt(struct CommandState state, mixed *field, string field_type, mi
       : field[FIELD_TYPE]),
     val
   );
-  input_to("field_input", flags, prompt, state, field, field_type, index, callback);
+  input_to("field_input", flags, prompt, state, field, field_type, index, 
+           callback);
 }
 
-void field_input(string arg, struct CommandState state, mixed *field, string field_type, mixed index, closure callback) {
+/**
+ * Handle field prompt input. This should update the command state with the
+ * new value and re-run process_command().
+ * 
+ * @param  arg           the input string
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  field         the field info from the parsed command spec: id, type
+ *                       info, required/prompt settings, max retry, default 
+ *                       value, prompt string, validations
+ * @param  field_type    field type: "args", "opts", or "extra"
+ * @param  index         field index, int for arg position, string for opts or
+ *                       extra field ids
+ * @param  callback      the callback to execute the validated command
+ */
+void field_input(string arg, struct CommandState state, mixed *field, 
+                 string field_type, mixed index, closure callback) {
   if (arg && strlen(arg)) {
     get_struct_member(state, field_type)[index] = arg;
   }
   process_command(state, callback);
 }
 
+/**
+ * Parse a field value from an input arg/opt/extra string. This should apply
+ * the correct type parser, and update the field value by reference.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  field         the field info from the parsed command spec: id, type
+ *                       info, required/prompt settings, max retry, default 
+ *                       value, prompt string, validations
+ * @param  field_type    field type: "args", "opts", or "extra"
+ * @param  index         field index, int for arg position, string for opts or
+ *                       extra field ids
+ * @param  val           the field value, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
+string parse_value(struct CommandState state, mixed *field, string field_type, 
+                   mixed index, mixed val) {
+  string id = field[FIELD_ID];
+  string arg = get_struct_member(state, field_type)[index];
+  arg = trim(arg || "", TRIM_BOTH);
+  switch (field[FIELD_TYPE]) {
+    case "bool":
+      return parse_boolean(arg, &val);
+    case "int":
+      return parse_int(arg, &val);
+    case "float":
+      return parse_float(arg, &val);
+    case "enum":
+      return parse_enum(arg, &val, field[FIELD_ENUM]);
+    case "file":
+      return parse_file(arg, &val);
+    case "files":
+      return parse_files(arg, &val);
+    case "object":
+      return parse_object(arg, &val);
+    case "objects":
+      return parse_objects(arg, &val);
+    case "string":
+    default:
+      val = arg;
+      return 0;
+  }
+  // XXX should this fail?
+  return 0;
+}
+
+/**
+ * Parse a boolean value.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to 1 or 0, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_boolean(string arg, mixed val) {
   switch (lower_case(arg)) {
     case "y":
@@ -338,6 +491,13 @@ string parse_boolean(string arg, mixed val) {
   return 0;
 }
 
+/**
+ * Parse an integer value.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to an int, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_int(string arg, mixed val) {
   if (sscanf("%d", arg, val)) {
     return 0;
@@ -347,6 +507,13 @@ string parse_int(string arg, mixed val) {
   return 0;
 }
 
+/**
+ * Parse a floating point value.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to a float, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_float(string arg, mixed val) {
   int i, f;
   if (sscanf("%d.%d", arg, i, f)) {
@@ -364,6 +531,16 @@ string parse_float(string arg, mixed val) {
   return 0;
 }
 
+/**
+ * Parse value from an enumeration.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set, passed by reference. assigned string
+ *                       for single or array for multi
+ * @param  enum          the enumeration info: legal values, multi flag, 
+ *                       delimeter for multi value strings
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_enum(string arg, mixed val, mixed *enum) {
   mapping enum_map = mkmapping(enum);
   if (enum[ENUM_MULTI]) {
@@ -387,6 +564,13 @@ string parse_enum(string arg, mixed val, mixed *enum) {
   return 0;
 }
 
+/**
+ * Parse a string as if it specifies a single filename.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to filename, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_file(string arg, mixed val) {
   // TODO optimize and customize this logic
   mixed result;
@@ -402,6 +586,14 @@ string parse_file(string arg, mixed val) {
   return 0;
 }
 
+/**
+ * Parse a value representing a list of filenames. Patterns will be expanded.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to an array of filenames, passed by 
+ *                       reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_files(string arg, mixed val) {
   string *args = explode_args(arg);
   mixed *result = ({ });
@@ -412,25 +604,104 @@ string parse_files(string arg, mixed val) {
   return 0;
 }
 
+/**
+ * Parse a value as a single object. Object expansion will be performed.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to an object, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_object(string arg, mixed val) {
   // TODO optimize and customize this logic
   val = expand_object(arg, THISP, 0);
   return 0;
 }
 
+/**
+ * Parse a value as a list of objects. Object expansion will be performed.
+ * 
+ * @param  arg           the value string
+ * @param  val           the value to set to object array, passed by reference
+ * @return a fail message, or 0 if value was parsed successfully
+ */
 string parse_objects(string arg, mixed val) {
   val = expand_objects(arg, THISP, 0);
   return 0;
 }
 
-varargs int validate(struct CommandState state, closure callback, int flags) {
+/**
+ * Perform command validation. May prompt for new values if validation fails
+ * when run in interactive mode. Return 1 if validation passed, otherwise 0.
+ * 
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  callback      the callback to execute the validated command
+ * @param  flags         validation flags: skip field-level validations
+ * @return 1 if validations passed, otherwise 0
+ */
+varargs int do_validate(struct CommandState state, closure callback, 
+                        int flags) {
+  closure retry_test = (: 
+    return ($1->form_retry < $1->command[COMMAND_MAX_RETRY]);
+  :)
+
   if (!(flags & VALIDATE_SKIP_FIELDS)) {
-    // TODO perform all field level validations
+    foreach (mixed *field : state->command[COMMAND_FIELDS]) {
+      int valid = validate(field[FIELD_VALIDATION], state, 
+                           state->model[field[FIELD_ID]], field, retry_test);
+      if (valid == VALIDATION_RETRY) {
+        state->form_retry += 1;
+        state->model = ([ ]);
+        state->force_prompt = 1;
+        process_command(state, callback);
+        return 0;
+      } else if (valid == VALIDATION_FAIL) {
+        return 0;
+      }
+    }
   }
 
   // do form validation
   mixed *validations = state->syntax[SYNTAX_VALIDATION] 
                        + state->command[COMMAND_VALIDATION];
+  int valid = validate(validations, state, model, 0, retry_test);
+  if (valid == VALIDATION_RETRY) {
+    state->form_retry += 1;
+    state->model = ([ ]);
+    state->force_prompt = 1;
+    process_command(state, callback);
+    return 0;
+  } else if (valid == VALIDATION_FAIL) {
+    return 0;
+  }
+
+  return 1;
+}
+
+/**
+ * Validate command by running one or more validation functions with a 
+ * specified value to validate. Will not perform a retry, but will perform a
+ * specified retry test and indicate via the return value whether a retry
+ * should be performed. This allows the validate() function to be used to 
+ * perform field-level or form-level validations depending on the function
+ * arguments.
+ * 
+ * @param  validations   the validations to run
+ * @param  state         the command state, a struct containing all the 
+ *                       information about the command-to-be-executed we have
+ *                       so far
+ * @param  val           the value to validate; field value for fields or model
+ *                       mapping for form-level validation
+ * @param  field         the field info if performing a field level validation
+ * @param  retry_test    a closure that takes state and field info (if given),
+ *                       and returns 1 if retry attempt should be made, or 0 to
+ *                       terminate command execution
+ * @return an integer indicating if validations passed, failed w/ retry, or
+ *         failed w/o retry
+ */
+int validate(mixed *validations, struct CommandState state, mixed val, 
+             mixed *field, closure retry_test) {
   foreach (mixed *validation : validations) {
     // invoke validation function
     string func = VALIDATION_PREFIX + validation[VALIDATE_VALIDATOR];
@@ -443,35 +714,50 @@ varargs int validate(struct CommandState state, closure callback, int flags) {
     }
 
     // process result
-    int result = apply(validator, state->model, validation[VALIDATE_PARAMS]);
+    int result = apply(validator, val, validation[VALIDATE_PARAMS]);
     result = (validation[VALIDATE_NEGATE] ? !result : result);
     if (!result) {
+      // validation failed
       stderr_msg(funcall(fail_formatter, validation[VALIDATE_FAIL], 
                          state->verb));
-      if (state->form_retry < state->command[COMMAND_MAX_RETRY]) {
-        state->form_retry += 1;
-        state->model = ([ ]);
-        state->force_prompt = 1;
-        process_command(state, callback);
-        return 0;
+      if (funcall(retry_test, state, field)) {
+        return VALIDATION_RETRY;
       } else {
-        return 0;
+        return VALIDATION_FAIL;
       }
     }
   }
-  return 1;
+  return VALIDATION_PASS;
 }
 
-// TODO convert this to try/on model? 
-// execute should return model that can be piped to another verb
-int do_execute(mapping model, string verb) {
+/**
+ * Run the execution function. 
+ * 
+ * @param  model         a mapping of field ids to the collected field value
+ * @param  verb          the verb being used to execute command
+ * @return a mapping that will be used for the model of the next command in 
+ *         the pipeline
+ */
+mapping do_execute(mapping model, string verb) {
   return execute(model, verb);
 }
 
-int execute(mapping model, string verb) {
+/**
+ * The execution function. Should be overridden by implementing command 
+ * controllers to execute the actual business logic of the command.
+ * 
+ * @param  model         a mapping of field ids to the collected field value
+ * @param  verb          the verb being used to execute command
+ * @return a mapping that will be used for the model of the next command in 
+ *         the pipeline
+ */
+mapping execute(mapping model, string verb) {
   return 0;
 }
 
+/**
+ * Constructor.
+ */
 void create() {
   prompt_formatter = parse_format(DEFAULT_PROMPT, ([
       'm' : ({ 0, "%s", ({ ''message }) }),
