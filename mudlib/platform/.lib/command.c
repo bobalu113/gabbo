@@ -8,8 +8,8 @@
 
 #define UNMATCHED_ARG  "__UNMATCHED_PARSE_COMMAND_ARG"
 
-private variables private functions inherit StringsLib;
-private variables private functions inherit ArgsLib;
+inherit StringsLib;
+inherit ArgsLib;
 
 mixed *apply_syntax(mixed *command, string arg, mapping opts, mapping badopts, 
                     string *args);

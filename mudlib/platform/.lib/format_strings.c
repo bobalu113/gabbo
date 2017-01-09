@@ -14,10 +14,10 @@
 #define ARG_OPEN     "{["
 #define ARG_CLOSE    "}]"
 
-private variables private functions inherit ArgsLib;
-private variables private functions inherit ArrayLib;
-private variables private functions inherit StringsLib;
-private variables private functions inherit ClosureLib;
+inherit ArgsLib;
+inherit ArrayLib;
+inherit StringsLib;
+inherit ClosureLib;
 
 varargs string *explode_format(string str, string delim,
                                string open, string close);

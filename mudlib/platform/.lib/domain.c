@@ -4,7 +4,6 @@
  * @author devo@eotl
  * @alias DomainLib
  */
-
 #include <domain.h>
 
 struct DomainConfig {

@@ -204,6 +204,15 @@ mixed *m_value(mapping map, string k) {
   return result;
 }
 
+/**
+ * Reduce an array or mapping.
+ * 
+ * @param  data          an array or mapping (reduced on keys)
+ * @param  reducer       a reduction function
+ * @param  initial       an initial value
+ * @param  args          extra args for the reducer
+ * @return a value reduced on reducer->(current_value, element)
+ */
 varargs mixed reduce(mixed data, closure reducer, mixed initial, 
                      varargs mixed *args) {
   mixed result = initial;
@@ -213,6 +222,15 @@ varargs mixed reduce(mixed data, closure reducer, mixed initial,
   return result;
 }
 
+/**
+ * Given an array of keys, create an array of mappings such that each element
+ * is a mapping with the specified keys and the correspecting values from
+ * data[index].
+ * 
+ * @param  keys         the keys for the resultant mappings
+ * @param  data         an array of corresponding values
+ * @return an array of mappings of keys to values
+ */
 mapping *mapping_array(mixed *keys, mixed *data) {
   mapping *result = ({ });
   int size = sizeof(keys);
@@ -230,7 +248,20 @@ mapping *mapping_array(mixed *keys, mixed *data) {
   return result;
 }
 
+/**
+ * Get a random key from a mapping.
+ * 
+ * @param  map           the mapping
+ * @return a random key, or 0 if the mapping is empty
+ */
 mixed random_key(mapping map) {
+  if (!mappingp(map)) {
+    return 0;
+  }
   string *keys = m_indices(map);
-  return keys[random(sizeof(keys))];
+  int size = sizeof(keys);
+  if (!size) {
+    return 0;
+  }
+  return keys[random(size)];
 }

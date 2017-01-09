@@ -4,10 +4,22 @@
  * @author devo@eotl
  * @alias RenderLib
  */
+inherit JSONLib;
 
-private variables private functions inherit JSONLib;
-
+/**
+ * Render a message and its context to a JSON string.
+ * 
+ * @param  topic         the message topic
+ * @param  message       the message
+ * @param  context       the message context
+ * @param  sender        the sender object
+ * @return the rendered JSON string
+ */
 string render_json(string topic, string message, mapping context, 
                    object sender) {
-  return json_encode(({ message, context }));
+  return json_encode(([
+    "topic": topic,
+    "message": message,
+    "context": context
+  ]));
 }

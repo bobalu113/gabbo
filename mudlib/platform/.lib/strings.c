@@ -4,11 +4,10 @@
  * @author devo
  * @alias StringsLib
  */
-
 #define UNQUOTE_CHARS "\"'"    // default quote chars to remove
 #define QUOTE_CHARS "\"'"     // default quote chars to match on
 
-private variables private functions inherit ArrayLib;
+inherit ArrayLib;
 
 /**
  * Find the first non-space character in a string.

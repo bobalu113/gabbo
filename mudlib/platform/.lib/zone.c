@@ -25,10 +25,22 @@ struct ZoneInstanceInfo {
   string label;
 };
 
+/**
+ * Test whether a zone id is valid.
+ * 
+ * @param  zone_id       the zone id
+ * @return 1 if is a valid zone id, otherwise 0
+ */
 int valid_zone_id(string zone_id) {
   return (strstr(zone_id, ZONE_DELIM CATEGORY_DELIM) == -1);
 }
 
+/**
+ * Get the parent zone id of a given zone id.
+ * 
+ * @param  zone_id       the zone id
+ * @return the parent zone id
+ */
 string get_parent_zone(string zone_id) {
   if (!valid_zone_id(zone_id)) {
     return 0;

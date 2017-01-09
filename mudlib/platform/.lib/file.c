@@ -296,6 +296,12 @@ int is_loadable(string file) {
   return (file[<2..<1] == ".c");
 }
 
+/**
+ * Returns 1 if a path represents a "." or ".." directory.
+ * 
+ * @param  path          a file path
+ * @return 1 if path is a special directory
+ */
 int is_special_dir(string path) {
   int len = strlen(path);
   if (!len) {
@@ -315,41 +321,67 @@ int is_special_dir(string path) {
   return 0;
 }
 
-private int _traverse(closure callback, mixed *info, string src, mixed *args) {
+/**
+ * Internal recursive function to traverse a directory tree.
+ * 
+ * @param  callback      a callback to run for every file and directory in a
+ *                       a tree
+ * @param  info          file info of the current file as returned by get_dir()
+ * @param  root          the root path for resolving relative paths
+ * @param  args          extra args to pass to the callback
+ * @return the number of files processed
+ */
+private int _traverse(closure callback, mixed *info, string root, mixed *args) {
   int result = 0;
-  if (apply(callback, info[0], info[0][strlen(src)..], info[1], info[2], 
+  if (apply(callback, info[0], info[0][strlen(root)..], info[1], info[2], 
             info[3], info[4], args)) {
     result = 1;
     if ((info[1] == FSIZE_DIR) && !is_special_dir(info[0])) {
       mixed *dir = get_dir(info[0] + "/", 
                            GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
       for (int i = 0, int j = sizeof(dir); i < j; i += 5) {
-        result += _traverse(callback, dir[i..(i + 4)], src, args);
+        result += _traverse(callback, dir[i..(i + 4)], root, args);
       }
     } 
   }
   return result;
 }
 
-int traverse_tree(string src, closure callback, varargs mixed *args) {
-  src = munge_filename(src);
+/**
+ * Traverse a directory tree.
+ * 
+ * @param  root          the root file or directory to traverse
+ * @param  callback      a closure to call for every file and directory under
+ *                       the root with the get_dir() info and root path
+ * @param  args          extra args to pass to the callback
+ * @return the number of files and directories processed
+ */
+int traverse_tree(string root, closure callback, varargs mixed *args) {
+  root = munge_filename(root);
   mixed *info;
-  if (src[<1] == '/') {
-    src = src[0..<2];
-    info = get_dir(src, GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
+  if (root[<1] == '/') {
+    root = root[0..<2];
+    info = get_dir(root, GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
     if (sizeof(info) && (info[1] != FSIZE_DIR)) {
       return 0;
     }
   }
   else {
-    info = get_dir(src, GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
+    info = get_dir(root, GETDIR_ALL|GETDIR_UNSORTED|GETDIR_PATH);
   }
   if (!sizeof(info)) {
     return 0;
   }
-  return _traverse(callback, info, src, args);
+  return _traverse(callback, info, root, args);
 }
 
+/**
+ * Recursively copy files and directories.
+ * 
+ * @param  src           the root directory to copy
+ * @param  dest          the destination path
+ * @return the number of files and directories copied
+ */
 int copy_tree(string src, string dest) {
   closure copy_file = (: 
     object logger = LoggerFactory->get_logger(THISO);
@@ -383,6 +415,12 @@ int copy_tree(string src, string dest) {
   return traverse_tree(src, copy_file, dest);
 }
 
+/**
+ * Restore a value from a .val file.
+ * 
+ * @param  file          the .val file
+ * @return the restored value
+ */
 mixed read_value(string file) {
   string data = read_file(file);
   if (!data) {
@@ -391,6 +429,13 @@ mixed read_value(string file) {
   return restore_value(data);
 }
 
+/**
+ * Save a value to a .val file.
+ * 
+ * @param  file          the filename to write
+ * @param  value         the value to save
+ * @return 1 for success, 0 for failure
+ */
 int write_value(string file, mixed value) {
   return write_file(file, save_value(value));
 }

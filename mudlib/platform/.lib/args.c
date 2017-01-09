@@ -7,8 +7,8 @@
 
 #include <args.h>
 
-private variables private functions inherit StringsLib;
-private variables private functions inherit ArrayLib;
+inherit StringsLib;
+inherit ArrayLib;
 
 private int _find_close_char(string str, int start, string open,
                              string close, int len, int style, string both);

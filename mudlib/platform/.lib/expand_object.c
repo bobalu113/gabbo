@@ -4,7 +4,6 @@
  * @author devo@eotl
  * @alias ObjectExpansionLib
  */
-
 #include <expand_object.h>
 
 private variables private functions inherit ArrayLib;

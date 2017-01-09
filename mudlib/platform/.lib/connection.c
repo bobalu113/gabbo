@@ -4,15 +4,11 @@
  * @author devo@eotl
  * @alias ConnectionLib
  */
-
 #include <capabilities.h>
 #include <command_giver.h>
+#include <connection.h>
 
 inherit ObjectLib;
-
-#define DEFAULT_SCREEN_WIDTH   80
-#define DEFAULT_SCREEN_LENGTH  25
-#define DEFAULT_PROMPT         "> "
 
 struct ConnectionInfo {
   string id;
@@ -32,6 +28,15 @@ struct ConnectionState {
   string session;
 };
 
+/**
+ * Connect an existing interactive object to a new session. This will exec them
+ * into the session avatar and update their connection info accordingly. The
+ * specified session will then become a "connected" session.
+ * 
+ * @param  who           an interactive object
+ * @param  session       a session to connect them to
+ * @return 1 for success, 0 for failure
+ */
 int connect_session(object who, string session) {
   object logger = LoggerFactory->get_logger(THISO);
   object avatar = SessionTracker->query_avatar(session);
@@ -60,8 +65,10 @@ int connect_session(object who, string session) {
 }
 
 /**
- * Returns the user's screen width. Currently hard-coded to 80 characters.
- * @return the user's screen width
+ * Get the screen width of a connected object.
+ * 
+ * @param  ob            the connected object, defaults to THISO
+ * @return the screen width
  */
 public int query_screen_width(object ob) {
   if (!ob) {
@@ -79,8 +86,10 @@ public int query_screen_width(object ob) {
 }
 
 /**
- * Returns the user's screen length. Currently hard-coded to 25 lines.
- * @return the user's screen length
+ * Get the screen length of a connected object.
+ * 
+ * @param  ob            the connected object, defaults to THISO
+ * @return the screen length
  */
 public int query_screen_length(object ob) {
   if (!ob) {
@@ -98,9 +107,10 @@ public int query_screen_length(object ob) {
 }
 
 /**
- * Return the user's terminal type, as detected by telnet negotation.
+ * Get the terminal type of a connected object.
  * 
- * @return a string designating the terminal type
+ * @param  ob            the connected object, defaults to THISO
+ * @return the terminal type
  */
 public varargs string query_terminal_type(object ob) {
   if (!ob) {
@@ -117,7 +127,9 @@ public varargs string query_terminal_type(object ob) {
 }
 
 /**
- * Restore the default prompt.
+ * Restore a connected object's configured prompt.
+ * 
+ * @param  ob            the connected object, defaults to THISO
  */
 public varargs void restore_prompt(object ob) {
   if (!ob) {
