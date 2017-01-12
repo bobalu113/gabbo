@@ -2,10 +2,9 @@
  * Utility library for manipulating strings.
  *
  * @author devo
- * @alias StringsLib
+ * @alias StringLib
  */
-#define UNQUOTE_CHARS "\"'"    // default quote chars to remove
-#define QUOTE_CHARS "\"'"     // default quote chars to match on
+#include <string.h>
 
 inherit ArrayLib;
 
@@ -144,7 +143,7 @@ varargs string unquote(string str, string quote_chars) {
  */
 string crop_string(string str, int length) {
   if (strlen(str) > length) {
-    return str[0..(length - 4)] + "...";
+    return str[0..(length - 4)] + ELIPSIS;
   }
   return str;
 }

@@ -1,5 +1,5 @@
 /**
- * Utility library for dealing with objects.
+ * Utility library for dealing with objects of all types.
  *
  * @author devo@eotl
  * @alias ObjectLib
@@ -13,6 +13,12 @@
 /**
  * Test whether an object is reachable from another object.
  *
+ * TODO This doesn't belong here, the name sucks. Maybe is_present(), and we
+ * expand the definition of "present" (i.e. reimplement present()) to include 
+ * any of these three conditions. I think it would be fine most of the time to 
+ * search from the inside out, but probably provide multiple algorithms. What
+ * really matters is what needs to happen in ObjectExpansionLib.
+ * 
  * @param  ob  the object trying to be accessed
  * @param  who the object doing the accessing, defaults to THISP
  * @return     1 if the object is reachable, otherwise 0
@@ -24,24 +30,14 @@ varargs int is_reachable(object ob, object who) {
   return (ob == who) || (ob == ENV(who)) || (ENV(ob) == who);
 }
 
-string get_create_uid(string objectname) {
-  if (objectp(DomainTracker)) {
-    return DomainTracker->query_domain_id(objectname);
-  } else {
-    return DEFAULT_DOMAIN; // XXX gaping security hole
-  }
-}
-
-string get_user(object ob) {
-  string euid = geteuid(ob);
-  string result;
-  int pos = member(euid, '@');
-  if (pos != -1) {
-    result = euid[0..(pos - 1)];
-  }
-  return result;
-}
-
+/**
+ * Get various info about an object based on its path.
+ * 
+ * @param  ob            a target object, or the object name of an object (or
+ *                       potential object)
+ * @return object name, uid, user, domain, zone, category, filename, clone 
+ *         number
+ */
 mixed *get_path_info(mixed ob) {
   string oname, uid, user;
   int tmp;
@@ -101,67 +97,14 @@ mixed *get_path_info(mixed ob) {
 }
 
 /**
- * Get the flavor the object belongs to.
- *
- * @param ob the object to query
- * @return   the object's flavor
+ * Reload an object. Depending on the flags being used, this function will 
+ * destruct an object and then recreate, attempting to restore as much of the
+ * original object's state as possible. 
+ * 
+ * @param  ob            the object to reload
+ * @param  flags         reload flags
+ * @return the newly loaded object
  */
-string get_flavor(object ob) {
-  string name = program_name(ob);
-  if (name[0..12] == "/platform/") {
-    return "platform";
-  }
-  return "";
-}
-
-/**
- * Test if an object has a specified capability.
- *
- * @param  ob  the object to test
- * @param  cap the capability in question
- * @return     1 if the object has the specified capability, otherwise 0
- */
-int is_capable(object ob, string cap) {
-  mapping caps = query_capabilities(ob);
-  return (member(caps, cap));
-}
-
-/**
- * Return the display name for a specified object.
- *
- * @param  ob the object to display
- * @return    the object's display name
- */
-string get_display(object ob) {
-  return ob->query_name() || ob->query_short();
-}
-
-/**
- * Is the object diegetic? Diegetic objects are the people, places, and
- * things that comprise the game world. Non-diegetic objects would be things
- * like command objects, service objects, or libraries.
- *
- * @param  ob the object to test
- * @return    1 if the object is diegetic, otherwise 0
- */
-int is_diegetic(object ob) {
-  return ob->is_stuff() || ob->is_room();
-}
-
-/**
- * Return the objective pronoun for a given object.
- *
- * @param  what the object
- * @return      "he, "she", or "it", depending on gender
- */
-string objective(object what) {
-  switch (what->query_gender()) {
-    case "male": return "he";
-    case "female": return "she";
-  }
-  return "it";
-}
-
 varargs object reload_object(mixed ob, int flags) {  
   // TODO move/restore inventory
   // TODO move/restore shadows
@@ -189,8 +132,11 @@ varargs object reload_object(mixed ob, int flags) {
     if (clonep(ob)) {
       if (flags & RELOAD_RELOAD_BLUEPRINT) {
         object blueprint = blueprint(ob);
-        if (blueprint) {
-          destruct(blueprint);
+        if (blueprint && (blueprint != ob)) {
+          blueprint = reload_object(blueprint, flags);
+          if (!blueprint) {
+            return 0;
+          }
         }
       }
       if (ob) {

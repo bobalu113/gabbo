@@ -1,5 +1,5 @@
-#ifndef _CAPABILITIES_H
-#define _CAPABILITIES_H
+#ifndef _CAPABILITY_H
+#define _CAPABILITY_H
 
 #define CAPABILITIES_VAR     _capabilities
 #define CAPABILITIES_VAR_STR "_capabilities"
@@ -17,4 +17,4 @@
 #define CAP_SHELL            "shell"
 #define CAP_VISIBLE          "visible"
 
-#endif  // _CAPABILITIES_H
+#endif  // _CAPABILITY_H

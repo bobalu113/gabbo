@@ -2,7 +2,7 @@
  * Utility library for parsing format strings into runnable lambda closures.
  *
  * @author devo
- * @alias FormatStringsLib
+ * @alias FormatStringLib
  */
 
 #include <sys/debug_info.h>

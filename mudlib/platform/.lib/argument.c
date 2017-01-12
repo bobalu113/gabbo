@@ -2,10 +2,10 @@
  * Utility library for parsing command arguments.
  *
  * @author devo@eotl
- * @alias ArgsLib
+ * @alias ArgumentLib
  */
 
-#include <args.h>
+#include <argument.h>
 
 inherit StringsLib;
 inherit ArrayLib;
