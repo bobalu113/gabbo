@@ -46,14 +46,35 @@ int user_exists(string username) {
   return file_exists(user_dir(username));
 }
 
+/**
+ * Get the password file for a given username.
+ * 
+ * @param  username      the username
+ * @return the user's password file
+ */
 string passwd_file(string username) {
   return user_dir(username) + PASSWD_FILE;
 }
 
+/**
+ * Create a password hash.
+ * 
+ * @param  password      the plain text password
+ * @return the hashed password
+ */
 string hash_passwd(string password) {
   return hash(PASSWD_HASH_METHOD, password, PASSWD_HASH_ITERATIONS);
 }
 
+/**
+ * Create a new user with the provided username and password. This installs
+ * the skeleton dir, registers the username with the user tracker, and saves
+ * the password to the user's password file.
+ * 
+ * @param  username      the username
+ * @param  password      the plain-text password
+ * @return the new user id
+ */
 string create_user(string username, string password) {
   object logger = LoggerFactory->get_logger(THISO);
 
@@ -71,6 +92,13 @@ string create_user(string username, string password) {
   return user_id;
 }
 
+/**
+ * Install the skeleton user directory to the specified user dir. This involves
+ * copying the files and applying the templates.
+ * 
+ * @param  user_dir      the user dir to isntall to
+ * @return 1 for success, 0 for failure
+ */
 int install_skeleton(string user_dir) {
   object logger = LoggerFactory->get_logger(THISO);
   if (file_exists(user_dir)) {
@@ -86,6 +114,13 @@ int install_skeleton(string user_dir) {
   return 1;
 }
 
+/**
+ * Apply a skeleton template for a specified username.
+ * 
+ * @param  template_path the path of the template file
+ * @param  username      the username
+ * @return 1 for success, 0 for failure
+ */
 int apply_template(string template_path, string username) {
   if ((strlen(template_path) < 10) 
       || (template_path[<9..<1] != TEMPLATE_SUFFIX)) {
@@ -115,6 +150,13 @@ int apply_template(string template_path, string username) {
   return 1;
 }
 
+/**
+ * Save a user's hashed password to their password file.
+ * 
+ * @param  user_id       the user id
+ * @param  password      the hashed password
+ * @return 1 for success, 0 for failure
+ */
 int save_password(string user_id, string password) {
   object logger = LoggerFactory->get_logger(THISO);
   string username = UserTracker->query_username(user_id);
@@ -132,7 +174,18 @@ int save_password(string user_id, string password) {
   return 1;
 }
 
-string attach_session(object login, string user_id) {
+/**
+ * Attach a user to their user session. If it can be safely resumed, their
+ * last session will be used. Otherwise, a new session will be created with a
+ * new avatar. Then the "descension" process takes place, which involves 
+ * resuming their session and switching their connection from the provided 
+ * interactive (which will generally be the login object).
+ * 
+ * @param  interactive   the user's current interactive 
+ * @param  user_id       the user id to attach to session
+ * @return the attached session id
+ */
+string attach_session(object interactive, string user_id) {
   object logger = LoggerFactory->get_logger(THISO);
 
   // get last connected session, or create new one
@@ -151,7 +204,7 @@ string attach_session(object login, string user_id) {
   if (!avatar) {
     avatar = clone_object(PlatformAvatar);
     if (!avatar) {
-      logger->warn("failed to clone platform avatar: %O %O", login, user_id);
+      logger->warn("failed to clone platform avatar: %O", user_id);
       return 0;
     }
     SessionTracker->set_avatar(session_id, avatar);
@@ -169,9 +222,9 @@ string attach_session(object login, string user_id) {
       return 0; 
     }
     // switch connection to session
-    if (!connect_session(login, session_id)) {
+    if (!connect_session(interactive, session_id)) {
       logger->warn("failed to connect user session: %O %O", 
-                   login, session_id);
+                   interactive, session_id);
       return 0;
     }
     apply(#'call_other, avatar, "on_descend", session_id, args);

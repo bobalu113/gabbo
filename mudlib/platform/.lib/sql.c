@@ -9,20 +9,24 @@
 
 inherit JSONLib;
 
+/**
+ * Encode an LPC value for insertion into a SQL statement. Complex data types
+ * are not currently supported.
+ * 
+ * @param  value         the value to encode
+ * @return the encoded string
+ */
 string encode_value(mixed value) {
   switch (typeof(value)) {
     case T_NUMBER:
       return to_string(value);
     case T_STRING:             
       return sprintf("'%s'", implode(explode(value, "'"), "''"));
-    case T_POINTER:
-      return encode_value(json_encode(value));
-    case T_OBJECT:
-      return encode_value(ObjectTracker->query_object_id(value));
-    case T_MAPPING:
-      return encode_value(json_encode(value));
     case T_FLOAT:
       return to_string(value);
+    case T_POINTER:
+    case T_OBJECT:
+    case T_MAPPING:
     case T_CLOSURE:
     case T_SYMBOL:
     case T_QUOTED_ARRAY:
@@ -33,6 +37,17 @@ string encode_value(mixed value) {
   return 0;
 }
 
+/**
+ * Get an insert statement for inserting a single record into the specified
+ * table. For parameterized statements, an empty array of parameters can be
+ * passed by reference and it will be populated with the correct values when
+ * the function returns. 
+ * 
+ * @param  table         the table name
+ * @param  data          a mapping of column names to values
+ * @param  params        a parameter array to populate, passed by reference
+ * @return the insert statement for the provided data
+ */
 string get_insert_statement(string table, mapping data, mixed *params) {
   string *columns = m_indices(data);
   params = m_values(data);
@@ -51,6 +66,19 @@ string get_insert_statement(string table, mapping data, mixed *params) {
   return query;
 }
 
+/**
+ * Get an update statement for updatinging a single record in the specified
+ * table. The update must be constrained on the id column, with the provided
+ * id value. For parameterized statements, an empty array of parameters can be
+ * passed by reference and it will be populated with the correct values when
+ * the function returns. 
+ * 
+ * @param  table         the table name
+ * @param  id            the row's id column value
+ * @param  data          a mapping of column names to values
+ * @param  params        a parameter array to populate, passed by reference
+ * @return the update statement for the provided data
+ */
 string get_update_statement(string table, mixed id, mapping data, 
                             mixed *params) {
   string *columns = m_indices(data);
@@ -82,6 +110,19 @@ string get_update_statement(string table, mixed id, mapping data,
   return query;
 }
 
+/**
+ * Get a select statement to query for one or more records from the specified
+ * table. All columns will be selected, but the result will be constrained by
+ * a WHERE statement based on the provided key. The key is a mapping of
+ * column names to values which will be AND'd together. For parameterized 
+ * statements, an empty array of parameters can be passed by reference and it 
+ * will be populated with the correct values when the function returns.  
+ * 
+ * @param  table         the table name
+ * @param  key           a mapping of column names to values
+ * @param  params        a parameter array to populate, passed by reference
+ * @return the select statement for the provided key
+ */
 string get_select_statement(string table, mapping key, mixed *params) {
   string *columns = m_indices(key);
   params = m_values(key);
@@ -102,6 +143,14 @@ string get_select_statement(string table, mapping key, mixed *params) {
   return query;
 }
 
+/**
+ * Get a create table statement used to duh, create a table. The column list
+ * needs to include info on type, defaults, indexes and constraints. 
+ * 
+ * @param  table         the table name
+ * @param  cols          the column list containing type, flags, and default
+ * @return the create table statement for the provided columns
+ */
 string get_create_table_statement(string table, mapping *cols) {
   string columns = "";
   int first = 1;
@@ -140,6 +189,12 @@ string get_create_table_statement(string table, mapping *cols) {
   return query;
 }
 
+/**
+ * Get a table info table statement.
+ * 
+ * @param  table         the table name
+ * @return the table info statement
+ */
 string get_table_info_statement(string table) {
   return sprintf("pragma table_info(%s);", table);
 }
