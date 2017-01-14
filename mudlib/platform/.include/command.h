@@ -67,4 +67,7 @@
 #define VALIDATION_FAIL       0
 #define VALIDATION_RETRY      -1
 
+#define STEP_FIELD            "step"
+#define INITIAL_STEP          0
+
 #endif  // _COMMAND_H

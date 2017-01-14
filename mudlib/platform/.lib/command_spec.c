@@ -35,11 +35,25 @@ mixed *parse_import_xml(string specfile, mixed *xml, mapping imports);
 int parse_boolean(string value);
 void parse_error(string specfile, string msg);
 
+/**
+ * Load a command specfile. See program doc for what a loaded command spec
+ * value looks like.
+ * 
+ * @param  specfile      the spec filename
+ * @return the loaded commands
+ */
 mixed *load_command_spec(string specfile) {
   mixed *xml = xml_parse(read_file(specfile));
   return parse_commands_xml(specfile, xml);
 }
 
+/**
+ * Parse the &lt;commands&gt; tag.
+ * 
+ * @param  specfile      the spec filename
+ * @param  xml           the deserialized xml to parse
+ * @return the loaded commands
+ */
 mixed *parse_commands_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -72,7 +86,15 @@ mixed *parse_commands_xml(string specfile, mixed *xml) {
   return commands;
 }
 
-
+/**
+ * Parse the &lt;command&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  subcommand_map  a mapping of subcommand ids to subcommands, 
+ *                         passed by reference
+ * @return the loaded command
+ */
 varargs mixed *parse_command_xml(string specfile, mixed *xml, 
                                  mapping subcommand_map) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
@@ -161,6 +183,14 @@ varargs mixed *parse_command_xml(string specfile, mixed *xml,
   return ({ id, controller, verbs, fields, syntax, validation, max_retry });
 }
 
+/**
+ * Parse the &lt;fields&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  field_map       a mapping of field ids to fields
+ * @return the loaded fields
+ */
 mixed *parse_fields_xml(string specfile, mixed *xml, mapping field_map) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -182,6 +212,13 @@ mixed *parse_fields_xml(string specfile, mixed *xml, mapping field_map) {
   return result;
 }
 
+/**
+ * Parse the &lt;field&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @return the loaded field
+ */
 mixed *parse_field_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -240,6 +277,15 @@ mixed *parse_field_xml(string specfile, mixed *xml) {
             prompt, validation });
 }
 
+/**
+ * Parse the &lt;args&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  field_map       a mapping of field ids to fields
+ * @param  arg_lists       a mapping of args ids to args
+ * @return the loaded args
+ */
 mixed *parse_args_xml(string specfile, mixed *xml, mapping field_map, 
                       mapping arg_lists) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
@@ -271,6 +317,14 @@ mixed *parse_args_xml(string specfile, mixed *xml, mapping field_map,
   return args;
 }
 
+/**
+ * Parse the &lt;arg&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  field_map       a mapping of field ids to fields
+ * @return the loaded arg
+ */
 mixed *parse_arg_xml(string specfile, mixed *xml, mapping field_map) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -281,6 +335,15 @@ mixed *parse_arg_xml(string specfile, mixed *xml, mapping field_map) {
   }
 }
 
+/**
+ * Parse the &lt;opts&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  field_map       a mapping of field ids to fields
+ * @param  opt_sets        a mapping of opts ids to opts
+ * @return the loaded opts
+ */
 mixed *parse_opts_xml(string specfile, mixed *xml, mapping field_map, 
                       mapping opt_sets) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
@@ -319,6 +382,14 @@ mixed *parse_opts_xml(string specfile, mixed *xml, mapping field_map,
   return ({ opts, longopts });
 }
 
+/**
+ * Parse the &lt;opt&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  field_map       a mapping of field ids to fields
+ * @return the loaded opt
+ */
 mixed *parse_opt_xml(string specfile, mixed *xml, mapping field_map) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -343,6 +414,13 @@ mixed *parse_opt_xml(string specfile, mixed *xml, mapping field_map) {
   return result;
 } 
 
+/**
+ * Parse the &lt;enum&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @return the loaded enum
+ */
 mixed *parse_enum_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -376,6 +454,13 @@ mixed *parse_enum_xml(string specfile, mixed *xml) {
   return ({ id, multi, delim, values });
 }
 
+/**
+ * Parse the &lt;value&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @return the loaded enum value
+ */
 mixed *parse_enum_value_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -401,6 +486,13 @@ mixed *parse_enum_value_xml(string specfile, mixed *xml) {
   return ({ value, label, type });
 }
 
+/**
+ * Parse the &lt;prompt&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @return the loaded prompt
+ */
 mixed *parse_prompt_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -414,6 +506,13 @@ mixed *parse_prompt_xml(string specfile, mixed *xml) {
   return ({ no_echo, msg });
 }
 
+/**
+ * Parse the &lt;validate&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @return the loaded validation
+ */
 mixed *parse_validate_xml(string specfile, mixed *xml) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
 
@@ -448,6 +547,18 @@ mixed *parse_validate_xml(string specfile, mixed *xml) {
   return ({ validator, fail, params, negate });
 }
 
+/**
+ * Parse the &lt;syntax&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  field_map       a mapping of field ids to fields
+ * @param  arg_lists       a mapping of args ids to args
+ * @param  opt_sets        a mapping of opts ids to opts
+ * @param  subcommand_map  a mapping of subcommand ids to subcommands, 
+ *                         passed by reference
+ * @return the loaded enum
+ */
 mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
                         mapping arg_lists, mapping opt_sets, 
                         mapping subcommand_map) {
@@ -515,6 +626,15 @@ mixed *parse_syntax_xml(string specfile, mixed *xml, mapping field_map,
             args, opts, longopts, validation, subcommands });
 }
 
+/**
+ * Parse the &lt;import&gt; tag.
+ * 
+ * @param  specfile        the spec filename
+ * @param  xml             the deserialized xml to parse
+ * @param  imports         a mapping of imported specfiles to imported
+ *                         commands, passed by reference
+ * @return the imported command
+ */
 mixed *parse_import_xml(string specfile, mixed *xml, mapping imports) {
   xml[XML_TAG_ATTRIBUTES] ||= ([ ]);
   string id;
@@ -555,10 +675,22 @@ mixed *parse_import_xml(string specfile, mixed *xml, mapping imports) {
   return 0;
 }
 
+/**
+ * Parse a boolean string.
+ * 
+ * @param  value         parse a boolean string
+ * @return [description]
+ */
 int parse_boolean(string value) {
   return (lower_case(value) == TRUE_VALUE);
 }
 
+/**
+ * Called during a parsing error.
+ * 
+ * @param  specfile      the spec filename
+ * @param  msg           an error message
+ */
 void parse_error(string specfile, string msg) {
   raise_error(sprintf("Error parsing command spec %s: %s\n", specfile, msg));
 }
