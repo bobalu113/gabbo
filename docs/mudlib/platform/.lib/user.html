@@ -67,16 +67,8 @@
 </li><li><a href="../../platform/.lib/connection.html" title="">ConnectionLib </a>
 <ul class="tree"><li class="last"><a href="../../platform/.lib/object.html" title="">ObjectLib </a>
 </li></ul></li><li><a href="../../platform/.lib/session.html" title="">SessionLib </a>
-</li><li class="last"><a href="../../platform/.lib/format_strings.html" title="">FormatStringsLib </a>
-<ul class="tree"><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
+</li><li class="last"><a href="../...html" title=""></a>
+</li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -107,31 +99,43 @@
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/user.html#apply_template()">apply_template</a></strong>(string&nbsp;template_path,&nbsp;string&nbsp;username)</code>
-<div class="block"></div>
+<div class="block">Apply a skeleton template for a specified username.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.lib/user.html#attach_session()">attach_session</a></strong>(object&nbsp;login,&nbsp;string&nbsp;user_id)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../platform/.lib/user.html#attach_session()">attach_session</a></strong>(object&nbsp;interactive,&nbsp;string&nbsp;user_id)</code>
+<div class="block">Attach a user to their user session.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/user.html#create_user()">create_user</a></strong>(string&nbsp;username,&nbsp;string&nbsp;password)</code>
-<div class="block"></div>
+<div class="block">Create a new user with the provided username and password.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/user.html#hash_passwd()">hash_passwd</a></strong>(string&nbsp;password)</code>
-<div class="block"></div>
+<div class="block">Create a password hash.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/user.html#install_skeleton()">install_skeleton</a></strong>(string&nbsp;user_dir)</code>
+<div class="block">Install the skeleton user directory to the specified user dir.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/user.html#passwd_file()">passwd_file</a></strong>(string&nbsp;username)</code>
-<div class="block"></div>
+<div class="block">Get the password file for a given username.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/user.html#save_password()">save_password</a></strong>(string&nbsp;user_id,&nbsp;string&nbsp;password)</code>
+<div class="block">Save a user's hashed password to their password file.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -165,7 +169,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -173,13 +177,6 @@
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/session.html" title="program /platform/.lib/session">SessionLib </a></h3>
 <code><a href="../../platform/.lib/session.html#is_active()">is_active</a>, <a href="../../platform/.lib/session.html#is_subsession()">is_subsession</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/format_strings">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/format_strings.html" title="program /platform/.lib/format_strings">FormatStringsLib </a></h3>
-<code><a href="../../platform/.lib/format_strings.html#explode_format()">explode_format</a>, <a href="../../platform/.lib/format_strings.html#parse_format()">parse_format</a></code></li>
 
 </ul>
 
@@ -236,11 +233,12 @@
 <li class="blockList">
 <h4>passwd_file</h4>
 <pre>public&nbsp;string&nbsp;passwd_file(string&nbsp;username)</pre>
-<div class="block"></div>
+<div class="block">Get the password file for a given username.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
+<dd><code>username</code> - the username </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the user's password file </dd>
 </dl>
 </li>
 </ul>
@@ -251,11 +249,12 @@
 <li class="blockList">
 <h4>hash_passwd</h4>
 <pre>public&nbsp;string&nbsp;hash_passwd(string&nbsp;password)</pre>
-<div class="block"></div>
+<div class="block">Create a password hash.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>password</code> - </dd>
+<dd><code>password</code> - the plain text password </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the hashed password </dd>
 </dl>
 </li>
 </ul>
@@ -266,12 +265,32 @@
 <li class="blockList">
 <h4>create_user</h4>
 <pre>public&nbsp;string&nbsp;create_user(string&nbsp;username,&nbsp;string&nbsp;password)</pre>
-<div class="block"></div>
+<div class="block">Create a new user with the provided username and password. This installs
+the skeleton dir, registers the username with the user tracker, and saves
+the password to the user's password file.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
-<dd><code>password</code> - </dd>
+<dd><code>username</code> - the username </dd>
+<dd><code>password</code> - the plain-text password </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the new user id </dd>
+</dl>
+</li>
+</ul>
+<a name="install_skeleton()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>install_skeleton</h4>
+<pre>public&nbsp;int&nbsp;install_skeleton(string&nbsp;user_dir)</pre>
+<div class="block">Install the skeleton user directory to the specified user dir. This involves
+copying the files and applying the templates.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>user_dir</code> - the user dir to isntall to </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -282,12 +301,30 @@
 <li class="blockList">
 <h4>apply_template</h4>
 <pre>public&nbsp;int&nbsp;apply_template(string&nbsp;template_path,&nbsp;string&nbsp;username)</pre>
-<div class="block"></div>
+<div class="block">Apply a skeleton template for a specified username.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>template_path</code> - </dd>
-<dd><code>username</code> - </dd>
+<dd><code>template_path</code> - the path of the template file </dd>
+<dd><code>username</code> - the username </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
+</dl>
+</li>
+</ul>
+<a name="save_password()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>save_password</h4>
+<pre>public&nbsp;int&nbsp;save_password(string&nbsp;user_id,&nbsp;string&nbsp;password)</pre>
+<div class="block">Save a user's hashed password to their password file.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>user_id</code> - the user id </dd>
+<dd><code>password</code> - the hashed password </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -297,13 +334,18 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>attach_session</h4>
-<pre>public&nbsp;string&nbsp;attach_session(object&nbsp;login,&nbsp;string&nbsp;user_id)</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;attach_session(object&nbsp;interactive,&nbsp;string&nbsp;user_id)</pre>
+<div class="block">Attach a user to their user session. If it can be safely resumed, their
+last session will be used. Otherwise, a new session will be created with a
+new avatar. Then the "descension" process takes place, which involves
+resuming their session and switching their connection from the provided
+interactive (which will generally be the login object).</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>login</code> - </dd>
-<dd><code>user_id</code> - </dd>
+<dd><code>interactive</code> - the user's current interactive </dd>
+<dd><code>user_id</code> - the user id to attach to session </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the attached session id </dd>
 </dl>
 </li>
 </ul>

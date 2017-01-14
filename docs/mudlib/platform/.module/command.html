@@ -53,22 +53,15 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">/platform/.module/command</div>
-<h2 title="Program CommandCode " class="title">Program CommandCode </h2>
+<h2 title="Program /platform/.module/command" class="title">Program /platform/.module/command</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Inherited Programs:</dt>
-<dd>
-<ul class="tree"><li class="last"><a href="../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></dd>
-</dl>
 <hr>
 <br>
-<div class="block">A base object for user commands.</div>
+<div class="block"></div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="../...html#toString()"><code>->toString()</code></a>
@@ -80,104 +73,12 @@
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ========== METHOD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method_summary">
-<!--   -->
-</a>
-<h3>Function Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Function Summary table, listing functions, and an explanation">
-<caption><span>Functions</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Function and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command.html#do_command()">do_command</a></strong>(string&nbsp;arg)</code>
-<div class="block">Execute the command.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command.html#is_command()">is_command</a></strong>()</code>
-<div class="block">Returns true to designate that this object is a command object.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command.html#query_actions()">query_actions</a></strong>()</code>
-<div class="block">Return a default list of actions to be associated with this command.</div>
-</td>
-</tr>
-</table>
-
-</li>
-</ul>
 </li>
 </ul>
 </div>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ METHOD DETAIL ========== -->
-<ul class="blockList">
-<li class="blockList"><a name="method_detail">
-<!--   -->
-</a>
-<h3>Function Detail</h3>
-<a name="query_actions()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_actions</h4>
-<pre>public&nbsp;mixed&nbsp;*query_actions()</pre>
-<div class="block">Return a default list of actions to be associated with this command. The
-result should be a two-dimensional array, with each inner array comprised
-of two elements: a verb and an action flag (see add_action(E)).</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>an array of default actions </dd>
-</dl>
-</li>
-</ul>
-<a name="do_command()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>do_command</h4>
-<pre>public&nbsp;int&nbsp;do_command(string&nbsp;arg)</pre>
-<div class="block">Execute the command. Overload this function with code to be invoked each
-time the command is run. Command-line arguments will be passed as the
-string arg.</div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - command-line arguments </dd>
-<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
-</dl>
-</li>
-</ul>
-<a name="is_command()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>is_command</h4>
-<pre>public&nbsp;nomask&nbsp;int&nbsp;is_command()</pre>
-<div class="block">Returns true to designate that this object is a command object.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>1 </dd>
-</dl>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
 </li>
 </ul>
 </li>

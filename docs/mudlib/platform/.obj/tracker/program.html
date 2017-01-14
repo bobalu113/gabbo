@@ -110,64 +110,64 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#get_id()">get_id</a></strong>(string&nbsp;program_name,&nbsp;int&nbsp;program_time,&nbsp;int&nbsp;program_count)</code>
-<div class="block"></div>
+<div class="block">Get a program id its constitutent components.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#new_program()">new_program</a></strong>(object&nbsp;blueprint)</code>
-<div class="block"></div>
+<div class="block">Invoked by the HookService when a new blueprint is created.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#program_cloned()">program_cloned</a></strong>(object&nbsp;clone)</code>
-<div class="block"></div>
+<div class="block">Invoked by the HookService when a new clone is created.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_clones()">query_clones</a></strong>(string&nbsp;program_id)</code>
-<div class="block"></div>
+<div class="block">Get a collection of all the clones for a given program id.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_program_count()">query_program_count</a></strong>(string&nbsp;id)</code>
-<div class="block"></div>
+<div class="block">Get the program count portion of a program id.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_program_id()">query_program_id</a></strong>(object&nbsp;ob)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_program_ids()">query_program_ids</a></strong>(string&nbsp;program_name)</code>
-<div class="block"></div>
+<div class="block">Get the program id of an object.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_program_names()">query_program_names</a></strong>()</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_program_ids()">query_program_ids</a></strong>(string&nbsp;program_name)</code>
+<div class="block">Get a collection of known program ids for a given program name.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#query_program_names()">query_program_names</a></strong>()</code>
+<div class="block">Get a list of all known program names.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/program.html#setup()">setup</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Setup the ProgramTracker.</div>
 </td>
 </tr>
 </table>
@@ -193,6 +193,19 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>protected&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the ProgramTracker.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="get_id()">
 <!--   -->
 </a>
@@ -200,13 +213,14 @@
 <li class="blockList">
 <h4>get_id</h4>
 <pre>public&nbsp;string&nbsp;get_id(string&nbsp;program_name,&nbsp;int&nbsp;program_time,&nbsp;int&nbsp;program_count)</pre>
-<div class="block"></div>
+<div class="block">Get a program id its constitutent components.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>program_name</code> - </dd>
-<dd><code>program_time</code> - </dd>
-<dd><code>program_count</code> - </dd>
+<dd><code>program_name</code> - the program name </dd>
+<dd><code>program_time</code> - the program time </dd>
+<dd><code>program_count</code> - the program count </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the program id </dd>
 </dl>
 </li>
 </ul>
@@ -217,11 +231,12 @@
 <li class="blockList">
 <h4>new_program</h4>
 <pre>public&nbsp;string&nbsp;new_program(object&nbsp;blueprint)</pre>
-<div class="block"></div>
+<div class="block">Invoked by the HookService when a new blueprint is created.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>blueprint</code> - </dd>
+<dd><code>blueprint</code> - the blueprint being created </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the blueprint's program id </dd>
 </dl>
 </li>
 </ul>
@@ -232,11 +247,12 @@
 <li class="blockList">
 <h4>program_cloned</h4>
 <pre>public&nbsp;string&nbsp;program_cloned(object&nbsp;clone)</pre>
-<div class="block"></div>
+<div class="block">Invoked by the HookService when a new clone is created.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>clone</code> - </dd>
+<dd><code>clone</code> - the clone object </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the program id of the clone </dd>
 </dl>
 </li>
 </ul>
@@ -247,9 +263,10 @@
 <li class="blockList">
 <h4>query_program_names</h4>
 <pre>public&nbsp;string&nbsp;*query_program_names()</pre>
-<div class="block"></div>
+<div class="block">Get a list of all known program names.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>an unsorted list of all known program names </dd>
 </dl>
 </li>
 </ul>
@@ -260,11 +277,12 @@
 <li class="blockList">
 <h4>query_program_ids</h4>
 <pre>public&nbsp;mapping&nbsp;query_program_ids(string&nbsp;program_name)</pre>
-<div class="block"></div>
+<div class="block">Get a collection of known program ids for a given program name.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>program_name</code> - </dd>
+<dd><code>program_name</code> - the program name </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of program ids from program </dd>
 </dl>
 </li>
 </ul>
@@ -275,11 +293,12 @@
 <li class="blockList">
 <h4>query_program_id</h4>
 <pre>public&nbsp;string&nbsp;query_program_id(object&nbsp;ob)</pre>
-<div class="block"></div>
+<div class="block">Get the program id of an object.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>ob</code> - </dd>
+<dd><code>ob</code> - the object being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the program of the object </dd>
 </dl>
 </li>
 </ul>
@@ -290,11 +309,12 @@
 <li class="blockList">
 <h4>query_program_count</h4>
 <pre>public&nbsp;int&nbsp;query_program_count(string&nbsp;id)</pre>
-<div class="block"></div>
+<div class="block">Get the program count portion of a program id.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>id</code> - </dd>
+<dd><code>id</code> - the program id </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the program count </dd>
 </dl>
 </li>
 </ul>
@@ -305,24 +325,12 @@
 <li class="blockList">
 <h4>query_clones</h4>
 <pre>public&nbsp;mapping&nbsp;query_clones(string&nbsp;program_id)</pre>
-<div class="block"></div>
+<div class="block">Get a collection of all the clones for a given program id.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>program_id</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="setup()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setup</h4>
-<pre>protected&nbsp;void&nbsp;setup()</pre>
-<div class="block"></div>
-<dl>
-<dl>
+<dd><code>program_id</code> - the program id being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of clones from the given program </dd>
 </dl>
 </li>
 </ul>
@@ -332,8 +340,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;int&nbsp;create()</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

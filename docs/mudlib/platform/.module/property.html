@@ -63,7 +63,7 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li class="last"><a href="../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li class="last"><a href="../../platform/.lib/file.html" title="">FileLib </a>
 </li></ul></dd>
 </dl>
 <hr>
@@ -114,54 +114,48 @@ Hooks are specified as one of the following array formats:
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#check_prop()">check_prop</a></strong>(string&nbsp;prop)</code>
 <div class="block">Test whether a property has been set, and query the property's flags.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#configure_prop()">configure_prop</a></strong>(string&nbsp;prop,&nbsp;int&nbsp;flags,&nbsp;mixed&nbsp;method)</code>
 <div class="block">Reconfigure a property that has already been initialized.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#default_prop_access()">default_prop_access</a></strong>(string&nbsp;prop,&nbsp;int&nbsp;op,&nbsp;object&nbsp;source,&nbsp;mixed&nbsp;special)</code>
 <div class="block">This function will be called for access checks against a prop that has not
 configured a valid access method.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#generate_unique_prop_name()">generate_unique_prop_name</a></strong>(string&nbsp;seed)</code>
 <div class="block">Utility function guaranteed to return a property name that is not already
 in use at the time the function is called.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#init_prop()">init_prop</a></strong>(string&nbsp;prop,&nbsp;int&nbsp;flags,&nbsp;mixed&nbsp;method)</code>
 <div class="block">Initialize a property with a specified configuration.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#mask_prop()">mask_prop</a></strong>(string&nbsp;prop,&nbsp;mixed&nbsp;method)</code>
 <div class="block">Masks overload the result returned by the query_prop() function.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/property.html#query_all_prop_names()">query_all_prop_names</a></strong>()</code>
 <div class="block">Get a list of all the properties on the object.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/property.html#query_capabilities()">query_capabilities</a></strong>()</code>
-<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -190,7 +184,7 @@ in use at the time the function is called.</div>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/property.html#setup_property()">setup_property</a></strong>()</code>
+<td class="colLast"><code><strong><a href="../../platform/.module/property.html#setup()">setup</a></strong>()</code>
 <div class="block">Initialize PropertyMixin.</div>
 </td>
 </tr>
@@ -201,6 +195,13 @@ in use at the time the function is called.</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/file">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/file.html" title="program /platform/.lib/file">FileLib </a></h3>
+<code><a href="../../platform/.lib/file.html#basename()">basename</a>, <a href="../../platform/.lib/file.html#copy_tree()">copy_tree</a>, <a href="../../platform/.lib/file.html#dirname()">dirname</a>, <a href="../../platform/.lib/file.html#expand_path()">expand_path</a>, <a href="../../platform/.lib/file.html#expand_pattern()">expand_pattern</a>, <a href="../../platform/.lib/file.html#file_exists()">file_exists</a>, <a href="../../platform/.lib/file.html#is_directory()">is_directory</a>, <a href="../../platform/.lib/file.html#is_loadable()">is_loadable</a>, <a href="../../platform/.lib/file.html#is_special_dir()">is_special_dir</a>, <a href="../../platform/.lib/file.html#munge_filename()">munge_filename</a>, <a href="../../platform/.lib/file.html#read_value()">read_value</a>, <a href="../../platform/.lib/file.html#traverse_tree()">traverse_tree</a>, <a href="../../platform/.lib/file.html#write_value()">write_value</a></code></li>
+
+</ul>
 
 </li>
 </ul>
@@ -216,6 +217,19 @@ in use at the time the function is called.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>protected&nbsp;void&nbsp;setup()</pre>
+<div class="block">Initialize PropertyMixin.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="init_prop()">
 <!--   -->
 </a>
@@ -429,33 +443,6 @@ configured a valid access method. See check_access().</div>
 <dd><code>source</code> - the object that is attempting to execute the operation </dd>
 <dd><code>special</code> - extra information, depending on the operation </dd>
 <dt><span class="strong">Returns:</span></dt><dd>1 if access should be denied, or 0 to allow the operation </dd>
-</dl>
-</li>
-</ul>
-<a name="setup_property()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setup_property</h4>
-<pre>protected&nbsp;void&nbsp;setup_property()</pre>
-<div class="block">Initialize PropertyMixin.</div>
-<dl>
-<dl>
-</dl>
-</li>
-</ul>
-<a name="query_capabilities()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_capabilities</h4>
-<pre>public&nbsp;mapping&nbsp;query_capabilities()</pre>
-<div class="block">Return a zero-width mapping of the capabilities this program provides.</div>
-<dl>
-<dl>
-<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of capabilities </dd>
 </dl>
 </li>
 </ul>

@@ -110,34 +110,34 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#new_object()">new_object</a></strong>(object&nbsp;o)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#object_destructed()">object_destructed</a></strong>(object&nbsp;o)</code>
-<div class="block"></div>
+<div class="block">Invoked by the HookService when a new object is created.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#query_object_id()">query_object_id</a></strong>(object&nbsp;ob)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#object_destructed()">object_destructed</a></strong>(object&nbsp;o)</code>
+<div class="block">Invoked by the master object when an object is destructed.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#query_object_id()">query_object_id</a></strong>(object&nbsp;ob)</code>
+<div class="block">Get the object id for an object.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/object.html#setup()">setup</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Setup the ObjectTracker.</div>
 </td>
 </tr>
 </table>
@@ -152,7 +152,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/array">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/array.html" title="program /platform/.lib/array">ArrayLib </a></h3>
-<code><a href="../../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
+<code><a href="../../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../../platform/.lib/array.html#random_key()">random_key</a>, <a href="../../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
 
 </ul>
 
@@ -177,7 +177,7 @@
 <li class="blockList">
 <h4>setup</h4>
 <pre>public&nbsp;void&nbsp;setup()</pre>
-<div class="block"></div>
+<div class="block">Setup the ObjectTracker.</div>
 <dl>
 <dl>
 </dl>
@@ -190,11 +190,11 @@
 <li class="blockList">
 <h4>new_object</h4>
 <pre>public&nbsp;void&nbsp;new_object(object&nbsp;o)</pre>
-<div class="block"></div>
+<div class="block">Invoked by the HookService when a new object is created.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>o</code> - </dd>
+<dd><code>o</code> - the object being created </dd>
 </dl>
 </li>
 </ul>
@@ -205,11 +205,11 @@
 <li class="blockList">
 <h4>object_destructed</h4>
 <pre>public&nbsp;void&nbsp;object_destructed(object&nbsp;o)</pre>
-<div class="block"></div>
+<div class="block">Invoked by the master object when an object is destructed.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>o</code> - </dd>
+<dd><code>o</code> - the object being destructed </dd>
 </dl>
 </li>
 </ul>
@@ -220,11 +220,18 @@
 <li class="blockList">
 <h4>query_object_id</h4>
 <pre>public&nbsp;string&nbsp;query_object_id(object&nbsp;ob)</pre>
-<div class="block"></div>
+<div class="block">Get the object id for an object. Unlike most other trackers, object ids
+aren't constructed with incrementing counters. Instead, they are based on
+timestamps so the query operation is idempotent assuming I'm using that word
+correctly.
+blueprint ids = "object_name#object_time#blueprint_counter"
+clone ids = "object_name#object_time"
+Reminder: clone object names are "load_name#clone_counter"</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>ob</code> - </dd>
+<dd><code>ob</code> - the object to get an id for </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the object id </dd>
 </dl>
 </li>
 </ul>
@@ -234,8 +241,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;int&nbsp;create()</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

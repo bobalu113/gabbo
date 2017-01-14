@@ -122,30 +122,38 @@ array.</div>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/array.html#mapping_array()">mapping_array</a></strong>(mixed *keys,&nbsp;mixed *data)</code>
-<div class="block"></div>
+<div class="block">Given an array of keys, create an array of mappings such that each element
+is a mapping with the specified keys and the correspecting values from
+data[index].</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;varargs&nbsp;mixed&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.lib/array.html#reduce()">reduce</a></strong>(mixed&nbsp;data,&nbsp;closure&nbsp;reducer,&nbsp;mixed&nbsp;initial,&nbsp;varargs mixed *args)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/array.html#random_key()">random_key</a></strong>(mapping&nbsp;map)</code>
+<div class="block">Get a random key from a mapping.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;mixed&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/array.html#reduce()">reduce</a></strong>(mixed&nbsp;data,&nbsp;closure&nbsp;reducer,&nbsp;mixed&nbsp;initial,&nbsp;varargs mixed *args)</code>
+<div class="block">Reduce an array or mapping.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/array.html#searcha()">searcha</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;el,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
 <div class="block">Return the index of the first element of an array or string which is a
 specified value.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/array.html#searcha_any()">searcha_any</a></strong>(mixed&nbsp;list,&nbsp;mixed&nbsp;elements,&nbsp;int&nbsp;start,&nbsp;int&nbsp;step)</code>
 <div class="block">Like member(), but instead of searching for a single item, search for any
 item of a set.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/array.html#unique_array()">unique_array</a></strong>(mixed *list,&nbsp;int&nbsp;keep_last)</code>
 <div class="block">Return a copy of an array with all duplicates removed.</div>
@@ -334,14 +342,15 @@ mapping.</div>
 <li class="blockList">
 <h4>reduce</h4>
 <pre>public&nbsp;varargs&nbsp;mixed&nbsp;reduce(mixed&nbsp;data,&nbsp;closure&nbsp;reducer,&nbsp;mixed&nbsp;initial,&nbsp;varargs mixed *args)</pre>
-<div class="block"></div>
+<div class="block">Reduce an array or mapping.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>data</code> - </dd>
-<dd><code>reducer</code> - </dd>
-<dd><code>initial</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>data</code> - an array or mapping (reduced on keys) </dd>
+<dd><code>reducer</code> - a reduction function </dd>
+<dd><code>initial</code> - an initial value </dd>
+<dd><code>args</code> - extra args for the reducer </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a value reduced on reducer->(current_value, element) </dd>
 </dl>
 </li>
 </ul>
@@ -352,12 +361,31 @@ mapping.</div>
 <li class="blockList">
 <h4>mapping_array</h4>
 <pre>public&nbsp;mapping&nbsp;*mapping_array(mixed *keys,&nbsp;mixed *data)</pre>
-<div class="block"></div>
+<div class="block">Given an array of keys, create an array of mappings such that each element
+is a mapping with the specified keys and the correspecting values from
+data[index].</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>keys</code> - </dd>
-<dd><code>data</code> - </dd>
+<dd><code>keys</code> - the keys for the resultant mappings </dd>
+<dd><code>data</code> - an array of corresponding values </dd>
+<dt><span class="strong">Returns:</span></dt><dd>an array of mappings of keys to values </dd>
+</dl>
+</li>
+</ul>
+<a name="random_key()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>random_key</h4>
+<pre>public&nbsp;mixed&nbsp;random_key(mapping&nbsp;map)</pre>
+<div class="block">Get a random key from a mapping.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>map</code> - the mapping </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a random key, or 0 if the mapping is empty </dd>
 </dl>
 </li>
 </ul>

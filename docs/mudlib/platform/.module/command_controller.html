@@ -64,47 +64,25 @@
 <dt>All Inherited Programs:</dt>
 <dd>
 <ul class="tree"><li><a href="../../platform/.lib/command.html" title="">CommandLib </a>
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></li><li><a href="../../platform/.lib/message.html" title="">MessageLib </a>
-</li><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../platform/.lib/struct.html" title="">StructLib </a>
+<ul class="tree"><li class="last"><a href="../...html" title=""></a>
+</li></ul></li><li><a href="../../platform/.lib/message.html" title="">MessageLib </a>
+</li><li><a href="../../platform/.lib/struct.html" title="">StructLib </a>
 </li><li><a href="../../platform/.lib/expand_object.html" title="">ObjectExpansionLib </a>
 <ul class="tree"><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li class="last"><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>
-</li><li class="last"><a href="../../platform/.lib/format_strings.html" title="">FormatStringsLib </a>
-<ul class="tree"><li><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
+</li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li><li class="last"><a href="../...html" title=""></a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+</li></ul></li><li><a href="../../platform/.lib/file.html" title="">FileLib </a>
+</li><li class="last"><a href="../...html" title=""></a>
+</li></ul></dd>
 </dl>
 <hr>
 <br>
 <div class="block">A generic CommandController module for commands added through the
-CommandGiver mixin. Each command must define a controller, and those
+CommandGiverMixin. Each command must define a controller, and those
 controllers may inherit this program to gain simplicity and uniformity
-in handling command execution.</div>
+in handling command execution. This is an abstract class, it implements the
+do_command() function invoked directly by CommandGiver but expects the
+inheriting programs to implement the execute() function.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="../...html#toString()"><code>->toString()</code></a>
@@ -116,34 +94,6 @@ in handling command execution.</div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_summary">
-<!--   -->
-</a>
-<h3>Variable Summary</h3>
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Variable Summary table, listing fields, and an explanation">
-<caption><span>Variables</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Variable and Description</th>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../..//platform/.module/command_controller.html#fail_formatter">fail_formatter</strong></code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;closure&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../..//platform/.module/command_controller.html#prompt_formatter">prompt_formatter</strong></code>
-<div class="block"></div>
-</td>
-</tr>
-</table>
-
-</li>
-</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method_summary">
@@ -156,124 +106,107 @@ in handling command execution.</div>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#create()">create</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#do_command()">do_command</a></strong>(mixed *command,&nbsp;string&nbsp;verb,&nbsp;string&nbsp;arg)</code>
-<div class="block"></div>
+<div class="block">Run a command.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#do_execute()">do_execute</a></strong>(mapping&nbsp;model,&nbsp;string&nbsp;verb)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#do_validate()">do_validate</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback,&nbsp;int&nbsp;flags)</code>
+<div class="block">Perform command validation.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#execute()">execute</a></strong>(mapping&nbsp;model,&nbsp;string&nbsp;verb)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#field_input()">field_input</a></strong>(string&nbsp;arg,&nbsp;struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<div class="block">Handle field prompt input.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#field_prompt()">field_prompt</a></strong>(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<div class="block">Prompt the user for a field value.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_boolean()">parse_boolean</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse a boolean value.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_enum()">parse_enum</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val,&nbsp;mixed *enum)</code>
-<div class="block"></div>
+<div class="block">Parse value from an enumeration.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_file()">parse_file</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse a string as if it specifies a single filename.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_files()">parse_files</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse a value representing a list of filenames.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_float()">parse_float</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse a floating point value.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_int()">parse_int</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse an integer value.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_object()">parse_object</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse a value as a single object.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#parse_objects()">parse_objects</a></strong>(string&nbsp;arg,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Parse a value as a list of objects.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_args()">process_args</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<div class="block">Process the field values passed via the command arg list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_command()">process_command</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<div class="block">Entry-point into command processor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_extra()">process_extra</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_field()">process_field</a></strong>(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<div class="block">Process the extra field values that were defined but not specified as
+passed via args or opts.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_opts()">process_opts</a></strong>(struct CommandState&nbsp;state,&nbsp;mapping&nbsp;opts,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_field()">process_field</a></strong>(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</code>
+<div class="block">Process a field.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;varargs&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#validate()">validate</a></strong>(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback,&nbsp;int&nbsp;flags)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_controller.html#process_opts()">process_opts</a></strong>(struct CommandState&nbsp;state,&nbsp;mapping&nbsp;opts,&nbsp;closure&nbsp;callback)</code>
+<div class="block">Process the field values passed via the command opts and longopts.</div>
 </td>
 </tr>
 </table>
@@ -281,7 +214,7 @@ in handling command execution.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/command">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/command.html" title="program /platform/.lib/command">CommandLib </a></h3>
-<code><a href="../../platform/.lib/command.html#apply_syntax()">apply_syntax</a>, <a href="../../platform/.lib/command.html#get_matching_syntax()">get_matching_syntax</a>, <a href="../../platform/.lib/command.html#parse_args()">parse_args</a>, <a href="../../platform/.lib/command.html#parse_args_explode()">parse_args_explode</a>, <a href="../../platform/.lib/command.html#parse_args_parse_command()">parse_args_parse_command</a>, <a href="../../platform/.lib/command.html#parse_args_regexp()">parse_args_regexp</a>, <a href="../../platform/.lib/command.html#parse_args_sscanf()">parse_args_sscanf</a>, <a href="../../platform/.lib/command.html#parse_longopt()">parse_longopt</a>, <a href="../../platform/.lib/command.html#parse_opt()">parse_opt</a>, <a href="../../platform/.lib/command.html#parse_opts()">parse_opts</a>, <a href="../../platform/.lib/command.html#parse_param()">parse_param</a>, <a href="../../platform/.lib/command.html#valid_syntax()">valid_syntax</a></code></li>
+<code><a href="../../platform/.lib/command.html#advance_step()">advance_step</a>, <a href="../../platform/.lib/command.html#apply_syntax()">apply_syntax</a>, <a href="../../platform/.lib/command.html#fail_result()">fail_result</a>, <a href="../../platform/.lib/command.html#get_matching_syntax()">get_matching_syntax</a>, <a href="../../platform/.lib/command.html#parse_args()">parse_args</a>, <a href="../../platform/.lib/command.html#parse_args_explode()">parse_args_explode</a>, <a href="../../platform/.lib/command.html#parse_args_parse_command()">parse_args_parse_command</a>, <a href="../../platform/.lib/command.html#parse_args_regexp()">parse_args_regexp</a>, <a href="../../platform/.lib/command.html#parse_args_sscanf()">parse_args_sscanf</a>, <a href="../../platform/.lib/command.html#parse_longopt()">parse_longopt</a>, <a href="../../platform/.lib/command.html#parse_opt()">parse_opt</a>, <a href="../../platform/.lib/command.html#parse_opts()">parse_opts</a>, <a href="../../platform/.lib/command.html#parse_param()">parse_param</a>, <a href="../../platform/.lib/command.html#pass_result()">pass_result</a>, <a href="../../platform/.lib/command.html#valid_syntax()">valid_syntax</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -289,20 +222,6 @@ in handling command execution.</div>
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/message.html" title="program /platform/.lib/message">MessageLib </a></h3>
 <code><a href="../../platform/.lib/message.html#prompt_msg()">prompt_msg</a>, <a href="../../platform/.lib/message.html#send_msg()">send_msg</a>, <a href="../../platform/.lib/message.html#send_prompt()">send_prompt</a>, <a href="../../platform/.lib/message.html#stderr_msg()">stderr_msg</a>, <a href="../../platform/.lib/message.html#stdout_msg()">stdout_msg</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/args">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/args.html" title="program /platform/.lib/args">ArgsLib </a></h3>
-<code><a href="../../platform/.lib/args.html#explode_args()">explode_args</a>, <a href="../../platform/.lib/args.html#explode_nested()">explode_nested</a>, <a href="../../platform/.lib/args.html#explode_unescaped()">explode_unescaped</a>, <a href="../../platform/.lib/args.html#find_close_char()">find_close_char</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/strings">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/strings.html" title="program /platform/.lib/strings">StringsLib </a></h3>
-<code><a href="../../platform/.lib/strings.html#find_nonws()">find_nonws</a>, <a href="../../platform/.lib/strings.html#is_escaped()">is_escaped</a>, <a href="../../platform/.lib/strings.html#match_quote()">match_quote</a>, <a href="../../platform/.lib/strings.html#search_str_unescaped()">search_str_unescaped</a>, <a href="../../platform/.lib/strings.html#unescape()">unescape</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -326,13 +245,6 @@ in handling command execution.</div>
 <code><a href="../../platform/.lib/file.html#basename()">basename</a>, <a href="../../platform/.lib/file.html#copy_tree()">copy_tree</a>, <a href="../../platform/.lib/file.html#dirname()">dirname</a>, <a href="../../platform/.lib/file.html#expand_path()">expand_path</a>, <a href="../../platform/.lib/file.html#expand_pattern()">expand_pattern</a>, <a href="../../platform/.lib/file.html#file_exists()">file_exists</a>, <a href="../../platform/.lib/file.html#is_directory()">is_directory</a>, <a href="../../platform/.lib/file.html#is_loadable()">is_loadable</a>, <a href="../../platform/.lib/file.html#is_special_dir()">is_special_dir</a>, <a href="../../platform/.lib/file.html#munge_filename()">munge_filename</a>, <a href="../../platform/.lib/file.html#read_value()">read_value</a>, <a href="../../platform/.lib/file.html#traverse_tree()">traverse_tree</a>, <a href="../../platform/.lib/file.html#write_value()">write_value</a></code></li>
 
 </ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/format_strings">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/format_strings.html" title="program /platform/.lib/format_strings">FormatStringsLib </a></h3>
-<code><a href="../../platform/.lib/format_strings.html#explode_format()">explode_format</a>, <a href="../../platform/.lib/format_strings.html#parse_format()">parse_format</a></code></li>
-
-</ul>
 
 </li>
 </ul>
@@ -342,34 +254,6 @@ in handling command execution.</div>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field_detail">
-<!--   -->
-</a>
-<h3>Variable Detail</h3>
-<a name="prompt_formatter">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>prompt_formatter</h4>
-<pre>public&nbsp;closure&nbsp;prompt_formatter</pre>
-<div class="block"></div>
-</li>
-</ul>
-<a name="fail_formatter">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>fail_formatter</h4>
-<pre>public&nbsp;closure&nbsp;fail_formatter</pre>
-<div class="block"></div>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method_detail">
@@ -382,14 +266,28 @@ in handling command execution.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>do_command</h4>
-<pre>public&nbsp;int&nbsp;do_command(mixed *command,&nbsp;string&nbsp;verb,&nbsp;string&nbsp;arg)</pre>
-<div class="block"></div>
+<pre>public&nbsp;mapping&nbsp;do_command(mixed *command,&nbsp;string&nbsp;verb,&nbsp;string&nbsp;arg)</pre>
+<div class="block">Run a command. Takes a command definition loaded from a command spec file,
+and collects all specified fields and runs validation against the values
+input by the user, either from arg list, getopts-style parameters, or a
+series of one or more interactive user prompts (with retries). Once all
+fields values have been provided and validated, they are passed to the
+execute() function as the "model" mapping along with the verb being used.
+The execute function may return a new model mapping that can be piped to
+a new command on the command line. This behavior is only guaranteed when
+not running in 'interactive' mode; if it is necessary to prompt the user for
+a missing or invalid value, this function will return 0. However it may be
+possible to preserve the command pipeline and resolve the rest of the
+command in the future after execute() finishes, if it is desirable to do so
+by the user.
+TODO implement command piping</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>command</code> - </dd>
-<dd><code>verb</code> - </dd>
-<dd><code>arg</code> - </dd>
+<dd><code>command</code> - the command info as loaded from the command spec </dd>
+<dd><code>verb</code> - the verb being used </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dt><span class="strong">Returns:</span></dt><dd>an "output" model mapping, or 0 if either the command failed or an interactive prompt was issued </dd>
 </dl>
 </li>
 </ul>
@@ -400,12 +298,17 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>process_command</h4>
 <pre>public&nbsp;int&nbsp;process_command(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Entry-point into command processor. Anytime the command state changes, this
+function may be called which attempts to run the command. If there is still
+missing or invalid input, it will descend into sub-processing functions to
+correct the problem, and re-run process_command() with the new command
+state. If the command state is good, the callback will be executed.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of the callback, or 0 if command could not be run as input </dd>
 </dl>
 </li>
 </ul>
@@ -416,12 +319,17 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>process_args</h4>
 <pre>public&nbsp;int&nbsp;process_args(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Process the field values passed via the command arg list. This simply
+runs process_field() for each command arg, and runs field_prompt() if you
+didn't specify enough args for the number of fields required. If all the
+arg values are good, return 1 to continue processing. To halt or terminate
+processing, return 0.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 to continue processing, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -432,13 +340,18 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>process_opts</h4>
 <pre>public&nbsp;int&nbsp;process_opts(struct CommandState&nbsp;state,&nbsp;mapping&nbsp;opts,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Process the field values passed via the command opts and longopts. This
+simply runs process_field() for each specified opt or longopt, and runs
+field_prompt() for any required-but-missing fields. If all the values are
+good, return 1 to continue processing. To halt or terminate processing,
+return 0.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>opts</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>opts</code> - a map of opt or longopt string to the field definition </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 to continue processing, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -449,12 +362,17 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>process_extra</h4>
 <pre>public&nbsp;int&nbsp;process_extra(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Process the extra field values that were defined but not specified as
+passed via args or opts. This simply runs process_field() for each extra
+field, and runs field_prompt() for any required-but-missing fields. If all
+the values are good, return 1 to continue processing. To halt or terminate
+processing, return 0.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 to continue processing, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -465,15 +383,20 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>process_field</h4>
 <pre>public&nbsp;int&nbsp;process_field(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Process a field. This function has 3 duties, parse the field value from the
+input string, run field validations on the value, and add the value to the
+model. If anything goes wrong along the way, it should attempt to retry
+field processing via a field_prompt() call. Returns 1 if everything was
+good, otherwise 0 to halt/terminate processing.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>field</code> - </dd>
-<dd><code>field_type</code> - </dd>
-<dd><code>index</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>field</code> - the field info from the parsed command spec: id, type info, required/prompt settings, max retry, default value, prompt string, validations </dd>
+<dd><code>field_type</code> - field type: "args", "opts", or "extra" </dd>
+<dd><code>index</code> - field index, int for arg position, string for opts or extra field ids </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 to continue processing, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -484,15 +407,15 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>field_prompt</h4>
 <pre>public&nbsp;void&nbsp;field_prompt(struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Prompt the user for a field value.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>field</code> - </dd>
-<dd><code>field_type</code> - </dd>
-<dd><code>index</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>field</code> - the field info from the parsed command spec: id, type info, required/prompt settings, max retry, default value, prompt string, validations </dd>
+<dd><code>field_type</code> - field type: "args", "opts", or "extra" </dd>
+<dd><code>index</code> - field index, int for arg position, string for opts or extra field ids </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
 </dl>
 </li>
 </ul>
@@ -503,16 +426,17 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>field_input</h4>
 <pre>public&nbsp;void&nbsp;field_input(string&nbsp;arg,&nbsp;struct CommandState&nbsp;state,&nbsp;mixed *field,&nbsp;string&nbsp;field_type,&nbsp;mixed&nbsp;index,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Handle field prompt input. This should update the command state with the
+new value and re-run process_command().</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>state</code> - </dd>
-<dd><code>field</code> - </dd>
-<dd><code>field_type</code> - </dd>
-<dd><code>index</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>arg</code> - the input string </dd>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>field</code> - the field info from the parsed command spec: id, type info, required/prompt settings, max retry, default value, prompt string, validations </dd>
+<dd><code>field_type</code> - field type: "args", "opts", or "extra" </dd>
+<dd><code>index</code> - field index, int for arg position, string for opts or extra field ids </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
 </dl>
 </li>
 </ul>
@@ -523,12 +447,13 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_boolean</h4>
 <pre>public&nbsp;string&nbsp;parse_boolean(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse a boolean value.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to 1 or 0, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -539,12 +464,13 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_int</h4>
 <pre>public&nbsp;string&nbsp;parse_int(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse an integer value.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to an int, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -555,12 +481,13 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_float</h4>
 <pre>public&nbsp;string&nbsp;parse_float(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse a floating point value.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to a float, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -571,13 +498,14 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_enum</h4>
 <pre>public&nbsp;string&nbsp;parse_enum(string&nbsp;arg,&nbsp;mixed&nbsp;val,&nbsp;mixed *enum)</pre>
-<div class="block"></div>
+<div class="block">Parse value from an enumeration.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
-<dd><code>enum</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set, passed by reference. assigned string for single or array for multi </dd>
+<dd><code>enum</code> - the enumeration info: legal values, multi flag, delimeter for multi value strings </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -588,12 +516,13 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_file</h4>
 <pre>public&nbsp;string&nbsp;parse_file(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse a string as if it specifies a single filename.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to filename, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -604,12 +533,13 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_files</h4>
 <pre>public&nbsp;string&nbsp;parse_files(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse a value representing a list of filenames. Patterns will be expanded.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to an array of filenames, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -620,12 +550,13 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_object</h4>
 <pre>public&nbsp;string&nbsp;parse_object(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse a value as a single object. Object expansion will be performed.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to an object, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
@@ -636,74 +567,32 @@ in handling command execution.</div>
 <li class="blockList">
 <h4>parse_objects</h4>
 <pre>public&nbsp;string&nbsp;parse_objects(string&nbsp;arg,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Parse a value as a list of objects. Object expansion will be performed.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>arg</code> - the value string </dd>
+<dd><code>val</code> - the value to set to object array, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a fail message, or 0 if value was parsed successfully </dd>
 </dl>
 </li>
 </ul>
-<a name="validate()">
+<a name="do_validate()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>validate</h4>
-<pre>public&nbsp;varargs&nbsp;int&nbsp;validate(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback,&nbsp;int&nbsp;flags)</pre>
-<div class="block"></div>
+<h4>do_validate</h4>
+<pre>public&nbsp;varargs&nbsp;int&nbsp;do_validate(struct CommandState&nbsp;state,&nbsp;closure&nbsp;callback,&nbsp;int&nbsp;flags)</pre>
+<div class="block">Perform command validation. May prompt for new values if validation fails
+when run in interactive mode. Return 1 if validation passed, otherwise 0.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>state</code> - </dd>
-<dd><code>callback</code> - </dd>
-<dd><code>flags</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="do_execute()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>do_execute</h4>
-<pre>public&nbsp;int&nbsp;do_execute(mapping&nbsp;model,&nbsp;string&nbsp;verb)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>model</code> - </dd>
-<dd><code>verb</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="execute()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>execute</h4>
-<pre>public&nbsp;int&nbsp;execute(mapping&nbsp;model,&nbsp;string&nbsp;verb)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>model</code> - </dd>
-<dd><code>verb</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="create()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>create</h4>
-<pre>public&nbsp;void&nbsp;create()</pre>
-<div class="block"></div>
-<dl>
-<dl>
+<dd><code>state</code> - the command state, a struct containing all the information about the command-to-be-executed we have so far </dd>
+<dd><code>callback</code> - the callback to execute the validated command </dd>
+<dd><code>flags</code> - validation flags: skip field-level validations </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if validations passed, otherwise 0 </dd>
 </dl>
 </li>
 </ul>

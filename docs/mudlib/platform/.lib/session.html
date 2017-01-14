@@ -89,13 +89,13 @@
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/session.html#is_active()">is_active</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Test whether a session is "active", e.g.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/session.html#is_subsession()">is_subsession</a></strong>(string&nbsp;session_id,&nbsp;string&nbsp;subsession_id)</code>
-<div class="block"></div>
+<div class="block">Test whether a session is a subsession of another.</div>
 </td>
 </tr>
 </table>
@@ -121,11 +121,13 @@
 <li class="blockList">
 <h4>is_active</h4>
 <pre>public&nbsp;int&nbsp;is_active(string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Test whether a session is "active", e.g. the session state is "running" or
+"suspended".</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
+<dd><code>session_id</code> - the session being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the session is active, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -136,12 +138,13 @@
 <li class="blockList">
 <h4>is_subsession</h4>
 <pre>public&nbsp;int&nbsp;is_subsession(string&nbsp;session_id,&nbsp;string&nbsp;subsession_id)</pre>
-<div class="block"></div>
+<div class="block">Test whether a session is a subsession of another.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
-<dd><code>subsession_id</code> - </dd>
+<dd><code>session_id</code> - the parent session </dd>
+<dd><code>subsession_id</code> - the potential subsession </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if second arg is a subsession of the first, otherwise 0 </dd>
 </dl>
 </li>
 </ul>

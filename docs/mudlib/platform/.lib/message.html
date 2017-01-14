@@ -90,31 +90,31 @@ connected via web and telnet.</div>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/message.html#prompt_msg()">prompt_msg</a></strong>(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob)</code>
-<div class="block"></div>
+<div class="block">Send a prompt message.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/message.html#send_msg()">send_msg</a></strong>(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob,&nbsp;string&nbsp;topic)</code>
-<div class="block"></div>
+<div class="block">Send a message with the specified context.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/message.html#send_prompt()">send_prompt</a></strong>(object&nbsp;who)</code>
-<div class="block"></div>
+<div class="block">Send a prompt string.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/message.html#stderr_msg()">stderr_msg</a></strong>(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob,&nbsp;string&nbsp;topic)</code>
-<div class="block"></div>
+<div class="block">Send a message over STDERR.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/message.html#stdout_msg()">stdout_msg</a></strong>(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob,&nbsp;string&nbsp;topic)</code>
-<div class="block"></div>
+<div class="block">Send a message over STDOUT.</div>
 </td>
 </tr>
 </table>
@@ -140,14 +140,17 @@ connected via web and telnet.</div>
 <li class="blockList">
 <h4>send_msg</h4>
 <pre>public&nbsp;varargs&nbsp;string&nbsp;send_msg(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob,&nbsp;string&nbsp;topic)</pre>
-<div class="block"></div>
+<div class="block">Send a message with the specified context. The context can hold anything,
+but at the minimum should declare a "sense" that sensor objects can receive
+the message using. Without a sense, the message may not be delivered.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>message</code> - </dd>
-<dd><code>context</code> - </dd>
-<dd><code>ob</code> - </dd>
-<dd><code>topic</code> - </dd>
+<dd><code>message</code> - the message to send </dd>
+<dd><code>context</code> - the message context </dd>
+<dd><code>ob</code> - the target object </dd>
+<dd><code>topic</code> - the message topic, optional; if not provided, a suitable default for the current object will be used </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the sent message, or 0 if it could not be sent </dd>
 </dl>
 </li>
 </ul>
@@ -158,14 +161,18 @@ connected via web and telnet.</div>
 <li class="blockList">
 <h4>stdout_msg</h4>
 <pre>public&nbsp;varargs&nbsp;string&nbsp;stdout_msg(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob,&nbsp;string&nbsp;topic)</pre>
-<div class="block"></div>
+<div class="block">Send a message over STDOUT. Unlike UNIX where STDOUT is a file handle, in
+MessageLib and SensorMixin it is an "extra sense." Sensor objects are able
+to receive messages via extra senses in addition to the standard five, and
+stdout is one of these senses.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>message</code> - </dd>
-<dd><code>context</code> - </dd>
-<dd><code>ob</code> - </dd>
-<dd><code>topic</code> - </dd>
+<dd><code>message</code> - the message to send </dd>
+<dd><code>context</code> - the message context </dd>
+<dd><code>ob</code> - the target object </dd>
+<dd><code>topic</code> - the message topic, optional; if not provided, a suitable default for the current object will be used </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the sent message, or 0 if it could not be sent </dd>
 </dl>
 </li>
 </ul>
@@ -176,14 +183,18 @@ connected via web and telnet.</div>
 <li class="blockList">
 <h4>stderr_msg</h4>
 <pre>public&nbsp;varargs&nbsp;string&nbsp;stderr_msg(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob,&nbsp;string&nbsp;topic)</pre>
-<div class="block"></div>
+<div class="block">Send a message over STDERR. Unlike UNIX where STDERR is a file handle, in
+MessageLib and SensorMixin it is an "extra sense." Sensor objects are able
+to receive messages via extra senses in addition to the standard five, and
+stderr is one of these senses.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>message</code> - </dd>
-<dd><code>context</code> - </dd>
-<dd><code>ob</code> - </dd>
-<dd><code>topic</code> - </dd>
+<dd><code>message</code> - the message to send </dd>
+<dd><code>context</code> - the message context </dd>
+<dd><code>ob</code> - the target object </dd>
+<dd><code>topic</code> - the message topic, optional; if not provided, a suitable default for the current object will be used </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the sent message, or 0 if it could not be sent </dd>
 </dl>
 </li>
 </ul>
@@ -194,13 +205,16 @@ connected via web and telnet.</div>
 <li class="blockList">
 <h4>prompt_msg</h4>
 <pre>public&nbsp;varargs&nbsp;string&nbsp;prompt_msg(string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;ob)</pre>
-<div class="block"></div>
+<div class="block">Send a prompt message. The prompt is one of the few types of messages that
+isn't "sensed" and can be delivered to any object even if it doesn't
+implement the SensorMixin.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>message</code> - </dd>
 <dd><code>context</code> - </dd>
 <dd><code>ob</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>{[type]}         [description] </dd>
 </dl>
 </li>
 </ul>
@@ -210,12 +224,13 @@ connected via web and telnet.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>send_prompt</h4>
-<pre>public&nbsp;varargs&nbsp;string&nbsp;send_prompt(object&nbsp;who)</pre>
-<div class="block"></div>
+<pre>public&nbsp;string&nbsp;send_prompt(object&nbsp;who)</pre>
+<div class="block">Send a prompt string.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>who</code> - </dd>
+<dd><code>who</code> - the object to prompt </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the prompt string that was sent </dd>
 </dl>
 </li>
 </ul>

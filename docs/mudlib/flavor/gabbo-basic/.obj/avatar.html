@@ -78,7 +78,8 @@
 </li><li class="last"><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>
 </li></ul></li><li><a href="../../../platform/.module/shell.html" title="">ShellMixin </a>
 <ul class="tree"><li class="last"><a href="../../../platform/.lib/file.html" title="">FileLib </a>
-</li></ul></li><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>
+</li></ul></li><li><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>
+</li><li class="last"><a href="../../../platform/.lib/exception.html" title="">ExceptionLib </a>
 </li></ul></li><li class="last"><a href="../../../platform/.module/soul.html" title="">SoulMixin </a>
 </li></ul></li><li class="last"><a href="../../../platform/.lib/connection.html" title="">ConnectionLib </a>
 <ul class="tree"><li class="last"><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>
@@ -117,7 +118,7 @@
 <li class="blockList"><a name="fields_inherited_from_class_/platform/.module/avatar">
 </a>
 <h3>Variables inherited from program&nbsp;<a href="../../../platform/.module/avatar.html" title="program /platform/.module/avatar">AvatarMixin </a></h3>
-<code><a href="../../../platform/.module/avatar.html#sessions">sessions</a></code></li>
+<code><a href="../../../platform/.module/avatar.html#master_session">master_session</a>, <a href="../../../platform/.module/avatar.html#slave_sessions">slave_sessions</a></code></li>
 
 </ul>
 
@@ -135,26 +136,26 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.obj/avatar.html#create()">create</a></strong>()</code>
 <div class="block"></div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.obj/avatar.html#on_descend()">on_descend</a></strong>(string&nbsp;session_id,&nbsp;string&nbsp;player_id,&nbsp;object&nbsp;room,&nbsp;varargs mixed *args)</code>
 <div class="block">Invoked by the login object once the avatar object is interactive and
 has been moved to its start location.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.obj/avatar.html#setup()">setup</a></strong>()</code>
 <div class="block">Invoked by the login object to set up a newly spawned avatar.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../../flavor/gabbo-basic/.obj/avatar.html#try_descend()">try_descend</a></strong>(string&nbsp;session_id)</code>
 <div class="block"></div>
@@ -172,21 +173,21 @@ has been moved to its start location.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.module/avatar">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.module/avatar.html" title="program /platform/.module/avatar">AvatarMixin </a></h3>
-<code><a href="../../../platform/.module/avatar.html#add_session()">add_session</a>, <a href="../../../platform/.module/avatar.html#is_avatar()">is_avatar</a>, <a href="../../../platform/.module/avatar.html#on_descend()">on_descend</a>, <a href="../../../platform/.module/avatar.html#query_sessions()">query_sessions</a>, <a href="../../../platform/.module/avatar.html#query_user()">query_user</a>, <a href="../../../platform/.module/avatar.html#query_username()">query_username</a>, <a href="../../../platform/.module/avatar.html#remove_session()">remove_session</a>, <a href="../../../platform/.module/avatar.html#setup()">setup</a>, <a href="../../../platform/.module/avatar.html#try_descend()">try_descend</a></code></li>
+<code><a href="../../../platform/.module/avatar.html#add_session()">add_session</a>, <a href="../../../platform/.module/avatar.html#add_slave_session()">add_slave_session</a>, <a href="../../../platform/.module/avatar.html#is_avatar()">is_avatar</a>, <a href="../../../platform/.module/avatar.html#on_descend()">on_descend</a>, <a href="../../../platform/.module/avatar.html#query_master_session()">query_master_session</a>, <a href="../../../platform/.module/avatar.html#query_sessions()">query_sessions</a>, <a href="../../../platform/.module/avatar.html#query_slave_sessions()">query_slave_sessions</a>, <a href="../../../platform/.module/avatar.html#query_terminal_type()">query_terminal_type</a>, <a href="../../../platform/.module/avatar.html#query_username()">query_username</a>, <a href="../../../platform/.module/avatar.html#remove_session()">remove_session</a>, <a href="../../../platform/.module/avatar.html#remove_slave_session()">remove_slave_session</a>, <a href="../../../platform/.module/avatar.html#set_master_session()">set_master_session</a>, <a href="../../../platform/.module/avatar.html#setup()">setup</a>, <a href="../../../platform/.module/avatar.html#try_descend()">try_descend</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.module/command_giver">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.module/command_giver.html" title="program /platform/.module/command_giver">CommandGiverMixin </a></h3>
-<code><a href="../../../platform/.module/command_giver.html#check_command_access()">check_command_access</a>, <a href="../../../platform/.module/command_giver.html#do_command()">do_command</a>, <a href="../../../platform/.module/command_giver.html#load_commands()">load_commands</a>, <a href="../../../platform/.module/command_giver.html#load_controller()">load_controller</a>, <a href="../../../platform/.module/command_giver.html#modify_command()">modify_command</a>, <a href="../../../platform/.module/command_giver.html#run_script()">run_script</a>, <a href="../../../platform/.module/command_giver.html#setup()">setup</a></code></li>
+<code><a href="../../../platform/.module/command_giver.html#check_command_access()">check_command_access</a>, <a href="../../../platform/.module/command_giver.html#do_command()">do_command</a>, <a href="../../../platform/.module/command_giver.html#load_cmd_imports()">load_cmd_imports</a>, <a href="../../../platform/.module/command_giver.html#load_controller()">load_controller</a>, <a href="../../../platform/.module/command_giver.html#run_script()">run_script</a>, <a href="../../../platform/.module/command_giver.html#setup()">setup</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#objective()">objective</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -200,7 +201,7 @@ has been moved to its start location.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/array">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/array.html" title="program /platform/.lib/array">ArrayLib </a></h3>
-<code><a href="../../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
+<code><a href="../../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../../platform/.lib/array.html#random_key()">random_key</a>, <a href="../../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -214,7 +215,7 @@ has been moved to its start location.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.module/sensor">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.module/sensor.html" title="program /platform/.module/sensor">SensorMixin </a></h3>
-<code><a href="../../../platform/.module/sensor.html#on_message()">on_message</a>, <a href="../../../platform/.module/sensor.html#render_message()">render_message</a>, <a href="../../../platform/.module/sensor.html#setup()">setup</a>, <a href="../../../platform/.module/sensor.html#try_message()">try_message</a></code></li>
+<code><a href="../../../platform/.module/sensor.html#on_message()">on_message</a>, <a href="../../../platform/.module/sensor.html#query_terminal_type()">query_terminal_type</a>, <a href="../../../platform/.module/sensor.html#render_message()">render_message</a>, <a href="../../../platform/.module/sensor.html#setup()">setup</a>, <a href="../../../platform/.module/sensor.html#try_message()">try_message</a></code></li>
 
 </ul>
 <ul class="blockList">

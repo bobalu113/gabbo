@@ -127,43 +127,43 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#parse_config()">parse_config</a></strong>(string&nbsp;domain_file)</code>
 <div class="block">Parse the configuration found by specified file and return it.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#query_children()">query_children</a></strong>(string&nbsp;domain_id)</code>
 <div class="block">Get a list of child domains belonging to a specified domain.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#query_domain()">query_domain</a></strong>(string&nbsp;domain_id)</code>
 <div class="block">Get the domain configuration for a specified domain id.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#query_domain_id()">query_domain_id</a></strong>(string&nbsp;path)</code>
 <div class="block">For a given filesystem path, return the domain id the file belongs to.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#reconfig_signal()">reconfig_signal</a></strong>(string&nbsp;file,&nbsp;string&nbsp;func)</code>
 <div class="block">Called when a domain.xml file is modified or removed.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/domain.html#resolve_sysinclude()">resolve_sysinclude</a></strong>(string&nbsp;file,&nbsp;string&nbsp;p)</code>
 <div class="block">Resolve a sysinclude (<file> style include) for files in a domain.</div>
@@ -230,19 +230,6 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="create()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>create</h4>
-<pre>public&nbsp;void&nbsp;create()</pre>
-<div class="block"></div>
-<dl>
-<dl>
-</dl>
-</li>
-</ul>
 <a name="reconfig_signal()">
 <!--   -->
 </a>
@@ -332,11 +319,11 @@ Will discover new domains from domain.xml files if necessary.</div>
 <h4>resolve_sysinclude</h4>
 <pre>public&nbsp;string&nbsp;resolve_sysinclude(string&nbsp;file,&nbsp;string&nbsp;p)</pre>
 <div class="block">Resolve a sysinclude (<file> style include) for files in a domain. First
-the domain's include/ directory will be tried, if no matching file was
+the domain's .include/ directory will be tried, if no matching file was
 found, the global include directory will be searched. The ".." directory
 in the include path will back up not just one directory but one entire
 domain, even if that domain spans multiple levels of the directory tree.
-The parent domain's "include/" directory will be searched for the file
+The parent domain's ".include/" directory will be searched for the file
 path instead.</div>
 <dl>
 <dl>
@@ -344,6 +331,19 @@ path instead.</div>
 <dd><code>file</code> - the file (possibly relative) being included </dd>
 <dd><code>p</code> - the compilation unit performing the include </dd>
 <dt><span class="strong">Returns:</span></dt><dd>the resolved include file </dd>
+</dl>
+</li>
+</ul>
+<a name="create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor. Make sure LoggerFactory and FileTracker have been preloaded.</div>
+<dl>
+<dl>
 </dl>
 </li>
 </ul>

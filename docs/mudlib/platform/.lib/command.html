@@ -63,13 +63,8 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
+<ul class="tree"><li class="last"><a href="../...html" title=""></a>
+</li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -98,75 +93,100 @@
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/command.html#advance_step()">advance_step</a></strong>(mapping&nbsp;result)</code>
+<div class="block">Advance the step field of a result model.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#apply_syntax()">apply_syntax</a></strong>(mixed *command,&nbsp;string&nbsp;arg,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;string *args)</code>
-<div class="block"></div>
+<div class="block">This function iterates over the syntax definitions of a specified command,
+applying the given argument string to populate the opts, badopts, and args
+parameters, passed by reference.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/command.html#fail_result()">fail_result</a></strong>(mapping&nbsp;result)</code>
+<div class="block">Update the result model for a failure result.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#get_matching_syntax()">get_matching_syntax</a></strong>(mapping&nbsp;syntax_map,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mixed *args)</code>
-<div class="block"></div>
+<div class="block">Look through a bunch of syntaxes given the parsed opts, badopts, and args
+and return the best match for that particular combination.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_args()">parse_args</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;mapping&nbsp;syntax)</code>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the provided syntax
+defintion.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_args_explode()">parse_args_explode</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;int&nbsp;numargs)</code>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the explode method.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_args_parse_command()">parse_args_parse_command</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;pattern)</code>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the the
+parse_command() method.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_args_regexp()">parse_args_regexp</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;pattern)</code>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using a regular
+expression.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_args_sscanf()">parse_args_sscanf</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;pattern)</code>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the sscanf method.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_longopt()">parse_longopt</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;opt,&nbsp;string&nbsp;param,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_longopts)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_longopt()">parse_longopt</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;longopt,&nbsp;string&nbsp;param,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_longopts)</code>
+<div class="block">Parse a longopt in an argument string.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_opt()">parse_opt</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_opts)</code>
-<div class="block"></div>
+<div class="block">Parse an opt in an argument string.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_opts()">parse_opts</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_opts,&nbsp;mapping&nbsp;valid_longopts)</code>
-<div class="block"></div>
+<div class="block">Parse opts and longopts out of an argument string.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#parse_param()">parse_param</a></strong>(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;param)</code>
-<div class="block"></div>
+<div class="block">Parse an opt or longopt parameter.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.lib/command.html#pass_result()">pass_result</a></strong>(mapping&nbsp;result)</code>
+<div class="block">Update the result model for a success result.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/command.html#valid_syntax()">valid_syntax</a></strong>(mixed *syntax,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mixed *args)</code>
-<div class="block"></div>
+<div class="block">Returns whether or not the parsed opts, badopts, and args are valid for a
+given syntax definition.</div>
 </td>
 </tr>
 </table>
@@ -192,15 +212,19 @@
 <li class="blockList">
 <h4>apply_syntax</h4>
 <pre>public&nbsp;mixed&nbsp;*apply_syntax(mixed *command,&nbsp;string&nbsp;arg,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;string *args)</pre>
-<div class="block"></div>
+<div class="block">This function iterates over the syntax definitions of a specified command,
+applying the given argument string to populate the opts, badopts, and args
+parameters, passed by reference. The first valid syntax found is returned.
+If no valid syntax was found, the closest match will be returned.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>command</code> - </dd>
-<dd><code>arg</code> - </dd>
-<dd><code>opts</code> - </dd>
-<dd><code>badopts</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>command</code> - the command definition </dd>
+<dd><code>arg</code> - the command line argument string </dd>
+<dd><code>opts</code> - a mapping of opts and longopts to their parameter values, passed by reference </dd>
+<dd><code>badopts</code> - a mapping of bad opts to their parameter values, passed by reference </dd>
+<dd><code>args</code> - the argument list, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the syntax that was applied </dd>
 </dl>
 </li>
 </ul>
@@ -211,14 +235,19 @@
 <li class="blockList">
 <h4>get_matching_syntax</h4>
 <pre>public&nbsp;mixed&nbsp;*get_matching_syntax(mapping&nbsp;syntax_map,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mixed *args)</pre>
-<div class="block"></div>
+<div class="block">Look through a bunch of syntaxes given the parsed opts, badopts, and args
+and return the best match for that particular combination. This reassigns
+opts, badopts, and args to the values that were parsed from the matching
+syntax.
+XXX this function is weird but needed for usage strings I guess</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>syntax_map</code> - </dd>
-<dd><code>opts</code> - </dd>
-<dd><code>badopts</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>opts</code> - a mapping of opts and longopts to their parameter values, passed by reference </dd>
+<dd><code>badopts</code> - a mapping of bad opts to their parameter values, passed by reference </dd>
+<dd><code>args</code> - the argument list, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the syntax that is the closest match to the </dd>
 </dl>
 </li>
 </ul>
@@ -229,14 +258,16 @@
 <li class="blockList">
 <h4>valid_syntax</h4>
 <pre>public&nbsp;int&nbsp;valid_syntax(mixed *syntax,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mixed *args)</pre>
-<div class="block"></div>
+<div class="block">Returns whether or not the parsed opts, badopts, and args are valid for a
+given syntax definition.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>syntax</code> - </dd>
-<dd><code>opts</code> - </dd>
-<dd><code>badopts</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>syntax</code> - the syntax being applied </dd>
+<dd><code>opts</code> - a mapping of opts and longopts to their parameter values, passed by reference </dd>
+<dd><code>badopts</code> - a mapping of bad opts to their parameter values, passed by reference </dd>
+<dd><code>args</code> - the argument list, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if syntax is valid, 0 otherwise </dd>
 </dl>
 </li>
 </ul>
@@ -247,16 +278,16 @@
 <li class="blockList">
 <h4>parse_opts</h4>
 <pre>public&nbsp;void&nbsp;parse_opts(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_opts,&nbsp;mapping&nbsp;valid_longopts)</pre>
-<div class="block"></div>
+<div class="block">Parse opts and longopts out of an argument string.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>opts</code> - </dd>
-<dd><code>badopts</code> - </dd>
-<dd><code>valid_opts</code> - </dd>
-<dd><code>valid_longopts</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the opts section of the argument string </dd>
+<dd><code>opts</code> - a mapping of discovered opts and longopts to their parameter values, passed by reference </dd>
+<dd><code>badopts</code> - a mapping of "bad" opts and their parameter values, passed by reference </dd>
+<dd><code>valid_opts</code> - all the valid opts </dd>
+<dd><code>valid_longopts</code> - all the valid longopts </dd>
 </dl>
 </li>
 </ul>
@@ -266,17 +297,17 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>parse_longopt</h4>
-<pre>public&nbsp;void&nbsp;parse_longopt(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;opt,&nbsp;string&nbsp;param,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_longopts)</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;parse_longopt(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;longopt,&nbsp;string&nbsp;param,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_longopts)</pre>
+<div class="block">Parse a longopt in an argument string.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>opt</code> - </dd>
-<dd><code>param</code> - </dd>
-<dd><code>badopts</code> - </dd>
-<dd><code>valid_longopts</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed longopt </dd>
+<dd><code>longopt</code> - the parsed longopt, passed by reference </dd>
+<dd><code>param</code> - the longopt parameter, passed by reference </dd>
+<dd><code>badopts</code> - a mapping of "bad" opts and their parameter values, passed by reference </dd>
+<dd><code>valid_longopts</code> - all the valid longopts </dd>
 </dl>
 </li>
 </ul>
@@ -287,15 +318,15 @@
 <li class="blockList">
 <h4>parse_opt</h4>
 <pre>public&nbsp;void&nbsp;parse_opt(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;mapping&nbsp;opts,&nbsp;mapping&nbsp;badopts,&nbsp;mapping&nbsp;valid_opts)</pre>
-<div class="block"></div>
+<div class="block">Parse an opt in an argument string.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>opts</code> - </dd>
-<dd><code>badopts</code> - </dd>
-<dd><code>valid_opts</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed opt </dd>
+<dd><code>opts</code> - a mapping of discovered opts and longopts to their parameter values, passed by reference </dd>
+<dd><code>badopts</code> - a mapping of "bad" opts and their parameter values, passed by reference </dd>
+<dd><code>valid_opts</code> - all the valid opts </dd>
 </dl>
 </li>
 </ul>
@@ -306,13 +337,15 @@
 <li class="blockList">
 <h4>parse_args</h4>
 <pre>public&nbsp;string&nbsp;*parse_args(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;mapping&nbsp;syntax)</pre>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the provided syntax
+defintion. The syntax format will be used to determine the parsing method.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>syntax</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed argument list </dd>
+<dd><code>syntax</code> - the syntax being applied </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of command line arguments found in argument string </dd>
 </dl>
 </li>
 </ul>
@@ -323,13 +356,20 @@
 <li class="blockList">
 <h4>parse_args_explode</h4>
 <pre>public&nbsp;string&nbsp;*parse_args_explode(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;int&nbsp;numargs)</pre>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the explode method.
+Using this method splits the entire string by whitespace and uses each
+substring as an argument. Arguments that contain whitespace "may be quoted"
+and the quoted string will be treated as a single argument. If an argument
+limit is provided, the last argument in the returned argument list will
+gobble up all additional content in the argument string, even if it contains
+whitespace.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>numargs</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed argument list </dd>
+<dd><code>numargs</code> - the expected number of arguments; the resulting argument list may have fewer members, but never more </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of command line arguments found in argument string </dd>
 </dl>
 </li>
 </ul>
@@ -340,13 +380,16 @@
 <li class="blockList">
 <h4>parse_args_sscanf</h4>
 <pre>public&nbsp;string&nbsp;*parse_args_sscanf(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;pattern)</pre>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the sscanf method.
+Using this method takes an sscanf pattern and returns the matched
+substrings.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>pattern</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed argument list </dd>
+<dd><code>pattern</code> - the sscanf pattern; due to the nature of how the internal call to sscanf() is made, there's a maximum number of match operators that may be used, configured in command.h </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of command line arguments found in argument string </dd>
 </dl>
 </li>
 </ul>
@@ -357,13 +400,15 @@
 <li class="blockList">
 <h4>parse_args_regexp</h4>
 <pre>public&nbsp;string&nbsp;*parse_args_regexp(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;pattern)</pre>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using a regular
+expression.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>pattern</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed argument list </dd>
+<dd><code>pattern</code> - the regular expression to apply </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of command line arguments found in argument string </dd>
 </dl>
 </li>
 </ul>
@@ -374,13 +419,16 @@
 <li class="blockList">
 <h4>parse_args_parse_command</h4>
 <pre>public&nbsp;string&nbsp;*parse_args_parse_command(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;pattern)</pre>
-<div class="block"></div>
+<div class="block">Parse the argument list out of an argument string using the the
+parse_command() method. This works similarly to the sscanf method, but uses
+the parse_command() efun instead.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>pattern</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed argument list </dd>
+<dd><code>pattern</code> - the parse_command pattern; due to the nature of how the internal call to parse_command() is made, there's a maximum number of match operators that may be used, configured in command.h </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the array of command line arguments found in argument string </dd>
 </dl>
 </li>
 </ul>
@@ -391,13 +439,62 @@
 <li class="blockList">
 <h4>parse_param</h4>
 <pre>public&nbsp;void&nbsp;parse_param(string&nbsp;arg,&nbsp;int&nbsp;pos,&nbsp;string&nbsp;param)</pre>
-<div class="block"></div>
+<div class="block">Parse an opt or longopt parameter.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
-<dd><code>pos</code> - </dd>
-<dd><code>param</code> - </dd>
+<dd><code>arg</code> - the argument string </dd>
+<dd><code>pos</code> - the position in the argument string to begin search, passed by reference and assigned the position of the end of the parsed parameter </dd>
+<dd><code>param</code> - the parsed parameter, passed by reference </dd>
+</dl>
+</li>
+</ul>
+<a name="advance_step()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>advance_step</h4>
+<pre>public&nbsp;mapping&nbsp;advance_step(mapping&nbsp;result)</pre>
+<div class="block">Advance the step field of a result model. It will be initialized if
+necessary.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>result</code> - the result model </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result model, updated </dd>
+</dl>
+</li>
+</ul>
+<a name="fail_result()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fail_result</h4>
+<pre>public&nbsp;mapping&nbsp;fail_result(mapping&nbsp;result)</pre>
+<div class="block">Update the result model for a failure result.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>result</code> - the result model </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result model, updated </dd>
+</dl>
+</li>
+</ul>
+<a name="pass_result()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pass_result</h4>
+<pre>public&nbsp;mapping&nbsp;pass_result(mapping&nbsp;result)</pre>
+<div class="block">Update the result model for a success result.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>result</code> - the result model </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result model, updated </dd>
 </dl>
 </li>
 </ul>

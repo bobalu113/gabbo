@@ -70,7 +70,8 @@
 <hr>
 <br>
 <div class="block">The postal service object. It is responsible for sending messages back and
-forth between objects.</div>
+forth between objects. This should be the only use of efun::tell_object() in
+the lib.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
 <a href="../...html#toString()"><code>->toString()</code></a>
@@ -94,9 +95,15 @@ forth between objects.</div>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.obj/postal_service.html#prompt_message()">prompt_message</a></strong>(object&nbsp;target,&nbsp;object&nbsp;sender)</code>
+<div class="block">Send a prompt message to an interactive object.</div>
+</td>
+</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.obj/postal_service.html#send_message()">send_message</a></strong>(object&nbsp;target,&nbsp;string&nbsp;topic,&nbsp;string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;sender)</code>
+<td class="colLast"><code><strong><a href="../../platform/.obj/postal_service.html#send_message()">send_message</a></strong>(object&nbsp;target,&nbsp;string&nbsp;topic,&nbsp;string message mapping&nbsp;context,&nbsp;object&nbsp;sender)</code>
 <div class="block">Send a message to a sensor object.</div>
 </td>
 </tr>
@@ -112,7 +119,7 @@ forth between objects.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 
@@ -136,18 +143,33 @@ forth between objects.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>send_message</h4>
-<pre>public&nbsp;void&nbsp;send_message(object&nbsp;target,&nbsp;string&nbsp;topic,&nbsp;string&nbsp;message,&nbsp;mapping&nbsp;context,&nbsp;object&nbsp;sender)</pre>
-<div class="block">Send a message to a sensor object. This should be the only use of
-efun::tell_object() in the lib.</div>
+<pre>public&nbsp;void&nbsp;send_message(object&nbsp;target,&nbsp;string&nbsp;topic,&nbsp;string message mapping&nbsp;context,&nbsp;object&nbsp;sender)</pre>
+<div class="block">Send a message to a sensor object. Target must be a sensor.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>target</code> - the object to which the message should be delivered, must be a "sensor" </dd>
 <dd><code>topic</code> - the message topic, a way to group common messages together </dd>
-<dd><code>message</code> - the message to be delivered, a string </dd>
 <dd><code>context</code> - the message context, a mapping </dd>
 <dd><code>sender</code> - the object doing the sending, or 0 for anonymous messages </dd>
 <dt><span class="strong">Returns:</span></dt><dd>a Message struct representing the sent message, or 0 if message could not be sent </dd>
+</dl>
+</li>
+</ul>
+<a name="prompt_message()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prompt_message</h4>
+<pre>public&nbsp;varargs&nbsp;string&nbsp;prompt_message(object&nbsp;target,&nbsp;object&nbsp;sender)</pre>
+<div class="block">Send a prompt message to an interactive object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>target</code> - the object to prompt </dd>
+<dd><code>sender</code> - the object doing the sending, or 0 for anonymous messages </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the prompt that was sent, or 0 unsent </dd>
 </dl>
 </li>
 </ul>

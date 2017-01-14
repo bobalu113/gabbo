@@ -67,16 +67,8 @@
 </li><li><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>
 </li><li><a href="../../../platform/.lib/zone.html" title="">ZoneLib </a>
 <ul class="tree"><li class="last"><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>
-</li></ul></li><li class="last"><a href="../../../platform/.lib/format_strings.html" title="">FormatStringsLib </a>
-<ul class="tree"><li><a href="../../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../../platform/.lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
+</li></ul></li><li class="last"><a href="../../...html" title=""></a>
+</li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -109,40 +101,40 @@ logger objects which are no longer in use.</div>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/logger/logger_factory.html#create()">create</a></strong>()</code>
 <div class="block">Initialize logger and formatter maps.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;object&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/logger/logger_factory.html#get_logger()">get_logger</a></strong>(mixed&nbsp;zone,&nbsp;object&nbsp;rel,&nbsp;int&nbsp;reconfig)</code>
 <div class="block">Retrieve a logger instance for the given zone from the pool, or create
 a new one from configuration.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/logger/logger_factory.html#get_null_logger()">get_null_logger</a></strong>()</code>
 <div class="block">Return a new no-op logger.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/logger/logger_factory.html#parse_output_prop()">parse_output_prop</a></strong>(string&nbsp;val)</code>
 <div class="block">Translate the property value of an output property to something more
 structured than a string.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/logger/logger_factory.html#release_logger()">release_logger</a></strong>(mixed&nbsp;zone,&nbsp;string&nbsp;euid)</code>
 <div class="block">Releases a logger object from the logger pool, thereby removing any
 references to it held by the factory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/logger/logger_factory.html#reset()">reset</a></strong>()</code>
 <div class="block">Clean up stale loggers.</div>
@@ -160,7 +152,7 @@ references to it held by the factory.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#objective()">objective</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -168,13 +160,6 @@ references to it held by the factory.</div>
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/zone.html" title="program /platform/.lib/zone">ZoneLib </a></h3>
 <code><a href="../../../platform/.lib/zone.html#get_parent_zone()">get_parent_zone</a>, <a href="../../../platform/.lib/zone.html#get_zone()">get_zone</a>, <a href="../../../platform/.lib/zone.html#valid_zone_id()">valid_zone_id</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/format_strings">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/format_strings.html" title="program /platform/.lib/format_strings">FormatStringsLib </a></h3>
-<code><a href="../../../platform/.lib/format_strings.html#explode_format()">explode_format</a>, <a href="../../../platform/.lib/format_strings.html#parse_format()">parse_format</a></code></li>
 
 </ul>
 

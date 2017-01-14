@@ -112,76 +112,71 @@ exec calls, and handles all telnet negotiations.</div>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#generate_id()">generate_id</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#new_connection()">new_connection</a></strong>(object&nbsp;interactive)</code>
-<div class="block"></div>
+<div class="block">Generate a new, unique connection id.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#query_connection()">query_connection</a></strong>(object&nbsp;interactive)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#new_connection()">new_connection</a></strong>(object&nbsp;interactive)</code>
+<div class="block">Invoked when a new connection is established with the interactive object
+doing the connecting.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#query_connection_info()">query_connection_info</a></strong>(string&nbsp;id)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#query_connection()">query_connection</a></strong>(object&nbsp;interactive)</code>
+<div class="block">Get the connection for an interactive object.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#query_exec_time()">query_exec_time</a></strong>(string&nbsp;connection_id)</code>
-<div class="block"></div>
+<div class="block">Get the exec time for a connection.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#query_interactive()">query_interactive</a></strong>(string&nbsp;connection_id)</code>
-<div class="block"></div>
+<div class="block">Get the interactive object associated with a connection.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#set_interactive()">set_interactive</a></strong>(string&nbsp;connection_id,&nbsp;object&nbsp;interactive)</code>
-<div class="block"></div>
+<div class="block">Change the interactive object associated with a connection.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#set_session()">set_session</a></strong>(string&nbsp;connection_id,&nbsp;string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Set the session associated with a connection.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#telnet_get_NAWS()">telnet_get_NAWS</a></strong>(object&nbsp;interactive)</code>
-<div class="block"></div>
+<div class="block">Send a telnet negotation to get NAWS for the specified interactive.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#telnet_get_terminal()">telnet_get_terminal</a></strong>(object&nbsp;interactive)</code>
-<div class="block"></div>
+<div class="block">Send a telnet negotation to get terminal type for the specified interactive.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#telnet_get_ttyloc()">telnet_get_ttyloc</a></strong>(object&nbsp;interactive)</code>
-<div class="block"></div>
+<div class="block">Send a telnet negotation to get tty location for the specified interactive.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -192,8 +187,8 @@ exec calls, and handles all telnet negotiations.</div>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#telnet_negotiation()">telnet_negotiation</a></strong>(int&nbsp;cmd,&nbsp;int&nbsp;opt,&nbsp;int *optargs)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/connection.html#telnet_negotiation()">telnet_negotiation</a></strong>(object&nbsp;interactive,&nbsp;int&nbsp;cmd,&nbsp;int&nbsp;opt,&nbsp;int *optargs)</code>
+<div class="block">Handle a telnet negotiation for an interactive.</div>
 </td>
 </tr>
 </table>
@@ -215,7 +210,7 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#objective()">objective</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 
@@ -233,21 +228,6 @@ exec calls, and handles all telnet negotiations.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="query_connection_info()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_connection_info</h4>
-<pre>public&nbsp;int&nbsp;query_connection_info(string&nbsp;id)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>id</code> - </dd>
-</dl>
-</li>
-</ul>
 <a name="telnet_neg_log()">
 <!--   -->
 </a>
@@ -270,11 +250,13 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>new_connection</h4>
 <pre>public&nbsp;string&nbsp;new_connection(object&nbsp;interactive)</pre>
-<div class="block"></div>
+<div class="block">Invoked when a new connection is established with the interactive object
+doing the connecting.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>interactive</code> - </dd>
+<dd><code>interactive</code> - the connected object </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the newly tracked connection id </dd>
 </dl>
 </li>
 </ul>
@@ -285,43 +267,13 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>set_interactive</h4>
 <pre>public&nbsp;int&nbsp;set_interactive(string&nbsp;connection_id,&nbsp;object&nbsp;interactive)</pre>
-<div class="block"></div>
+<div class="block">Change the interactive object associated with a connection.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>connection_id</code> - </dd>
-<dd><code>interactive</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="set_session()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set_session</h4>
-<pre>public&nbsp;int&nbsp;set_session(string&nbsp;connection_id,&nbsp;string&nbsp;session_id)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>connection_id</code> - </dd>
-<dd><code>session_id</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="query_connection()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>query_connection</h4>
-<pre>public&nbsp;string&nbsp;query_connection(object&nbsp;interactive)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>interactive</code> - </dd>
+<dd><code>connection_id</code> - the connection to update </dd>
+<dd><code>interactive</code> - the interactive object for the connection </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -332,11 +284,45 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>query_interactive</h4>
 <pre>public&nbsp;object&nbsp;query_interactive(string&nbsp;connection_id)</pre>
-<div class="block"></div>
+<div class="block">Get the interactive object associated with a connection.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>connection_id</code> - </dd>
+<dd><code>connection_id</code> - the connection to query </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the interactive object for the connection </dd>
+</dl>
+</li>
+</ul>
+<a name="set_session()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_session</h4>
+<pre>public&nbsp;int&nbsp;set_session(string&nbsp;connection_id,&nbsp;string&nbsp;session_id)</pre>
+<div class="block">Set the session associated with a connection.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>connection_id</code> - the connection to update </dd>
+<dd><code>session_id</code> - the session id for the connection </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+</dl>
+</li>
+</ul>
+<a name="query_connection()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_connection</h4>
+<pre>public&nbsp;string&nbsp;query_connection(object&nbsp;interactive)</pre>
+<div class="block">Get the connection for an interactive object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>interactive</code> - the connected interactive </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the connection id of the interactive </dd>
 </dl>
 </li>
 </ul>
@@ -347,11 +333,12 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>query_exec_time</h4>
 <pre>public&nbsp;int&nbsp;query_exec_time(string&nbsp;connection_id)</pre>
-<div class="block"></div>
+<div class="block">Get the exec time for a connection.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>connection_id</code> - </dd>
+<dd><code>connection_id</code> - the connection to query </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the time of the last exec operation for the connect (the last time the interactive was changed) </dd>
 </dl>
 </li>
 </ul>
@@ -361,14 +348,15 @@ exec calls, and handles all telnet negotiations.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>telnet_negotiation</h4>
-<pre>public&nbsp;void&nbsp;telnet_negotiation(int&nbsp;cmd,&nbsp;int&nbsp;opt,&nbsp;int *optargs)</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;telnet_negotiation(object&nbsp;interactive,&nbsp;int&nbsp;cmd,&nbsp;int&nbsp;opt,&nbsp;int *optargs)</pre>
+<div class="block">Handle a telnet negotiation for an interactive.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>cmd</code> - </dd>
-<dd><code>opt</code> - </dd>
-<dd><code>optargs</code> - </dd>
+<dd><code>interactive</code> - the interactive object receiving the telnet negotation </dd>
+<dd><code>cmd</code> - negotation action (DO/DONT/WILL/WONT) </dd>
+<dd><code>opt</code> - negotation option </dd>
+<dd><code>optargs</code> - extra args to the negotation </dd>
 </dl>
 </li>
 </ul>
@@ -379,11 +367,12 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>telnet_get_terminal</h4>
 <pre>public&nbsp;int&nbsp;telnet_get_terminal(object&nbsp;interactive)</pre>
-<div class="block"></div>
+<div class="block">Send a telnet negotation to get terminal type for the specified interactive.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>interactive</code> - </dd>
+<dd><code>interactive</code> - the interactive for which to update terminal type </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -394,11 +383,12 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>telnet_get_NAWS</h4>
 <pre>public&nbsp;int&nbsp;telnet_get_NAWS(object&nbsp;interactive)</pre>
-<div class="block"></div>
+<div class="block">Send a telnet negotation to get NAWS for the specified interactive.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>interactive</code> - </dd>
+<dd><code>interactive</code> - the interactive for which to update NAWS </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -409,11 +399,12 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>telnet_get_ttyloc</h4>
 <pre>public&nbsp;int&nbsp;telnet_get_ttyloc(object&nbsp;interactive)</pre>
-<div class="block"></div>
+<div class="block">Send a telnet negotation to get tty location for the specified interactive.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>interactive</code> - </dd>
+<dd><code>interactive</code> - the interactive for which to update tty location </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -424,9 +415,10 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>generate_id</h4>
 <pre>public&nbsp;string&nbsp;generate_id()</pre>
-<div class="block"></div>
+<div class="block">Generate a new, unique connection id.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>the connection id </dd>
 </dl>
 </li>
 </ul>
@@ -437,7 +429,7 @@ exec calls, and handles all telnet negotiations.</div>
 <li class="blockList">
 <h4>create</h4>
 <pre>public&nbsp;void&nbsp;create()</pre>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

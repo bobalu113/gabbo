@@ -128,40 +128,46 @@ one to many or many to many.</div>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#generate_id()">generate_id</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Generate a new player id.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#new_player()">new_player</a></strong>(string&nbsp;user_id)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#query_last_session()">query_last_session</a></strong>(string&nbsp;player_id)</code>
-<div class="block"></div>
+<div class="block">Invoked when a new player is created.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#query_players()">query_players</a></strong>(string&nbsp;user_id)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#query_last_session()">query_last_session</a></strong>(string&nbsp;player_id)</code>
+<div class="block">Get the player's last (or current) session.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#query_players()">query_players</a></strong>(string&nbsp;user_id)</code>
+<div class="block">Return a collection of all players that belong to a specified user.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#query_user()">query_user</a></strong>(string&nbsp;player_id)</code>
-<div class="block"></div>
+<div class="block">Get the user that owns a specified player.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/player.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the PlayerTracker.</div>
 </td>
 </tr>
 </table>
@@ -218,6 +224,19 @@ one to many or many to many.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the PlayerTracker.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="new_player()">
 <!--   -->
 </a>
@@ -225,11 +244,12 @@ one to many or many to many.</div>
 <li class="blockList">
 <h4>new_player</h4>
 <pre>public&nbsp;string&nbsp;new_player(string&nbsp;user_id)</pre>
-<div class="block"></div>
+<div class="block">Invoked when a new player is created.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user_id</code> - </dd>
+<dd><code>user_id</code> - the user the player belongs to </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the new player id </dd>
 </dl>
 </li>
 </ul>
@@ -240,11 +260,12 @@ one to many or many to many.</div>
 <li class="blockList">
 <h4>query_players</h4>
 <pre>public&nbsp;mapping&nbsp;query_players(string&nbsp;user_id)</pre>
-<div class="block"></div>
+<div class="block">Return a collection of all players that belong to a specified user.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user_id</code> - </dd>
+<dd><code>user_id</code> - the user id owning the players </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of player ids </dd>
 </dl>
 </li>
 </ul>
@@ -255,11 +276,12 @@ one to many or many to many.</div>
 <li class="blockList">
 <h4>query_last_session</h4>
 <pre>public&nbsp;string&nbsp;query_last_session(string&nbsp;player_id)</pre>
-<div class="block"></div>
+<div class="block">Get the player's last (or current) session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>player_id</code> - </dd>
+<dd><code>player_id</code> - the player being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the session id of the player's last session, or 0 if never connected </dd>
 </dl>
 </li>
 </ul>
@@ -270,11 +292,12 @@ one to many or many to many.</div>
 <li class="blockList">
 <h4>query_user</h4>
 <pre>public&nbsp;string&nbsp;query_user(string&nbsp;player_id)</pre>
-<div class="block"></div>
+<div class="block">Get the user that owns a specified player.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>player_id</code> - </dd>
+<dd><code>player_id</code> - the player being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the user id that owns the player </dd>
 </dl>
 </li>
 </ul>
@@ -285,9 +308,10 @@ one to many or many to many.</div>
 <li class="blockList">
 <h4>generate_id</h4>
 <pre>public&nbsp;string&nbsp;generate_id()</pre>
-<div class="block"></div>
+<div class="block">Generate a new player id.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>a new, unique player id </dd>
 </dl>
 </li>
 </ul>
@@ -297,8 +321,8 @@ one to many or many to many.</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;int&nbsp;create()</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

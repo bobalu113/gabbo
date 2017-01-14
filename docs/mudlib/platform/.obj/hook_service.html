@@ -92,40 +92,46 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#auto_include_hook()">auto_include_hook</a></strong>(string&nbsp;base_file,&nbsp;string&nbsp;current_file,&nbsp;int&nbsp;sys)</code>
 <div class="block">Auto-include string hook.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#clean_up_hook()">clean_up_hook</a></strong>(int&nbsp;ref,&nbsp;object&nbsp;ob)</code>
 <div class="block">Clean up hook.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#command_hook()">command_hook</a></strong>(string&nbsp;command,&nbsp;object&nbsp;command_giver)</code>
 <div class="block">Command hook.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#create()">create</a></strong>()</code>
 <div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#create_hook()">create_hook</a></strong>(object&nbsp;ob)</code>
 <div class="block">Create hook, for initializing newly compiled objects.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#move_object_hook()">move_object_hook</a></strong>(object&nbsp;item,&nbsp;object&nbsp;dest)</code>
 <div class="block">Move object hook.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#ob->create()">ob->create</a></strong>()</code>
+<div class="block"></div>
 </td>
 </tr>
 <tr class="altColor">
@@ -141,6 +147,13 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#track_object()">track_object</a></strong>(object&nbsp;ob)</code>
+<div class="block">Used by the create hook to notify appropriate tracker objects of the
+creation of a new object.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;mixed&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.obj/hook_service.html#uids_hook()">uids_hook</a></strong>(string&nbsp;objectname,&nbsp;object&nbsp;blueprint)</code>
 <div class="block">UIDs hook.</div>
@@ -151,7 +164,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 
@@ -182,7 +195,7 @@
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>action</code> - negotation action (DO/DONT/WILL/WONT) </dd>
 <dd><code>option</code> - negotation option </dd>
-<dd><code>opts</code> - </dd>
+<dd><code>opts</code> - extra args to the negotation </dd>
 </dl>
 </li>
 </ul>
@@ -258,6 +271,22 @@ object.</div>
 </dl>
 </li>
 </ul>
+<a name="track_object()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>track_object</h4>
+<pre>public&nbsp;void&nbsp;track_object(object&nbsp;ob)</pre>
+<div class="block">Used by the create hook to notify appropriate tracker objects of the
+creation of a new object.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>ob</code> - the object being created </dd>
+</dl>
+</li>
+</ul>
 <a name="create_hook()">
 <!--   -->
 </a>
@@ -273,6 +302,19 @@ invoking create() in the new object.</div>
 <dt><span class="strong">Parameters:</span></dt>
 <dd><code>ob</code> - the object being created </dd>
 <dt><span class="strong">Returns:</span></dt><dd>0, to indicate the object's current time to reset should be preserved </dd>
+</dl>
+</li>
+</ul>
+<a name="ob->create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ob->create</h4>
+<pre>public&nbsp;int&nbsp;ob->create()</pre>
+<div class="block"></div>
+<dl>
+<dl>
 </dl>
 </li>
 </ul>

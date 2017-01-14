@@ -95,31 +95,31 @@
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/connection.html#connect_session()">connect_session</a></strong>(object&nbsp;who,&nbsp;string&nbsp;session)</code>
-<div class="block"></div>
+<div class="block">Connect an existing interactive object to a new session.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/connection.html#query_screen_length()">query_screen_length</a></strong>(object&nbsp;ob)</code>
-<div class="block">Returns the user's screen length.</div>
+<div class="block">Get the screen length of a connected object.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/connection.html#query_screen_width()">query_screen_width</a></strong>(object&nbsp;ob)</code>
-<div class="block">Returns the user's screen width.</div>
+<div class="block">Get the screen width of a connected object.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/connection.html#query_terminal_type()">query_terminal_type</a></strong>(object&nbsp;ob)</code>
-<div class="block">Return the user's terminal type, as detected by telnet negotation.</div>
+<div class="block">Get the terminal type of a connected object.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;varargs&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/connection.html#restore_prompt()">restore_prompt</a></strong>(object&nbsp;ob)</code>
-<div class="block">Restore the default prompt.</div>
+<div class="block">Restore a connected object's configured prompt.</div>
 </td>
 </tr>
 </table>
@@ -127,7 +127,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 
@@ -152,12 +152,15 @@
 <li class="blockList">
 <h4>connect_session</h4>
 <pre>public&nbsp;int&nbsp;connect_session(object&nbsp;who,&nbsp;string&nbsp;session)</pre>
-<div class="block"></div>
+<div class="block">Connect an existing interactive object to a new session. This will exec them
+into the session avatar and update their connection info accordingly. The
+specified session will then become a "connected" session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>who</code> - </dd>
-<dd><code>session</code> - </dd>
+<dd><code>who</code> - an interactive object </dd>
+<dd><code>session</code> - a session to connect them to </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -168,12 +171,12 @@
 <li class="blockList">
 <h4>query_screen_width</h4>
 <pre>public&nbsp;int&nbsp;query_screen_width(object&nbsp;ob)</pre>
-<div class="block">Returns the user's screen width. Currently hard-coded to 80 characters.</div>
+<div class="block">Get the screen width of a connected object.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>ob</code> - </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the user's screen width </dd>
+<dd><code>ob</code> - the connected object, defaults to THISO </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the screen width </dd>
 </dl>
 </li>
 </ul>
@@ -184,12 +187,12 @@
 <li class="blockList">
 <h4>query_screen_length</h4>
 <pre>public&nbsp;int&nbsp;query_screen_length(object&nbsp;ob)</pre>
-<div class="block">Returns the user's screen length. Currently hard-coded to 25 lines.</div>
+<div class="block">Get the screen length of a connected object.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>ob</code> - </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the user's screen length </dd>
+<dd><code>ob</code> - the connected object, defaults to THISO </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the screen length </dd>
 </dl>
 </li>
 </ul>
@@ -200,12 +203,12 @@
 <li class="blockList">
 <h4>query_terminal_type</h4>
 <pre>public&nbsp;varargs&nbsp;string&nbsp;query_terminal_type(object&nbsp;ob)</pre>
-<div class="block">Return the user's terminal type, as detected by telnet negotation.</div>
+<div class="block">Get the terminal type of a connected object.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>ob</code> - </dd>
-<dt><span class="strong">Returns:</span></dt><dd>a string designating the terminal type </dd>
+<dd><code>ob</code> - the connected object, defaults to THISO </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the terminal type </dd>
 </dl>
 </li>
 </ul>
@@ -216,11 +219,11 @@
 <li class="blockList">
 <h4>restore_prompt</h4>
 <pre>public&nbsp;varargs&nbsp;void&nbsp;restore_prompt(object&nbsp;ob)</pre>
-<div class="block">Restore the default prompt.</div>
+<div class="block">Restore a connected object's configured prompt.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>ob</code> - </dd>
+<dd><code>ob</code> - the connected object, defaults to THISO </dd>
 </dl>
 </li>
 </ul>

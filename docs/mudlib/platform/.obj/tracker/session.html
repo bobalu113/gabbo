@@ -120,64 +120,70 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#connect_session()">connect_session</a></strong>(string&nbsp;session_id,&nbsp;string&nbsp;connection)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Associate a session with a connection, making it a "connected" session.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#create()">create</a></strong>()</code>
+<div class="block">Constructor.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#disconnect_session()">disconnect_session</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Disconnect a session.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#generate_id()">generate_id</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Generate a new session id.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#is_connected()">is_connected</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Query whether a session is connected or not.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#new_session()">new_session</a></strong>(string&nbsp;user_id,&nbsp;string&nbsp;supersession_id)</code>
-<div class="block"></div>
+<div class="block">Invoked to create a new session.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#query_avatar()">query_avatar</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Get the avatar for a given session.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#query_user()">query_user</a></strong>(string&nbsp;session_id)</code>
+<div class="block">Get the user who owns a given session.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#query_user()">query_user</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#resume_session()">resume_session</a></strong>(string&nbsp;session_id)</code>
+<div class="block">Start or resume a session by changing its session state to "running".</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#resume_session()">resume_session</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#set_avatar()">set_avatar</a></strong>(string&nbsp;session_id,&nbsp;object&nbsp;avatar)</code>
+<div class="block">Associate an avatar object with a given session.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#set_avatar()">set_avatar</a></strong>(string&nbsp;session_id,&nbsp;object&nbsp;avatar)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/session.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the SessionTracker.</div>
 </td>
 </tr>
 </table>
@@ -231,6 +237,19 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the SessionTracker.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="new_session()">
 <!--   -->
 </a>
@@ -238,12 +257,13 @@
 <li class="blockList">
 <h4>new_session</h4>
 <pre>public&nbsp;string&nbsp;new_session(string&nbsp;user_id,&nbsp;string&nbsp;supersession_id)</pre>
-<div class="block"></div>
+<div class="block">Invoked to create a new session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user_id</code> - </dd>
-<dd><code>supersession_id</code> - </dd>
+<dd><code>user_id</code> - the user id who owns the session </dd>
+<dd><code>supersession_id</code> - the new session's parent session </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the newly created session id </dd>
 </dl>
 </li>
 </ul>
@@ -254,11 +274,12 @@
 <li class="blockList">
 <h4>query_user</h4>
 <pre>public&nbsp;string&nbsp;query_user(string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Get the user who owns a given session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
+<dd><code>session_id</code> - the session being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the user id who owns the session </dd>
 </dl>
 </li>
 </ul>
@@ -269,11 +290,12 @@
 <li class="blockList">
 <h4>is_connected</h4>
 <pre>public&nbsp;int&nbsp;is_connected(string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Query whether a session is connected or not.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
+<dd><code>session_id</code> - the session id being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the session is connected, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -284,12 +306,13 @@
 <li class="blockList">
 <h4>connect_session</h4>
 <pre>public&nbsp;int&nbsp;connect_session(string&nbsp;session_id,&nbsp;string&nbsp;connection)</pre>
-<div class="block"></div>
+<div class="block">Associate a session with a connection, making it a "connected" session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
-<dd><code>connection</code> - </dd>
+<dd><code>session_id</code> - the session being connected </dd>
+<dd><code>connection</code> - the connection id of the connection using the session </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -300,11 +323,12 @@
 <li class="blockList">
 <h4>disconnect_session</h4>
 <pre>public&nbsp;int&nbsp;disconnect_session(string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Disconnect a session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
+<dd><code>session_id</code> - the session to disconnect </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -315,11 +339,13 @@
 <li class="blockList">
 <h4>resume_session</h4>
 <pre>public&nbsp;int&nbsp;resume_session(string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Start or resume a session by changing its session state to "running".
+Sessions with a state of "done" may not be resumed.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
+<dd><code>session_id</code> - the session to resume </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -330,12 +356,14 @@
 <li class="blockList">
 <h4>set_avatar</h4>
 <pre>public&nbsp;int&nbsp;set_avatar(string&nbsp;session_id,&nbsp;object&nbsp;avatar)</pre>
-<div class="block"></div>
+<div class="block">Associate an avatar object with a given session. Avatars can implement the
+CommandGiverMixin and SensorMixin to share interactivity between sessions.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
-<dd><code>avatar</code> - </dd>
+<dd><code>session_id</code> - the session owning the avatar </dd>
+<dd><code>avatar</code> - the avatar for the session </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -346,11 +374,12 @@
 <li class="blockList">
 <h4>query_avatar</h4>
 <pre>public&nbsp;object&nbsp;query_avatar(string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Get the avatar for a given session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
+<dd><code>session_id</code> - the session id being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the session's avatar object </dd>
 </dl>
 </li>
 </ul>
@@ -361,9 +390,10 @@
 <li class="blockList">
 <h4>generate_id</h4>
 <pre>public&nbsp;string&nbsp;generate_id()</pre>
-<div class="block"></div>
+<div class="block">Generate a new session id.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>the new, unique session id </dd>
 </dl>
 </li>
 </ul>
@@ -373,8 +403,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;int&nbsp;create()</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

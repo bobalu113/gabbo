@@ -89,13 +89,13 @@
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/struct.html#get_struct_member()">get_struct_member</a></strong>(mixed&nbsp;strct,&nbsp;string&nbsp;member)</code>
-<div class="block"></div>
+<div class="block">Get the value of a struct member.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/struct.html#set_struct_member()">set_struct_member</a></strong>(mixed&nbsp;strct,&nbsp;string&nbsp;member,&nbsp;mixed&nbsp;val)</code>
-<div class="block"></div>
+<div class="block">Set the value of a struct member.</div>
 </td>
 </tr>
 </table>
@@ -121,12 +121,13 @@
 <li class="blockList">
 <h4>get_struct_member</h4>
 <pre>public&nbsp;mixed&nbsp;get_struct_member(mixed&nbsp;strct,&nbsp;string&nbsp;member)</pre>
-<div class="block"></div>
+<div class="block">Get the value of a struct member.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>strct</code> - </dd>
-<dd><code>member</code> - </dd>
+<dd><code>strct</code> - the struct to index </dd>
+<dd><code>member</code> - a string denoting which member to index </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the result of strct->member </dd>
 </dl>
 </li>
 </ul>
@@ -137,13 +138,13 @@
 <li class="blockList">
 <h4>set_struct_member</h4>
 <pre>public&nbsp;void&nbsp;set_struct_member(mixed&nbsp;strct,&nbsp;string&nbsp;member,&nbsp;mixed&nbsp;val)</pre>
-<div class="block"></div>
+<div class="block">Set the value of a struct member.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>strct</code> - </dd>
-<dd><code>member</code> - </dd>
-<dd><code>val</code> - </dd>
+<dd><code>strct</code> - the struct to index </dd>
+<dd><code>member</code> - a string denoting which member to index </dd>
+<dd><code>val</code> - the value to assign to strct->member </dd>
 </dl>
 </li>
 </ul>

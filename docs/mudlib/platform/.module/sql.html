@@ -108,52 +108,52 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/sql.html#create_table()">create_table</a></strong>(string&nbsp;table,&nbsp;mapping *cols,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
-<div class="block"></div>
+<div class="block">Create a new table.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/sql.html#insert()">insert</a></strong>(string&nbsp;table,&nbsp;mapping&nbsp;data,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
-<div class="block">Insert a new record of tracked data.</div>
+<div class="block">Insert a new row into the database.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/sql.html#query_database()">query_database</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Get the database connection string.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/sql.html#select()">select</a></strong>(string&nbsp;table,&nbsp;mapping&nbsp;key,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
-<div class="block">Look up a tracked data record using a specified key.</div>
+<div class="block">Select rows from a table.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/sql.html#set_database()">set_database</a></strong>(string&nbsp;db)</code>
-<div class="block"></div>
+<div class="block">Set the database that will be used for running queries.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/sql.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the SQLMixin.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/sql.html#setup()">setup</a></strong>()</code>
-<div class="block"></div>
+<td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/sql.html#table_info()">table_info</a></strong>(string&nbsp;table,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
+<div class="block">Get table info.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/sql.html#table_info()">table_info</a></strong>(string&nbsp;table,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected&nbsp;varargs&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/sql.html#update()">update</a></strong>(string&nbsp;table,&nbsp;mapping&nbsp;data,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
-<div class="block">Update an existing record of tracked data.</div>
+<div class="block">Update an existing row in the database.</div>
 </td>
 </tr>
 </table>
@@ -196,8 +196,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>setup</h4>
-<pre>public&nbsp;void&nbsp;setup()</pre>
-<div class="block"></div>
+<pre>protected&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the SQLMixin.</div>
 <dl>
 <dl>
 </dl>
@@ -210,11 +210,12 @@
 <li class="blockList">
 <h4>set_database</h4>
 <pre>public&nbsp;int&nbsp;set_database(string&nbsp;db)</pre>
-<div class="block"></div>
+<div class="block">Set the database that will be used for running queries.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>db</code> - </dd>
+<dd><code>db</code> - the database connection string </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -225,9 +226,10 @@
 <li class="blockList">
 <h4>query_database</h4>
 <pre>public&nbsp;string&nbsp;query_database()</pre>
-<div class="block"></div>
+<div class="block">Get the database connection string.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>the database connection string </dd>
 </dl>
 </li>
 </ul>
@@ -238,22 +240,15 @@
 <li class="blockList">
 <h4>insert</h4>
 <pre>protected&nbsp;varargs&nbsp;int&nbsp;insert(string&nbsp;table,&nbsp;mapping&nbsp;data,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
-<div class="block">Insert a new record of tracked data. Data must be in mapping form. If the
-tracked type doesn't yet exist, will be created with a default
-configuration. First, the data is added to the in-memory record list without
-an id. Next, the data will be inserted into the backing SQL database. The
-auto-generated id will then be added to the in-memory record map. A callback
-function will be invoked upon successful completion of the update operation.
-This may be synchronous or asynchronous depending on the SQL driver being
-used.</div>
+<div class="block">Insert a new row into the database.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>data</code> - the tracked data </dd>
-<dd><code>callback</code> - a closure to call once tracking is active </dd>
-<dd><code>args</code> - extra args to pass to the callback </dd>
-<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+<dd><code>table</code> - table name </dd>
+<dd><code>data</code> - mapping of column names to values for that column </dd>
+<dd><code>callback</code> - callback to run upon successful insertion with result </dd>
+<dd><code>args</code> - extra args for the callback </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero to indicate insert request was received </dd>
 </dl>
 </li>
 </ul>
@@ -264,24 +259,15 @@ used.</div>
 <li class="blockList">
 <h4>update</h4>
 <pre>protected&nbsp;varargs&nbsp;int&nbsp;update(string&nbsp;table,&nbsp;mapping&nbsp;data,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
-<div class="block">Update an existing record of tracked data. Data must be in mapping form, and
-must either contain a valid id or all keys represented in the keys array
-for the configured tracker type. Either the id or keys may be provided, and
-all other members of the passed data will be the new values to sign to the
-other members of the existing tracked data. If both the id and keys are
-provided, the id will be used to identify the record, and the key values
-will treated as any other value to update (provided the maintain
-uniqueness). It is not possible to update the id. A callback function will
-be invoked upon successful completion of the update operation. This may be
-synchronous or asynchronous depending on the SQL driver being used.</div>
+<div class="block">Update an existing row in the database.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>data</code> - the tracked data </dd>
-<dd><code>callback</code> - a closure to call when the update is complete </dd>
-<dd><code>args</code> - extra args to pass to the callback </dd>
-<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+<dd><code>table</code> - table name </dd>
+<dd><code>data</code> - mapping of column names to values, id column value used for where clause </dd>
+<dd><code>callback</code> - callback to run upon successful insertion with result </dd>
+<dd><code>args</code> - extra args for the callback </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero to indicate update request was received </dd>
 </dl>
 </li>
 </ul>
@@ -292,19 +278,15 @@ synchronous or asynchronous depending on the SQL driver being used.</div>
 <li class="blockList">
 <h4>select</h4>
 <pre>protected&nbsp;varargs&nbsp;int&nbsp;select(string&nbsp;table,&nbsp;mapping&nbsp;key,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
-<div class="block">Look up a tracked data record using a specified key. The key may be
-expressed as a mapping, in which case it must contain either the id
-or the tracker type's keys. It may also be passed as an integer, to be used
-as the id. If found, the record will be passed to the provided callback
-closure.</div>
+<div class="block">Select rows from a table.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>key</code> - a mapping of data to be used as a key </dd>
-<dd><code>callback</code> - a closure to call with the selected record </dd>
-<dd><code>args</code> - extra args to pass to the callback </dd>
-<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
+<dd><code>table</code> - table name </dd>
+<dd><code>key</code> - mapping of column names to values for where clause </dd>
+<dd><code>callback</code> - callback to run upon successful query with result </dd>
+<dd><code>args</code> - extra args for the callback </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero to indicate select request was received </dd>
 </dl>
 </li>
 </ul>
@@ -315,14 +297,15 @@ closure.</div>
 <li class="blockList">
 <h4>create_table</h4>
 <pre>protected&nbsp;varargs&nbsp;int&nbsp;create_table(string&nbsp;table,&nbsp;mapping *cols,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
-<div class="block"></div>
+<div class="block">Create a new table.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>cols</code> - </dd>
-<dd><code>callback</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>table</code> - table name </dd>
+<dd><code>cols</code> - an array of column data including column name, type, and constraints </dd>
+<dd><code>callback</code> - callback to run upon successful query with result </dd>
+<dd><code>args</code> - extra args for the callback </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero to indicate create table request was received </dd>
 </dl>
 </li>
 </ul>
@@ -333,13 +316,14 @@ closure.</div>
 <li class="blockList">
 <h4>table_info</h4>
 <pre>protected&nbsp;varargs&nbsp;int&nbsp;table_info(string&nbsp;table,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
-<div class="block"></div>
+<div class="block">Get table info.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>callback</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>table</code> - table name </dd>
+<dd><code>callback</code> - callback to run upon successful query with result </dd>
+<dd><code>args</code> - extra args for the callback </dd>
+<dt><span class="strong">Returns:</span></dt><dd>non-zero to indicate table info request was received </dd>
 </dl>
 </li>
 </ul>

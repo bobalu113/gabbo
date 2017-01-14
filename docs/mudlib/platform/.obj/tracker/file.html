@@ -108,22 +108,28 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/file.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/file.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the FileTracker.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/file.html#subscribe()">subscribe</a></strong>(string&nbsp;regexp,&nbsp;closure&nbsp;callback)</code>
-<div class="block"></div>
+<div class="block">Allows objects to subscribe to file write events.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/file.html#write_signal()">write_signal</a></strong>(string&nbsp;file,&nbsp;string&nbsp;func)</code>
-<div class="block"></div>
+<div class="block">Called by the master object when a file write occurs.</div>
 </td>
 </tr>
 </table>
@@ -160,14 +166,14 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="create()">
+<a name="setup()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>create</h4>
-<pre>public&nbsp;void&nbsp;create()</pre>
-<div class="block"></div>
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the FileTracker.</div>
 <dl>
 <dl>
 </dl>
@@ -180,12 +186,13 @@
 <li class="blockList">
 <h4>subscribe</h4>
 <pre>public&nbsp;int&nbsp;subscribe(string&nbsp;regexp,&nbsp;closure&nbsp;callback)</pre>
-<div class="block"></div>
+<div class="block">Allows objects to subscribe to file write events.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>regexp</code> - </dd>
-<dd><code>callback</code> - </dd>
+<dd><code>regexp</code> - a regular expression to match file paths against </dd>
+<dd><code>callback</code> - a callback to run when a match write is triggered </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -196,12 +203,25 @@
 <li class="blockList">
 <h4>write_signal</h4>
 <pre>public&nbsp;void&nbsp;write_signal(string&nbsp;file,&nbsp;string&nbsp;func)</pre>
-<div class="block"></div>
+<div class="block">Called by the master object when a file write occurs.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>file</code> - </dd>
-<dd><code>func</code> - </dd>
+<dd><code>file</code> - the filename being written </dd>
+<dd><code>func</code> - the write operation (see valid_write()) </dd>
+</dl>
+</li>
+</ul>
+<a name="create()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>create</h4>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor.</div>
+<dl>
+<dl>
 </dl>
 </li>
 </ul>

@@ -95,37 +95,40 @@
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/sql.html#encode_value()">encode_value</a></strong>(mixed&nbsp;value)</code>
-<div class="block"></div>
+<div class="block">Encode an LPC value for insertion into a SQL statement.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/sql.html#get_create_table_statement()">get_create_table_statement</a></strong>(string&nbsp;table,&nbsp;mapping *cols)</code>
-<div class="block"></div>
+<div class="block">Get a create table statement used to duh, create a table.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/sql.html#get_insert_statement()">get_insert_statement</a></strong>(string&nbsp;table,&nbsp;mapping&nbsp;data,&nbsp;mixed *params)</code>
-<div class="block"></div>
+<div class="block">Get an insert statement for inserting a single record into the specified
+table.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/sql.html#get_select_statement()">get_select_statement</a></strong>(string&nbsp;table,&nbsp;mapping&nbsp;key,&nbsp;mixed *params)</code>
-<div class="block"></div>
+<div class="block">Get a select statement to query for one or more records from the specified
+table.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/sql.html#get_table_info_statement()">get_table_info_statement</a></strong>(string&nbsp;table)</code>
-<div class="block"></div>
+<div class="block">Get a table info table statement.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/sql.html#get_update_statement()">get_update_statement</a></strong>(string&nbsp;table,&nbsp;mixed&nbsp;id,&nbsp;mapping&nbsp;data,&nbsp;mixed *params)</code>
-<div class="block"></div>
+<div class="block">Get an update statement for updatinging a single record in the specified
+table.</div>
 </td>
 </tr>
 </table>
@@ -158,11 +161,13 @@
 <li class="blockList">
 <h4>encode_value</h4>
 <pre>public&nbsp;string&nbsp;encode_value(mixed&nbsp;value)</pre>
-<div class="block"></div>
+<div class="block">Encode an LPC value for insertion into a SQL statement. Complex data types
+are not currently supported.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>value</code> - </dd>
+<dd><code>value</code> - the value to encode </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the encoded string </dd>
 </dl>
 </li>
 </ul>
@@ -173,13 +178,17 @@
 <li class="blockList">
 <h4>get_insert_statement</h4>
 <pre>public&nbsp;string&nbsp;get_insert_statement(string&nbsp;table,&nbsp;mapping&nbsp;data,&nbsp;mixed *params)</pre>
-<div class="block"></div>
+<div class="block">Get an insert statement for inserting a single record into the specified
+table. For parameterized statements, an empty array of parameters can be
+passed by reference and it will be populated with the correct values when
+the function returns.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>data</code> - </dd>
-<dd><code>params</code> - </dd>
+<dd><code>table</code> - the table name </dd>
+<dd><code>data</code> - a mapping of column names to values </dd>
+<dd><code>params</code> - a parameter array to populate, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the insert statement for the provided data </dd>
 </dl>
 </li>
 </ul>
@@ -190,14 +199,19 @@
 <li class="blockList">
 <h4>get_update_statement</h4>
 <pre>public&nbsp;string&nbsp;get_update_statement(string&nbsp;table,&nbsp;mixed&nbsp;id,&nbsp;mapping&nbsp;data,&nbsp;mixed *params)</pre>
-<div class="block"></div>
+<div class="block">Get an update statement for updatinging a single record in the specified
+table. The update must be constrained on the id column, with the provided
+id value. For parameterized statements, an empty array of parameters can be
+passed by reference and it will be populated with the correct values when
+the function returns.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>id</code> - </dd>
-<dd><code>data</code> - </dd>
-<dd><code>params</code> - </dd>
+<dd><code>table</code> - the table name </dd>
+<dd><code>id</code> - the row's id column value </dd>
+<dd><code>data</code> - a mapping of column names to values </dd>
+<dd><code>params</code> - a parameter array to populate, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the update statement for the provided data </dd>
 </dl>
 </li>
 </ul>
@@ -208,13 +222,19 @@
 <li class="blockList">
 <h4>get_select_statement</h4>
 <pre>public&nbsp;string&nbsp;get_select_statement(string&nbsp;table,&nbsp;mapping&nbsp;key,&nbsp;mixed *params)</pre>
-<div class="block"></div>
+<div class="block">Get a select statement to query for one or more records from the specified
+table. All columns will be selected, but the result will be constrained by
+a WHERE statement based on the provided key. The key is a mapping of
+column names to values which will be AND'd together. For parameterized
+statements, an empty array of parameters can be passed by reference and it
+will be populated with the correct values when the function returns.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>key</code> - </dd>
-<dd><code>params</code> - </dd>
+<dd><code>table</code> - the table name </dd>
+<dd><code>key</code> - a mapping of column names to values </dd>
+<dd><code>params</code> - a parameter array to populate, passed by reference </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the select statement for the provided key </dd>
 </dl>
 </li>
 </ul>
@@ -225,12 +245,14 @@
 <li class="blockList">
 <h4>get_create_table_statement</h4>
 <pre>public&nbsp;string&nbsp;get_create_table_statement(string&nbsp;table,&nbsp;mapping *cols)</pre>
-<div class="block"></div>
+<div class="block">Get a create table statement used to duh, create a table. The column list
+needs to include info on type, defaults, indexes and constraints.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
-<dd><code>cols</code> - </dd>
+<dd><code>table</code> - the table name </dd>
+<dd><code>cols</code> - the column list containing type, flags, and default </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the create table statement for the provided columns </dd>
 </dl>
 </li>
 </ul>
@@ -241,11 +263,12 @@
 <li class="blockList">
 <h4>get_table_info_statement</h4>
 <pre>public&nbsp;string&nbsp;get_table_info_statement(string&nbsp;table)</pre>
-<div class="block"></div>
+<div class="block">Get a table info table statement.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>table</code> - </dd>
+<dd><code>table</code> - the table name </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the table info statement </dd>
 </dl>
 </li>
 </ul>

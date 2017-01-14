@@ -68,16 +68,8 @@
 </li><li><a href="../../../platform/.lib/connection.html" title="">ConnectionLib </a>
 <ul class="tree"><li class="last"><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>
 </li></ul></li><li><a href="../../../platform/.lib/session.html" title="">SessionLib </a>
-</li><li class="last"><a href="../../../platform/.lib/format_strings.html" title="">FormatStringsLib </a>
-<ul class="tree"><li><a href="../../../platform/.lib/args.html" title="">ArgsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../../platform/.lib/strings.html" title="">StringsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li class="last"><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li><li class="last"><a href="../../../platform/.lib/closure.html" title="">ClosureLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></li></ul></dd>
+</li><li class="last"><a href="../../...html" title=""></a>
+</li></ul></li></ul></dd>
 </dl>
 <hr>
 <br>
@@ -106,14 +98,14 @@
 <th class="colLast" scope="col">Variable and Description</th>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../..//platform/.obj/tracker/user.html#primary_user_ids">primary_user_ids</strong></code>
+<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../..//platform/.obj/tracker/user.html#user_counter">user_counter</strong></code>
 <div class="block"></div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../..//platform/.obj/tracker/user.html#user_counter">user_counter</strong></code>
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../..//platform/.obj/tracker/user.html#usernames">usernames</strong></code>
 <div class="block"></div>
 </td>
 </tr>
@@ -139,46 +131,52 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#generate_id()">generate_id</a></strong>()</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#new_user()">new_user</a></strong>(string&nbsp;username)</code>
-<div class="block"></div>
+<div class="block">Generate a new, unique user id.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#query_last_session()">query_last_session</a></strong>(string&nbsp;user_id)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#new_user()">new_user</a></strong>(string&nbsp;username)</code>
+<div class="block">Invoked to track a new user.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#query_primary_user()">query_primary_user</a></strong>(string&nbsp;username)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#query_last_session()">query_last_session</a></strong>(string&nbsp;user_id)</code>
+<div class="block">Get a user's last (or current) session.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#query_username()">query_username</a></strong>(string&nbsp;user_id)</code>
-<div class="block"></div>
+<div class="block">Get the username for a given user id.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#query_users()">query_users</a></strong>(string&nbsp;username)</code>
+<div class="block">Get the users associated with a given username.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#set_last_session()">set_last_session</a></strong>(string&nbsp;user_id,&nbsp;string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Set a user's last (or current) session.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/user.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the UserTracker.</div>
 </td>
 </tr>
 </table>
@@ -186,7 +184,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/user">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/user.html" title="program /platform/.lib/user">UserLib </a></h3>
-<code><a href="../../../platform/.lib/user.html#apply_template()">apply_template</a>, <a href="../../../platform/.lib/user.html#attach_session()">attach_session</a>, <a href="../../../platform/.lib/user.html#create_user()">create_user</a>, <a href="../../../platform/.lib/user.html#hash_passwd()">hash_passwd</a>, <a href="../../../platform/.lib/user.html#passwd_file()">passwd_file</a>, <a href="../../../platform/.lib/user.html#user_dir()">user_dir</a>, <a href="../../../platform/.lib/user.html#user_exists()">user_exists</a></code></li>
+<code><a href="../../../platform/.lib/user.html#apply_template()">apply_template</a>, <a href="../../../platform/.lib/user.html#attach_session()">attach_session</a>, <a href="../../../platform/.lib/user.html#create_user()">create_user</a>, <a href="../../../platform/.lib/user.html#hash_passwd()">hash_passwd</a>, <a href="../../../platform/.lib/user.html#install_skeleton()">install_skeleton</a>, <a href="../../../platform/.lib/user.html#passwd_file()">passwd_file</a>, <a href="../../../platform/.lib/user.html#save_password()">save_password</a>, <a href="../../../platform/.lib/user.html#user_dir()">user_dir</a>, <a href="../../../platform/.lib/user.html#user_exists()">user_exists</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -207,7 +205,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#objective()">objective</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -215,13 +213,6 @@
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/session.html" title="program /platform/.lib/session">SessionLib </a></h3>
 <code><a href="../../../platform/.lib/session.html#is_active()">is_active</a>, <a href="../../../platform/.lib/session.html#is_subsession()">is_subsession</a></code></li>
-
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/format_strings">
-</a>
-<h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/format_strings.html" title="program /platform/.lib/format_strings">FormatStringsLib </a></h3>
-<code><a href="../../../platform/.lib/format_strings.html#explode_format()">explode_format</a>, <a href="../../../platform/.lib/format_strings.html#parse_format()">parse_format</a></code></li>
 
 </ul>
 
@@ -249,13 +240,13 @@
 <div class="block"></div>
 </li>
 </ul>
-<a name="primary_user_ids">
+<a name="usernames">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>primary_user_ids</h4>
-<pre>public&nbsp;mapping&nbsp;primary_user_ids</pre>
+<h4>usernames</h4>
+<pre>public&nbsp;mapping&nbsp;usernames</pre>
 <div class="block"></div>
 </li>
 </ul>
@@ -277,6 +268,19 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the UserTracker.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="new_user()">
 <!--   -->
 </a>
@@ -284,11 +288,12 @@
 <li class="blockList">
 <h4>new_user</h4>
 <pre>public&nbsp;string&nbsp;new_user(string&nbsp;username)</pre>
-<div class="block"></div>
+<div class="block">Invoked to track a new user.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
+<dd><code>username</code> - the username of the new user </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the newly created user id </dd>
 </dl>
 </li>
 </ul>
@@ -299,11 +304,12 @@
 <li class="blockList">
 <h4>query_username</h4>
 <pre>public&nbsp;string&nbsp;query_username(string&nbsp;user_id)</pre>
-<div class="block"></div>
+<div class="block">Get the username for a given user id.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user_id</code> - </dd>
+<dd><code>user_id</code> - the user being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the username of the specified user </dd>
 </dl>
 </li>
 </ul>
@@ -314,12 +320,13 @@
 <li class="blockList">
 <h4>set_last_session</h4>
 <pre>public&nbsp;int&nbsp;set_last_session(string&nbsp;user_id,&nbsp;string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Set a user's last (or current) session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user_id</code> - </dd>
-<dd><code>session_id</code> - </dd>
+<dd><code>user_id</code> - the user id of the user owning the session </dd>
+<dd><code>session_id</code> - the session id of the user's new last session </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -330,26 +337,28 @@
 <li class="blockList">
 <h4>query_last_session</h4>
 <pre>public&nbsp;string&nbsp;query_last_session(string&nbsp;user_id)</pre>
-<div class="block"></div>
+<div class="block">Get a user's last (or current) session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>user_id</code> - </dd>
+<dd><code>user_id</code> - the user id being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the session id of the user's last session, or 0 if never logged in </dd>
 </dl>
 </li>
 </ul>
-<a name="query_primary_user()">
+<a name="query_users()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_primary_user</h4>
-<pre>public&nbsp;string&nbsp;query_primary_user(string&nbsp;username)</pre>
-<div class="block"></div>
+<h4>query_users</h4>
+<pre>public&nbsp;mapping&nbsp;query_users(string&nbsp;username)</pre>
+<div class="block">Get the users associated with a given username.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>username</code> - </dd>
+<dd><code>username</code> - the username to query </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of the user ids sharing the username </dd>
 </dl>
 </li>
 </ul>
@@ -360,9 +369,10 @@
 <li class="blockList">
 <h4>generate_id</h4>
 <pre>public&nbsp;string&nbsp;generate_id()</pre>
-<div class="block"></div>
+<div class="block">Generate a new, unique user id.</div>
 <dl>
 <dl>
+<dt><span class="strong">Returns:</span></dt><dd>the new user id </dd>
 </dl>
 </li>
 </ul>
@@ -372,8 +382,8 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;int&nbsp;create()</pre>
-<div class="block"></div>
+<pre>public&nbsp;void&nbsp;create()</pre>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

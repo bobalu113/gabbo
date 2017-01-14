@@ -75,7 +75,8 @@
 </li><li class="last"><a href="../../platform/.lib/object.html" title="">ObjectLib </a>
 </li></ul></li><li><a href="../../platform/.module/shell.html" title="">ShellMixin </a>
 <ul class="tree"><li class="last"><a href="../../platform/.lib/file.html" title="">FileLib </a>
-</li></ul></li><li class="last"><a href="../../platform/.lib/array.html" title="">ArrayLib </a>
+</li></ul></li><li><a href="../../platform/.lib/array.html" title="">ArrayLib </a>
+</li><li class="last"><a href="../../platform/.lib/exception.html" title="">ExceptionLib </a>
 </li></ul></dd>
 </dl>
 <hr>
@@ -105,8 +106,14 @@
 <th class="colLast" scope="col">Variable and Description</th>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../..//platform/.module/avatar.html#master_session">master_session</strong></code>
+<div class="block"></div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../..//platform/.module/avatar.html#sessions">sessions</strong></code>
+<td class="colLast"><code><strong><a href="../..//platform/.module/avatar.html#slave_sessions">slave_sessions</strong></code>
 <div class="block"></div>
 </td>
 </tr>
@@ -133,15 +140,27 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#add_slave_session()">add_slave_session</a></strong>(string&nbsp;session_id)</code>
+<div class="block">Add a new slave session.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;nomask&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#is_avatar()">is_avatar</a></strong>()</code>
 <div class="block">Returns true to designate that this object represents an avatar.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#on_descend()">on_descend</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Called upon a successful "descension".</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#query_master_session()">query_master_session</a></strong>()</code>
+<div class="block">Get the master session.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -151,33 +170,54 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#query_user()">query_user</a></strong>()</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;mapping&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#query_slave_sessions()">query_slave_sessions</a></strong>()</code>
+<div class="block">Get the slave sessions.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#query_terminal_type()">query_terminal_type</a></strong>()</code>
+<div class="block">AvatarMixin implementation of query_terminal_type() to get terminal info
+from connection details.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#query_username()">query_username</a></strong>()</code>
 <div class="block">Return the username associated with this avatar.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#remove_session()">remove_session</a></strong>(string&nbsp;session_id)</code>
 <div class="block"></div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#remove_slave_session()">remove_slave_session</a></strong>(string&nbsp;session_id)</code>
+<div class="block">Remove a slave session.</div>
+</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#setup()">setup</a></strong>()</code>
-<div class="block">Initialize AvatarMixin.</div>
+<td class="colFirst"><code>protected&nbsp;int&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#set_master_session()">set_master_session</a></strong>(string&nbsp;session_id)</code>
+<div class="block">Set the master session.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the AvatarMixin.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/avatar.html#try_descend()">try_descend</a></strong>(string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">This function is called when a new session is created for this avatar,
+and the creating object wants to "descend" their consciousness into the
+new session.</div>
 </td>
 </tr>
 </table>
@@ -185,14 +225,14 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.module/command_giver">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.module/command_giver.html" title="program /platform/.module/command_giver">CommandGiverMixin </a></h3>
-<code><a href="../../platform/.module/command_giver.html#check_command_access()">check_command_access</a>, <a href="../../platform/.module/command_giver.html#do_command()">do_command</a>, <a href="../../platform/.module/command_giver.html#load_commands()">load_commands</a>, <a href="../../platform/.module/command_giver.html#load_controller()">load_controller</a>, <a href="../../platform/.module/command_giver.html#modify_command()">modify_command</a>, <a href="../../platform/.module/command_giver.html#run_script()">run_script</a>, <a href="../../platform/.module/command_giver.html#setup()">setup</a></code></li>
+<code><a href="../../platform/.module/command_giver.html#check_command_access()">check_command_access</a>, <a href="../../platform/.module/command_giver.html#do_command()">do_command</a>, <a href="../../platform/.module/command_giver.html#load_cmd_imports()">load_cmd_imports</a>, <a href="../../platform/.module/command_giver.html#load_controller()">load_controller</a>, <a href="../../platform/.module/command_giver.html#run_script()">run_script</a>, <a href="../../platform/.module/command_giver.html#setup()">setup</a></code></li>
 
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -206,7 +246,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/array">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/array.html" title="program /platform/.lib/array">ArrayLib </a></h3>
-<code><a href="../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
+<code><a href="../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../platform/.lib/array.html#random_key()">random_key</a>, <a href="../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -220,7 +260,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.module/sensor">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.module/sensor.html" title="program /platform/.module/sensor">SensorMixin </a></h3>
-<code><a href="../../platform/.module/sensor.html#on_message()">on_message</a>, <a href="../../platform/.module/sensor.html#render_message()">render_message</a>, <a href="../../platform/.module/sensor.html#setup()">setup</a>, <a href="../../platform/.module/sensor.html#try_message()">try_message</a></code></li>
+<code><a href="../../platform/.module/sensor.html#on_message()">on_message</a>, <a href="../../platform/.module/sensor.html#query_terminal_type()">query_terminal_type</a>, <a href="../../platform/.module/sensor.html#render_message()">render_message</a>, <a href="../../platform/.module/sensor.html#setup()">setup</a>, <a href="../../platform/.module/sensor.html#try_message()">try_message</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -259,13 +299,23 @@
 <!--   -->
 </a>
 <h3>Variable Detail</h3>
-<a name="sessions">
+<a name="master_session">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>sessions</h4>
-<pre>public&nbsp;mapping&nbsp;sessions</pre>
+<h4>master_session</h4>
+<pre>public&nbsp;string&nbsp;master_session</pre>
+<div class="block"></div>
+</li>
+</ul>
+<a name="slave_sessions">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>slave_sessions</h4>
+<pre>public&nbsp;mapping&nbsp;slave_sessions</pre>
 <div class="block"></div>
 </li>
 </ul>
@@ -277,51 +327,6 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="setup()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setup</h4>
-<pre>protected&nbsp;void&nbsp;setup()</pre>
-<div class="block">Initialize AvatarMixin. If this function is overloaded, be advised
-that the mixin's private variables are initialized in the parent
-implementation.</div>
-<dl>
-<dl>
-</dl>
-</li>
-</ul>
-<a name="try_descend()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>try_descend</h4>
-<pre>public&nbsp;mixed&nbsp;*try_descend(string&nbsp;session_id)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="on_descend()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>on_descend</h4>
-<pre>public&nbsp;void&nbsp;on_descend(string&nbsp;session_id)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>session_id</code> - </dd>
-</dl>
-</li>
-</ul>
 <a name="add_session()">
 <!--   -->
 </a>
@@ -365,16 +370,136 @@ implementation.</div>
 </dl>
 </li>
 </ul>
-<a name="query_user()">
+<a name="setup()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>query_user</h4>
-<pre>public&nbsp;string&nbsp;query_user()</pre>
-<div class="block"></div>
+<h4>setup</h4>
+<pre>protected&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the AvatarMixin.</div>
 <dl>
 <dl>
+</dl>
+</li>
+</ul>
+<a name="try_descend()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>try_descend</h4>
+<pre>public&nbsp;mixed&nbsp;*try_descend(string&nbsp;session_id)</pre>
+<div class="block">This function is called when a new session is created for this avatar,
+and the creating object wants to "descend" their consciousness into the
+new session. It can prevent the descension from happening, or otherwise
+prepare for the descension that's about to take place. The try_descend()
+implementation at the core level does nothing but return an empty array to
+ensure compabitility.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>session_id</code> - the session to which this avatar is attached </dd>
+<dt><span class="strong">Returns:</span></dt><dd>extra args to be passed to on_descend(): </dd>
+</dl>
+</li>
+</ul>
+<a name="on_descend()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>on_descend</h4>
+<pre>public&nbsp;void&nbsp;on_descend(string&nbsp;session_id)</pre>
+<div class="block">Called upon a successful "descension". Descension and ascension are the
+processes by which multiple avatars are linked together across sessions.
+Descension establishes these links, and ascension removes them. A connected
+avatar need not necessarily itself be interactive, but may be linked to at
+least one other session whose avatar is interactive. The primary job of
+AvatarMixin's core on_descend() function store the session for reference and
+configure the other mixins. The master session will be updated if the new
+session belongs to the same user, otherwise a slave session will be added.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>session_id</code> - the session this avatar has been bound to, it will be running if it wasn't already prior to descension </dd>
+</dl>
+</li>
+</ul>
+<a name="set_master_session()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set_master_session</h4>
+<pre>protected&nbsp;int&nbsp;set_master_session(string&nbsp;session_id)</pre>
+<div class="block">Set the master session. If the new master session was previously a slave, it
+will no longer be a slave.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>session_id</code> - the new master session id </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
+</dl>
+</li>
+</ul>
+<a name="query_master_session()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_master_session</h4>
+<pre>public&nbsp;string&nbsp;query_master_session()</pre>
+<div class="block">Get the master session.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the master session id </dd>
+</dl>
+</li>
+</ul>
+<a name="add_slave_session()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>add_slave_session</h4>
+<pre>protected&nbsp;int&nbsp;add_slave_session(string&nbsp;session_id)</pre>
+<div class="block">Add a new slave session.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>session_id</code> - the slave session id to add </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
+</dl>
+</li>
+</ul>
+<a name="remove_slave_session()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remove_slave_session</h4>
+<pre>protected&nbsp;int&nbsp;remove_slave_session(string&nbsp;session_id)</pre>
+<div class="block">Remove a slave session.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>session_id</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>`[description] </dd>
+</dl>
+</li>
+</ul>
+<a name="query_slave_sessions()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_slave_sessions</h4>
+<pre>public&nbsp;mapping&nbsp;query_slave_sessions()</pre>
+<div class="block">Get the slave sessions.</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a zero-width mapping of slave session ids </dd>
 </dl>
 </li>
 </ul>
@@ -385,11 +510,26 @@ implementation.</div>
 <li class="blockList">
 <h4>query_username</h4>
 <pre>public&nbsp;string&nbsp;query_username()</pre>
-<div class="block">Return the username associated with this avatar. This name will be
-consistent across all characters a user plays.</div>
+<div class="block">Return the username associated with this avatar. This will be the username
+attached to the master session.</div>
 <dl>
 <dl>
 <dt><span class="strong">Returns:</span></dt><dd>the username </dd>
+</dl>
+</li>
+</ul>
+<a name="query_terminal_type()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>query_terminal_type</h4>
+<pre>public&nbsp;string&nbsp;query_terminal_type()</pre>
+<div class="block">AvatarMixin implementation of query_terminal_type() to get terminal info
+from connection details. TODO code this</div>
+<dl>
+<dl>
+<dt><span class="strong">Returns:</span></dt><dd>the terminal type </dd>
 </dl>
 </li>
 </ul>

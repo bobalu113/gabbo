@@ -95,7 +95,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/file.html#copy_tree()">copy_tree</a></strong>(string&nbsp;src,&nbsp;string&nbsp;dest)</code>
-<div class="block"></div>
+<div class="block">Recursively copy files and directories.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -138,7 +138,7 @@ by pattern.</div>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/file.html#is_special_dir()">is_special_dir</a></strong>(string&nbsp;path)</code>
-<div class="block"></div>
+<div class="block">Returns 1 if a path represents a "." or ".." directory.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -150,19 +150,19 @@ by pattern.</div>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/file.html#read_value()">read_value</a></strong>(string&nbsp;file)</code>
-<div class="block"></div>
+<div class="block">Restore a value from a .val file.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.lib/file.html#traverse_tree()">traverse_tree</a></strong>(string&nbsp;src,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../platform/.lib/file.html#traverse_tree()">traverse_tree</a></strong>(string&nbsp;root,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</code>
+<div class="block">Traverse a directory tree.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.lib/file.html#write_value()">write_value</a></strong>(string&nbsp;file,&nbsp;mixed&nbsp;value)</code>
-<div class="block"></div>
+<div class="block">Save a value to a .val file.</div>
 </td>
 </tr>
 </table>
@@ -325,11 +325,12 @@ in the middle of the path will be expanded in place (e.g.
 <li class="blockList">
 <h4>is_special_dir</h4>
 <pre>public&nbsp;int&nbsp;is_special_dir(string&nbsp;path)</pre>
-<div class="block"></div>
+<div class="block">Returns 1 if a path represents a "." or ".." directory.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>path</code> - </dd>
+<dd><code>path</code> - a file path </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if path is a special directory </dd>
 </dl>
 </li>
 </ul>
@@ -339,14 +340,15 @@ in the middle of the path will be expanded in place (e.g.
 <ul class="blockList">
 <li class="blockList">
 <h4>traverse_tree</h4>
-<pre>public&nbsp;int&nbsp;traverse_tree(string&nbsp;src,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
-<div class="block"></div>
+<pre>public&nbsp;int&nbsp;traverse_tree(string&nbsp;root,&nbsp;closure&nbsp;callback,&nbsp;varargs mixed *args)</pre>
+<div class="block">Traverse a directory tree.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>src</code> - </dd>
-<dd><code>callback</code> - </dd>
-<dd><code>args</code> - </dd>
+<dd><code>root</code> - the root file or directory to traverse </dd>
+<dd><code>callback</code> - a closure to call for every file and directory under the root with the get_dir() info and root path </dd>
+<dd><code>args</code> - extra args to pass to the callback </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of files and directories processed </dd>
 </dl>
 </li>
 </ul>
@@ -357,12 +359,13 @@ in the middle of the path will be expanded in place (e.g.
 <li class="blockList">
 <h4>copy_tree</h4>
 <pre>public&nbsp;int&nbsp;copy_tree(string&nbsp;src,&nbsp;string&nbsp;dest)</pre>
-<div class="block"></div>
+<div class="block">Recursively copy files and directories.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>src</code> - </dd>
-<dd><code>dest</code> - </dd>
+<dd><code>src</code> - the root directory to copy </dd>
+<dd><code>dest</code> - the destination path </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of files and directories copied </dd>
 </dl>
 </li>
 </ul>
@@ -373,11 +376,12 @@ in the middle of the path will be expanded in place (e.g.
 <li class="blockList">
 <h4>read_value</h4>
 <pre>public&nbsp;mixed&nbsp;read_value(string&nbsp;file)</pre>
-<div class="block"></div>
+<div class="block">Restore a value from a .val file.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>file</code> - </dd>
+<dd><code>file</code> - the .val file </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the restored value </dd>
 </dl>
 </li>
 </ul>
@@ -388,12 +392,13 @@ in the middle of the path will be expanded in place (e.g.
 <li class="blockList">
 <h4>write_value</h4>
 <pre>public&nbsp;int&nbsp;write_value(string&nbsp;file,&nbsp;mixed&nbsp;value)</pre>
-<div class="block"></div>
+<div class="block">Save a value to a .val file.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>file</code> - </dd>
-<dd><code>value</code> - </dd>
+<dd><code>file</code> - the filename to write </dd>
+<dd><code>value</code> - the value to save </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>

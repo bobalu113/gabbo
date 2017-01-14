@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title></title>
-<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style">
 </head>
 <body>
 <div class="topNav"><a name="navbar_top">
@@ -16,11 +16,11 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../../../index.html?/platform/.bin/shell/logger.html" target="_top">Frames</a></li>
-<li><a href="../../../../platform/.bin/shell/logger.html" target="_top">No Frames</a></li>
+<li><a href="../../../index.html?/platform/.lib/capability.html" target="_top">Frames</a></li>
+<li><a href="../../../platform/.lib/capability.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
-<li><a href="../../../../allclasses-noframe.html">All Programs</a></li>
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
 </ul>
 </li>
 <li>
@@ -53,30 +53,19 @@
 </a></div>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<h2 title="Program /platform/.bin/shell/logger" class="title">Program /platform/.bin/shell/logger</h2>
+<div class="subTitle">/platform/.lib/capability</div>
+<h2 title="Program CapabilityLib " class="title">Program CapabilityLib </h2>
 </div>
 <div class="contentContainer">
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Inherited Programs:</dt>
-<dd>
-<ul class="tree"><li><a href="../../../platform/.module/command.html" title="">/platform/.module/command</a>
-</li><li><a href="../../...html" title=""></a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../../platform/.lib/getopts.html" title="">GetoptsLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li class="last"><a href="../../../platform/.lib/expand_object.html" title="">ObjectExpansionLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-<ul class="tree"><li><a href="../../../platform/.lib/array.html" title="">ArrayLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li><a href="../../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li class="last"><a href="../../...html" title=""></a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li></ul></li></ul></dd>
-</dl>
 <hr>
 <br>
-<div class="block"></div>
+<div class="block">Utility library for dealing with the capabilities API.</div>
 <!-- 
 <dl><dt><span class="strong">See Also:</span></dt><dd>
-<a href="../../...html#toString()"><code>->toString()</code></a>
+<a href="../...html#toString()"><code>->toString()</code></a>
 </dd></dl>
 -->
 </li>
@@ -99,8 +88,8 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.bin/shell/logger.html#do_command()">do_command</a></strong>(string&nbsp;arg)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../platform/.lib/capability.html#is_capable()">is_capable</a></strong>(object&nbsp;ob,&nbsp;string&nbsp;cap)</code>
+<div class="block">Test if an object has a specified capability.</div>
 </td>
 </tr>
 </table>
@@ -119,18 +108,20 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="do_command()">
+<a name="is_capable()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>do_command</h4>
-<pre>public&nbsp;int&nbsp;do_command(string&nbsp;arg)</pre>
-<div class="block"></div>
+<h4>is_capable</h4>
+<pre>public&nbsp;int&nbsp;is_capable(object&nbsp;ob,&nbsp;string&nbsp;cap)</pre>
+<div class="block">Test if an object has a specified capability.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>arg</code> - </dd>
+<dd><code>ob</code> - the object to test </dd>
+<dd><code>cap</code> - the capability in question </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 if the object has the specified capability, otherwise 0 </dd>
 </dl>
 </li>
 </ul>
@@ -156,11 +147,11 @@
 <ul class="navList">
 <li>
 <ul class="navList">
-<li><a href="../../../../index.html?/platform/.bin/shell/logger.html" target="_top">Frames</a></li>
-<li><a href="../../../../platform/.bin/shell/logger.html" target="_top">No Frames</a></li>
+<li><a href="../../../index.html?/platform/.lib/capability.html" target="_top">Frames</a></li>
+<li><a href="../../../platform/.lib/capability.html" target="_top">No Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
-<li><a href="../../../../allclasses-noframe.html">All Programs</a></li>
+<li><a href="../../../allclasses-noframe.html">All Programs</a></li>
 </ul>
 </li>
 <li>

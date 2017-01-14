@@ -128,46 +128,52 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#get_instance_id()">get_instance_id</a></strong>(string&nbsp;zone_id,&nbsp;int&nbsp;instance_count)</code>
-<div class="block"></div>
+<div class="block">Get a zone instance id from its constituent parts.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#load_config()">load_config</a></strong>(string&nbsp;zone_id)</code>
-<div class="block"></div>
+<div class="block">Reload configuration from the zone config file for the specified zone.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#new_instance()">new_instance</a></strong>(string&nbsp;zone_id,&nbsp;string&nbsp;label)</code>
-<div class="block"></div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#new_zone()">new_zone</a></strong>(string&nbsp;zone_id)</code>
-<div class="block"></div>
+<div class="block">Invoked to initialize a new "zone instance" in the system.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#query_flavor()">query_flavor</a></strong>(string&nbsp;zone_id)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#new_zone()">new_zone</a></strong>(string&nbsp;zone_id)</code>
+<div class="block">Invoked to initiate a zone in the system.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#query_flavor()">query_flavor</a></strong>(string&nbsp;zone_id)</code>
+<div class="block">Get a zone's configured flavor.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#query_starting_instance()">query_starting_instance</a></strong>(string&nbsp;zone_id,&nbsp;string&nbsp;session_id)</code>
-<div class="block"></div>
+<div class="block">Get the zone instance to use for new sessions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/zone.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the ZoneTracker.</div>
 </td>
 </tr>
 </table>
@@ -182,7 +188,7 @@
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#objective()">objective</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -245,6 +251,19 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the ZoneTracker.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="new_zone()">
 <!--   -->
 </a>
@@ -252,11 +271,14 @@
 <li class="blockList">
 <h4>new_zone</h4>
 <pre>public&nbsp;string&nbsp;new_zone(string&nbsp;zone_id)</pre>
-<div class="block"></div>
+<div class="block">Invoked to initiate a zone in the system. This can happen anytime for any
+valid zone, but it will necessarily always have occured by the time the
+first object loaded from a zone is initialized.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>zone_id</code> - </dd>
+<dd><code>zone_id</code> - the zone id of the new zone, same as the system path </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the zone id for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -267,11 +289,12 @@
 <li class="blockList">
 <h4>load_config</h4>
 <pre>public&nbsp;int&nbsp;load_config(string&nbsp;zone_id)</pre>
-<div class="block"></div>
+<div class="block">Reload configuration from the zone config file for the specified zone.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>zone_id</code> - </dd>
+<dd><code>zone_id</code> - the zone id to configure </dd>
+<dt><span class="strong">Returns:</span></dt><dd>0 for failure, 1 for success </dd>
 </dl>
 </li>
 </ul>
@@ -282,12 +305,13 @@
 <li class="blockList">
 <h4>new_instance</h4>
 <pre>public&nbsp;string&nbsp;new_instance(string&nbsp;zone_id,&nbsp;string&nbsp;label)</pre>
-<div class="block"></div>
+<div class="block">Invoked to initialize a new "zone instance" in the system.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>zone_id</code> - </dd>
-<dd><code>label</code> - </dd>
+<dd><code>zone_id</code> - the zone id spawning the new instance </dd>
+<dd><code>label</code> - a friendly label for the new instance </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the instance id of the newly created instance </dd>
 </dl>
 </li>
 </ul>
@@ -298,12 +322,15 @@
 <li class="blockList">
 <h4>query_starting_instance</h4>
 <pre>public&nbsp;string&nbsp;query_starting_instance(string&nbsp;zone_id,&nbsp;string&nbsp;session_id)</pre>
-<div class="block"></div>
+<div class="block">Get the zone instance to use for new sessions. This will always be a zone
+instance with a specific default label. If no matching label is found, a
+new instance will be created with that label.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>zone_id</code> - </dd>
-<dd><code>session_id</code> - </dd>
+<dd><code>zone_id</code> - the zone to get the instance for </dd>
+<dd><code>session_id</code> - the session id of the new session </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the zone instance id of the starting zone instance for the specified session </dd>
 </dl>
 </li>
 </ul>
@@ -314,11 +341,12 @@
 <li class="blockList">
 <h4>query_flavor</h4>
 <pre>public&nbsp;string&nbsp;query_flavor(string&nbsp;zone_id)</pre>
-<div class="block"></div>
+<div class="block">Get a zone's configured flavor.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>zone_id</code> - </dd>
+<dd><code>zone_id</code> - the zone being queried </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the flavor of the specified zone </dd>
 </dl>
 </li>
 </ul>
@@ -329,12 +357,13 @@
 <li class="blockList">
 <h4>get_instance_id</h4>
 <pre>public&nbsp;string&nbsp;get_instance_id(string&nbsp;zone_id,&nbsp;int&nbsp;instance_count)</pre>
-<div class="block"></div>
+<div class="block">Get a zone instance id from its constituent parts.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>zone_id</code> - </dd>
-<dd><code>instance_count</code> - </dd>
+<dd><code>zone_id</code> - the zone id </dd>
+<dd><code>instance_count</code> - the instance count </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the zone instance id </dd>
 </dl>
 </li>
 </ul>
@@ -345,7 +374,7 @@
 <li class="blockList">
 <h4>create</h4>
 <pre>public&nbsp;void&nbsp;create()</pre>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

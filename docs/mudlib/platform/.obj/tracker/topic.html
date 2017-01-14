@@ -63,8 +63,8 @@
 <dl>
 <dt>All Inherited Programs:</dt>
 <dd>
-<ul class="tree"><li><a href="../../../platform/.lib/file.html" title="">FileLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
-</li><li class="last"><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>&nbsp;[private&nbsp;variables&nbsp;private&nbsp;functions]
+<ul class="tree"><li><a href="../../../platform/.lib/file.html" title="">FileLib </a>
+</li><li class="last"><a href="../../../platform/.lib/object.html" title="">ObjectLib </a>
 </li></ul></dd>
 </dl>
 <hr>
@@ -115,25 +115,51 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/topic.html#create()">create</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/topic.html#get_controller_topic()">get_controller_topic</a></strong>(object&nbsp;controller)</code>
 <div class="block"></div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/topic.html#get_renderer()">get_renderer</a></strong>(string&nbsp;topic_id,&nbsp;string&nbsp;term)</code>
-<div class="block"></div>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/topic.html#get_renderer()">get_renderer</a></strong>(string&nbsp;topic,&nbsp;string&nbsp;term)</code>
+<div class="block">Get the renderer for a given topic and term.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>public&nbsp;string&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/topic.html#get_topic()">get_topic</a></strong>(object&nbsp;ob)</code>
+<div class="block">Get a default topic for a given ob's messages.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>public&nbsp;void&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../platform/.obj/tracker/topic.html#setup()">setup</a></strong>()</code>
+<div class="block">Setup the TopicTracker.</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/file">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/file.html" title="program /platform/.lib/file">FileLib </a></h3>
+<code><a href="../../../platform/.lib/file.html#basename()">basename</a>, <a href="../../../platform/.lib/file.html#copy_tree()">copy_tree</a>, <a href="../../../platform/.lib/file.html#dirname()">dirname</a>, <a href="../../../platform/.lib/file.html#expand_path()">expand_path</a>, <a href="../../../platform/.lib/file.html#expand_pattern()">expand_pattern</a>, <a href="../../../platform/.lib/file.html#file_exists()">file_exists</a>, <a href="../../../platform/.lib/file.html#is_directory()">is_directory</a>, <a href="../../../platform/.lib/file.html#is_loadable()">is_loadable</a>, <a href="../../../platform/.lib/file.html#is_special_dir()">is_special_dir</a>, <a href="../../../platform/.lib/file.html#munge_filename()">munge_filename</a>, <a href="../../../platform/.lib/file.html#read_value()">read_value</a>, <a href="../../../platform/.lib/file.html#traverse_tree()">traverse_tree</a>, <a href="../../../platform/.lib/file.html#write_value()">write_value</a></code></li>
+
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
+</a>
+<h3>Functions inherited from program&nbsp;<a href="../../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
+<code><a href="../../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+
+</ul>
 
 </li>
 </ul>
@@ -167,22 +193,6 @@
 <!--   -->
 </a>
 <h3>Function Detail</h3>
-<a name="get_renderer()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>get_renderer</h4>
-<pre>public&nbsp;object&nbsp;get_renderer(string&nbsp;topic_id,&nbsp;string&nbsp;term)</pre>
-<div class="block"></div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>topic_id</code> - </dd>
-<dd><code>term</code> - </dd>
-</dl>
-</li>
-</ul>
 <a name="get_controller_topic()">
 <!--   -->
 </a>
@@ -198,6 +208,52 @@
 </dl>
 </li>
 </ul>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>public&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the TopicTracker.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
+<a name="get_renderer()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get_renderer</h4>
+<pre>public&nbsp;object&nbsp;get_renderer(string&nbsp;topic,&nbsp;string&nbsp;term)</pre>
+<div class="block">Get the renderer for a given topic and term.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>topic</code> - the topic being queried </dd>
+<dd><code>term</code> - the terminal type </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the renderer object </dd>
+</dl>
+</li>
+</ul>
+<a name="get_topic()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get_topic</h4>
+<pre>public&nbsp;string&nbsp;get_topic(object&nbsp;ob)</pre>
+<div class="block">Get a default topic for a given ob's messages.</div>
+<dl>
+<dl>
+<dt><span class="strong">Parameters:</span></dt>
+<dd><code>ob</code> - the object doing the messaging </dd>
+<dt><span class="strong">Returns:</span></dt><dd>a topic </dd>
+</dl>
+</li>
+</ul>
 <a name="create()">
 <!--   -->
 </a>
@@ -205,7 +261,7 @@
 <li class="blockList">
 <h4>create</h4>
 <pre>public&nbsp;void&nbsp;create()</pre>
-<div class="block"></div>
+<div class="block">Constructor.</div>
 <dl>
 <dl>
 </dl>

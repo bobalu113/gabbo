@@ -96,47 +96,42 @@
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Function and Description</th>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#check_command_access()">check_command_access</a></strong>(object&nbsp;cmd_ob,&nbsp;int&nbsp;read)</code>
 <div class="block">Test whether a given command object should be allowed this command giver's
 read/write access.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#do_command()">do_command</a></strong>(string&nbsp;arg)</code>
-<div class="block">Main command router.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#load_commands()">load_commands</a></strong>()</code>
-<div class="block"></div>
+<div class="block">Main command router invoked by HookService.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#load_controller()">load_controller</a></strong>(string&nbsp;controller)</code>
-<div class="block"></div>
+<td class="colFirst"><code>public&nbsp;mixed&nbsp;*</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#load_cmd_imports()">load_cmd_imports</a></strong>()</code>
+<div class="block">Introspect the inherit tree for the command imports variable assignments and
+load the configured command specs from disk.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>public&nbsp;mixed&nbsp;</code></td>
-<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#modify_command()">modify_command</a></strong>(string&nbsp;cmd)</code>
-<div class="block">Implementation of the modify_command hook.</div>
+<td class="colFirst"><code>public&nbsp;object&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#load_controller()">load_controller</a></strong>(string&nbsp;controller)</code>
+<div class="block">Attempt to load a command controller object.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>public&nbsp;int&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#run_script()">run_script</a></strong>(string&nbsp;script_file)</code>
-<div class="block"></div>
+<div class="block">Simple script handling supporting basic source files.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected&nbsp;void&nbsp;</code></td>
 <td class="colLast"><code><strong><a href="../../platform/.module/command_giver.html#setup()">setup</a></strong>()</code>
-<div class="block">Initialize CommandGiverMixin.</div>
+<div class="block">Setup the CommandGiverMixin.</div>
 </td>
 </tr>
 </table>
@@ -144,7 +139,7 @@ read/write access.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/object">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/object.html" title="program /platform/.lib/object">ObjectLib </a></h3>
-<code><a href="../../platform/.lib/object.html#get_create_uid()">get_create_uid</a>, <a href="../../platform/.lib/object.html#get_display()">get_display</a>, <a href="../../platform/.lib/object.html#get_flavor()">get_flavor</a>, <a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#get_user()">get_user</a>, <a href="../../platform/.lib/object.html#is_capable()">is_capable</a>, <a href="../../platform/.lib/object.html#is_diegetic()">is_diegetic</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#objective()">objective</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
+<code><a href="../../platform/.lib/object.html#get_path_info()">get_path_info</a>, <a href="../../platform/.lib/object.html#is_reachable()">is_reachable</a>, <a href="../../platform/.lib/object.html#reload_object()">reload_object</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -158,7 +153,7 @@ read/write access.</div>
 <li class="blockList"><a name="methods_inherited_from_class_/platform/.lib/array">
 </a>
 <h3>Functions inherited from program&nbsp;<a href="../../platform/.lib/array.html" title="program /platform/.lib/array">ArrayLib </a></h3>
-<code><a href="../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
+<code><a href="../../platform/.lib/array.html#anti_searcha()">anti_searcha</a>, <a href="../../platform/.lib/array.html#anti_searcha_any()">anti_searcha_any</a>, <a href="../../platform/.lib/array.html#deep_flatten_array()">deep_flatten_array</a>, <a href="../../platform/.lib/array.html#flatten_array()">flatten_array</a>, <a href="../../platform/.lib/array.html#m_value()">m_value</a>, <a href="../../platform/.lib/array.html#mapping_array()">mapping_array</a>, <a href="../../platform/.lib/array.html#random_key()">random_key</a>, <a href="../../platform/.lib/array.html#reduce()">reduce</a>, <a href="../../platform/.lib/array.html#searcha()">searcha</a>, <a href="../../platform/.lib/array.html#searcha_any()">searcha_any</a>, <a href="../../platform/.lib/array.html#unique_array()">unique_array</a></code></li>
 
 </ul>
 <ul class="blockList">
@@ -183,6 +178,19 @@ read/write access.</div>
 <!--   -->
 </a>
 <h3>Function Detail</h3>
+<a name="setup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setup</h4>
+<pre>protected&nbsp;void&nbsp;setup()</pre>
+<div class="block">Setup the CommandGiverMixin.</div>
+<dl>
+<dl>
+</dl>
+</li>
+</ul>
 <a name="check_command_access()">
 <!--   -->
 </a>
@@ -201,31 +209,18 @@ read/write access.</div>
 </dl>
 </li>
 </ul>
-<a name="load_commands()">
+<a name="load_cmd_imports()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>load_commands</h4>
-<pre>public&nbsp;mixed&nbsp;*load_commands()</pre>
-<div class="block"></div>
+<h4>load_cmd_imports</h4>
+<pre>public&nbsp;mixed&nbsp;*load_cmd_imports()</pre>
+<div class="block">Introspect the inherit tree for the command imports variable assignments and
+load the configured command specs from disk.</div>
 <dl>
 <dl>
-</dl>
-</li>
-</ul>
-<a name="setup()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setup</h4>
-<pre>protected&nbsp;void&nbsp;setup()</pre>
-<div class="block">Initialize CommandGiverMixin. If this function is overloaded, be advised
-that the mixin's private variables are initialized in the parent
-implementation.</div>
-<dl>
-<dl>
+<dt><span class="strong">Returns:</span></dt><dd>a 2-dimensional array of command spec and the parsed command data </dd>
 </dl>
 </li>
 </ul>
@@ -236,8 +231,10 @@ implementation.</div>
 <li class="blockList">
 <h4>do_command</h4>
 <pre>public&nbsp;int&nbsp;do_command(string&nbsp;arg)</pre>
-<div class="block">Main command router. Any added commands will pass through this action
-function before being routed to the proper command object.</div>
+<div class="block">Main command router invoked by HookService. Any added commands will pass
+through this action function to parse out the verb and argument portion of
+the command. Then control will be routed to the associated command
+controller for validation and execution.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
@@ -253,11 +250,12 @@ function before being routed to the proper command object.</div>
 <li class="blockList">
 <h4>run_script</h4>
 <pre>public&nbsp;int&nbsp;run_script(string&nbsp;script_file)</pre>
-<div class="block"></div>
+<div class="block">Simple script handling supporting basic source files.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>script_file</code> - </dd>
+<dd><code>script_file</code> - the script file </dd>
+<dt><span class="strong">Returns:</span></dt><dd>1 for success, 0 for failure </dd>
 </dl>
 </li>
 </ul>
@@ -268,29 +266,12 @@ function before being routed to the proper command object.</div>
 <li class="blockList">
 <h4>load_controller</h4>
 <pre>public&nbsp;object&nbsp;load_controller(string&nbsp;controller)</pre>
-<div class="block"></div>
+<div class="block">Attempt to load a command controller object.</div>
 <dl>
 <dl>
 <dt><span class="strong">Parameters:</span></dt>
-<dd><code>controller</code> - </dd>
-</dl>
-</li>
-</ul>
-<a name="modify_command()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>modify_command</h4>
-<pre>public&nbsp;mixed&nbsp;modify_command(string&nbsp;cmd)</pre>
-<div class="block">Implementation of the modify_command hook. Every command executed by the
-player will have a chance to be modified before being parsed by this
-function.</div>
-<dl>
-<dl>
-<dt><span class="strong">Parameters:</span></dt>
-<dd><code>cmd</code> - the command string being executed </dd>
-<dt><span class="strong">Returns:</span></dt><dd>the new command string to execute </dd>
+<dd><code>controller</code> - the path to the controller </dd>
+<dt><span class="strong">Returns:</span></dt><dd>the loaded controller object </dd>
 </dl>
 </li>
 </ul>
